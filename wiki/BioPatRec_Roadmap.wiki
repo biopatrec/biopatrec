@@ -1,9 +1,8 @@
-#summary One-sentence summary of this page.
+#summary Tree-like representation of the most relevant routines
 
 = Introduction =
 
-Add your content here.
-
+This is a quick and general overview of the most relevant functions used in BioPatRec
 
 == Signal Treatment ==
  * Signal pre-processing (pb_preProcessing, GUI_SigTreatment)
