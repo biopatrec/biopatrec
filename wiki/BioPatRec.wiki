@@ -13,7 +13,7 @@ BioPatRec is a research platform for testing and development of algorithms for p
 
 == for Programmers ==
 
-If you are interested to develop further using the platform, or simple understand the nuts and bolts on how it works, the following links are for you.
+If you are interested to develop further using the platform, or simple understand the nuts and bolts of BioPatRec, the following links are for you.
 
  * [BioPatRec_Roadmap]
 
