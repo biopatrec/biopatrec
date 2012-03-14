@@ -1,8 +1,27 @@
-#summary One-sentence summary of this page.
+#summary BioPatRec software introduction.
 
 = Introduction =
 
+BioPatRec is a research platform for testing and development of algorithms for prosthetic control.
 
-* [BioPatRec_Roadmap]
+ * [BioPatRec_Highlights] (Fetures, demos, etc)
 
-* [BioPatRec_Startup_Guide]
+
+== for Users ==
+
+ * [BioPatRec_Startup_Guide]
+
+== for Programmers ==
+
+If you are interested to develop further using the platform, or simple understand the nuts and bolts on how it works, the following links are for you.
+
+ * [BioPatRec_Roadmap]
+
+ * Data Structures
+  * [recSession]
+  * [sigTreated]
+  * [sigFeatures]
+  * [patRec]
+
+ * [Coding_Standard] (simple and easy)
+ * [Copyright_Notice] 
