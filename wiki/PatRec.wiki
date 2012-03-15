@@ -4,7 +4,7 @@
 
 
 
-Different pattern recognition (PatRec) funtions can be accessed by the GUI for PatRec (GUI_PatRec). For a general overview of the routines involved in PatRec see BioPatRec_Road Map
+Different pattern recognition (PatRec) funtions can be accessed by the GUI for PatRec (GUI_PatRec). For a general overview of the routines involved in PatRec see [BioPatRec_Road Map]
 
  * Get the signal features [sigFeatures] by:
       *   Load_[recSession] or
