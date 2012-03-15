@@ -1,0 +1,47 @@
+#summary Startup guide and How To's
+
+= Introduction =
+
+Add your content here.
+
+
+= How To's =
+
+The following are quick guidelines on how to use BioPatRec. In the following instructions it is assumed that you have already setup your workspace and paths in MATLAB to work with BioPatRec.
+
+= How to record signals? =
+
+Signals can be recorded a single shot for fast signal quality evaluations, or as a recording session for further processing and PatRec. In the following steps it is assumed that you have already configured your DAQ card.
+
+== One-shot recordings ==
+
+ * Type !BioPatRec
+ * Select "Recordings"
+ * ...
+
+== Recording Session ==
+
+ * Type !BioPatRec
+ * Select "Recording Session"
+ * ...
+
+
+= How to pre-process the data and extract signal features? =
+
+ * Type !BioPatRec
+ * Select "Pattern Recognition"
+ * Select "Get Signal Features"
+ * Lead the file containing the [recSession] structure
+ * ...
+
+= How to run offline Pattern Recognition? =
+
+ * Type !BioPatRec
+ * Select "Pattern Recognition"
+ * Select "Get Signal Features" to load the file with the [sigFeatures] structure. If you only have the [recSession] structure file, see "How to pre-process ..." before.
+ * ...
+
+= How to run Real-time Pattern Recognition? =
+
+* In order to do this you need to have trained a classifier already in the step before, or have the structure [patRec] avilable. You can load [patRec] from a file using the open menu.
+* ...
