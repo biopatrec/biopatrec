@@ -4,11 +4,11 @@
 
 
 
-Different pattern recognition ([PatRec]) funtions can be accessed by the GUI for [PatRec] (GUI_PatRec). For a general overview of the routines involved in [ PatRec ] see [BioPatRec Road Map].
+Different pattern recognition ([[PatRec]]) funtions can be accessed by the GUI for [PatRec] (GUI_PatRec). For a general overview of the routines involved in [[PatRec]] see [[ BioPatRec Road Map]].
 
  * Get the signal features [sigFeatures] by:
-      *   Load_recSession or
-      *   Load_sigFeatures 
+      *   Load_[recSession] or
+      *   Load_[sigFeatures] 
 
  * Offline [PatRec]
         *  Calls [OfflinePatRec] and uses [sigFeatures] and others
@@ -19,6 +19,6 @@ Different pattern recognition ([PatRec]) funtions can be accessed by the GUI for
 
  * Real-time [PatRec]
         *  The 'Real-time [PatRec]' botton will take you to the a dedicated GUI Test PatRec using:
-        *  Load_[patRec]? to the GUI_[TestPatRec].
+        *  Load_patRec? to the GUI_[TestPatRec].
  
 Add your content here.
