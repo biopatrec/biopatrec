@@ -2,8 +2,7 @@
 
 = Introduction =
 
-Add your content here.
-
+Here we explain how to set up the matlab path
 
 = How To's =
 
