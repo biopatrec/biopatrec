@@ -10,7 +10,7 @@ Different pattern recognition (PatRec) funtions can be accessed by the GUI for P
       *   Load_[recSession] or
       *   Load_[sigFeatures] 
 
- * Offline PatRec?
+ * Offline PatRec
         *  Calls [OfflinePatRec] and uses [sigFeatures] and others
         *  First the training and validation sets are extracted (see The [training], [testing] and validation sets?)
         *  Then the classifier topology is created (see PatRec [Topologies]).
