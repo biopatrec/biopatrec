@@ -6,15 +6,15 @@
 
 Different pattern recognition (PatRec?) funtions can be accessed by the GUI for PatRec? (GUI_PatRec?). For a general overview of the routines involved in PatRec? see BioPatRec Road Map?.
 
- * Get the signal features sigFeatures? by:
+ * Get the signal features sigFeatures by:
       *   Load_recSession? or
       *   Load_sigFeatures? 
 
  * Offline PatRec?
-        *  Calls OfflinePatRec? and uses sigFeatures? and others
+        *  Calls OfflinePatRec and uses sigFeatures and others
         *  First the training and validation sets are extracted (see The training?, testing? and validation sets?)
         *  Then the classifier topology is created (see [PatRec Topologies]).
-        *  Finally OfflinePatRec? calls OfflinePatRecTraining? to proceed with the classifier(s) training.
+        *  Finally OfflinePatRec calls OfflinePatRecTraining to proceed with the classifier(s) training.
         *  Returns the patRec? containing all information required for testing the classifier(s). 
 
  * Real-time PatRec?
