@@ -5,11 +5,7 @@
 BioPatRec is a research platform for testing and development of algorithms for prosthetic control.
 
  * [BioPatRec_Highlights] (Fetures, demos, etc)
-
-
-== for Users ==
-
- * [BioPatRec_Startup_Guide]
+ * [BioPatRec_StartupGuide]
 
 == for Programmers ==
 
