@@ -28,19 +28,19 @@ Signals can be recorded a single shot for fast signal quality evaluations, or as
 = How to pre-process the data and extract signal features? =
 
  * Type !BioPatRec
-     * Recordings
-     * Recording Session
-     * Pattern Recognition
+     * "Recordings"
+     * "Recording Session"
+     * "Pattern Recognition"
        * Select "Pattern Recognition"
        * Select "Get Signal Features"
        * Lead the file containing the [recSession] structure
-       * From Signal Treatment Window, 
+       * From Signal Treatment Window 
          * choose Number of movements,cTp,and Number of channels. 
          * Select "Pre-processing"
          * Select "Filters". Choose type of Filters if required  .
          * Select "Time Window". choose a window method and window length.  
         * Select "Sets per Exercise". Select number of "training", "validation", "test" windows. (Note: The Total Number of windows should be equal to total Number of sets per exercise).
-        * Select "Treat".
+        * Select "Treat"
 
 
 = How to run offline Pattern Recognition? =
@@ -48,13 +48,13 @@ Signals can be recorded a single shot for fast signal quality evaluations, or as
  * Type !BioPatRec
  * Select "Pattern Recognition"
  * Select "Get Signal Features" to load the file with the [sigFeatures] structure. If you only have the [recSession] structure file, see "How to pre-process" before.
- * Select "Feature".
- * Select "Algorithm".
- * Select " Training Method".
- * Select "Normalization".
+ * Select "Features"
+ * Select "Algorithm"
+ * Select "Training Method"
+ * Select "Normalization"
  * Select "Randomized Set and only indv.Movement" ,if its requried.
- * Select "Topology".
- * Select Run Off-line Training".
+ * Select "Topology"
+ * Select "Run Off-line Training"
 
 = How to run Real-time Pattern Recognition? =
 
