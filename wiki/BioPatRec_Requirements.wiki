@@ -1,0 +1,19 @@
+#summary Technical requirements to run BioPatRec
+
+= Requirements =
+
+BioPatRec was initially developed in Matlab R2009, however the latest version was only tested in R011b. Some parts might work in previous versions, however, the VRE and the data acquisition routines need:
+
+ * Matlab R2011b
+
+== Data Acquisition ==
+
+The daq routines currently work with the Matlab "session-based interface (SBI)". The "legacy" routines can be made available under request.
+
+We have used the simplest National Instruments card (USB-6009) for most of our experiments. We expected NI card of this type to work seemly, however you won’t know until you try it. In theory, the SBI should make the use of any DAQ card simple.
+
+If you are planning to use the USB-6009 card you will need the 
+
+
+== Virtual Reality Enviroment ==
+
