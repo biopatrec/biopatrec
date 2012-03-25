@@ -25,5 +25,7 @@ If you are interested on developing further using this platform, or simple under
  * [Coding_Standard] (simple, easy and useful!)
  * [Copyright_Notice] (fair play)
 
+If you wish to commit changes or upgrades to BioPatRec, the easiest way is to submit a _patch_ using Tortoise. See this [http://www.igorexchange.com/node/87#branches Tortoise SVN Tutorial] for more information.
+
 Join the google group if you are interested on receiving updates
 http://groups.google.com/group/biopatrec
