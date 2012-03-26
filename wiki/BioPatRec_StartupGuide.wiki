@@ -18,6 +18,13 @@
    * Selected the path to !BioPatRec
  * Save
 
+*4.- Configure your DAQ card.* In order to use !BioPatRec for recording bioelectric signals you will need to install your DAQ card drivers first. The system is currently using the "session-baseed interface" paradigm, and it has been tested with the NI-USB6009 card.
+
+*USB-6009*
+
+You will need to install the  [http://joule.ni.com/nidu/cds/view/p/id/2604/lang/en NI-DAQmx]
+
+
 = How To's =
 
 The following are quick guidelines on how to use BioPatRec. In the following instructions it is assumed that you have already setup your workspace and paths in MATLAB to work with BioPatRec.
