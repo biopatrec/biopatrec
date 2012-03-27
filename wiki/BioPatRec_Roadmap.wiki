@@ -4,41 +4,50 @@
 
 This is a quick and general overview of the most relevant functions used in BioPatRec
 
-== Signal Treatment ==
- * Signal pre-processing (pb_preProcessing, GUI_SigTreatment)
+= Recordigns =
+
+== GUI_Recordigns ==
+
+== GUI_RecordignSession ==
+
+
+= Signal Treatment =
+== GUI_SigTreatment ==
+ * Signal pre-processing (pb_preProcessing)
   * Split_recSession_Mov
   * Split_recSession_Ch
   * RemoveTrasient_cTp (returns [sigTreated])
   * AddRestAsMovement
 
- * TreatData 
+ * TreatData (from pb_treat)
   * ApplyFilters
    * [Filters]
   * GetData
  * GetAllSigFeatures (returns [sigFeatures])
 
-== PatRec ==
+= PatRec =
 
-* OfflinePatRec
- * Rand_sigFeatures
- * GetSets_Stack...
- * Normalize_TrV
- * Creates ([PatRec_Topologies])
- * OfflinePatRecTraining
-  * xTraining routines (MLP, LDA, etc...)
- * [Accuracy_patRec]
-  * NormalizeSet
+ * OfflinePatRec
+  * Rand_sigFeatures
+  * GetSets_Stack...
+  * Normalize_TrV
+  * Creates ([PatRec_Topologies])
+  * OfflinePatRecTraining (returns [patRec])
+   * xTraining routines (MLP, LDA, etc...)
+  * [Accuracy_patRec] (uses [patRec])
+   * NormalizeSet
+   * OneShotPatRecClassifier
+    * Calls ([PatRec_Topologies])
+     * OneShotPatRec
+      * xTest routines
+
+ * RealtimePatRec (uses [patRec])
+  * InitSBI_NI
+  * [SignalProcessing_RealtimePatRec]
+   * ApplyFilters
+   * GetSigFeatures
+   * NormalizeSet
   * OneShotPatRecClassifier
-   * Calls ([[PatRec Topologies]])
-    * OneShotPatRec
-     * xTest routines
-
-* RealtimePatRec
- * [[SignalProcessing_RealtimePatRec]]
-  * ApplyFilters
-  * GetSigFeatures
-  * NormalizeSet
- * OneShotPatRecClassifier
-   * Calls ([[PatRec Topologies]])
-    * OneShotPatRec
-     * xTest routines
+    * Calls ([PatRec_Topologies])
+     * OneShotPatRec
+      * xTest routines
