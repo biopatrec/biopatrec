@@ -1,6 +1,6 @@
 #summary sigTreated description
 
-[recSession] -> sigTreated -> [sigFeatures]
+[recSession] -> [sigTreated] -> [sigFeatures] -> [patRec]
 
 = sigTreated =
  * sF (sampling frequency)
