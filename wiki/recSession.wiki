@@ -1,6 +1,6 @@
 #summary recSession description
 
-recSession will become [sigTreated]
+[recSession] -> [sigTreated] -> [sigFeatures] -> [patRec]
 
 = recSession =
  * sF (sampling frequency)
