@@ -1,0 +1,69 @@
+#summary PatRec module description
+
+= Pattern Recognition =
+
+Different pattern recognition (!PatRec) functions can be accessed by the GUI for PatRec (GUI_PatRec). For a general overview of the routines involved in PatRec see [BioPatRec_Roadmap].
+
+== Offline !PatRec == 
+
+  * Calls OfflinePatRec and uses [sigFeatures] and others
+  * First the training and validation sets are extracted (see [xSets])
+  * Then the classifier topology is created (see [PatRec_Topologies]).
+  * Finally OfflinePatRec calls OfflinePatRecTraining to proceed with the classifier(s) training.
+  * Returns the [patRec] structure containing all information required for testing the classifier(s).
+
+== Real-time !PatRec == 
+
+ The Real-time pattern recognitions requires a trained classifier in the structure [patRec].
+
+NOTE: To do any real-time testing you must have configured your DAQ card, see [BioPatRec_StartupGuide].
+
+== Pattern recognition algorithms ==
+
+ * [Discriminant_Analysis]] 
+ * [MLP] Multi-layers Perceptron
+ * [RFN] Regulation Feedback Networks
+
+
+== PatRec GUI ==
+
+You first need to load data through the "Get Sig Features" botton. Doing this, there will be a window, which allows you to select the *.mat file of your interest. You can either load a previous recording session ([recSession]) or saved signal features ([sigFeatures]). If you load some other kind of data the message _That was not a valid training matrix_ will be displayed.
+
+ * Load a recording session
+ If you load data of a recording session, the program will identify that through the variable [recSession] or _ss_. In case of _ss_ it will transform it into [recSession] in order to keep compatibility.
+ The subfunction [Load_recSession] will be executed.
+
+ * Load signal features
+ In case you load signal features data, the program will recognize that through the variable [sigFeatures] and will execute [Load_sigFeatures].
+
+see [BioPatRec_StartupGuide] for operation of the GUI.
+
+In this GUI_PatRec is also possible to:
+
+  * Real-time !PatRec (Quick test)
+   * Calls RealtimePatRec
+   * Uses [patRec] and the GUI handles.
+   * Returns the predicted movements to the GUI and the average processing time.
+
+  * Motion test
+   * Calls MotionTest
+   * Uses [patRec] and the GUI handles.
+   * Returns ...
+
+NOTE: To do any real-time testing you must have configured your DAQ card, see [BioPatRec_StartupGuide].
+
+= Adding a New PatRec Algorithm =
+
+Create all the related functions (files) inside a new folder with clear name for your new algorithm. This folder must be inside the folder !PatRec.
+
+You have to be sure that your algorithm takes as input the [sigFeatures] struct.
+
+Take a look at OfflinePatRec to understand how data is processed before reaching the PatRec algorithms.
+
+You will have to modify the following routines:
+
+ * GUI_PatRec
+  * pm_SelectAlgorithm
+  * pm_SelectTraining
+ * OfflinePatRecTraining
+ * OneShotPatRec
