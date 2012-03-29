@@ -2,7 +2,7 @@
 
 = Pattern Recognition =
 
-Different pattern recognition (!PatRec) functions can be accessed by the GUI for PatRec (GUI_PatRec). For a general overview of the routines involved in PatRec see [BioPatRec_Roadmap].
+Different pattern recognition (!PatRec) functions can be accessed by the GUI for !PatRec ({{{GUI_PatRec}}}). For a general overview of the routines involved in !PatRec see [BioPatRec_Roadmap].
 
 == Offline !PatRec == 
 
@@ -25,7 +25,7 @@ NOTE: To do any real-time testing you must have configured your DAQ card, see [B
  * [RFN] Regulation Feedback Networks
 
 
-== PatRec GUI ==
+== !PatRec GUI ==
 
 You first need to load data through the "Get Sig Features" botton. Doing this, there will be a window, which allows you to select the *.mat file of your interest. You can either load a previous recording session ([recSession]) or saved signal features ([sigFeatures]). If you load some other kind of data the message _That was not a valid training matrix_ will be displayed.
 
@@ -52,7 +52,7 @@ In this GUI_PatRec is also possible to:
 
 NOTE: To do any real-time testing you must have configured your DAQ card, see [BioPatRec_StartupGuide].
 
-= Adding a New PatRec Algorithm =
+= Adding a New !PatRec Algorithm =
 
 Create all the related functions (files) inside a new folder with clear name for your new algorithm. This folder must be inside the folder !PatRec.
 
