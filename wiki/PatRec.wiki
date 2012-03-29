@@ -54,16 +54,19 @@ NOTE: To do any real-time testing you must have configured your DAQ card, see [B
 
 = Adding a New !PatRec Algorithm =
 
-Create all the related functions (files) inside a new folder with clear name for your new algorithm. This folder must be inside the folder !PatRec.
+Create all the related functions (files) inside a new folder with clear name for your new algorithm. This folder must be inside !PatRec folder.
 
-You have to be sure that your algorithm takes as input the [sigFeatures] struct.
+Take a look at OfflinePatRec to understand how data is processed before reaching the PatRec algorithms. You have to be sure that your algorithm takes as input the [sigFeatures] struct.
 
-Take a look at OfflinePatRec to understand how data is processed before reaching the PatRec algorithms.
+You will normally need at least 2 functions
+
+ * One for training your algorithm
+ * One for testing your trained algorithm  
 
 You will have to modify the following routines:
 
- * GUI_PatRec
+ * {{{GUI_PatRec}}} (To add you algorithm in the GUI)
   * pm_SelectAlgorithm
   * pm_SelectTraining
- * OfflinePatRecTraining
- * OneShotPatRec
+ * OfflinePatRecTraining (Training)
+ * OneShotPatRec (Testing)
