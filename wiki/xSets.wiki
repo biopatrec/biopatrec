@@ -1,0 +1,42 @@
+#summary Description of the trSets, vSets and tSets
+
+= The training, validation and testing sets =
+
+This is the last step of signal processing before continuing with the  PatRec or more specific OfflinePatRec.
+
+ * *trSets*. Training sets (used for training, yes, really!)
+ * *vSets*. Validation sets (used for validation during training)
+ * *tSets*. Testing sets (only to be used for testing the trained algorithm)
+
+These are all matrices (r x c) of signal features values where:
+
+ * rows = number of sets
+ * colums = number of channels times number of features (set of features, or features vector)
+
+Depending on the [PatRec_Algorithms], the use of the validation set can change, however, the testing set must be used only after the training is completed.
+
+For each xSets there is a xOuts, these are:
+
+ * *trOuts*
+ * *vOuts*
+ * *tOuts*
+
+These are (r x c) matrices where
+
+ * rows = number of data sets
+ * colums = number of outputs 
+
+Each data set in this case is a vector of 0s represent an _off_ output, and 1 an _on_ output. e.g. If the features vector r = 3 of xSets, corresponds to the class 2, then in r = 3 of xOut will be: 0 1 0 ...
+
+In some parts of the code the xSets can be xSet, this has to be standardized to xSets and xOuts since xSet would represent better a single vector of data.
+
+These matrices are constructed by the functions:
+
+ * GetSets_Stack_IndvMov or
+ * GetSets_Stack
+
+NOTE: It might seems like the latter is not need it since the former can handle both cases, however, if mixed movements want to be treated as individual movements, this can only be process by the former one.
+
+ * The xSets are constructed by stacking sets of signal features.
+ * Each set is constructed by obtaining the first signal features per each channel, then the second features per channel and so on, until all the selected features are part of the row.
+ * This makes that all values for the same feature per channels can be found in the same column.
