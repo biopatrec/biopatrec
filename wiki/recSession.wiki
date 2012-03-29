@@ -1,0 +1,24 @@
+#summary recSession description
+
+recSession will become [sigTreated]
+
+= recSession =
+ * sF (sampling frequency)
+ * sT (sampling time)
+ * cT (contraction time)
+ * rT (relaxation time)
+ * nM (number of movements)
+ * nR (number of repetitions)
+ * dev (device used for the recordings)
+ * nCh (number of channels)
+ * mov (description of the movements performed)
+ * date
+ * cmt (comments)
+ * tdata (total data) 
+
+Previously due to the heritage of the [EMG_AQ] the following fields were included
+
+ * cTp (contration time percentage)
+ * trdata( data extracted using the cTp)
+
+These two fields were removed from the recSession and now are part of [sigTreated]. 
