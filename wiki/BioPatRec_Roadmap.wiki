@@ -2,7 +2,7 @@
 
 = Introduction =
 
-This is a quick and general overview of the most relevant functions used in BioPatRec
+This is a quick and general overview of the most relevant functions used in BioPatRec. These are functions or GUIs names.
 
 = Recordigns =
 
@@ -12,18 +12,24 @@ This is a quick and general overview of the most relevant functions used in BioP
 
 
 = Signal Treatment =
-== GUI_SigTreatment ==
- * Signal pre-processing (pb_preProcessing)
+
+ * pb_preProcessing (in GUI_SigTreatment, and uses [recSession])
   * Split_recSession_Mov
   * Split_recSession_Ch
   * RemoveTrasient_cTp (returns [sigTreated])
-  * AddRestAsMovement
+  * AddRestAsMovement (uses [recSession] and complements [sigTreated])
 
- * TreatData (from pb_treat)
-  * ApplyFilters
-   * [Filters]
-  * GetData
- * GetAllSigFeatures (returns [sigFeatures])
+ * pb_treat (in GUI_SigTreatment, and uses [sigTreated])
+  * TreatData 
+   * ApplyFilters
+    * [Filters]
+   * GetData (returns sets of raw signal trData, vData and tData)
+    * Time window cutting (Non-overlapped, Overlapped cons, etc..)
+
+  * GetAllSigFeatures (returns [sigFeatures])
+
+ * pb_treatFolder
+  * Same than pb_treat but for a set of files located in a specific folder. The files must be named: 1, 2, 3,...
 
 = PatRec =
 
