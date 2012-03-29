@@ -1,0 +1,22 @@
+#summary patRec description
+
+[recSession] -> [sigTreated] -> [sigFeatures] -> [patRec]
+
+= patRec =
+ * nM (number of movements)
+ * mov (movements)
+ * sF (sampling frequency)
+ * tW (time window)
+ * nCh (vector with the number of channels)
+ * dev (device used for recordings)
+ * fFilter (frequency filter)
+ * sFilter (spatial filter)
+ * selFeatures (selected features ID, cell) 
+ * topology
+ * movOutIdx (index for the movements related to the output 
+ * normSets (normalization information, struct)
+ * patRecTrained
+ * acc (accuracy per movement plus the over all accuracy in the last row) 
+ * date
+
+According to the algorithm used (see [PatRec_Algorithms], additional variables in patRecTrained contain the required information (training) for applying the trained classifier.
