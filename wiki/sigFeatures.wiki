@@ -1,0 +1,20 @@
+#summary sigFeatures description
+
+[recSession] -> [sigTreated] -> [sigFeatures] -> [patRec]
+
+= sigFeatures =
+ * sF (sampling frequency)
+ * tW (time window)
+ * nCh (number of channels)
+ * mov (movements)
+ * dev (device used for recordings)
+ * fFilter (frequency filter)
+ * sFilter (spatial filter)
+ * trSets (training sets, number) 
+ * vSets (validation sets, number) 
+ * tSets (testing sets, number) 
+ * trFeatures (training features) 
+ * vFeatures (validation features) 
+ * tFeatures (test features) 
+
+This structure contains the signal features to be used for pattern recognition. These are [the training, validation and testing sets].
