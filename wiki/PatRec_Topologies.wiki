@@ -1,0 +1,90 @@
+#summary Description of the different classifier's topologies
+
+= Introduction =
+
+The BioPatRec allows you to create seemsly differet classifiers topologies using the available PatRec algorithms.
+
+The topologies are created as part of OfflinePatRec, and later call in OneShotPatRecClassifier. Each topology uses a specific evaluation function named: 
+
+ * {{{PatRec_TopologyName}}}
+
+All evaluation functions return two variables: 
+
+ * ''outMov'' is a vector with the predicted movements indices.
+
+ * ''outVector'' is a vector with the classifier certanty of each movement, not only the predicted ones.
+
+= Topologies =
+
+== Single Classifier ==
+({{{PatRec_SingleClassifier}}})
+
+ A single classifier is created.
+
+== Ago-antagonist ==
+({{{PatRec_AgoAntagonist}}})
+
+ This topology has as many classifiers as DoF, or Classes/2. Therefore it is assumed that consecutive classes are Ago-Antagonist movements organized in pairs per DoF. The rest movements is considered as an exeption.
+
+ The classifier is trained only using the Ago-Antagonist data sets.
+
+ The output is given by the winner per DoF. 
+ NOTE: Not working! It will always predict as many movements as DoF as it is. It needs to be modified.
+
+== Ago-antagonist & Mixed ==
+({{{PatRec_AgoAntagonistRest}}})
+
+ Same than Ago-antagonist but the classifier is trained using the Ago-Antagonist sets plus a set mixed with the remaning classes.
+
+ The output is given by the winner per DoF.
+
+== One-vs-All ==
+({{{PatRec_OneVsAll}}})
+ 
+ This topology has as many classifiers as classes. A single classifier is trained to distinguish between a given class and the rest of the classes. The data sets used to form the rest class is made with the same contribution per remaining class.
+
+ The output of each classifier is assigned to the corresponding movement.
+
+== One-vs-All Threshold ==
+({{{PatRec_OneVsAllT}}})
+ 
+ This topology has as many classifiers as classes. A single classifier is trained to distinguish between a given class and the rest of the classes. The data sets used to form the rest class is made with the same contribution per remaining class.
+
+ The output of each classifier is assigned to the corresponding movement.
+
+== One-vs-One ==
+({{{PatRec_OneVsOne}}})
+
+ This topology has as n*(n-1)/2 classifiers (n=classes). 
+
+ The output is normally given by major voting which makes it not suitable for simultaneous classification. However, in this specific application we considered a correct prediction if the probability of prediction is higher than 85%. 
+
+== One-vs-One DoF ==
+({{{PatRec_OneVsOneDoF}}})
+
+ Same than before but the lossing movements in the DoF is made zero.
+ NOTE: Needs to be worked more
+
+= Auxilary routines =
+
+ *[ExtractSets_Stack]
+
+ This function extract the corresponding set of selected movements. It keeps the format of [xSets] and xOuts but only with the rows corresponding to the selected movements (selSets)
+
+ *[ExtractSets_Stack_MixRest]
+
+ It differes from [ExtractSets_Stack] by also including a mix of the remaining movements in a set with a single output.
+ It get sets orderly one per set until the data set is completed with the remaining sets. 
+
+ *[ExtractSets_Stack_MixRestEqual]
+
+ It differes from [ExtractSets_Stack_MixRest] by creating an equal number of sample between the selected sets and the mixed sets.
+
+== How to add a new Topology ==
+
+The following must be done to add "newTopology"
+
+ * Add the name of the topology in the GUI_PatRec pop menue pm_SelectTopology, e.g. newTopology
+ * Especify how this topology is created in OfflinePatRec
+ * Make the case in OneShotPatRecClassifier
+ * Create file PatRec_newTopology inside !PatRec/Topologies where the output of this topology will be compute.
