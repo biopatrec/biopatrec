@@ -55,7 +55,7 @@ All evaluation functions return two variables:
 == One-vs-One ==
 ({{{PatRec_OneVsOne}}})
 
- This topology has as n*(n-1)/2 classifiers (n=classes). 
+ This topology has as {{{n*(n-1)/2}}} classifiers (n=classes). 
 
  The output is normally given by major voting which makes it not suitable for simultaneous classification. However, in this specific application we considered a correct prediction if the probability of prediction is higher than 85%. 
 
@@ -67,16 +67,16 @@ All evaluation functions return two variables:
 
 = Auxilary routines =
 
- *[ExtractSets_Stack]
+ *[ExtractSets_Stack
 
  This function extract the corresponding set of selected movements. It keeps the format of [xSets] and xOuts but only with the rows corresponding to the selected movements (selSets)
 
- *[ExtractSets_Stack_MixRest]
+ *[ExtractSets_Stack_MixRest
 
  It differes from [ExtractSets_Stack] by also including a mix of the remaining movements in a set with a single output.
  It get sets orderly one per set until the data set is completed with the remaining sets. 
 
- *[ExtractSets_Stack_MixRestEqual]
+ *[ExtractSets_Stack_MixRestEqual
 
  It differes from [ExtractSets_Stack_MixRest] by creating an equal number of sample between the selected sets and the mixed sets.
 
