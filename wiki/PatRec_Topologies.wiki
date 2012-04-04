@@ -84,7 +84,7 @@ All evaluation functions return two variables:
 
 The following must be done to add "newTopology"
 
- * Add the name of the topology in the GUI_PatRec pop menue pm_SelectTopology, e.g. newTopology
- * Especify how this topology is created in OfflinePatRec
+ * Add the name of the topology in the [GUI_PatRec] pop menu [pm_SelectTopology], e.g. {{{newTopology}}}
+ * Specify how this topology is created in OfflinePatRec
  * Make the case in OneShotPatRecClassifier
- * Create file PatRec_newTopology inside !PatRec/Topologies where the output of this topology will be compute.
+ * Create file {{{PatRec_newTopology}}} inside !PatRec/Topologies where the output of this topology will be compute.
