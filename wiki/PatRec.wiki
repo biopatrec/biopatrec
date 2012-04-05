@@ -6,8 +6,13 @@ Different pattern recognition (!PatRec) functions can be accessed by the GUI for
 
 == Offline !PatRec == 
 
-  * Calls OfflinePatRec and uses [sigFeatures] and others
+Most of the training phase or Offline !PatRec is taking care by the function OfflinePatRec which requires [sigFeatures].
+
   * First the training and validation sets are extracted (see [xSets])
+  * The [xSets] can be formed in different ways according to the _"Select Movements Mix"_ pop menu.
+   * _All Mov_. This means that all the movements recorded will be used as independent movements, therefore the # Outputs = # Movements.
+   * _Individual Mov_. This option will only considere the individual movementes during the training phase. All movements will be considered in the testing phase. In this case, the # Outputs = # Individual movements. However the accuracy is givien considering all movements.
+   * _Mixed Out_. This means that the mixed classes (or simultaneous movements) will also be used during the training phase, and # Outputs = # Individual movements. 
   * Then the classifier topology is created (see [PatRec_Topologies]).
   * Finally OfflinePatRec calls OfflinePatRecTraining to proceed with the classifier(s) training.
   * Returns the [patRec] structure containing all information required for testing the classifier(s).
@@ -27,10 +32,10 @@ NOTE: To do any real-time testing you must have configured your DAQ card, see [B
 
 == !PatRec GUI ==
 
-You first need to load data through the "Get Sig Features" botton. Doing this, there will be a window, which allows you to select the *.mat file of your interest. You can either load a previous recording session ([recSession]) or saved signal features ([sigFeatures]). If you load some other kind of data the message _That was not a valid training matrix_ will be displayed.
+You first need to load data through the "Get Sig Features" botton. Doing this, there will be a window, which allows you to select the {{{*.mat}}} file of your interest. You can either load a previous recording session ([recSession]) or saved signal features ([sigFeatures]). If you load some other kind of data the message _That was not a valid training matrix_ will be displayed.
 
  * Load a recording session
- If you load data of a recording session, the program will identify that through the variable [recSession] or _ss_. In case of _ss_ it will transform it into [recSession] in order to keep compatibility.
+ If you load data of a recording session, the program will identify that through the variable [recSession] or _ss_ (the ss structure was used in [EMG_AQ]). In case of _ss_ it will transform it into [recSession] in order to keep compatibility.
  The subfunction [Load_recSession] will be executed.
 
  * Load signal features
