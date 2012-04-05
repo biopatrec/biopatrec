@@ -8,14 +8,18 @@ Different pattern recognition (!PatRec) functions can be accessed by the GUI for
 
 Most of the training phase or Offline !PatRec is taking care by the function OfflinePatRec which requires [sigFeatures].
 
-  * First the training and validation sets are extracted (see [xSets])
+ * First the training and validation sets are extracted (see [xSets]). This directly affects the information to be used during the training and testing phases.
   * The [xSets] can be formed in different ways according to the _"Select Movements Mix"_ pop menu.
    * _All Mov_. This means that all the movements recorded will be used as independent movements, therefore the # Outputs = # Movements.
    * _Individual Mov_. This option will only considere the individual movementes during the training phase. All movements will be considered in the testing phase. In this case, the # Outputs = # Individual movements. However the accuracy is givien considering all movements.
    * _Mixed Out_. This means that the mixed classes (or simultaneous movements) will also be used during the training phase, and # Outputs = # Individual movements. 
-  * Then the classifier topology is created (see [PatRec_Topologies]).
-  * Finally OfflinePatRec calls OfflinePatRecTraining to proceed with the classifier(s) training.
-  * Returns the [patRec] structure containing all information required for testing the classifier(s).
+
+ * Then the classifier topology is created (see [PatRec_Topologies]).
+   * The same classifier can be constructed in different topologies, such as One-Vs-All, One-Vs-One, etc... see [PatRec_Topologies] for details.
+
+ * Finally OfflinePatRec calls OfflinePatRecTraining to proceed with the classifier(s) training.
+
+The OfflinePatRec returns the [patRec] structure containing all information required for further utilization of the classifier(s).
 
 == Real-time !PatRec == 
 
@@ -25,7 +29,7 @@ NOTE: To do any real-time testing you must have configured your DAQ card, see [B
 
 == Pattern recognition algorithms ==
 
- * [Discriminant_Analysis]] 
+ * [Discriminant_Analysis] 
  * [MLP] Multi-layers Perceptron
  * [RFN] Regulation Feedback Networks
 
