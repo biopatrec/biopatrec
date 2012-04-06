@@ -2,27 +2,27 @@
 
 = Starup Guide =
 
-*1.- Open Matlab as administrator.* This is especially important for input-output functionalities (e.g. recordings, VRE, etc). To be sure you will always run MATLAB as administrator
+*1.- Open MATLAB as administrator.* This is especially important for input-output functionalities (e.g. recordings, VRE, etc). To be sure you will always run MATLAB as administrator:
 
  * Right click on the MATLAB executable file
  * _Properties_
  * _Compatibility_
  * Check _Run this program as administrator_
 
-*2.- Add path.* You need to add the path of all functions so they can be found by MATLAB when running !BioPatRec
+*2.- Set path...* You need to add the path of all functions so they can be found by MATLAB when running !BioPatRec
  
  * File
-  * Add with subfolders
-   * Selected the path to !BioPatRec
+  * Set path...
+   * Add with subfolders
+    * Selected the path to !BioPatRec
  * Save
 
-*3.- Change the “Current Folder” to that of !BioPatRec.* This is because some temporal files will be store in the current folder during execution. This step is not absolutely necessary but otherwise you will have temporal files everywhere.
+*3.- Change the “Current Folder” to that of !BioPatRec.* This is because some temporal files will be store in the current folder during execution. This step is not absolutely necessary, however, you will have temporal files everywhere otherwise.
 
-*4.- Configure your DAQ card.* In order to use !BioPatRec for recording bioelectric signals you will need to install your DAQ card drivers first. The system is currently using the "session-baseed interface" paradigm, and it has been tested with the NI-USB6009 card.
+*4.- Install your DAQ card.* In order to use !BioPatRec for recording bioelectric signals you will need to install your DAQ card drivers first. The system is currently using the "session-baseed interface" paradigm, and it has been tested with the NI-USB6009 card.
 
-*USB-6009*
-
-You will need to install the  [http://joule.ni.com/nidu/cds/view/p/id/2604/lang/en NI-DAQmx]
+ *USB-6009*
+ You will need to install the [http://joule.ni.com/nidu/cds/view/p/id/2604/lang/en NI-DAQmx]
 
 
 = How To's =
@@ -45,7 +45,7 @@ At the MATLAB command window
  * Select the recording channels by ticking the channels check-boxes
  * Click _Start Recording_
 
-Once the recording is finished you can also:
+Once the recording is finished, you can also:
 
  * Apply different filters to the displayed time windows. Use the panel on the left-side, or more filters are available in the menu _Filters_
  * You can navigate in the graphs using the tools on the top of the GUI
@@ -112,7 +112,7 @@ Coming from the Signal Treatment GUI
  * Tick _Only indv. movements_ if you like to use only the invidual movements information for training, altough all movements will be used for testing. This only applies for simultaneous control (normally checked)
  * Select _Topology_ (normally _Single Classifier_, see [Classifier_Topologies])
  * Click _Run Off-line Training_
- * The structure [patRec] will be generated as a result, and it can be saved in _Data_ then _Save PatRec_.
+ * The structure [patRec] will be generated as a result, and it can be saved using the menu _Data_ and then _Save PatRec_.
 
 for more details see PatRec.
 
