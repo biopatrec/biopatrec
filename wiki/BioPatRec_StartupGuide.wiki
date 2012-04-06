@@ -9,14 +9,14 @@
  * _Compatibility_
  * Check _Run this program as administrator_
 
-*2.- Change the “Current Folder” to that of !BioPatRec.* This is because some temporal files will be store in the current folder during execution. This step is not absolutely necessary but otherwise you will have temporal files everywhere.
-
-*3.- Add path.* You need to add the path of all functions so they can be found by MATLAB when running !BioPatRec
+*2.- Add path.* You need to add the path of all functions so they can be found by MATLAB when running !BioPatRec
  
  * File
   * Add with subfolders
    * Selected the path to !BioPatRec
  * Save
+
+*3.- Change the “Current Folder” to that of !BioPatRec.* This is because some temporal files will be store in the current folder during execution. This step is not absolutely necessary but otherwise you will have temporal files everywhere.
 
 *4.- Configure your DAQ card.* In order to use !BioPatRec for recording bioelectric signals you will need to install your DAQ card drivers first. The system is currently using the "session-baseed interface" paradigm, and it has been tested with the NI-USB6009 card.
 
