@@ -2,30 +2,15 @@
 
 = Pattern Recognition =
 
-Different pattern recognition (!PatRec) functions can be accessed by the GUI for !PatRec ({{{GUI_PatRec}}}). For a general overview of the routines involved in !PatRec see [BioPatRec_Roadmap].
+The different pattern recognition (!PatRec) features can be accessed from the GUI: [GUI_PatRec]. For a general overview of the routines involved in !PatRec see [BioPatRec_Roadmap].
 
-== Offline !PatRec == 
+In BioPatRec, the pattern recognition is organized in:
 
-Most of the training phase or Offline !PatRec is taking care by the function OfflinePatRec which requires [sigFeatures].
+ * *Offline*: Training, validation and testing can be done using pre-recorded data.
 
- * First the training and validation sets are extracted (see [xSets]). This directly affects the information to be used during the training and testing phases.
-  * The [xSets] can be formed in different ways according to the _"Select Movements Mix"_ pop menu.
-   * _All Mov_. This means that all the movements recorded will be used as independent movements, therefore the # Outputs = # Movements.
-   * _Individual Mov_. This option will only considere the individual movementes during the training phase. All movements will be considered in the testing phase. In this case, the # Outputs = # Individual movements. However the accuracy is givien considering all movements.
-   * _Mixed Out_. This means that the mixed classes (or simultaneous movements) will also be used during the training phase, and # Outputs = # Individual movements. 
+ * *Realtime*: Needs the trained algorithm from the offline step in order to test it with real-time recordings.
 
- * Then the classifier topology is created (see [PatRec_Topologies]).
-   * The same classifier can be constructed in different topologies, such as One-Vs-All, One-Vs-One, etc... see [PatRec_Topologies] for details.
-
- * Finally OfflinePatRec calls OfflinePatRecTraining to proceed with the classifier(s) training.
-
-The OfflinePatRec returns the [patRec] structure containing all information required for further utilization of the classifier(s).
-
-== Real-time !PatRec == 
-
- The Real-time pattern recognitions requires a trained classifier in the structure [patRec].
-
-NOTE: To do any real-time testing you must have configured your DAQ card, see [BioPatRec_StartupGuide].
+For user instructions see [GUI_PatRec].
 
 == Pattern recognition algorithms ==
 
@@ -33,49 +18,67 @@ NOTE: To do any real-time testing you must have configured your DAQ card, see [B
  * [MLP] Multi-layers Perceptron
  * [RFN] Regulation Feedback Networks
 
+== Offline !PatRec == 
 
-== !PatRec GUI ==
+Most of the training phase or Offline !PatRec is taking care by the function OfflinePatRec. This function requires [sigFeatures].
 
-You first need to load data through the "Get Sig Features" botton. Doing this, there will be a window, which allows you to select the {{{*.mat}}} file of your interest. You can either load a previous recording session ([recSession]) or saved signal features ([sigFeatures]). If you load some other kind of data the message _That was not a valid training matrix_ will be displayed.
+ * First the training and validation sets are extracted (see [xSets]). This directly affects the information to be used during the training and testing phases.
+  * The [xSets] can be formed in different ways according to the _"Select Movements Mix"_ pop menu.
+   * _All Mov_. This means that all the movements recorded will be used as independent movements.
+    * # Outputs = # Movements.
+   * _Individual Mov_. This option will only consider the individual movements during the training phase. All movements will be considered in the testing phase. 
+    * # Outputs = # Individual movements.
+   * _Mixed Out_. This means that the mixed classes (or simultaneous movements) will also be used during the training phase.
+    * # Outputs = # Individual movements. 
 
- * Load a recording session
- If you load data of a recording session, the program will identify that through the variable [recSession] or _ss_ (the ss structure was used in [EMG_AQ]). In case of _ss_ it will transform it into [recSession] in order to keep compatibility.
- The subfunction [Load_recSession] will be executed.
+ * The classifier topology is then created (see [PatRec_Topologies]).
+   * The same classifier can be constructed in different topologies, such as One-Vs-All, One-Vs-One, etc... see [PatRec_Topologies] for details.
 
- * Load signal features
- In case you load signal features data, the program will recognize that through the variable [sigFeatures] and will execute [Load_sigFeatures].
+ * Finally, OfflinePatRec calls OfflinePatRecTraining to proceed with the classifier(s) training.
 
-see [BioPatRec_StartupGuide] for operation of the GUI.
+The OfflinePatRec returns the [patRec] structure containing all information required for further utilization of the classifier(s).
 
-In this GUI_PatRec is also possible to:
+== Real-time !PatRec == 
 
-  * Real-time !PatRec (Quick test)
-   * Calls RealtimePatRec
-   * Uses [patRec] and the GUI handles.
-   * Returns the predicted movements to the GUI and the average processing time.
+ The Real-time pattern recognition requires a trained classifier in the structure [patRec]. The classifier will be tested with continuously recorded data.
 
-  * Motion test
-   * Calls MotionTest
-   * Uses [patRec] and the GUI handles.
-   * Returns ...
+ * Real-time !PatRec (button)
+  * Calls RealtimePatRec
+  * Uses [patRec] and the GUI handles.
+  * Returns the predicted movements to the GUI and the average processing time.
+
+The real-time predictions can be couple with a prosthetic device or the virtual reality environment. see [GUI_TestPatRec] for operation.
+
+The following tests of prediction and control performance can be used:
+
+ * Motion test
+  * Calls MotionTest
+  * Uses [patRec] and the GUI handles.
+  * Returns ...
+
 
 NOTE: To do any real-time testing you must have configured your DAQ card, see [BioPatRec_StartupGuide].
 
 = Adding a New !PatRec Algorithm =
 
-Create all the related functions (files) inside a new folder with clear name for your new algorithm. This folder must be inside !PatRec folder.
-
-Take a look at OfflinePatRec to understand how data is processed before reaching the PatRec algorithms. You have to be sure that your algorithm takes as input the [sigFeatures] struct.
+Create all the related functions (files) inside a new folder with a clear name for your new algorithm. This folder must be inside !PatRec folder.
 
 You will normally need at least 2 functions
 
- * One for training your algorithm
- * One for testing your trained algorithm  
+ * One for *training* your algorithm
+  * Your training function must take as input the [xSets] and returns the required information for further evaluation. 
+  * See OfflinePatRecTraining for examples of how other PatRec algorithms are called.
+
+ * One for *testing* your trained algorithm
+  * This function must receive a features vector and returns the predicted class or movement.
+  * See OneShotPatRec for examples of how other PatRec algorithms are called.
 
 You will have to modify the following routines:
 
  * {{{GUI_PatRec}}} (To add you algorithm in the GUI)
-  * pm_SelectAlgorithm
-  * pm_SelectTraining
- * OfflinePatRecTraining (Training)
- * OneShotPatRec (Testing)
+  * pm_SelectAlgorithm (in {{{GUI_PatRec.fig}}})
+  * pm_SelectTraining (in {{{GUI_PatRec.m}}})
+ * OfflinePatRecTraining (for training)
+ * OneShotPatRec (for testing)
+
+Take a look at OfflinePatRec to deeply understand how data is processed before reaching the PatRec algorithms in the OfflinePatRecTraining function. See [BioPatRec_Roadmap] for a general overview.
