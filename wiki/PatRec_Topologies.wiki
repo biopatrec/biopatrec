@@ -24,19 +24,20 @@ All evaluation functions return two variables:
 == Ago-antagonist ==
 ({{{PatRec_AgoAntagonist}}})
 
- This topology has as many classifiers as DoF, or Classes/2. Therefore it is assumed that consecutive classes are Ago-Antagonist movements organized in pairs per DoF. The rest movements is considered as an exeption.
+ This topology has as many classifiers as DoF (or Classes/2). Therefore it is assumed that consecutive classes are Ago-Antagonist movements organized in pairs per DoF. The classifier is trained only using the Ago-Antagonist data sets.
 
- The classifier is trained only using the Ago-Antagonist data sets.
+ The rest movements is considered as an exception. If this is present, the classifier considered the 2 movements of the DoF AND the rest movement (no movement) class. 
 
  The output is given by the winner per DoF. 
- NOTE: Not working! It will always predict as many movements as DoF as it is. It needs to be modified.
+ NOTE: Not good for this application as it is! It will always predict as many movements as DoF as it is. The following topology takes care of this issue.
 
 == Ago-antagonist & Mixed ==
 ({{{PatRec_AgoAntagonistRest}}})
 
- Same than Ago-antagonist but the classifier is trained using the Ago-Antagonist sets plus a set mixed with the remaning classes.
+ Same than Ago-antagonist but the classifier is trained using the Ago-Antagonist sets plus a set mixed with the remaning classes. The rest movement (no movement) is also included in the training of each DoF if present.
 
  The output is given by the winner per DoF.
+
 
 == One-vs-All ==
 ({{{PatRec_OneVsAll}}})
