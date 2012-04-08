@@ -67,9 +67,11 @@ All evaluation functions return two variables:
 
 = Auxilary routines =
 
+The following routines are used by the topology functions to extract the data sets required for their topologies. This is all around the [xSets].
+
  * {{{ExtractSets_Stack}}}
 
- This function extract the corresponding set of selected movements (selSets). It keeps the format of xSets and xOuts but only with the rows corresponding to the selected movements with index in selSets
+ This function extract the corresponding set of selected movements (selSets). It keeps the format of [xSets] and xOuts but only with the rows corresponding to the selected movements with index in selSets
 
  NOTE: As it is now, the number of sets per selected movement must be the same. This is normally the case if recSession was used.
 
