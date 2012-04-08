@@ -1,0 +1,5 @@
+#summary Notes on the function
+
+This function extract the corresponding set of selected movements (selSets). It keeps the format of [xSets] and xOuts but only with the rows corresponding to the selected movements with index in _selSets_
+
+NOTE: As it is now, the number of sets per selected movement must be the same. This is normally the case if [recSession] was used.
