@@ -67,22 +67,28 @@ All evaluation functions return two variables:
 
 = Auxilary routines =
 
- *[ExtractSets_Stack
+ * {{{ExtractSets_Stack}}}
 
- This function extract the corresponding set of selected movements. It keeps the format of [xSets] and xOuts but only with the rows corresponding to the selected movements (selSets)
+ This function extract the corresponding set of selected movements (selSets). It keeps the format of xSets and xOuts but only with the rows corresponding to the selected movements with index in selSets
 
- *[ExtractSets_Stack_MixRest
+ NOTE: As it is now, the number of sets per selected movement must be the same. This is normally the case if recSession was used.
 
- It differes from [ExtractSets_Stack] by also including a mix of the remaining movements in a set with a single output.
- It get sets orderly one per set until the data set is completed with the remaining sets. 
+ * {{{ExtractSets_Stack_MixRest}}}
 
- *[ExtractSets_Stack_MixRestEqual
+ It differs from {{{ExtractSets_Stack}}} by also including the remaining movements in a set with a single output labeled "mixed".
 
- It differes from [ExtractSets_Stack_MixRest] by creating an equal number of sample between the selected sets and the mixed sets.
+ NOTE: The number of sets in the mixed class and the selected movements (classe) would be normally different.
+
+
+ * {{{ExtractSets_Stack_MixRestEqual}}}
+
+ It differs from {{{ExtractSets_Stack_MixRest}}} by creating an equal number of sample between the selected sets and the mixed sets.
+
+ NOTE: The number of sets per class would be the same.
 
 == How to add a new Topology ==
 
-The following must be done to add "newTopology"
+The following must be done to add a "newTopology"
 
  * Add the name of the topology in the [GUI_PatRec] pop menu [pm_SelectTopology], e.g. {{{newTopology}}}
  * Specify how this topology is created in OfflinePatRec
