@@ -1,0 +1,29 @@
+#summary MLP implementation
+
+= Introduction =
+
+This implementation of the ANN allows MLP or SLP topologies.
+
+ * {{{ANN_Perceptron}}} (main routine)
+  * Settings can be done here such as learning rate and ANN topology
+
+
+= Algorithm =
+
+
+
+= Roadmap =
+
+== Training ==
+
+ * {{{ANN_Perceptron}}}
+  * {{{InitANN_Perceptron}}}
+  * Run training algorithms
+   * {{{Backpropagation}}}
+  * {{{FastTestANN}}}
+   * {{{EvaluateANN}}}
+
+== Testing ==
+
+ * {{{MLPTest}}}
+  * {{{EvaluateANN}}}
