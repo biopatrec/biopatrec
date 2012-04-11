@@ -11,7 +11,7 @@ This is a quick and general overview of the most relevant functions used in BioP
 == GUI_RecordignSession ==
 
 
-= Signal Treatment =
+= Signal Treatment (SigTreatment)=
 
  * pb_preProcessing (in GUI_SigTreatment, and uses [recSession])
   * Split_recSession_Mov
@@ -26,12 +26,18 @@ This is a quick and general overview of the most relevant functions used in BioP
    * GetData (returns sets of raw signal trData, vData and tData)
     * Time window cutting (Non-overlapped, Overlapped cons, etc..)
 
-  * GetAllSigFeatures (returns [sigFeatures])
+  * Signal features extraction proceeds (see below)
 
  * pb_treatFolder
   * Same than pb_treat but for a set of files located in a specific folder. The files must be named: 1, 2, 3,...
 
-= PatRec =
+= Signal Features (SigFeatures)=
+
+  * GetAllSigFeatures (uses [xData] and returns [sigFeatures])
+   * GetSigFeatures
+    * Calls every feature computation routines {{{GetSigFeatures_xxx}}}
+
+= Pattern Recognition (PatRec) =
 
  * OfflinePatRec
   * Rand_sigFeatures
