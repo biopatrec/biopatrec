@@ -17,6 +17,7 @@ For user instructions see [GUI_PatRec].
  * [Discriminant_Analysis] 
  * [MLP] Multi-layers Perceptron
  * [RFN] Regulation Feedback Networks
+ * [SOM] Self-Organizing Map
 
 == Offline !PatRec == 
 
