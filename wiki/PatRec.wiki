@@ -12,12 +12,18 @@ In BioPatRec, the pattern recognition is organized in:
 
 For user instructions see [GUI_PatRec].
 
-== Pattern recognition algorithms ==
+== Algorithms ==
 
- * [Discriminant_Analysis] 
- * [MLP] Multi-layers Perceptron
- * [RFN] Regulation Feedback Networks
- * [SOM] Self-Organizing Map
+ * Feature selection
+  * [PCA] Principal Component Analysis
+
+ * Pattern Recognition
+  * [Discriminant_Analysis] 
+  * [MLP] Multi-layers Perceptron
+  * [RFN] Regulation Feedback Networks
+  * [SOM] Self-Organizing Map
+
+
 
 == Offline !PatRec == 
 
