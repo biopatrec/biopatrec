@@ -9,3 +9,7 @@ Add your content here.
 
 == Initial testing of the Virtual Reality Enviroment ==
 <wiki:video url="http://www.youtube.com/watch?v=nBixj_vEOQo"/>
+
+== Initial testing of a multifunctional prosthesis  ==
+
+<object style="height: 390px; width: 640px"><param name="movie" value="https://www.youtube.com/v/nxPToKzuXF4?version=3&feature=player_embedded"><param name="allowFullScreen" value="true"><param name="allowScriptAccess" value="always"><embed src="https://www.youtube.com/v/nxPToKzuXF4?version=3&feature=player_embedded" type="application/x-shockwave-flash" allowfullscreen="true" allowScriptAccess="always" width="640" height="360"></object>
