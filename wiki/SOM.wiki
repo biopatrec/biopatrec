@@ -30,7 +30,7 @@ The classification will be done by comparing the winning neuron for testing data
 = Functions Roadmap =
 ==Training==
 
-examples of MLP:
+
  * {{{SOM_Maping}}}
   * Run training algorithms
    
