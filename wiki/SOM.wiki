@@ -17,7 +17,7 @@ The algorithm is summarized as follows:
   # *Sampling:* Draw randomly the input vector x from the input data sets.
   # *Simmilarity matching:* Find the best-matching(winning) neuron i(x) at time-step _n_ by using the minimum-distance criterion where
         i(x)=arg min || x(_n_) - wj | , j=1,2,...,l
-  # *Updating:* Adjust the synaptic-weight vector of all excited neurons by using the update formula *wj(_n_+1)=wj(_n_) + _etta_ _hj(_n_) ( x(_n_) - w(_n_))* where _etta_ is a learning rate parameter and hj(_n_) is the neighborhood function centered around the winning neuron x(i); both _eta_ and hj(_n_)are varied dynamically during learning best results.
+  # *Updating:* Adjust the synaptic-weight vector of all excited neurons by using the update formula *wj(_n_+1)=wj(_n_) + _etta_ _hj(_n_) ( x(_n_) - w(_n_))* where _etta_ is a learning rate parameter and hj(_n_) is the neighborhood function centered around the winning neuron x(i); both _etta_ and hj(_n_)are varied dynamically during learning best results.
   # *Continuation:* Continue with step 2 for some for some iteration.
 
 Then after the training completed the next step is to find for each input data set the winning neuron according to step 3 and depending on the wj(0) j=1,2...,l
