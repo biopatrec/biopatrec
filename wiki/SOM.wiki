@@ -19,4 +19,5 @@ The algorithm is summarized as follows:
         i(x)=arg min || x(_n_) - wj | , j=1,2,...,l
   # *Updating:* Adjust the synaptic-weight vector of all excited neurons by using the update formula *wj(_n_+1)=wj(_n_) + _eta_ _hj(_n_) ( x(_n_) - w(_n_))* where _eta_ is a learning rate parameter and hj(_n_) is the neighborhood function centered around the winning neuron x(i); both _eta_ and hj(_n_)are varied dynamically during learning best results.
   # *Continuation:* Continue with step 2 for some for some iteration.
+
  
