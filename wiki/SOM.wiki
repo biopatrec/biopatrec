@@ -25,4 +25,20 @@ and keeping index of the winning neurons for all input data set in one vector th
 
 The classification will be done by comparing the winning neuron for testing data set according  to the code Book .  
 
- 
+
+
+= Functions Roadmap =
+==Training==
+
+examples of MLP:
+ * {{{SOM_Maping}}}
+  * Run training algorithms
+   
+  * {{{TestSOM}}}
+   * {{{FindBUM}}}
+
+== Testing ==
+
+
+ * {{{TestSOM}}}
+   * {{{FindBUM}}}
