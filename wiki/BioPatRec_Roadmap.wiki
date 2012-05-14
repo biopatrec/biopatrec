@@ -4,21 +4,21 @@
 
 This is a quick and general overview of the most relevant functions used in BioPatRec. These are functions or GUIs names.
 
-= Recordigns =
+= Recordings =
 
-== GUI_Recordigns ==
+== GUI_Recordings ==
 
-== GUI_RecordignSession ==
- * mov-Set Images of different movements.
- * pb_record
-  * GUI_REcordings
-    * pb_startrecording
-    * GUI_AFEselection
-      * pb_record(AFE settings)
-      * RecordingSession(For AFE in our case)
-      * AFE_PICCOLO(RHA)
-        * Start Exercise
-     
+== GUI_Recording Session (BioPatRec) ==
+ * pb_record (in GUI_RecordingSession)
+  
+  * GUI_Recordings 
+   * pb_startrecording (in GUI Recordings)
+
+  * GUI_AFEselection 
+   * pb_record (GUI_AFEselection(RHA))
+    * RecordingSession
+    * AFE_PICCOLO (RHA)
+        
 
 
 = Signal Treatment (SigTreatment)=
