@@ -2,15 +2,32 @@
 
 = Introduction =
 
-Regulation Feedback Networks were initially introduced by [http://reason.cs.uiuc.edu/tsvi/ Tsvi Achler] as an alternative to the traditional "feed forward" or "lateral inhibition" pattern recognition algorithms. 
-
-In traditional pattern recognition, the learning takes places during a training phase, in RFN, the pattern recognition occurs during the testing phase by observing the stability of the outputs.
+Regulation Feedback Networks were initially introduced by [http://reason.cs.uiuc.edu/tsvi/ Tsvi Achler] as an alternative to the traditional "feed forward" or "lateral inhibition" pattern recognition algorithms. In traditional pattern recognition, the learning takes places during a training phase, in RFN, the pattern recognition occurs during the testing phase by observing the stability of the outputs.
 
 Feedback regulation is analogous to the negative feedback in control theory.
 
 = Algorithm =
 
 Salience is an integral part of RFN ...
+
+
+= Implementation =
+
+There are two key procedures for this algorithm
+
+1.- The creation of the connectivity matrix:
+  * connMat(#Movements x #Features)
+ 
+We dispose of several vectors of features (or data sets) per class. However, RFN requires of a single vector to represent a class. Therefore, we can generate this vector in the following ways, or "training algorithm" as shown in the GUI_PatRec: 
+
+ * *Mean*. This is the average value of each feature per class
+ * *Mean + PSO*. Additionally to taking the mean, a PSO is used to fine tune the resulting vectors.
+ * *Exclusive Mean*. Excludes the mean values that are smaller than 2 times the standard deviation.
+
+
+2.- The testing function where the stability of the output is evaluated (RegulationFeedbackTest)
+
+NOTE: For this particular implementation the normalization "UnitaryRange" is necessary. This means a normalization between 0 and 1.
 
 = Functions Roadmap =
 == Training ==
