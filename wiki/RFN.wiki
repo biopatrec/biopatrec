@@ -2,26 +2,32 @@
 
 = Introduction =
 
-Algorithm background
+Regulation Feedback Networks were initially introduced by [http://reason.cs.uiuc.edu/tsvi/ Tsvi Achler] as an alternative to the traditional "feed forward" or "lateral inhibition" pattern recognition algorithms. 
+
+In traditional pattern recognition, the learning takes places during a training phase, in RFN, the pattern recognition occurs during the testing phase by observing the stability of the outputs.
+
+Feedback regulation is analogous to the negative feedback in control theory.
 
 = Algorithm =
 
-How does it work?
-Images? Diagrams?
+Salience is an integral part of RFN ...
 
 = Functions Roadmap =
 == Training ==
 
-examples of MLP:
- * {{{ANN_Perceptron}}}
-  * {{{InitANN_Perceptron}}}
-  * Run training algorithms
-   * {{{Backpropagation}}}
-  * {{{FastTestANN}}}
-   * {{{EvaluateANN}}}
+ * RegulationFeedback
+  * 'Mean' training calls:
+   * Get_connMat_TrV
+  * 'Mean + PSO' training calls: 
+   * Get_connMat_TrV
+   * InitPSO_RFN
+   * PSO_RFN
+  * 'Exclusive Mean' training calls:
+   * Get_connMat_eMean
+  * RegulationFeedbackAcc
+   * RegulationFeedbackTest
+
 
 == Testing ==
 
-example of MLP:
- * {{{MLPTest}}}
-  * {{{EvaluateANN}}}
+ * RegulationFeedbackTest
