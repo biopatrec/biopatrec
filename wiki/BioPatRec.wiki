@@ -12,7 +12,7 @@ BioPatRec is a modular platform for testing and development of algorithms to be 
 
 If you are interested on developing further using this platform, or simple understand the nuts and bolts of !BioPatRec, the following links are for you.
 
-!BioPatRec is structured in different modules, and their related routines can be found inside the folders with the modules' names.
+!BioPatRec is structured in different modules, and their related routines can be found inside the folders named after each module.
 
  * [Comm]
  * SigRecordings
@@ -34,7 +34,7 @@ See [BioPatRec_Roadmap] for quick overview of the relevant functions in each mod
 If you are planning to contribute or develop further using this platform, you might want to consider the following
 
  * [Coding_Standard] (simple, easy and useful!)
- * [Copyright_Notice] (keep the connection and fair play)
+ * [Copyright_Notice] (keep the connection and play fair)
 
 If you wish to commit changes or upgrades to BioPatRec, the easiest way is to submit a _patch_ using Tortoise. See this [http://www.igorexchange.com/node/87#branches Tortoise SVN Tutorial] for more information.
 
