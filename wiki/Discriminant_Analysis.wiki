@@ -1,0 +1,26 @@
+#summary Discriminant Analysis Description
+
+= Introduction =
+
+This is the standard statistical method for pattern recognition, where Linear Discriminant Analysis ([http://en.wikipedia.org/wiki/Linear_discriminant_analysis LDA]) is probably the most popular and well-known. 
+
+= Algorithm =
+
+...
+
+= Implementation =
+
+The implementation is based on MATLAB _classify_ function. See [http://www.mathworks.se/help/toolbox/stats/classify.html Discriminant Analysis in Matlab] for details.
+
+
+
+
+= Functions Roadmap =
+== Training ==
+
+ * GetSetsLables_Stack 
+ * DiscriminantAnalysis
+
+== Testing ==
+
+ * DiscriminantTest
