@@ -4,22 +4,46 @@
 
 This is a quick and general overview of the most relevant functions used in BioPatRec. These are functions or GUIs names.
 
-= Recordings =
+= Recordings (SigRecordings)=
 
 == GUI_Recordings ==
 
-== GUI_Recording Session (BioPatRec) ==
- * pb_record (in GUI_RecordingSession)
-  
-  * GUI_Recordings 
-   * pb_startrecording (in GUI Recordings)
+ * pb_StartRecording (Start Recording)
+  * DAQShow_SBI
 
-  * GUI_AFEselection 
-   * pb_record (GUI_AFEselection(RHA))
+ * pb_ApplyButter (Apply Butter)
+  * ApplyButterFilter
+
+ * Menus
+  * File
+   * Load
+    * DataShow or,
+    * GUI_RecordingSessionShow
+    * Compatibility_recSession (if necessary)
+  * Recordings
+   * One-shot
+    * pb_StartRecording
+   * Recording Session
+    * GUI_RecordingSession
+  * Filters
+   * ...
+   * ...
+
+== GUI_Recording Session ==
+
+ * pb_Record
+  * calls GUI_Recordings 
+  * calls GUI_AFEselection 
+   * pb_record (GUI_AFEselection)
     * RecordingSession
-    * AFE_PICCOLO (RHA)
-        
+      * for SBI - NI
+       * InitSBI_NI
+       * DataShow
 
+== GUI_RecordingSessionShow ==
+
+ * pb_Load
+  * DataShow
 
 = Signal Treatment (SigTreatment)=
 
