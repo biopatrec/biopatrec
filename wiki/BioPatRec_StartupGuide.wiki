@@ -53,6 +53,7 @@ Once the recording is completed, you can also:
 NOTE:
  * You can use this GUI to open any recording session or _cdata.mat_
  * At this point you can only do recordings using this GUI if you are using the _session-based interface_, e.g. you are using the USB-6009. 
+ * It used to be that you could record from any set of channels in the ”legacy” data acquisition paradigm in MATLAB. This is no longer the case with SBI. Therefore you can only record from consecutive channels without skipping any (yes, another issue with the updates in MATLAB). 
 
 == Recording Session ==
 
