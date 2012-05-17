@@ -10,7 +10,7 @@ In BioPatRec, the pattern recognition is organized in:
 
  * *Realtime*: Needs the trained algorithm from the offline step in order to test it with real-time recordings.
 
-For user instructions see [GUI_PatRec].
+For user instructions see [BioPatRec_StartupGuide], or more detailed in [GUI_PatRec].
 
 == Algorithms ==
 
@@ -45,9 +45,11 @@ Most of the training phase or Offline !PatRec is taking care by the function Off
 
 The OfflinePatRec returns the [patRec] structure containing all information required for further utilization of the classifier(s).
 
+Automatic statistics can be generated using the menu _Statistics_, see [PatRec_Statistics] for details.
+
 == Real-time !PatRec == 
 
- The Real-time pattern recognition requires a trained classifier in the structure [patRec]. The classifier will be tested with continuously recorded data.
+The Real-time pattern recognition requires a trained classifier in the structure [patRec]. The classifier will be tested with continuously recorded data.
 
  * Real-time !PatRec (button)
   * Calls RealtimePatRec
