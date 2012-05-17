@@ -12,4 +12,4 @@ xFeatures(#Sets x #Movements)
 
 This was simple done to have wider range of features available during the testing of PatRec. 
 
-These features are extracted in OfflinePatRec to from the xSets
+These features are extracted in OfflinePatRec to from the [xSets]
