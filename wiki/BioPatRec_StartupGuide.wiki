@@ -2,24 +2,24 @@
 
 = Starup Guide =
 
-*1.- Open MATLAB as administrator.* This is especially important for input-output functionalities (e.g. recordings, VRE, etc). To be sure you will always run MATLAB as administrator:
+*1.- Open MATLAB as administrator.* This is especially important for input-output functionality (e.g. recordings, VRE, etc). If you are just interested in the Offline PatRec, you can skip this step. To be sure you will always run MATLAB as administrator (Windows 7):
 
  * Right click on the MATLAB executable file
  * _Properties_
  * _Compatibility_
  * Check _Run this program as administrator_
 
-*2.- Set path...* You need to add the path of all functions so they can be found by MATLAB when running !BioPatRec
+*2.- Set path...* You need to add the path to all functions so they can be found by MATLAB when running !BioPatRec
  
- * File
-  * Set path...
-   * Add with subfolders
-    * Selected the path to !BioPatRec
- * Save
+ * _File_
+ * _Set path..._
+ * _Add with subfolders_
+ * Selected the path to !BioPatRec
+ * _Save_
 
-*3.- Change the “Current Folder” to that of !BioPatRec.* This is because some temporal files will be store in the current folder during execution. This step is not absolutely necessary, however, you will have temporal files everywhere otherwise.
+*3.- Change the “Current Folder” to that of !BioPatRec.* This is because some temporal files will be stored in the current folder during execution. This step is not absolutely necessary, however, you will have temporal files everywhere if you skip it.
 
-*4.- Install your DAQ card.* In order to use !BioPatRec for recording bioelectric signals you will need to install your DAQ card drivers. The system is currently using the "session-based interface" paradigm, and it has been tested with the NI-USB6009 card.
+*4.- Install your DAQ card.* In order to use !BioPatRec for real-time PatRec, and therefore recording bioelectric signals, you need to install your DAQ card drivers. The system is currently using the "session-based interface" paradigm, and it has been tested with the NI-USB6009 card (one of the most simplest and affordable DAQ cards from National Instruments).
 
  * For the USB-6009 you will need to install the [http://joule.ni.com/nidu/cds/view/p/id/2604/lang/en NI-DAQmx]
  * Other devices using SCI have been used as well. These routines and the "legacy" routines for MATLAB can be made available upon request.
@@ -30,7 +30,7 @@ The following are quick guidelines on how to use BioPatRec. It is assumed that y
 
 = How to record signals? =
 
-Recordings can be done as a single shot for fast signal quality evaluations, or as a recording session for further processing and PatRec. In the following steps it is assumed that you have already configured your DAQ card.
+Recordings can be done as a single time-defined event for fast signal quality evaluation, or as a recording session for further processing and PatRec. In the following steps, it is assumed that you have already configured your DAQ card.
 
 == One-shot recordings ==
 
@@ -38,20 +38,20 @@ At the MATLAB command window
 
  * Type !BioPatRec
  * Click _Recordings_
- * Select how fast you want to record (sampling frequency)
+ * Select how fast you want to sample the signals (sampling frequency)
  * Select for how long you want record (sampling time)
  * Select the time window to be displayed in the GUI (peeking time)
  * Select the recording channels by ticking the channels check-boxes
  * Click _Start Recording_
 
-Once the recording is finished, you can also:
+Once the recording is completed, you can also:
 
  * Apply different filters to the displayed time windows. Use the panel on the left-side, or more filters are available in the menu _Filters_
  * You can navigate in the graphs using the tools on the top of the GUI
  * You can zoom in a specific time using the boxes on the top of the graphs.
 
 NOTE:
- * You can use this GUI to open any recording session or _cData.mat_
+ * You can use this GUI to open any recording session or _cdata.mat_
  * At this point you can only do recordings using this GUI if you are using the _session-based interface_, e.g. you are using the USB-6009. 
 
 == Recording Session ==
@@ -60,22 +60,37 @@ At the MATLAB command window
 
  * Type !BioPatRec
  * Click _Recording Session_
- * ...
- * The structure [recSession] will be generated as a result.
+ * Write the number of repetitions of each movement (nR)
+ * Write the number the contraction time (cT) in seconds
+ * Write the number the relaxation time (rT) in between contractions
+ * Select the movements by highlighting the name
+ * Push _Record_
+
+Now you will be redirected to the Analog Front-End Selection.
+
+ * Select the device name
+ * Select the number of channels
+ * Select sampling frequency (Default 2k)
+ * Tick the option of dummy contraction if wanted
+ * Push _Record_
+
+The structure [recSession] will be generated as a result.
+
+NOTE: Leave the default options for _Active, COM/port, and Show_. Unless you have the required hardware and software.
 
 = How to pre-process the data and extract signal features? =
 
 At the MATLAB command window
 
  * Type !BioPatRec
-     * Click _Pattern Recognition_
-       * Click _Get Sig. Features_
-       * Select the file containing the [recSession] structure
+ * Click _Pattern Recognition_
+ * Click _Get Sig. Features_
+ * Select the file containing the [recSession] structure
 
 The latter will take you to the Signal Treatment GUI, now:
 
  * Select the movements to be used by highlighting the name (all are selected by default)
- * Tick the _Add "rest" as a movement_ if you want to have "no movement" or "rest" as a pattern or class.
+ * Tick the _Add "rest" as a movement_ if you want to have "no movement" or "rest" as a pattern/class/movement.
  * Select the percentage of the contraction time that you will like to use. If you select _1_, you will include the transient period of the movement. If you chose _0.5_ you will probably only use the signals corresponding to the steady state of the movement or the isometric contraction.
  * Select the channels to be used by highlighting the number (all are selected by default)
  * Click _Pre-procesing_
