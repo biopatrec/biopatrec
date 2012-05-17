@@ -10,11 +10,11 @@
  * dev (device used for recordings)
  * fFilter (frequency filter)
  * sFilter (spatial filter)
- * trSets (training sets, number), see [xSets] 
- * vSets (validation sets, number), see [xSets] 
- * tSets (testing sets, number), see [xSets] 
+ * trSets (training sets, number)
+ * vSets (validation sets, number)
+ * tSets (testing sets, number)
  * trFeatures (training features), see [xFeatures] 
  * vFeatures (validation features), see [xFeatures] 
  * tFeatures (test features), see [xFeatures] 
 
-This structure contains the signal features to be used for pattern recognition. These are the training, validation and testing sets (see [xSets]).
+This structure contains the signal features to be used for pattern recognition. These are the training, validation and testing sets (see [xSets] created in PatRec).
