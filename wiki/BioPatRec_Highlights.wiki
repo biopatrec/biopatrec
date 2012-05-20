@@ -1,9 +1,56 @@
 #summary BioPatRec features and video demonstrations
 
-= Introduction =
+= BioPatRec Highlights =
 
-Add your content here.
+BioPatRec allows a seamless implementation of a variety of algorithms in the fields of
+ # Signal processing
+ # Feature selection and extraction
+ # Pattern recognition
+ # Real-time control
+in the context of prosthetic control.
 
+=== General features ===
+ * *Modular.* As long as the data structures for information transfer are respected, any module could be substituted.
+ * *Customizable.* As a result of the modular design, BioPatRec can be adapted to different experimental settings.
+ * *User friendly.* The use of graphical user interfaces (GUIs) facilitates BioPatRec utilization. Moreover, a considerable amount of documentation is available in this wiki for its operation.
+
+ * Recordings
+  * Dedicated GUI for customization of the recording sessions
+  * Dedicated GUI to load recording sessions, and display related information.
+  * Signals displayed in time and frequency domains.
+  * Graphical navigation tools available (time and frequency range selection, zoom, pan, etc..)
+  * Frequency and spatial filters available
+
+ * Signal processing
+  * Dedicated GUI for signal processing
+  * Movements selection
+  * Channels selection
+  * Addition of “rest” as the state of no movement
+  * Filters
+   * Frequency
+   * Spatial
+  * Signal Segmentation
+   * Non-overlapped with selectable _Time Window_
+   * Constant overlap with selectable _Time Window_ and _overlap_
+  * Customizable construction of the training, validation and testing sets
+  * Over 21 time and frequency signal features available
+
+ * Pattern Recognition
+  * Easy selection of signal features
+  * Customization of the training, validation and testing sets
+  * Variety of pattern recognition algorithms with different training algorithms (see PatRec)
+  * Different normalization methods
+   * Mean 0, Variance 1
+   * 0 to 1
+   * -1 to 1
+  * Different methods to construct the [xSets] (see PatRec), especially useful for simultaneous movements.
+  * Different classifier topologies available (see [PatRec_Topologies])
+  * Optional randomization of data sets
+  * Display of accuracy per movement and confusion matrix
+  * Automatic computation of pattern recognition statistics (see [PatRec_Statistics])
+  * Real-time testing
+   * Motion Test
+   * Target Control Achievement
 
 = Demonstrations =
 
