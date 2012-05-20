@@ -18,19 +18,22 @@ Salience is an integral part of RFN ...
 
 There are two key procedures for this algorithm
 
-1.- The creation of the connectivity matrix:
+*1.- The creation of the connectivity matrix:*
   * connMat(#Movements x #Features)
  
-RFN requires of a single vector to represent a class. However, in prosthetic control, there is normally several vectors of features (or data sets, [xSets]) per class. Therefore, we need to generate this vector in the following ways (or "training algorithm" to be selected in [GUI_PatRec]): 
+RFN requires of a single vector to represent a class. However, in prosthetic control, there is normally several vectors of features (or data sets, [xSets]) per class. Therefore, we need to generate this vector in the following ways:
 
  * *Mean*. This is the average value of each feature per class
  * *Mean + PSO*. Additionally to taking the mean, a PSO is used to fine tune the resulting vectors.
  * *Exclusive Mean*. Excludes the mean values that are smaller than 2 times the standard deviation.
 
+These different methods can be selected as "training algorithm" in the [GUI_PatRec]). 
 
-2.- The testing function where the stability of the output is evaluated (RegulationFeedbackTest)
+*2.- The testing function* where the stability of the output is evaluated (RegulationFeedbackTest)
 
-NOTE: For this particular implementation the normalization "UnitaryRange" is necessary. This means a normalization between 0 and 1.
+NOTE: For this particular implementation the normalization "{{{UnitaryRange}}}" is necessary. This means a normalization between 0 and 1.
+
+An additional implementation that utilizes a threshold to selected the predicted output is also available. The "RFNth" uses the standard RFN routines with the addition of a threshold.
 
 = Functions Roadmap =
 == Training ==
@@ -44,6 +47,12 @@ NOTE: For this particular implementation the normalization "UnitaryRange" is nec
    * PSO_RFN
   * 'Exclusive Mean' training calls:
    * Get_connMat_eMean
+  * RegulationFeedbackAcc
+   * RegulationFeedbackTest
+
+ * RegulationFeedback_thOut
+  * RegulationFeedback
+   * ...
   * RegulationFeedbackAcc
    * RegulationFeedbackTest
 
