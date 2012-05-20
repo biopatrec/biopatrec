@@ -8,8 +8,11 @@ Feedback regulation is analogous to the negative feedback in control theory.
 
 = Algorithm =
 
+... 
+
 Salience is an integral part of RFN ...
 
+...
 
 = Implementation =
 
@@ -18,7 +21,7 @@ There are two key procedures for this algorithm
 1.- The creation of the connectivity matrix:
   * connMat(#Movements x #Features)
  
-We dispose of several vectors of features (or data sets) per class. However, RFN requires of a single vector to represent a class. Therefore, we can generate this vector in the following ways, or "training algorithm" as shown in the GUI_PatRec: 
+RFN requires of a single vector to represent a class. However, in prosthetic control, there is normally several vectors of features (or data sets, [xSets]) per class. Therefore, we need to generate this vector in the following ways (or "training algorithm" to be selected in [GUI_PatRec]): 
 
  * *Mean*. This is the average value of each feature per class
  * *Mean + PSO*. Additionally to taking the mean, a PSO is used to fine tune the resulting vectors.
