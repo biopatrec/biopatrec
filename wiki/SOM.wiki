@@ -1,4 +1,6 @@
-#summary One-sentence summary of this page.
+#summary SOM implementation
+
+NOTE: This is an ongoing development and therefore the documentation is not yet ready.
 
 = Introduction =
 
