@@ -2,17 +2,25 @@
 
 = BioPatRec Highlights =
 
-BioPatRec allows a seamless implementation of a variety of algorithms in the fields of
+BioPatRec is a modular platform implemented in MATLAB that allows a seamless integration of a variety of algorithms in the fields of 
+
  # Signal processing
  # Feature selection and extraction
  # Pattern recognition
  # Real-time control
-in the context of prosthetic control.
+
+in the context of prosthetic control. 
+
+BioPatRec includes all the necessary routines for prosthetic control based in pattern recognition; from data acquisition to real-time evaluations, including a virtual reality environment and pattern recognition algorithms (see below for all features). 
+
+BioPatRec is demonstrated with the real-time control of a virtual hand and multifunctional prosthetic devices (see the videos below).
 
 === General features ===
  * *Modular.* As long as the data structures for information transfer are respected, any module could be substituted.
  * *Customizable.* As a result of the modular design, BioPatRec can be adapted to different experimental settings.
  * *User friendly.* The use of graphical user interfaces (GUIs) facilitates BioPatRec utilization. Moreover, a considerable amount of documentation is available in this wiki for its operation.
+
+=== 
 
  * Recordings
   * Dedicated GUI for customization of the recording sessions
