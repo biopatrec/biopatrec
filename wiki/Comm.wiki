@@ -1,0 +1,43 @@
+#summary Communications (in/out)
+
+= Communications =
+
+All the routines associated with communications can be found in the *Comm* folder. These can be from/to peripherals or other software.
+
+ * Analog Front-End ([AFE])
+  * Session-Based Interface (SBI)
+ * Virtual Reality Environment ([VRE])
+ * Artificial Limb Controller (ALC)
+
+= Inputs =
+== Analog Front-Ends ==
+=== Session-Based Interface ===
+
+The SBI routines have been tested for the NI-USB6009, however, any other DAQ card could be used under this paradigm. In our experience, the NI-USB6009 is an affordable option for data acquisition.
+
+The SBI can be used for both inputs and outputs, however, we mostly use it for inputs (recordings).
+
+Since BioPatRec was developed before SBI, we also have available the "legacy" routines.
+
+=== Biopotenial Amplifiers ===
+
+We have developed several low-cost high-CMRR biopotenial amplifiers for our research. We have specific designs for ENG and EMG. If you are looking for bio-amps, we might able to help you.
+
+== Other peripherals ==
+
+ * AcceleGlove (coming soon...)
+
+
+= Outputs =
+
+We have established a easy communication protocol to produce physically meaningful outputs (see the Movements_Protocol)
+
+== Virtual Reality Environment ==
+
+... see ([VRE])
+
+== Prosthetic Devices ==
+
+We have developed routines to control prosthetic devices using PWMs or servo motors. The output command is transmitted using the Serial Communication Interface (SCI) to a microcontroller (see the Movements_Protocol).
+
+... coming soon...
