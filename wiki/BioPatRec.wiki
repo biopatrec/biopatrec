@@ -23,6 +23,8 @@ If you are interested on developing further using this platform, or simple under
 
 See [BioPatRec_Roadmap] for quick overview of the relevant functions in each module.
 
+https://biopatrec.googlecode.com/svn/wiki/img/Biopatrec_flow.png
+
 !BioPatRec has a modular design based in data structures. This means that as long as you use the same data structures, you could use the different modules independently if you wish.
 
  * Data Structures
