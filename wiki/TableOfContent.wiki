@@ -6,14 +6,11 @@
   * [BioPatRec_StartupGuide Startup Guide] 
   * [BioPatRec_Requirements Requirements]
   * [BioPatRec_Roadmap Functions roadmap]
-
  * Structures:
   * [recSession]
   * [sigTreated]
   * [sigFeatures]
   * [patRec]
-
  * Data sets
   * [xSets]
-
  * [Coding_Standard Coding]
