@@ -1,0 +1,46 @@
+#summary Feature extraction
+
+= Feature extraction =
+
+Although there are few PatRec algorithms that can be feed directly with time series, such as myoelectric signals, the vast majority required discrete values. In our case, these signal features are extracted from fixed time windows in SigTreatment.
+
+
+== Features ==
+
+The following are the available signal features
+
+|| *ID* || *Feature* || *Domain* ||
+|| tmabs || Mean absolute value || Time ||
+...
+
+
+
+== Implementation ==
+
+ * GetAllSigFeatures this functions creates the base of [sigFeatures] and populates the [xFeatures] by calling GetSigFeatures
+  * Input:
+   * handles (from the GUI)
+   * [sigTreated]
+  * Output:
+   * [sigFeatures]
+
+ * GetSigFeatures computes all the requested features
+  * Input:
+   * data(Samples x Channels)
+   * sampling frequency
+   * fID (Vector of cells with the features ID)
+  * Output:
+   * xFeatures
+
+ * pF (structure received by each function to compute a feature)
+  * pF.ch (channels)
+  * pF.sp (samples)
+  * pF.sF (sampling frequency)
+  * pF.data (Samples x Channels)
+  * pF.absdata (Samples x Channels)
+  * pF.f ([xFeatures], a structure with all the computed features)
+
+= Adding a new feature =
+
+If you would like to try a new signal feature, this is what you should do...
+
