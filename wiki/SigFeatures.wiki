@@ -9,9 +9,30 @@ Although there are few PatRec algorithms that can be feed directly with time ser
 
 The following are the available signal features
 
-|| *ID* || *Feature* || *Domain* ||
-|| tmabs || Mean absolute value || Time ||
-...
+|| *ID*    || *Feature*           || *Domain* ||
+|| tmn     || Mean                || Time || 
+|| tmabs   || Mean absolute value || Time ||
+|| tmd     || Median              || Time ||
+|| tstd    || standard deviation  || Time ||            
+|| tvar    || Variance            || Time ||            
+|| twl     || Waveform length     || Time ||          
+|| trms    || RMS                 || Time ||
+|| tzc     || Zero-crossing       || Time ||
+|| tpks    || Peaks               || Time ||
+|| tmpks   || Mean (peaks)        || Time ||
+|| tmvel1  || Mean  velocity      || Time || 
+|| tslpch1 || Slope change        || Time ||      
+|| tslpch2 || Slope Changes using the diff of the raw signal || Time ||        
+|| tpwr    || Power               || Time ||
+|| tren    || Rough entropy       || Time ||
+|| tcr     || Correlation         || Time || 
+|| tcv     || Co-variance         || Time ||
+|| fwl     || Waveform length     || Frequency ||
+|| fmn     || Mean                || Frequency ||   
+|| fmd     || Median              || Frequency ||
+|| fpmn    || Mean (peaks)        || Frequency ||
+|| fpmd    || Median (peaks)      || Frequency ||
+|| fpstd   || Standard deviation (peaks)  || Frequency ||
 
 
 
@@ -43,4 +64,3 @@ The following are the available signal features
 = Adding a new feature =
 
 If you would like to try a new signal feature, this is what you should do...
-
