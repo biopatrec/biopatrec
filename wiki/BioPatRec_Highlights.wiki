@@ -9,27 +9,27 @@ BioPatRec is a modular platform implemented in MATLAB that allows a seamless int
  # Pattern recognition
  # Real-time control
 
-in the context of prosthetic control. 
+All these in the context of prosthetic control. 
 
-BioPatRec includes all the necessary routines for prosthetic control based in pattern recognition; from data acquisition to real-time evaluations, including a virtual reality environment and pattern recognition algorithms (see below for all features). 
+BioPatRec itself includes all the necessary routines for prosthetic control based in pattern recognition; from data acquisition to real-time evaluations, including a virtual reality environment and pattern recognition algorithms (see below for all features). 
 
-BioPatRec is demonstrated with the real-time control of a virtual hand and multifunctional prosthetic devices (see the videos below).
+We demonstrate BioPatRec with the real-time control of a virtual hand and multifunctional prosthetic devices (see the videos below).
 
 === General features ===
  * *Modular.* As long as the data structures for information transfer are respected, any module could be substituted.
  * *Customizable.* As a result of the modular design, BioPatRec can be adapted to different experimental settings.
  * *User friendly.* The use of graphical user interfaces (GUIs) facilitates BioPatRec utilization. Moreover, a considerable amount of documentation is available in this wiki for its operation.
 
-=== 
+=== Features per module ===
 
- * Recordings
+ * *Recordings*
   * Dedicated GUI for customization of the recording sessions
   * Dedicated GUI to load recording sessions, and display related information.
   * Signals displayed in time and frequency domains.
   * Graphical navigation tools available (time and frequency range selection, zoom, pan, etc..)
   * Frequency and spatial filters available
 
- * Signal processing
+ * *Signal treatment and feature extraction*
   * Dedicated GUI for signal processing
   * Movements selection
   * Channels selection
@@ -43,7 +43,7 @@ BioPatRec is demonstrated with the real-time control of a virtual hand and multi
   * Customizable construction of the training, validation and testing sets
   * Over 21 time and frequency signal features available
 
- * Pattern Recognition
+ * *Pattern Recognition*
   * Easy selection of signal features
   * Customization of the training, validation and testing sets
   * Variety of pattern recognition algorithms with different training algorithms (see PatRec)
