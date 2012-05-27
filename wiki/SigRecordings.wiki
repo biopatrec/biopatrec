@@ -1,11 +1,11 @@
-#summary Signal recordgins.
+#summary Signal recordings.
 
 SigRecordings -> SigTreatment -> SigFeatures -> PatRec
 
 = Recordings =
 
-BioPatRec allows the recording of bio-electric signals through different devices which are already configured (e.g. NI-USB6009), or can be added in [Comm]. For an overview of the functions involved in recordings see [BioPatRec_Roadmap].
+BioPatRec allows the recording of bio-electric signals through different devices which are already configured (e.g. NI-USB6009), or can be added in [Comm]. 
 
-Recordings can be done as a single time-defined event for fast signal quality evaluation, or as a recording session for further processing and PatRec. See [BioPatRec_StartupGuide] for quick user instructions.  
+Recordings can be done as a single time-defined event for fast signal quality evaluation; as a recording session for further processing and PatRec; and as continues recordings for real-time control. There are specific GUIs for each of them. See [BioPatRec_StartupGuide] for quick user instructions and [BioPatRec_Roadmap] for an overview of the functions involved.
 
 A recording session will generate a [recSession] structure, which can be later used for signal treatment (SigTreatment).
