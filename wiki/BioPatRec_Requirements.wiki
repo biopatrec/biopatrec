@@ -2,18 +2,20 @@
 
 = Requirements =
 
-BioPatRec was initially developed in Matlab R2009, however the latest version was only tested in R011b. Some parts might work in previous versions, however, the VRE and the data acquisition routines need:
-
  * Matlab R2011b
+  * Data Acquisition Toolbox (recordings)
+  * Statistics Toolbox ([LDA])
+
+BioPatRec was initially developed in Matlab `R2009`, however the latest version was only tested in `R2011b`. Some parts of BioPatRec might work in previous versions, but the VRE and the data acquisition routines need `R2011b`.
 
 == Data Acquisition ==
 
-The daq routines currently work with the Matlab "session-based interface (SBI)". The "legacy" routines can be made available under request.
+The DAQ routines currently work with the Matlab "session-based interface (SBI)". The "legacy" routines can be made available under request.
 
-We have used the simplest National Instruments card (USB-6009) for most of our experiments. We expected NI card of this type to work seemly, however you won’t know until you try it. In theory, the SBI should make the use of any DAQ card simple.
+We have used the simplest National Instruments card (USB-6009) for most of our experiments. We expect any NI card to work seemly, however you won’t know until you try it. In theory, the SBI should allow you to USB a wide variety of DAQ cards.
 
-If you are planning to use the USB-6009 card you will need the 
+If you are planning to use the USB-6009 card you will need the drivers [http://joule.ni.com/nidu/cds/view/p/id/2604/lang/en NI-DAQmx]
 
+Note: Other devices using SCI have been used as well. These routines and the "legacy" routines for MATLAB can be made available upon request.
 
 == Virtual Reality Enviroment ==
-
