@@ -38,4 +38,11 @@ Since all the raw data and setting of its acquisition are available in the struc
 
 == Adding a new filter ==
 
-This can be easily done by ...
+This can be easily done by following these steps:
+
+ * Add the filter name/ID in [GUI_SigTreatment], either
+  * pm_frequencyFilters, or
+  * pm_spatialFilters
+ * Add the call to your filtering function in ApplyFilters.
+
+Take a look to ApplyFilters to see how the current filters are called. All information you require are provided in [sigTreated].
