@@ -2,8 +2,9 @@
 
 = Feature extraction =
 
-Although there are few PatRec algorithms that can be feed directly with time series, such as myoelectric signals, the vast majority required discrete values. In our case, these signal features are extracted from fixed time windows in SigTreatment.
+Although there are few PatRec algorithms that can be feed directly with time series, such as myoelectric signals, the vast majority require discrete values. In our case, these signal features are extracted from fixed time windows, or signal segmentation, handle by SigTreatment.
 
+See BioPatRec_StartupGuide for quick user instructions and BioPatRec_Roadmap for an overview of the functions involved.
 
 == Features ==
 
@@ -34,6 +35,7 @@ These are some of the available signal features
 || fpmd    || Peaks median (Top 5)|| Frequency ||
 || fpstd   || Peaks std (Top 5)   || Frequency ||
 
+The [GUI_PatRec] includes sets of the top features, or more commonly used, for their easy selection before PatRec.
 
 == Implementation ==
 
@@ -69,4 +71,4 @@ Adding new signal features is very simple, you only need to:
 
 You can see the other "_GetSigFeatures_tXXX_" function as an example.
 
-NOTE: If you consider part of your computation would be useful for a nother feature, you can add it in pF. (e.g. {{{GetSigFeatures_tpks}}})
+NOTE: If you consider that part of your computation would be useful for another feature, you can add it in pF. (e.g. {{{GetSigFeatures_tpks}}})
