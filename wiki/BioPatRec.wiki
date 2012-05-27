@@ -2,13 +2,13 @@
 
 = Introduction =
 
-BioPatRec is a modular platform for testing and development of algorithms to be applied in prosthetic control.
+!BioPatRec is a modular platform for testing and development of algorithms to be applied in prosthetic control.
 
- * See [BioPatRec_Highlights] for features, demos, etc…
- * See [BioPatRec_StartupGuide] for quick instructions ("How To's")
- * See [BioPatRec_Requirements] for (yes, exactly) the system requirements.   
+ * See [BioPatRec_Highlights Highlights] for features, demos, etc…
+ * See [BioPatRec_StartupGuide Startup Guide] for quick instructions ("How To's")
+ * See [BioPatRec_Requirements Requirements] for (yes, exactly!) the system requirements.   
 
-= for Programmers =
+= For Developers/Researches =
 
 If you are interested on developing further using this platform, or simple understand the nuts and bolts of !BioPatRec, the following links are for you.
 
