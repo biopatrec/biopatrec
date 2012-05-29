@@ -8,11 +8,12 @@ This is a quick and general overview of the most relevant functions used in BioP
 
 == GUI_Recordings ==
 
- * pb_StartRecording (Start Recording)
-  * DAQShow_SBI
+ * [pb_StartRecording] (Start Recording)
+  * [DAQShow_SBI]
+   * [InitSBI_NI]
 
- * pb_ApplyButter (Apply Butter)
-  * ApplyButterFilter
+ * [pb_ApplyButter] (Apply Butter)
+  * [ApplyButterFilter]
 
  * Menus
   * File
