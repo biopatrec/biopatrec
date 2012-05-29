@@ -4,26 +4,29 @@ Here you can find instructions on how to solve the most common problems
 
 = General =
 
-It doesn't come as a surprise that sometime Windows and MATLAB can be unstable and crash without an apparent reason. So, the first thing you should try if something is not working properly is:
+It doesn't come as a surprise that sometime Windows and Matlab become unstable and crash without any apparent reason. So, the first things you should try if something is not working properly (and you are sure is not your fault) are:
 
-  # Close BioPatRec and open it again
-  # Close MATLAB and open it again
-  # Restart windows
+  # Close BioPatRec and open it again, if that doesn't work then,
+  # Close Matlab and open it again, if that doesn't work then,
+  # Restart Windows
 
 If the latter doesn't work, then check the following issues
 
 = Communications and Data Acquisition =
- * In order to use the data aquisition tool box in the R2011b version of MATLAB you have to use [http://www.mathworks.se/help/toolbox/daq/bskx95j.html Session-based Interfaces].
 
- * *Problem:* The MATLAB R2011a with data aquisition toolbox 2.18 doesn't support USB devices from NI, only compacDAQ. ([http://www.mathworks.se/matlabcentral/answers/11333-ni-daq-usb-6351-problem-on-win64-platform problem]). This MATLAB version uses the [http://www.mathworks.se/help/toolbox/daq/bskx95j.html Session-based Interfaces] which doesn't support USB cards, and [http://www.mathworks.se/help/toolbox/daq/ref/analoginput.html legacy] cannot be used in a 64-bit Matlab.
- * *Solution:* Either use a later MATLAB version with SBI, or an earlier version with legacy. You will need to ask us for the legacy routines though.
+The Matlab/NI drivers are not as stable as you would expect. If you have experience during data acquisition try the function {{{TestSBI_NI_USB6009}}}. Although is named after the NI-USB6009, it works for several NI devices (see [Comm]). If this routine doesn't work, then it's not a BioPatRec issue, so check the following known problems/solutions.
+
+ * *Problem:* The MATLAB R2011a with data acquisition toolbox 2.18 doesn't support USB devices from NI, only compacDAQ. ([http://www.mathworks.se/matlabcentral/answers/11333-ni-daq-usb-6351-problem-on-win64-platform problem]). This MATLAB version uses the [http://www.mathworks.se/help/toolbox/daq/bskx95j.html Session-based Interfaces] which doesn't support USB cards, and [http://www.mathworks.se/help/toolbox/daq/ref/analoginput.html legacy] cannot be used in a 64-bit Matlab.
+  * *Solution:* Either use a later Matlab version with SBI, or an earlier version with legacy. You will need to ask us for the legacy routines though.
 
 
  * *Problem:* Error for USB6009: 
  ''Onboard device memory overflow. Because of system and/or bus-bandwidth limitations, the driver could not read data from the device fast enough to keep up with the device throughput.''
-
- * *Solution:* This error can appear when doing foreground acquisition, see [http://digital.ni.com/public.nsf/allkb/611475F9BE62881E86256FDC0062B1BB USB-6008/6009 Error -200361: Buffer Overflow Error]. It can be solved by unstalling de device from the windows manager device, then disconnect it, wait some minutes and connect it again. It will be automatically installed.
+  * *Solution:* This error can appear when doing foreground acquisition, see [http://digital.ni.com/public.nsf/allkb/611475F9BE62881E86256FDC0062B1BB USB-6008/6009 Error -200361: Buffer Overflow Error]. It can be solved by unstalling de device from the windows manager device, then disconnect it, wait some minutes and connect it again. It will be automatically installed.
  Note: A [http://www.mathworks.se/matlabcentral/answers/27596-onboard-device-memory-overflow-because-of-system-and-or-bus-bandwidth-limitations-the-driver-could report] has been done to MATLAB about this issue. They recomend to follow a bug patch that can be found in the report. It makes things better since after the patch, unistalling the drivers is not necessary anymore. However, de/conection of the USB cable is still necessary. 
 
  * *Problem:* The DAQ with the USB6009 is not calling the callback function. 
- * *Solutions:* This has been solved using the same procedure than the error before.
+  * *Solutions:* This has been solved using the same procedure than the error before.
+
+ * *Problem:* Error: 'Attempted to access data(:,1); index out of bounds because size(data)=[0,0].'
+  * *Solutions:* This has been solved using the same procedure than the error before.
