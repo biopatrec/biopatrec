@@ -14,11 +14,11 @@
  * mov (description of the movements performed)
  * date
  * cmt (comments)
- * tdata (total data) 
+ * tdata (total data, Samples x Channels x Movements)
 
 Previously due to the heritage of the [EMG_AQ] the following fields were included
 
  * cTp (contration time percentage)
  * trdata( data extracted using the cTp)
 
-These two fields were removed from the recSession and now are part of [sigTreated]. 
+These two fields are now removed from the [recSession] and became part of [sigTreated]. 
