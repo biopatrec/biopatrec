@@ -74,6 +74,8 @@ This is a quick and general overview of the most relevant functions used in BioP
 
 = Pattern Recognition (PatRec) =
 
+ * Main GUI: [GUI_PatRec]
+
  * OfflinePatRec
   * Rand_sigFeatures
   * GetSets_Stack...
