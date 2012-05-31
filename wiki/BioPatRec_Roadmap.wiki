@@ -78,7 +78,10 @@ This is a quick and general overview of the most relevant functions used in BioP
 
  * OfflinePatRec
   * Rand_sigFeatures
-  * GetSets_Stack...
+  * Get the [xSets]
+   * GetSets_Stack, or
+   * GetSets_Stack_IndvMov, or
+   * GetSets_Stack_MixedOut
   * Normalize_TrV
   * Creates ([PatRec_Topologies])
   * OfflinePatRecTraining (returns [patRec])
