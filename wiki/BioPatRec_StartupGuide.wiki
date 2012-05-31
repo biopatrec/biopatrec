@@ -29,6 +29,75 @@
 
 The following are quick guidelines on how to use BioPatRec. It is assumed that you have already setup your workspace and paths in MATLAB to work with BioPatRec.
 
+= How to treat the raw signals and extract the signal features? =
+
+At the MATLAB command window
+
+ * Type !BioPatRec
+ * Click _Pattern Recognition_
+ * Click _Get Sig. Features_
+ * Select the file containing the [recSession] structure (e.g. any `*.mat` file in _data examples_)
+
+The latter will take you to the Signal Treatment GUI, now:
+
+ * Select the movements to be used by highlighting the name (all are selected by default)
+ * Tick the _Add "rest" as a movement_ if you want to have "no movement" or "rest" as a pattern/class/movement.
+ * Select the percentage of the contraction time that you will like to use. If you select _1_, you will include the transient period of the movement. If you chose _0.5_, you will probably only use the signals corresponding to the steady state of the movement or the isometric contraction.
+ * Select the channels to be used by highlighting the number (all are selected by default)
+ * Click _Pre-processing_
+
+Now that the movements and channels have been selected you can
+
+ * Select frequency or spatial filters
+ * Select the way to extract time windows
+  * _Overlapped Cons_ is normally used with a time window length of 0.2 seconds and overlap of 0.05 seconds
+  * The number of available windows with the selected method will be given in _No. windows_
+ * Select how many windows will be use for the training, validation and testing set
+  * This can be done by changing the percentage or directly the number of windows
+  * Before continue be sure that the _No. windows_ is the same than the _Total_ windows, otherwise you will get an error!
+ * Click _Treat_
+
+The structure [sigFeatures] will be generated as a result, and it can be saved using the menu _Data_ then _Save Features_. This will avoid that you go through the whole signal processing process next time.
+
+= How to run offline Pattern Recognition? =
+
+Coming from the MATLAB command window
+
+ * Type !BioPatRec
+ * Click _Pattern Recognition
+ * Select _Get Sig. Features_ to load the file with the [sigFeatures] structure. If you only have the [recSession] structure file, see "How to pre-process ..." (howto before).
+
+Coming from the Signal Treatment GUI
+
+ * Select the signal features to be used by highlighting their ID or selecting _TopX_ (default: Top 4)
+ * Modify the number of sets to be used (if required)
+ * Select _Algorithm_
+ * Select _Training Method_ (if required)
+ * Select _Normalization_ (if required)
+ * Select _Movements_ (default: _Individual Mov_)
+ * Select _Topology_ (default: _Single Classifier_, see [Classifier_Topologies])
+ * Tick _Randomized sets_ if you want the training, validation and testing sets to be mixed randomly before training (normally checked)
+ * Click _Run Off-line Training_
+
+The structure [patRec] will be generated as a result, and it can be saved using the menu _Data_ and then _Save PatRec_. For more details see PatRec.
+
+= How to run Real-time Pattern Recognition? =
+
+In order to do this you need to have trained a classifier already in the step before, or have the structure [patRec] available. You can load [patRec] from a file using the open menu.
+
+A simple real-time test:
+
+ * Select for how long you want to test the algorithm in _Testing time_
+ * Click _Test Real-time !PatRec_
+ * The box _Avg. Proc. Time_ will display the average processing time for your algorithm once the testing time is finished.
+
+More advanced test:
+
+ * [Motion_Test]
+ * [TAC_Test]
+ * [RealTime_PatRec]
+
+
 = How to record signals? =
 
 Recordings can be done as a single time-defined event for fast signal quality evaluation, or as a recording session for further processing and PatRec. In the following steps, it is assumed that you have already configured your DAQ card.
@@ -78,70 +147,3 @@ Now you will be redirected to the Analog Front-End Selection.
 The structure [recSession] will be generated as a result.
 
 NOTE: Leave the default options for _Active, COM/port, and Show_. Unless you have the required hardware and software.
-
-= How to pre-process the data and extract signal features? =
-
-At the MATLAB command window
-
- * Type !BioPatRec
- * Click _Pattern Recognition_
- * Click _Get Sig. Features_
- * Select the file containing the [recSession] structure
-
-The latter will take you to the Signal Treatment GUI, now:
-
- * Select the movements to be used by highlighting the name (all are selected by default)
- * Tick the _Add "rest" as a movement_ if you want to have "no movement" or "rest" as a pattern/class/movement.
- * Select the percentage of the contraction time that you will like to use. If you select _1_, you will include the transient period of the movement. If you chose _0.5_ you will probably only use the signals corresponding to the steady state of the movement or the isometric contraction.
- * Select the channels to be used by highlighting the number (all are selected by default)
- * Click _Pre-procesing_
-
-Now that the movemenes and channels have been selected you can
-
- * Select frequency or spatial filtes
- * Select the way to extract time windows
-  * _Overlapped Cons_ is normally used with a time window lenght of 0.2 seconds and overlap of 0.05 seconds
-  * The number of available windows with the selected method will be given in _No. windows_
- * Select how many windows will be use for the training, validation and testing set
-  * This can be done by changing the percentage or directly the number of windows
-  * Before continue be sure that the _No. windows_ is the same than the _Total_ windows, otherwise you will get an error!
- * Click _Treat_
-
-The structure [sigFeatures] will be generated as a result, and it can be saved in _Data_ then _Save Features_
-
-= How to run offline Pattern Recognition? =
-
-Coming from the MATLAB command window
-
- * Type !BioPatRec
- * Click _Pattern Recognition
- * Select _Get Sig. Features_ to load the file with the [sigFeatures] structure. If you only have the [recSession] structure file, see "How to pre-process".
-
-Coming from the Signal Treatment GUI
-
- * Select the signal features to be used by highlighting their ID or selecting _Topx_ (default: Top 4)
- * Modify the number of sets to be used (if required)
- * Select _Algorithm_
- * Select _Training Method_ (if required)
- * Select _Normalization_ (if required)
- * Select _Movements_ (default: _Individual Mov_)
- * Select _Topology_ (default: _Single Classifier_, see [Classifier_Topologies])
- * Tick _Randomized sets_ if you want the training, validation and testing sets to be mixed randomly before training (normally checked)
- * Click _Run Off-line Training_
-
-The structure [patRec] will be generated as a result, and it can be saved using the menu _Data_ and then _Save PatRec_. For more details see PatRec.
-
-= How to run Real-time Pattern Recognition? =
-
-In order to do this you need to have trained a classifier already in the step before, or have the structure [patRec] avilable. You can load [patRec] from a file using the open menu.
-
-A simple real-time test:
-
- * Select for how long you want to test the algorithm in _Testing time_
- * Click _Test Real-time !PatRec_
- * The box _Avg. Proc. Time_ will display the average processing time for your algorithm once the testing time is finished.
-
-More advanced test:
-
- * [Motion_Test]
- * [RealTime_PatRec]
