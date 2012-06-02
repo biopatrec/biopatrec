@@ -2,14 +2,19 @@
 
 = Introduction =
 
-This implementation of the ANN allows MLP or SLP topologies.
+Multilayer Perceptron (MLP) is probably one of the best known Artificial Neural Networks (ANN) algorithms. Therefore you can find information about it in virtually any machine learning text. For general information see [http://en.wikipedia.org/wiki/Multilayer_perceptron wikipedia].
 
- * {{{ANN_Perceptron}}} (main routine)
-  * Settings can be done here such as learning rate and ANN topology
+In summary, MLP is a feedforward topology which predictions depend on the weight assigned to each neuron connection. It has been shown useful to achieve non-linear discrimination, and it has been widely used in the prosthetic control research. 
 
+= Implementation =
 
-= Algorithm =
+Settings such as learning rate and ANN topology can be done in the main function {{{ANN_Perceptron}}}. 
 
+ * Automatic reset after a given number of iterations without convergence
+ * Batch or stochastic training
+ * The number of hidden layers and hidden neurons can be easily modify in the nHn matrix.
+  * 1 hidden layer with 10 neurons -> nHn = 10;  
+  * 3 hidden layer with 10 neurons -> nHn = [10 10 10];  
 
 
 = Roadmap =
@@ -18,10 +23,20 @@ This implementation of the ANN allows MLP or SLP topologies.
 
  * {{{ANN_Perceptron}}}
   * {{{InitANN_Perceptron}}}
-  * Run training algorithms
-   * {{{Backpropagation}}}
+  * {{{EvaluateANN}}}
+  * Training algorithm:
+   * Backpropagation, or
+    * {{{Backpropagation}}}
+   * PSO, or
+    * {{{InitPSO_MLP}}}
+    * {{{PSO_MLP}}}
+     * {{{Pos2W}}}
+     * {{{FitnessANN}}}  
+      * {{{EvaluateANN}}}  
+   * ...
   * {{{FastTestANN}}}
    * {{{EvaluateANN}}}
+  * {{{FullTestANN}}}
 
 == Testing ==
 
