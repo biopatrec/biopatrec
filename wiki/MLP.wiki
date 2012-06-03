@@ -8,17 +8,25 @@ In summary, MLP is a feedforward topology which predictions depend on the weight
 
 = Implementation =
 
-Settings such as learning rate and ANN topology can be done in the main function {{{ANN_Perceptron}}}. 
+Settings such as learning rate (eta) and ANN topology can be done in the main function {{{ANN_Perceptron}}}. 
 
- * Automatic reset after a given number of iterations without convergence
- * Batch or stochastic training
+ * Automatic reset after a given number of iterations without convergence (set by nRepF)
+ * Batch or stochastic training (set by batchTr)
  * The number of hidden layers and hidden neurons can be easily modify in the nHn matrix.
-  * 1 hidden layer with 10 neurons -> nHn = 10;  
-  * 3 hidden layer with 10 neurons -> nHn = [10 10 10];  
+  * 1 hidden layer with 10 neurons -> `nHn = 10`;  
+  * 3 hidden layer with 10 neurons each -> `nHn = [10 10 10]`;  
+  * 2 hidden layer with different neurons each -> `nHn = [6 14]`;  
 
+== Default settings ==
 
-= Roadmap =
+Although several algorithms have been implemented to train the MLP, so far the best results have been found with:
 
+Backpropagation
+ * Eta = 0.1
+ * `nHn = [nIn*2 nIn*2]`
+ * batchTr = 0     
+
+= Functions roadmap =
 == Training ==
 
  * {{{ANN_Perceptron}}}
@@ -37,6 +45,7 @@ Settings such as learning rate and ANN topology can be done in the main function
   * {{{FastTestANN}}}
    * {{{EvaluateANN}}}
   * {{{FullTestANN}}}
+   * {{{EvaluateANN}}}
 
 == Testing ==
 
