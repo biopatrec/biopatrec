@@ -1,11 +1,17 @@
 #summary Table of content
 
+ * [http://code.google.com/p/biopatrec/ Home]
+ * [BioPatRec_Highlights Highlights]
+ * [BioPatRec_StartupGuide Startup Guide] 
+ * [BioPatRec_Requirements Requirements]
+ * [BioPatRec_Roadmap Functions roadmap]
  * BioPatRec
-  * [http://code.google.com/p/biopatrec/ Home]
-  * [BioPatRec_Highlights Highlights]
-  * [BioPatRec_StartupGuide Startup Guide] 
-  * [BioPatRec_Requirements Requirements]
-  * [BioPatRec_Roadmap Functions roadmap]
+  * [Comm]
+  * SigRecordings
+  * SigTreatment
+  * SigFeatures
+  * PatRec
+  * DevControl
  * Structures:
   * [recSession]
   * [sigTreated]
