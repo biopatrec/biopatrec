@@ -70,9 +70,9 @@ The [GUI_PatRec] includes sets of the top features, or more commonly used, for t
 
 Adding new signal features is very simple, you only need to:
 
- # Add the ID (_tXXX_) in the _fID_ vector in GetSigFeatures
- # Create a function call "_GetSigFeatures_tXXX_" that receives pF, and returns _pF.f.tXXX = your feature values_.
+ # Add the ID (_t/fXXX_) in the features.def file 
+ # Create a function call "_GetSigFeatures_t/fXXX_" that receives pF, and returns _pF.f.t/fXXX = your feature values_. Most of the "_GetSigFeatures_tXXX_" routines are inside the GetSigFeatures function.
 
-You can see the other "_GetSigFeatures_tXXX_" function as an example.
+t/f corresponds to time/frequency.
 
 NOTE: If you consider that part of your computation would be useful for another feature, you can add it in pF. (e.g. {{{GetSigFeatures_tpks}}})
