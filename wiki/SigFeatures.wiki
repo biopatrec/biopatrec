@@ -14,17 +14,21 @@ These are some of the available signal features
 || tmn     || Mean                || Time || 
 || tmabs   || Mean absolute value || Time ||
 || tmd     || Median              || Time ||
-|| tstd    || standard deviation  || Time ||            
+|| tstd    || Standard deviation  || Time ||            
 || tvar    || Variance            || Time ||            
 || twl     || Waveform length     || Time ||          
 || trms    || RMS                 || Time ||
 || tzc     || Zero-crossing       || Time ||
 || tpks    || Peaks (over RMS)    || Time ||
 || tmpks   || Peaks mean          || Time ||
-|| tmvel   || Mean  velocity      || Time || 
+|| tmvel   || Mean  velocity       || Time || 
 || tslpch1 || Slope changes (peaks)|| Time ||      
 || tslpch2 || Slope changes (diff) || Time ||        
-|| tpwr    || Power               || Time ||
+|| tpwr    || Power                || Time ||
+|| tdam    || Difference abs. mean || Time ||
+|| tmfl    || Max fractal length   || Time ||
+|| tfd     || Fractal dimension    || Time ||
+|| tfdh    || Fractal dim. Higuchi || Time ||
 || tren    || Rough entropy       || Time ||
 || tcr     || Correlation         || Time || 
 || tcv     || Co-variance         || Time ||
