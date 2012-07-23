@@ -1,6 +1,6 @@
 #summary One-sentence summary of this page.
 
-= GUI_!TestPWMs =
+= GUI_TestPWMs =
 
 This GUI was created to test the pulse width modulation (PWM) with the [ALC]. It has 4 buttons:
 
