@@ -26,3 +26,7 @@ This GUI was created to test the pulse width modulation (PWM) with the [ALC]. It
 
 
 The name of the matlab function and C function in the [ALC] must match each other in order to ease the identification.
+
+
+
+* NOTE: This function doesn't use the object-oriented [Movements_Protocol]. Please see the [GUI_TestPatRec_Mov2Mov] for reference in working with the movement and motors in the object-oriented way
