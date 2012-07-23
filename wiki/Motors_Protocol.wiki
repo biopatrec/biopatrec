@@ -56,11 +56,6 @@ Note: The motor driver used for the DC motors requires two PWMs, therefore two d
 
 NOTE: When sending 'S' any PWM could be updated using the PWM ID, not only the 'K' and 'L' reserved for the servo motors.
 
-= Testing GUIs =
- * [GUI_TestPWMs]
- * [GUI_Test_I_limb]
- * [GUI_Test_PanTilt]
-
 = Functions Roadmap =
 
 === Object-oriented ===
@@ -72,3 +67,8 @@ NOTE: When sending 'S' any PWM could be updated using the PWM ID, not only the '
   * ActivateMotors
    * Update2PWMusingSCI (DC motors)
    * Not working for servo motors
+
+= Testing GUIs =
+ * [GUI_TestPWMs]
+ * [GUI_Test_I_limb]
+ * [GUI_Test_PanTilt]
