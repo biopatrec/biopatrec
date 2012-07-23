@@ -1,5 +1,7 @@
 #summary Outputs communication protocols
 
+= !BioPatRec and Movements =
+
 BioPatRec has currently the following output options:
 
  * [VRE]
@@ -8,7 +10,7 @@ BioPatRec has currently the following output options:
 
 In order to know which movements are being used, an object is created during initialization. This object is then used to retrieve the values for what is to be sent to different outputs ([VRE] or Motors) in order to perform that specific movement.
 
-NOTE: We are moving to an object-oriented way to process the output movements. However, it is not absolutely necessary to use the object and these cab be bypassed. 
+NOTE: We are moving to an object-oriented way to process the output movements. However, it is not absolutely necessary to use the object and these can be bypassed. 
 
 = Protocol =
 
@@ -40,12 +42,12 @@ Each movement is then created using the motor class (motor.m).
 
 *NOTE: If the order is changed, please change the _movements.def_ as well as this will point to the wrong motor otherwise.*
 
-== Using the Objects in GUI ==
-In the GUI for testing Pattern Recognition Mov2Mov, when a button is pressed, the value of the dropdown-list is used to identify which movement in the list of movements is to be performed. Then depending on which types of movements are desired, the values in the objects are retrieved and sent to the correct output.
+= Using the Objects in GUI =
+In the GUI for testing Pattern Recognition !Mov2Mov, when a button is pressed, the value of the dropdown-list is used to identify which movement in the list of movements is to be performed. Then depending on which types of movements are desired, the values in the objects are retrieved and sent to the correct output.
 
 When the movements and/or motors are changed, such as when position is updated, it is important to overwrite the instance of that movement and/or motor in the handles. This due to MATLAB not transferring the same instance of the object in functions, but rather a copy of it.
 
-== Functions roadmap ==
+= Functions roadmap =
 
  * Load_patRec
   * InitMotors
@@ -53,8 +55,8 @@ When the movements and/or motors are changed, such as when position is updated, 
   * InitMovements
    * movements
 
-== Notes ==
+= Notes =
 
-In order to use the object-oriented way the last parameter of the _Load_patRec_ function must be set to 1. This will load the names of the created movements into any dropdown menu with a given id of 'pm_m*', where * is a value from 1 to 20, in the new GUI being loaded.
+In order to use the object-oriented way the last parameter of the _Load_patRec_ function must be set to 1. This will load the names of the created movements into any dropdown menu with a given id of 'pm_m?', where ? is a value from 1 to 20, in the new GUI being loaded.
 
 There is another GUI for testing the real-time patrec which is not using neither the movements or motors objects (GUI_TestPatRec_Mov2MotDir). This relays in hard-coded relationships between the movements index and the assigned motor direction in the drop lists.
