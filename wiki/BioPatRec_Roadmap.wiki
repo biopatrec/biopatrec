@@ -105,7 +105,9 @@ This is a quick and general overview of the most relevant functions used in BioP
      * OneShotPatRec
       * xTest routines
 
-= Control =
+= Control Algorithms =
+
+see [Control]
 
  * InitControl
  * ApplyControl
@@ -114,3 +116,17 @@ This is a quick and general overview of the most relevant functions used in BioP
    * RealtimePatRec
    * MotionTest
    * TACTest
+
+= Device Control =
+
+see [Motors_Protocol]
+
+== Object-oriented ==
+ * MotorsOn / MotorsOff
+  * Update2PWMusingSCI (DC motors)
+  * UpdatePWMusingSCI_PanTilt (Servo motors)
+
+== Hard-coded ==
+ *ActivateMotors
+  * Update2PWMusingSCI (DC motors)
+  * Not working for servo motors
