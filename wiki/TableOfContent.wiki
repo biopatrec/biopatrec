@@ -11,7 +11,7 @@
   * SigTreatment
   * SigFeatures
   * PatRec
-  * DevControl
+  * [Control]
  * Structures:
   * [recSession]
   * [sigTreated]
