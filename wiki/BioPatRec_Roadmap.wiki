@@ -121,12 +121,12 @@ see [Control]
 
 see [Motors_Protocol]
 
-== Object-oriented ==
+=== Object-oriented (OOP) ===
  * MotorsOn / MotorsOff
   * Update2PWMusingSCI (DC motors)
   * UpdatePWMusingSCI_PanTilt (Servo motors)
 
-== Hard-coded ==
+=== Non-OOP ===
  *ActivateMotors
   * Update2PWMusingSCI (DC motors)
   * Not working for servo motors
