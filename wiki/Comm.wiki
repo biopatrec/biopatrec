@@ -36,7 +36,7 @@ We have established a easy communication protocol to produce physically meaningf
 
 == Virtual Reality Environment ==
 
-... see ([VRE])
+In order to easily test and quickly control a prosthesis from the BioPatRec a Virtual Reality Environment ([VRE]) has been developed. Please see relevant page for more information.
 
 == Prosthetic Devices ==
 
