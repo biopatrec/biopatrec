@@ -107,6 +107,10 @@ This is a quick and general overview of the most relevant functions used in BioP
 
 = Control =
 
- * RealtimePatRec
-  * InitControl
-  * ApplyControl
+ * InitControl
+ * ApplyControl
+
+ Used inside of:
+   * RealtimePatRec
+   * MotionTest
+   * TACTest
