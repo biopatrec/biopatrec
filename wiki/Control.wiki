@@ -1,0 +1,29 @@
+#summary Control engineering
+
+= Device Control and Control Algorithms =
+
+In the *control* folder routines for device/[VRE] control following the [Movements_Protocol] are provided, as well as control algorithms to be executed during realtime pattern recognition.
+
+= Control algorithms =
+
+The following control algorithms can be selected in the [GUI_TestPatRec_Mov2Mov]
+
+ * Majority vote
+ * Buffer output
+
+= How to add a new control algorithm =
+
+To add a control algorithm you have to initialize it in:
+
+ * InitControl
+
+and the add the executing routine in:
+
+ * ApplyControl
+
+These two routines are called in the realtime patrec functions such as:
+
+ * RealtimePatRec
+ * MotionTest
+ * [TACTest]
+
