@@ -19,7 +19,7 @@ If you are interested on developing further using this platform, or simple under
  * SigTreatment
  * SigFeatures
  * PatRec
- * DevControl
+ * [Control]
 
 See [BioPatRec_Roadmap] for quick overview of the relevant functions in each module.
 
