@@ -111,5 +111,4 @@ Containing all features of !BioPatRec ETT, plus:
 
 == Initial testing of simultaneous control  ==
 
-<wiki:video url="http://youtu.be/6W5plVzXe1k
-feature=player_embedded&v=nxPToKzuXF4"/>
+<wiki:video url="http://www.youtube.com/watch?v=6W5plVzXe1k&feature=player_detailpage"/>
