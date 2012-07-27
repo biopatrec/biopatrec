@@ -17,6 +17,12 @@ Settings such as learning rate (eta) and ANN topology can be done in the main fu
   * 3 hidden layer with 10 neurons each -> `nHn = [10 10 10]`;  
   * 2 hidden layer with different neurons each -> `nHn = [6 14]`;  
 
+== Training Algorithms ==
+
+ * Backpropagation (default)
+ * Particle Swarm Optimization
+  * Not good for over 4 movements
+
 == Default settings ==
 
 Although several algorithms have been implemented to train the MLP, so far the best results have been found with:
