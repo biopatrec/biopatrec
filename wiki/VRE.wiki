@@ -13,6 +13,13 @@ The VRE can be started but will not run until a Socket Connection is setup. Duri
 
 A feature of the VRE is the [TACTest]. This is a test to see how fast a user can go to a desired position, for instance to close the hand, and will provide concrete data for direct comparison between pattern recognitions.
 
+When using the VRE you cannot perform movements that are not supported. To see a list of the supported movements see the map of dofs in [VRE_Protocol] page. 
+
 = Execution =
 
 The VRE is loaded when you wish to test the pattern recognition, usually from the [GUI_TestPatRec] routine, by pressing the appropriate button in the interface. This will load the configuration interface from Ogre3D, and it is important that this is not cancelled. If no socket connection is set up after the button is pressed *MATLAB may crash*.
+
+= Exiting = 
+
+When exiting the VRE, either by disconnecting the connectiong from MATLAB or closing the window, you may get an error message that reads: _This application has requested the Runtime to terminate it in an unusual way. Please contact the application's support team for more information._
+This error occurs often when closing. This is a known error, and does not affect the performance of the program. It has been added to the ToDo for the next release.
