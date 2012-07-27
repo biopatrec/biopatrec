@@ -108,3 +108,8 @@ Containing all features of !BioPatRec ETT, plus:
 == Initial testing of a multifunctional prosthesis  ==
 
 <wiki:video url="http://www.youtube.com/watch?feature=player_embedded&v=nxPToKzuXF4"/>
+
+== Initial testing of simultaneous control  ==
+
+<wiki:video url="http://youtu.be/6W5plVzXe1k
+feature=player_embedded&v=nxPToKzuXF4"/>
