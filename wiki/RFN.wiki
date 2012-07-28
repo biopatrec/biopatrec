@@ -2,7 +2,7 @@
 
 = Introduction =
 
-Regulation Feedback Networks were initially introduced by [http://reason.cs.uiuc.edu/tsvi/ Tsvi Achler] as an alternative to the traditional "feed forward" or "lateral inhibition" pattern recognition algorithms. In traditional pattern recognition, the learning takes places during a training phase, in RFN, the pattern recognition occurs during the testing phase by observing the stability of the outputs.
+Regulatory Feedback Networks were initially introduced by [http://reason.cs.uiuc.edu/tsvi/ Tsvi Achler] as an alternative to the traditional "feed forward" or "lateral inhibition" pattern recognition algorithms. In traditional pattern recognition, the learning takes places during a training phase, in RFN, the pattern recognition occurs during the testing phase by observing the stability of the outputs.
 
 Feedback regulation is analogous to the negative feedback in control theory.
 
