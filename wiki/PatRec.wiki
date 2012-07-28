@@ -18,7 +18,7 @@ For quick user instructions see [BioPatRec_StartupGuide], or more detailed infor
  * Pattern Recognition
   * [Discriminant_Analysis] 
   * [MLP] Multi-layers Perceptron
-  * [RFN] Regulation Feedback Networks
+  * [RFN] Regulatory Feedback Networks
   * [SOM] Self-Organizing Map
 
 
