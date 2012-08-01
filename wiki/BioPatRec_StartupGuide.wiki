@@ -90,6 +90,7 @@ A simple real-time test:
  * Select for how long you want to test the algorithm in _Testing time_
  * Click _Test Real-time !PatRec_
  * The box _Avg. Proc. Time_ will display the average processing time for your algorithm once the testing time is finished.
+will be sent as movements to the VRE
 
 More advanced test:
 
@@ -97,6 +98,25 @@ More advanced test:
  * [TAC_Test]
  * [RealTime_PatRec]
 
+
+= How to control the Virtual Reality Environment? =
+
+For more information about the environment, see [VRE].
+
+In order to do this you need to have trained a classifier already in the step before, or have the structure [patRec] available. You can load [patRec] from a file using the open menu.
+
+Using the interface _Real-time !PatRec !Mov2Mov_, the classifications of !PatRec can control the VRE.
+
+*Note:* The corresponding movement in the dropdown-list next to the classified movement is sent to the VRE, if miss-classification occurs you can simply change the value in the dropdown-list to send the correct movements. The distance each movement is moved is also retrieved from the textboxes next to each movement.
+
+The movements are loaded into a list upon start, thus changes will not take effect until the next run.
+
+ * Select for how long you want to run the test in _Testing time_
+ * Click the _VRE_ button
+ * Select configurations for the environment in the _Ogre3D_ window. Click OK.
+ * Click _Test Real-time !PatRec_
+
+The VRE can also be controlled using the buttons next to each movement, this can be done without correct [patRec] structure.
 
 = How to record signals? =
 
