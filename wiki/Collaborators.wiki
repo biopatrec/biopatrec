@@ -10,7 +10,7 @@
  * Nichlas Sanders
   * Biomedical Engineering and Computer Science
   * *Integrum AB, Sweden*
-  * !BioPatRec interest: Developer of the current [VRE]
+  * [VRE] developer
 
 Early version of BioPatRec have been released to:
 
@@ -18,6 +18,11 @@ Early version of BioPatRec have been released to:
   * Cognitive Computing
   * *IBM Research, Almaden, USA*
   * !BioPatRec interest: PatRec
+
+ * Robert S. Krieger
+  * Biomedical engineering
+  * *California Institute of Technology, USA* 
+  * !BioPatRec interest: Prosthetic devices and control
 
  * Prathamesh Dhanpalwar
   * Biomedical Eng. Student
