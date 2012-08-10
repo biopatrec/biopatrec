@@ -19,6 +19,8 @@ When using the VRE you cannot perform movements that are not supported. To see a
 
 The VRE is loaded when you wish to test the pattern recognition, usually from the [GUI_TestPatRec] routine, by pressing the appropriate button in the interface. This will load the configuration interface from Ogre3D, and it is important that this is not cancelled. If no socket connection is set up after the button is pressed *MATLAB may crash*.
 
+_*Note:*_ To start the VRE, you must first disconnect the motor connection, and vice versa. If not correctly disconnected this may cause errors. Try disconnecting and re-connecting the acquisition card if any problems occur.
+
 = Exiting = 
 
 When exiting the VRE, either by disconnecting the connectiong from MATLAB or closing the window, you may get an error message that reads: _This application has requested the Runtime to terminate it in an unusual way. Please contact the application's support team for more information._
