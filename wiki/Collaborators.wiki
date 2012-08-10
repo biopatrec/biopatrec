@@ -2,55 +2,57 @@
 
 = Who's in? ==
 
- * Max J. Ortiz C.
+ * Max J. Ortiz C., EE, PhD.c
   * Natural Control of Artificial Limbs Through an Osseointegrated Implant 
   * *Chalmers University of Technology / Integrum AB, Sweden*
   * !BioPatRec developer
 
- * Nichlas Sanders
+ * Nichlas Sander, MSc.
   * Biomedical Engineering and Computer Science
   * *Integrum AB, Sweden*
   * [VRE] developer
 
 Early version of BioPatRec have been released to:
 
- * Tsvi Achler
+ * Tsvi Achler, MD,PhD.
   * Cognitive Computing
   * *IBM Research, Almaden, USA*
   * !BioPatRec interest: PatRec
 
- * Robert S. Krieger
-  * Biomedical engineering
+ * Robert S. Krieger, MSc.c
+  * Biomedical Eng.
   * *California Institute of Technology, USA* 
   * !BioPatRec interest: Prosthetic devices and control
 
- * Prathamesh Dhanpalwar
-  * Biomedical Eng. Student
+ * Prathamesh Dhanpalwar, MSc.c
+  * Biomedical Eng.
   * *Chalmers University of Technology, Sweden*
   * !BioPatRec interest: Myoelectric signals acquisition
 
- * Veronika Handrick
-  * Biomedical Eng. Student
+ * Veronika Handrick, MSc.c
+  * Biomedical Eng.
   * *University of Applied Sciences Jena, Germany*
   * !BioPatRec interest: General
 
- * Morten Bak Kristoffersen
-  * Medialogy
+ * Morten Bak Kristoffersen, MSc.c
+  * Medialogy 
   * *Aalborg University, Denmark*
   * !BioPatRec interest: Augmented Reality
 
 
- * Ali Fouad / Siva Kumar
-  * Complex Adaptive Systems / Biomedical Eng. Students
+ * Ali Fouad, MSc.c / Siva Kumar, MSc.c
+  * Complex Adaptive Systems / Biomedical Eng.
   * Interested on PCA and SOM
   * *Chalmers University of Technology, Sweden*
 
- * Joakim Arver
-  * Biomedical Eng. Student
+ * Joakim Arver, MSc.c
+  * Biomedical Eng.
   * Interested on Virtual Reality
   * *Chalmers University of Technology, Sweden*
 
- * Per Förstber / Gustav Josefsson
-  * Biomedical Eng. Students
+ * Per Förstber, MSc.c / Gustav Josefsson, MSc.c
+  * Biomedical Eng.
   * Interested: Analog front ends and myoelectric signal acquisition
   * *Chalmers University of Technology, Sweden*
+
+Note: To avoid hurting anyone's feelings, the title used corresponds to the time in which they initially received !BioPatRec, unless otherwise requested.
