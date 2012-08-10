@@ -118,6 +118,8 @@ The movements are loaded into a list upon start, thus changes will not take effe
 
 The VRE can also be controlled using the buttons next to each movement, this can be done without correct [patRec] structure.
 
+You can also run a so called Target Achievement Control ([TAC]) test, read more about that under the dedicated wiki page.
+
 = How to record signals? =
 
 Recordings can be done as a single time-defined event for fast signal quality evaluation, or as a recording session for further processing and PatRec. In the following steps, it is assumed that you have already configured your DAQ card.
