@@ -1,0 +1,44 @@
+#summary TAC Test is used for practical evaluation and testing of the controllability of a prosthetic device.
+
+= Introduction =
+
+The TAC Test evaluates user control and positioning of a prosthetic device. Subjects are instructed to move a virtual prosthesis into a target posture and maintain it for a period of time (set in interface). If the subject overshot the target posture or produced unnecessary movements these have to be corrected to achieve success.
+
+= Process = 
+
+When the test starts the target position hand is displayed and moved into a random position. The positions are randomised for each trial, so the user does not know which movement is next. Each trial has a number of repetitions (set in interface) where the randomised movements are in the same order.
+
+In the TAC Test GUI, the wanted movement is displayed, along with the current predicted movement. This is merely due to the difficulties that some have to distinguish between different movements. This is caused by the projection of a 3D object onto a 2D space.
+
+Once the subject hand has all of it's DoFs within the set allowance (set in interface) it has to stay within this allowance for a set amount of time (set in interface). If the user goes outside of the allowance the time for idling is reset. After completion there is a short break (~3 seconds) after the next target position is displayed, and so on.
+
+
+
+After all trials and repetitions have been completed the data from the test can be saved to a local file. It is also presented in graphs where the completion time, completion rate and selection time are displayed.
+
+= Required to run =
+
+In order to run this TAC Test we first need a few things;
+* [patRec] - a working classifier to move the subject hand is required.
+* [VRE] - an open Virtual Reality session must be running and functional.
+
+_*Note:*_ The TAC test only supports a total of six movements. Close/Open Hand, Flex/Extend Hand and Supination/Pronation. If more movements are added to the test, this will generate some errors.
+
+= Configuration =
+
+Before starting the test there are a number of variables that can be altered. These can be changed to alter the length, repetition and difficulty of the test.
+
+The parameters are;
+* Repetitions - The amount of repetitions to do for each trial.
+* Trials - The amount of trials to do during the test.
+* Execution time - The total time to complete each movement.
+* TAC Allowance - The required distance to be within in order to consider the test completed. Hands to be within ± of value.
+* Speed - The speed of which the subject hand moves.
+* Idling time - The required time the subject must stay within the allowed distance.
+
+= Recommendations = 
+To have a good test the following values are recommended;
+* Execution time: 15-20 seconds
+* Speed: 2-3
+* Allowance: 5-8 (lower values are more difficult)
+* Idling time: 1-2 s (higher values are more difficult)
