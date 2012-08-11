@@ -39,20 +39,19 @@ A beta version of BioPatRec has been released to:
   * *University of Applied Sciences Jena, Germany*
   * !BioPatRec interest: General
 
-
  * Ali Fouad, MSc.c / Siva Kumar, MSc.c
   * Complex Adaptive Systems / Biomedical Eng.
-  * Interested on PCA and SOM
   * *Chalmers University of Technology, Sweden*
+  * !BioPatRec interest: [PCA] and [SOM]
 
  * Joakim Arver, MSc.c
   * Biomedical Eng.
-  * Interested on Virtual Reality
   * *Chalmers University of Technology, Sweden*
+  * !BioPatRec interest: Initial contributions on the [VRE]
 
  * Per Förstber, MSc.c / Gustav Josefsson, MSc.c
   * Biomedical Eng.
-  * Interested: Analog front ends and myoelectric signal acquisition
   * *Chalmers University of Technology, Sweden*
+  * !BioPatRec interest: Analog front ends and myoelectric signal acquisition
 
 Note: To avoid hurting anyone's feelings, the title used corresponds to the time in which they initially received !BioPatRec, unless otherwise requested.
