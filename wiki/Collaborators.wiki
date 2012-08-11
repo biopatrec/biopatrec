@@ -12,12 +12,17 @@
   * *Integrum AB, Sweden*
   * [VRE] developer
 
-Early version of BioPatRec have been released to:
+A beta version of BioPatRec has been released to:
 
  * Tsvi Achler, MD,PhD.
   * Cognitive Computing
   * *IBM Research, Almaden, USA*
   * !BioPatRec interest: PatRec
+
+ * Morten Bak Kristoffersen, MSc.c
+  * Medialogy 
+  * *Aalborg University, Denmark*
+  * !BioPatRec interest: Augmented Reality
 
  * Robert S. Krieger, MSc.c
   * Biomedical Eng.
@@ -33,11 +38,6 @@ Early version of BioPatRec have been released to:
   * Biomedical Eng.
   * *University of Applied Sciences Jena, Germany*
   * !BioPatRec interest: General
-
- * Morten Bak Kristoffersen, MSc.c
-  * Medialogy 
-  * *Aalborg University, Denmark*
-  * !BioPatRec interest: Augmented Reality
 
 
  * Ali Fouad, MSc.c / Siva Kumar, MSc.c
