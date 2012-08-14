@@ -59,6 +59,9 @@ Now that the movements and channels have been selected you can
 
 The structure [sigFeatures] will be generated as a result, and it can be saved using the menu _Data_ then _Save Features_. This will avoid that you go through the whole signal processing process next time.
 
+Demo on how to process a recording session to be used for offline pattern recognition:
+<wiki:video url="http://www.youtube.com/watch?v=CG8hSI6wssc&feature=youtu.be"/>
+
 = How to run offline Pattern Recognition? =
 
 Coming from the MATLAB command window
