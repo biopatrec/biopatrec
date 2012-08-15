@@ -4,43 +4,68 @@ NOTE: This is an ongoing development and therefore the documentation is not yet 
 
 = Introduction =
 
-_Self-Organizing Map_ is a kind of artificial neural network. These network are based on competitive learning; the output neurons of the network compete among themselves to be fired. The only _one_ neuron will be fired and that neuron called _winning neuron_. 
-In Self-Organizing Map, the neurons are placed at the nodes of a lattice that is usually one or two dimensional, the higher dimensional are also possible but not as common.
-The principal goal of the Self-Organizing Map (SOM) is to transform the high dimension (arbitrary dimension) input data into one or two dimensional discrete map.
+Self-Organizing Map is  unsupervised  artificial neural network. SOM consists of nodes or neurons represented by one or two dimensional grid ,the usual arrangement of the neurons is a regular spacing in a hexagonal or rectangular grid. Each  neuron has a weight vector of the same dimension as the input data vectors.
 
-SOM is consist an input layer and output layer. Each neuron in the lattice is fully connected to the input layer. This network represents a feedforward structure with a single computational layer consisting of neurons arranged in rows and columns. 
+In summary, SOM is feedforward structure based on competitive learning, the output neurons of the network compete among themselves and the closest neuron to the input data set going to be the winning neuron.
+The principal goal of SOM is to transform the high dimension (arbitrary dimension) input data into one or two dimensional discrete map.
   
 
 = Algorithm =
+There are two training methods:
+ * Stochastic Training.
+ * Batch Training.
 
-The algorithm is summarized as follows:
+ == Stochastic Training.==
+ The algorithm is summarized as follows:
 
-  # *Initialization:* Randomly choosing the initial weight vectors Wj(0).The only restriction is that Wj(0) to be different for j=1,2,...,l where l is the number of neurons in the lattice.
-  # *Sampling:* Draw randomly the input vector x from the input data sets.
-  # *Simmilarity matching:* Find the best-matching(winning) neuron i(x) at time-step _n_ by using the minimum-distance criterion where
-        i(x)=arg min || x(_n_) - wj | , j=1,2,...,l
-  # *Updating:* Adjust the synaptic-weight vector of all excited neurons by using the update formula *wj(_n_+1)=wj(_n_) + _eta_ _hj(_n_) ( x(_n_) - w(_n_))* where _eta_ is a learning rate parameter and hj(_n_) is the neighborhood function centered around the winning neuron x(i); both _eta_ and hj(_n_)are varied dynamically during learning best results.
-  # *Continuation:* Continue with step 2 for some iteration.
+  # *Initialization:* Randomly choosing the initial weight vectors _W,,j,,_.The only restriction is that _W,,j,,_ to be different for _j=1,2,...,n_ where _n_ is the number of neurons in the lattice.
+  # *Sampling:* Draw randomly the input vector _x_ from the input data sets.
+  # *Simmilarity matching:* Find the best-matching(winning) neuron _i(x)_ at time-step _t_ by using the minimum-distance criterion where
+        _i(x)=arg min || x(t) - W,,j,, | , j=1,2,...,n_
+  # *Updating:* Adjust the synaptic-weight vector of all excited neurons by using the update formula *_W,,j,,(t+1)=W,,j,,(t) + eta(t) h,,cj,,(t) ( x(t) - W,,j,,(t) )    ,   j=1,2,...,n_*  where _eta(t)_ is a learning rate parameter and _h,,cj,,(t)_ is the neighborhood function centered around the winning neuron _i(x)_; both _eta(t)_ and _h,,cj,,(t)_are varied dynamically during learning.
+  # *Continuation:* Continue with step 2 to 4 for some iterations.
 
-Then after the training completed the next step is to find for each input data set the winning neuron according to step 3 and depending on the wj(0) j=1,2...,l
-and keeping index of the winning neurons for all input data set in one vector that called the _Code Book_ .  
+ 
+ == Batch Training.==
+ In the Batch Training all the input data vectors are simultaneously    used to update all the weight vectors.
 
-The classification will be done by comparing the winning neuron for testing data set according  to the code Book .  
-
+ The algorithm is summarized as follows:
+  # Find the best-matching(winning) neuron _i_ according to 3 in Stochastic Training. 
+  # Calculate the sum of vectors in each Voronoi set by:
+   _S,,j,,_=sum(_x,,j,,_)   ,_j=1,2.....,nv,,i,,_. where _nv,,i,,_ is Voronoi set of unit _i_.
+  # The number of sample in each Voronoi (_nv,,i,,_) set _i_.
+  # W,,i,,(t+1)=sum( _h,,ij,,(t)_ _S,,j,,(t)_ ) / sum( _nv,,j,,_ _h,,ij,,(t)_ )  ,_j=1,2.....,m_. where _m,_ is number of neurons , _h,,ij,,(t)_ is a neighborhood function centered around the neuron _i_ at time _t_ and _nv,,j,,_ is  number of samples in the Voronoi set _j_.
+  # Continue with step 1 to 4 for some iterations.
 
 
 = Functions Roadmap =
-==Training==
+==Training== 
 
 
  * {{{SOM_Maping}}}
-  * Run training algorithms
+  * {{{EvaluateSom}}}
+   * {{{InitSom}}}
+     * {{{unitCoords}}}
+     * {{{RandomWeights}}}
+     * {{{lineaInitial}}}
+     * {{{Sigma}}}
+     * {{{Eta}}}
+     * {{{unitDists}}}
+   * {{{StochasticTraining}}}
+     * {{{FindClosest}}}
+     * {{{UpdateWeights}}}
+     * {{{GetNeurLab}}}
+   * {{{BatchTrainig}}}
+     * {{{VectorDistance}}}
+     * {{{GetNeurLab}}}
+   * {{{FastTestSOM}}}
+     * {{{FindClosest}}}
    
-  * {{{TestSOM}}}
-   * {{{FindBUM}}}
+
+   
 
 == Testing ==
 
 
- * {{{TestSOM}}}
-   * {{{FindBUM}}}
+ * {{{SOMTest}}}
+   * {{{FindClosest}}}
