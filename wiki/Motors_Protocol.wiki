@@ -70,5 +70,5 @@ NOTE: When sending 'S' any PWM could be updated using the PWM ID, not only the '
 
 = Testing GUIs =
  * [GUI_TestPWMs]
- * [GUI_Test_I_limb]
+ * [GUI_Test_Hand]
  * [GUI_Test_PanTilt]
