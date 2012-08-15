@@ -1,4 +1,6 @@
-#summary One-sentence summary of this page.
+#summary Description of GUI_Test_I_limb
+
+= GUI_Test_I_limb =
 
 The GUI ''GUI_Test_I_limb'' was created to test the motors of the i-limb (or any other hand using DC motors), and manually change the duty cycle of the pulse width modulation (PWM). Each finger can be moved in both directions.
 
@@ -6,14 +8,14 @@ NOTE: This function doesn't use the object-oriented [Movements_Protocol]. Please
 
 The GUI consists of 2 main parts:
 
- * *Initialize the serial connection*
+== Initialize the serial connection == 
  There are 3 buttons (''Connect, Disconnect, Test connection'') which handles the communication 
  * Connect: Calls "Connect_ALC" which returns the communication object saved in the  handles as "com". The "com" object is necessary for all future   communication.
  * Test Connection: Calls "TestConnectionALC" which writes a 'C' and expects a 1 in return if the communication is successful.
  * Disconnect:  Close the 'com' object.
 
 
- * *Control*
+== Control ==
 
  * Speed and Length: 
  The ''speed'' is proportional to the duty cycle. 
