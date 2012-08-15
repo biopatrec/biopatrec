@@ -4,12 +4,16 @@ The GUI ''GUI_Test_I_limb'' was created to test the motors of the i-limb (or any
 
 NOTE: This function doesn't use the object-oriented [Movements_Protocol]. Please see the [GUI_TestPatRec_Mov2Mov] for reference in working with the movement and motors in the object-oriented way.
 
-The GUI consists of 3 main parts:
+The GUI consists of 2 main parts:
 
- * Initialize the serial connection
+ * *Initialize the serial connection*
  There are 3 buttons (''Connect, Disconnect, Test connection'') which handles the communication 
-  * Connect: Calls "Connect_ALC" which returns the communication object saved in the  handles as "com". The "com" object is necessary for all future   communication. It also test the connection by calling "TestConnectionALC". This function writes a 'C' and expects a 1 in return if the communication is successful.
+  * Connect: Calls "Connect_ALC" which returns the communication object saved in the  handles as "com". The "com" object is necessary for all future   communication.
+ * Test Connection: Calls "TestConnectionALC" which writes a 'C' and expects a 1 in return if the communication is successful.
   * Disconnect:  Close the 'com' object.
+
+
+ * *Control*
 
  * Speed and Length: 
 
