@@ -14,7 +14,12 @@
 
 A beta version of BioPatRec has been released to:
 
- * Tsvi Achler, MD,PhD.
+ * Tim Gale, BE, MEngSc, PhD.
+  * Senior Lecturer: Mechatronics and Medical Engineering
+  * *University of Tasmania, Australia*
+  * !BioPatRec interest: Signal processing and PatRec
+
+ * Tsvi Achler, MD, PhD.
   * Cognitive Computing
   * *IBM Research, Almaden, USA*
   * !BioPatRec interest: PatRec
