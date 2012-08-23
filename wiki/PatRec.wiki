@@ -2,7 +2,7 @@
 
 = Pattern Recognition =
 
-In BioPatRec, the pattern recognition is organized in:
+The pattern recognition module is organized in:
 
  * *Offline*: Training, validation and testing can be done using pre-recorded data.
 
@@ -20,14 +20,14 @@ For quick user instructions see [BioPatRec_StartupGuide], or more detailed infor
   * [MLP] Multi-layers Perceptron
   * [RFN] Regulatory Feedback Networks
   * [SOM] Self-Organizing Map
-
+  * [KNN] k-Nearest Neighbor
 
 
 == Offline !PatRec == 
 
-Most of the training phase or Offline !PatRec is taking care by the function OfflinePatRec. This function requires [sigFeatures].
+Most of the training phase is taking care by the function _OfflinePatRec_, which requires the variable [sigFeatures].
 
- * First the training and validation sets are extracted (see [xSets]). This directly affects the information to be used during the training and testing phases.
+ * The first step is to extract the training and validation sets (see [xSets]). This directly affects the information to be used during the training and testing of the classifier.
   * The [xSets] can be formed in different ways according to the _"Select Movements Mix"_ pop menu.
    * _All Mov_. This means that all the movements recorded will be used as independent movements, regardless if they are individual or mixed movements.
     * # Outputs = # Movements.
