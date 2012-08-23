@@ -1,0 +1,21 @@
+#summary Normalization
+
+= Normalization =
+
+The choice of the normalization method depends strongly on the implementation of a given algorithm, and it can greatly affects the classifier performance.
+
+Normalization is usually required to avoid that features with large magnitudes eclipse the contribution of the rest.
+
+== Normalization methods ==
+ * Statistical normalization (Mean 0, Variance 1)
+ * Unitary range (0 to 1), preferred in:
+  * [RFN]
+ * Mid-range 0, Range 2 (-1 to 1), preferred in:
+   * [MLP]
+
+
+= How to add a normalization method? =
+
+ * Add the processing function in [NormalizeSets_TrV]. The parameters required to normalize future data sets must be included in the struct _normSets_. This function must normalize the training and validation sets independently. See the other normalization function as example.
+
+ * Add the normalization fuction to _NormalizeSet_. This function must normalize a single vector using the provided parameters.
