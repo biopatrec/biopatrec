@@ -36,6 +36,8 @@ Most of the training phase or Offline !PatRec is taking care by the function Off
    * _Mixed Out_. This means that the mixed classes (or simultaneous movements) will also be used during the training phase.
     * # Outputs = # Individual movements. 
 
+ * [Normalization] 
+
  * The classifier topology is then created (see [PatRec_Topologies]).
    * The same classifier can be constructed in different topologies, such as One-Vs-All, One-Vs-One, etc... see [PatRec_Topologies] for details.
 
