@@ -14,11 +14,11 @@ Naming of variables, methods etc, should have descriptive names that give a dire
  
 === Variables === 
 
-ex: _tmpVar_
+ e.g.: _tmpVar_
 
 First letter shall always be in lower case. If the variable name includes multiple words, all words with the exception of the first shall start with an upper case.
 
-ex. aLocalVariable
+ e.g.: _aLocalVariable_
 
 Variables which lack direct meaning, such as temporary variables inside iterations, may ignore the requirements of having a descriptive name.
  
@@ -26,20 +26,20 @@ Variables which lack direct meaning, such as temporary variables inside iteratio
  
 Any global variable or constant shall be named using only upper case letters. If the name includes multiple words, each word shall be seperated with _
  
-ex: '''A_GLOBAL_VARIABLE''' 
+ e.g.: _'''A_GLOBAL_VARIABLE'''_ 
 
 
 === Iteration varibles ===
  
 For iterations; i, j and k shall be used. If needed, a more descriptive name should be used with i,j or k as a prefix.
  
-ex. iPatterns 
+ e.g. _iPatterns_ 
  
 === Abbrevations in variables === 
  
 If an abbrevation is to be used in a variable name, it shall be placed first in the name and be entirely in lower case. 
  
-ex. emgSignal 
+ e.g. _emgSignal_ 
  
 === Prefixes ===
  
@@ -55,7 +55,7 @@ If dealing with weight or height, use w or h respectively.
  
 Names of functions or methods shall begin with upper case. If the function or method name includes multiple words, each word shall begin with upper case. 
  
-ThisIsAFunction(); 
+ _e.g.: ThisIsAFunction();_ 
 
 See: [http://en.wikipedia.org/wiki/CamelCase CamelCase]
  
@@ -63,13 +63,13 @@ See: [http://en.wikipedia.org/wiki/CamelCase CamelCase]
 
 Names of GUIs must start with "GUI_"
 
-e.g.: GUI_ThisIsAFuction
+ _e.g.: GUI_ThisIsAFuction_
 
 Components inside the GUI are consider as a variables so the follow the same criteria as variables with the addition of to letters that identifies it type of componenet.
 
-e.g. A checkbox component would be named "cb_variable"
+ _e.g. A checkbox component would be named "cb_variable"_
 
-e.g. A pushbottom compoenet would be named "pb_pushbottom"
+ _e.g. A pushbottom compoenet would be named "pb_pushbottom"_
 
  
 == Code layout ==
@@ -88,6 +88,7 @@ else
    code
 end
 }}}
+
 C++:
 {{{
 if ( condition ){
