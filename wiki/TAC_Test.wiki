@@ -2,7 +2,7 @@
 
 = Introduction =
 
-The TAC Test evaluates user control and positioning of a prosthetic device. Subjects are instructed to move a virtual prosthesis into a target posture and maintain it for a period of time (set in interface). If the subject overshot the target posture or produced unnecessary movements these have to be corrected to achieve success.
+The Target Achievement Control (TAC) Test evaluates the performance of a given control strategy by simulating the control and positioning of an artificial prosthetic device. Subjects are instructed to move a virtual prosthesis into a target posture and maintain it for a period of time (set in interface). If the subject overshot the target posture or produced unnecessary movements these have to be corrected to achieve success.
 
 = Process = 
 
@@ -18,9 +18,10 @@ After all trials and repetitions have been completed the data from the test can 
 
 = Required to run =
 
-In order to run this TAC Test we first need a few things;
-* [patRec] - a working classifier to move the subject hand is required.
-* [VRE] - an open Virtual Reality session must be running and functional.
+In order to run this TAC Test we first need a few things:
+
+ * [patRec] - a working classifier to move the subject hand is required.
+ * [VRE] - an open Virtual Reality session must be running and functional.
 
 _*Note:*_ The TAC test only supports a total of six movements. Close/Open Hand, Flex/Extend Hand and Supination/Pronation. If more movements are added to the test, this will generate some errors.
 
@@ -28,17 +29,18 @@ _*Note:*_ The TAC test only supports a total of six movements. Close/Open Hand, 
 
 Before starting the test there are a number of variables that can be altered. These can be changed to alter the length, repetition and difficulty of the test.
 
-The parameters are;
-* Repetitions - The amount of repetitions to do for each trial.
-* Trials - The amount of trials to do during the test.
-* Execution time - The total time to complete each movement.
-* TAC Allowance - The required distance to be within in order to consider the test completed. Hands to be within ± of value.
-* Speed - The speed of which the subject hand moves.
-* Idling time - The required time the subject must stay within the allowed distance.
+The parameters are:
+
+ * Repetitions - The amount of repetitions to do for each trial.
+ * Trials - The amount of trials to do during the test.
+ * Execution time - The total time to complete each movement.
+ * TAC Allowance - The required distance to be within in order to consider the test completed. Hands to be within ± of value.
+ * Speed - The speed of which the subject hand moves.
+ * Idling time - The required time the subject must stay within the allowed distance.
 
 = Recommendations = 
 To have a good test the following values are recommended;
-* Execution time: 15-20 seconds
-* Speed: 2-3
-* Allowance: 5-8 (lower values are more difficult)
-* Idling time: 1-2 s (higher values are more difficult)
+ * Execution time: 15-20 seconds
+ * Speed: 2-3
+ * Allowance: 5-8 (lower values are more difficult)
+ * Idling time: 1-2 s (higher values are more difficult)
