@@ -65,6 +65,7 @@ The following tests of prediction and control performance can be used:
   * Uses [patRec] and the GUI handles.
   * Returns ...
 
+ * [TAC_Test Target Achievement Control (TAC) Test]
 
 NOTE: To do any real-time testing you must have configured your DAQ card, see [BioPatRec_StartupGuide].
 
@@ -79,7 +80,7 @@ You will normally need at least 2 functions
   * See OfflinePatRecTraining for examples of how other PatRec algorithms are called.
 
  * One for *testing* your trained algorithm
-  * This function must receive a features vector and returns the predicted class or movement.
+  * This function must receive a single feature vector and returns the predicted class or movement in _outMov_, and a vector with the probability of prediction for each class in _outVector_.
   * See OneShotPatRec for examples of how other PatRec algorithms are called.
 
 You will have to modify the following routines:
