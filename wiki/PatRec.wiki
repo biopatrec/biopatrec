@@ -60,7 +60,7 @@ The real-time predictions can be couple with a prosthetic device or the virtual 
 
 The following tests of prediction and control performance can be used:
 
- * Motion test
+ * [Motion_Test Motion test]
   * Calls MotionTest
   * Uses [patRec] and the GUI handles.
   * Returns ...
