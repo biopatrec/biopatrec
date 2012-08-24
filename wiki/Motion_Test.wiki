@@ -4,7 +4,7 @@
 
 The Motion Test was originally introduced by Kuiken _et al._ (2009) as one of the first real-time evaluations of pattern recognition applied in prosthetic control. For a comprehensive explanation and rationale of this test, see:
 
-[http://jama.jamanetwork.com/article.aspx?articleid=183371 Kuiken TA, Lock BA, Lipschutz RDR, Miller LA, Stubbleﬁeld KAK, Englehart KBK, Li G: Targeted muscle reinnervation for real-time myoelectric control of multifunction artiﬁcial arms. JAMA: the journal of the American Medical Association 2009, 301(6):619–628.]
+ [http://jama.jamanetwork.com/article.aspx?articleid=183371 Kuiken TA, Lock BA, Lipschutz RDR, Miller LA, Stubbleﬁeld KAK, Englehart KBK, Li G: Targeted muscle reinnervation for real-time myoelectric control of multifunction artiﬁcial arms. JAMA: the journal of the American Medical Association 2009, 301(6):619–628.]
 
 A real-time evaluation for controlability would by the [TAC_Test TAC test].
 
