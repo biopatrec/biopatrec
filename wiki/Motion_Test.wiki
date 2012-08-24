@@ -24,7 +24,7 @@ Additional:
 == Requirements ==
 
  * [patRec] - a trained classifier is required, see PatRec.
- * Data acquisition is required, see [Communications]
+ * Data acquisition is required, see [Comm]
 
 = NOTES: =
 
