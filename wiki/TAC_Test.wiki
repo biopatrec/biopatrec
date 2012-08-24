@@ -4,6 +4,10 @@
 
 The Target Achievement Control (TAC) Test evaluates the performance of a given control strategy by simulating the control and positioning of an artificial prosthetic device. Subjects are instructed to move a virtual prosthesis into a target posture and maintain it for a period of time (set in interface). If the subject overshot the target posture or produced unnecessary movements these have to be corrected to achieve success.
 
+The TAC test was originally introduced by [http://www.rehab.research.va.gov/jour/11/486/simon486.html Simon et al. (2011)]. For a comprehensive explanation and rational of this evaluation, see the referred publication:
+
+ [http://www.rehab.research.va.gov/jour/11/486/simon486.html Simon AM, Hargrove LJ, Lock BA, Kuiken TA. Target Achievement Control Test: Evaluating real-time myoelectric pattern recognition control of multifunctional upper-limb prostheses. J Rehabil Res Dev. 2011;48(6): 619-28.].
+
 = Process = 
 
 When the test starts the target position hand is displayed and moved into a random position. The positions are randomised for each trial, so the user does not know which movement is next. Each trial has a number of repetitions (set in interface) where the randomised movements are in the same order.
@@ -16,7 +20,7 @@ Once the subject hand has all of it's DoFs within the set allowance (set in inte
 
 After all trials and repetitions have been completed the data from the test can be saved to a local file. It is also presented in graphs where the completion time, completion rate and selection time are displayed.
 
-= Required to run =
+= Requirements =
 
 In order to run this TAC Test we first need a few things:
 
