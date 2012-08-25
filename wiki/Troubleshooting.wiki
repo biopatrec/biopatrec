@@ -4,13 +4,13 @@ Here you can find instructions on how to solve the most common problems
 
 = General =
 
-It doesn't come as a surprise that sometime Windows and Matlab become unstable and crash without any apparent reason. So, the first things you should try if something is not working properly (and you are sure is not your fault) are:
+It doesn't come as a surprise that sometime Windows and Matlab become unstable and crash without any apparent reason. So, the first things you should try if something is not working properly (and you are sure is not your fault) is:
 
   # Close BioPatRec and open it again, if that doesn't work then,
   # Close Matlab and open it again, if that doesn't work then,
   # Restart Windows
 
-If the latter doesn't work, then check the following issues
+If the latter doesn't work and you double checked is not your fault, then take a look at the following issues
 
 = Communications and Data Acquisition =
 
@@ -30,3 +30,8 @@ The Matlab/NI drivers are not as stable as you would expect. If you have experie
 
  * *Problem:* Error: 'Attempted to access data(:,1); index out of bounds because size(data)=[0,0].'
   * *Solutions:* This has been solved using the same procedure than the error before.
+
+= Myoelectric signals recording =
+
+ * *Problem:* My signals are too noisy
+  * *Solutions:* see [sEMG]
