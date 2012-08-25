@@ -172,3 +172,5 @@ Now you will be redirected to the Analog Front-End Selection.
 The structure [recSession] will be generated as a result.
 
 NOTE: Leave the default options for _Active, COM/port, and Show_. Unless you have the required hardware and software.
+
+See [sEMG] for tips on how to perform surface electromyography
