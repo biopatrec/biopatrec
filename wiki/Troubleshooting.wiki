@@ -6,6 +6,7 @@ Here you can find instructions on how to solve the most common problems
 
 It doesn't come as a surprise that sometime Windows and Matlab become unstable and crash without any apparent reason. So, the first things you should try if something is not working properly (and you are sure is not your fault) is:
 
+  # Have you followed the instructions at [BioPatRec_StartupGuide startup guide]?, if so then,
   # Close BioPatRec and open it again, if that doesn't work then,
   # Close Matlab and open it again, if that doesn't work then,
   # Restart Windows
@@ -18,7 +19,6 @@ The Matlab/NI drivers are not as stable as you would expect. If you have experie
 
  * *Problem:* The MATLAB R2011a with data acquisition toolbox 2.18 doesn't support USB devices from NI, only compacDAQ. ([http://www.mathworks.se/matlabcentral/answers/11333-ni-daq-usb-6351-problem-on-win64-platform problem]). This MATLAB version uses the [http://www.mathworks.se/help/toolbox/daq/bskx95j.html Session-based Interfaces] which doesn't support USB cards, and [http://www.mathworks.se/help/toolbox/daq/ref/analoginput.html legacy] cannot be used in a 64-bit Matlab.
   * *Solution:* Either use a later Matlab version with SBI, or an earlier version with legacy. You will need to ask us for the legacy routines though.
-
 
  * *Problem:* Error for USB6009: 
  ''Onboard device memory overflow. Because of system and/or bus-bandwidth limitations, the driver could not read data from the device fast enough to keep up with the device throughput.''
@@ -35,3 +35,8 @@ The Matlab/NI drivers are not as stable as you would expect. If you have experie
 
  * *Problem:* My signals are too noisy
   * *Solutions:* see [sEMG]
+
+= Pattern recognition =
+
+ * *Problem:* Error using classify (line 228). The pooled covariance matrix of TRAINING must be positive definite.
+  * *Solutions:* LDA can has not enough useful information. Try increasing the number of training sets or using different features.
