@@ -1,0 +1,33 @@
+#summary Surface electromyography
+
+The quality of the recorded myoelectric signals depends strongly on two things:
+
+ * BioAmps
+ * Electrodes
+
+= Electrode placement for sEMG = 
+
+Recording electrodes:
+
+ * A bipolar configuration is preferable to reduce noise
+ * Along the muscle fibers
+ * Away from innervation zone if bipolar electrode. No applicable for monopolar
+ * Away from the tendon
+ * Away from muscle edge
+
+Reference electrode:
+ * As far as possible from the recording electrodes
+ * Place in an electrically neural tissue
+ * Good electrical contact
+
+NOTE: Do NOT forget to use a reference electrode!!!
+
+= References = 
+
+For a very quick overview on sEMG see:
+
+ [http://www.delsys.com/Attachments_pdf/WP_SEMGintro.pdf De Luca, C., Surface Electromyography: Detection and Recording: DelSys; 2002.]
+
+For scientist see:
+
+ Merletti R, Parker P: Electromyography: Physiology, Engineering, and Noninvasive Applications. New Jersey, USA: John Wiley & Sons; 2004
