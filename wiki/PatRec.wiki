@@ -27,23 +27,27 @@ For quick user instructions see [BioPatRec_StartupGuide], or more detailed infor
 
 Most of the training phase is taking care by the function _OfflinePatRec_, which requires the variable [sigFeatures].
 
- * The first step is to extract the training and validation sets (see [xSets]). This directly affects the information to be used during the training and testing of the classifier.
-  * The [xSets] can be formed in different ways according to the _"Select Movements Mix"_ pop menu.
-   * _All Mov_. This means that all the movements recorded will be used as independent movements, regardless if they are individual or mixed movements.
-    * # Outputs = # Movements.
-   * _Individual Mov_. This option will only consider the individual movements during the training phase. All movements will be considered in the testing phase. 
-    * # Outputs = # Individual movements.
-   * _Mixed Out_. This means that the mixed classes (or simultaneous movements) will also be used during the training phase.
-    * # Outputs = # Individual movements. 
+ * *Creation of a matrix of feature vectors.* The first step is to extract the training and validation sets (see [xSets]). This directly affects the information to be used during the training and testing of the classifier. The [xSets] can be formed in different ways according to the _"Select Movements Mix"_ pop menu.
+  * _All Mov_. This means that all the movements recorded will be used as independent movements, regardless if they are individual or mixed movements.
+   * # Outputs = # Movements.
+  * _Individual Mov_. This option will only consider the individual movements during the training phase. All movements will be considered in the testing phase. 
+   * # Outputs = # Individual movements.
+  * _Mixed Out_. This means that the mixed classes (or simultaneous movements) will also be used during the training phase.
+   * # Outputs = # Individual movements. 
+  NOTE: Only _"All Mov"_ is available in [BioPatRec_Highlights#BioPatRec_ETT BioPatRec ETT]. The rest are under testing.
 
- * [Normalization] 
+ * *[Normalization]*. The training and validation sets are normalized according to the selected option. 
 
- * The classifier topology is then created (see [PatRec_Topologies]).
-   * The same classifier can be constructed in different topologies, such as One-Vs-All, One-Vs-One, etc... see [PatRec_Topologies] for details.
+ * *Creation of the classifier topology.* The same classifier can be constructed in different topologies, such as One-Vs-All, One-Vs-One, etc... see [PatRec_Topologies] for details.
+ NOTE: Only the _single classifier_ topology is available in [BioPatRec_Highlights#BioPatRec_ETT BioPatRec ETT]. The rest are under testing.
 
- * Finally, OfflinePatRec calls OfflinePatRecTraining to proceed with the classifier(s) training.
+ * *Training of the classifier.* The OfflinePatRec function calls OfflinePatRecTraining to proceed with the classifier(s) training. The function OfflinePatRec returns the [patRec] structure containing all information required for further utilization of the classifier(s).
 
-The OfflinePatRec returns the [patRec] structure containing all information required for further utilization of the classifier(s).
+ * *Testing of the classifier.* A common function to all classifiers is used to evaluate the accuracy of the selected pattern recognition strategy (Accuracy_patRec). These function uses the testing sets with unseen feature vectors for the classifier(s). Therefore it requires independent functions for
+  * Normalization of a single an unseen feature vector (NormalizeSet) with the parameters created during the normalization of the training set. 
+  * Classification of a single feature vector with the classifier previously trained. This function is the classifier test routine and is called from OneShotPatRec, see below for the implementation of a new classifier.
+
+ This framework allows the computation of the offline accuracy with the same routines later used for the Real-time classification. Therefore, if the implementation of a given classifier works offline, it will be work in real-time!
 
 Automatic statistics can be generated using the menu _Statistics_, see [PatRec_Statistics] for details.
 
