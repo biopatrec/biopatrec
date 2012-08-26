@@ -40,3 +40,6 @@ The Matlab/NI drivers are not as stable as you would expect. If you have experie
 
  * *Problem:* Error using classify (line 228). The pooled covariance matrix of TRAINING must be positive definite.
   * *Solutions:* LDA can has not enough useful information. Try increasing the number of training sets or using different features.
+
+ * *Problem:* The training of the classifiers seems stuck and there are not signs of convergence.
+  * *Solutions:* This is normally due to the amount and quality of the provided feature vectors. Try the algorithm with one of the data sets in the repository, and select the top 2 or 3 features, if this doesn't work is probably an issue with your classifier. If this works, then is an issue with your recording session. Additionally, try different signal features. 
