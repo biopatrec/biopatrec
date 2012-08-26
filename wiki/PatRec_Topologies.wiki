@@ -29,12 +29,13 @@ All evaluation functions return two variables:
  The rest movements is considered as an exception. If this is present, the classifier considered the 2 movements of the DoF AND the rest movement (no movement) class. 
 
  The output is given by the winner per DoF. 
- NOTE: Not good for this application as it is! It will always predict as many movements as DoF as it is. The following topology takes care of this issue.
+
+ NOTE: *Not good* for this application as it is! It will always predict as many movements as DoF. The following topology takes care of this issue.
 
 == Ago-antagonist & Mixed ==
 ({{{PatRec_AgoAntagonistRest}}})
 
- Same than Ago-antagonist but the classifier is trained using the Ago-Antagonist sets plus a set mixed with the remaning classes. The rest movement (no movement) is also included in the training of each DoF if present.
+ Same than Ago-antagonist but the classifier is trained using the Ago-Antagonist sets, plus a mixed set containing the remaining classes. The rest movement (no movement) is also included in the training of each DoF if present.
 
  The output is given by the winner per DoF.
 
@@ -42,29 +43,27 @@ All evaluation functions return two variables:
 == One-vs-All ==
 ({{{PatRec_OneVsAll}}})
  
- This topology has as many classifiers as classes. A single classifier is trained to distinguish between a given class and the rest of the classes. The data sets used to form the rest class is made with the same contribution per remaining class.
+ This topology has as many classifiers as classes. A single classifier is trained to distinguish between a given class and the rest of the classes. 
 
  The output of each classifier is assigned to the corresponding movement.
 
 == One-vs-All Threshold ==
 ({{{PatRec_OneVsAllT}}})
  
- This topology has as many classifiers as classes. A single classifier is trained to distinguish between a given class and the rest of the classes. The data sets used to form the rest class is made with the same contribution per remaining class.
-
- The output of each classifier is assigned to the corresponding movement.
+ Same as One-vs-All but the output of each classifier is used to construct the vectorOut which is latter pass through a threshold selection.
 
 == One-vs-One ==
 ({{{PatRec_OneVsOne}}})
 
  This topology has as {{{n*(n-1)/2}}} classifiers (n=classes). 
 
- The output is normally given by major voting which makes it not suitable for simultaneous classification. However, in this specific application we considered a correct prediction if the probability of prediction is higher than 85%. 
+ The output is normally given by major voting which makes it not suitable for simultaneous classification.
 
 == One-vs-One DoF ==
 ({{{PatRec_OneVsOneDoF}}})
 
- Same than before but the lossing movements in the DoF is made zero.
- NOTE: Needs to be worked more
+ Same than before but the losing movements in the DoF is made zero, and there is a threshold selection per class (one failure allowed).
+ NOTE: Needs to be worked more, MO
 
 = Auxilary routines =
 
@@ -73,8 +72,6 @@ The following routines are used by the topology functions to extract the data se
  * {{{ExtractSets_Stack}}}
 
  This function extract the corresponding set of selected movements (selSets). It keeps the format of [xSets] and xOuts but only with the rows corresponding to the selected movements with index in selSets
-
- NOTE: As it is now, the number of sets per selected movement must be the same. This is normally the case if recSession was used.
 
  * {{{ExtractSets_Stack_MixRest}}}
 
