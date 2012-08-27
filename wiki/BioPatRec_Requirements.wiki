@@ -19,3 +19,16 @@ If you are planning to use the USB-6009 card you will need the drivers [http://j
 Note: Other devices using SCI have been used as well. These routines and the "legacy" routines for MATLAB can be made available upon request.
 
 == Virtual Reality Enviroment ==
+
+In order to run the Virtual Reality Environment you must currently use a machine running Windows. The software has been tested and checked to run successfully on Windows 7 64-bit machines.
+
+In order to run the software the computer must be compatible with OpenGL rendering. Any NVidia and ATI card can be used, and most SiS, Intel and S3 cards are compatible. To make sure if it is compatible, check with your graphic card vendor to make sure it supports *OpenGL 1.2.1*.
+
+Other hardware, such as CPU, has not been thoroughly tested in order to say for certain which level of CPU is required to run this application. The system has been tested and works with: 
+ * Intel Core i7 2,8 GHz
+ * Intel Core i5 2,4 GHz
+ * Intel Core i3 2,1 GHz
+
+without showing any signs of reduced performance.
+
+Using hardware with non-adequate performance will result in slower performance in rendering and may provide latency in all systems associated with the VRE.
