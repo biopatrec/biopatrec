@@ -1,0 +1,39 @@
+#summary One-sentence summary of this page.
+
+= Introduction =
+ Principal Component Analysis (PCA) is one of the widely used Dimensionality Reduction Technique. In Pattern Recognition, Dimensionality Reduction can be categorized as Feature selection or Feature Projection. PCA is an unsupervised Feature reduction or Feature projection technique which does not require any information about class labels. The central idea of PCA is to reduce the dimensionality of large data set in to low dimensional space while preserving as much as possible variation present in the data.
+
+ PCA is a linear transformation also called as KarhunenLoeve Tranform (KLT). It transforms number of correlated variables into small number    of uncorrelated variables called as Principal Components (PC's).The first PC accounts much of variability in the data and the succeeding components accounts remaining variability. It is a true eigen vector based multivariate analysis reveling internal structure of the data which is best explains the variance in the data. 
+
+
+= Algorithm =
+PCA Algorithm is summerized as follows
+  
+   
+   * *Step-1*: Compute the Mean 
+                   
+   * *Step-2*: Subtract the mean from Original  data.
+
+   * *Step-3*: Compute sample Covariance matrix.
+
+   * *Step-4*:  Compute Eigen vectors and Eigen values. 
+
+   * *Step-5*: Sort Eigen values in descending order.
+
+   * *Step-6*: Arrange the Eigen vectors with their corresponding eigen values in descending order.
+ 
+   * *Step-7*: Choose first k highest eigen vectors. 
+
+   * *Step-8*: Project the data on to k eigen vectors.
+
+=== How to Chose k ===
+   To choose k following criterion is used.
+   Consider Eigenvalue is Lamda.
+  ∑ ^𝛌^i / ∑^𝛌^j > Thershold(eg.0.9999) where i = 1,2,....k and j = 1,2,....N
+                  
+         
+  
+Add your content here.  Format your content with:
+  * Text in *bold* or _italic_
+  * Headings, paragraphs, and lists
+  * Automatic links to other wiki pages
