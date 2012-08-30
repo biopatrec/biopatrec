@@ -16,13 +16,13 @@ PCA Algorithm is summarized as follows
 
    * *Step-3*: Compute sample Covariance matrix.
 
-   * *Step-4*:  Compute Eigen vectors and Eigen values. 
+   * *Step-4*: Compute Eigen vectors and Eigen values. 
 
    * *Step-5*: Sort Eigen values in descending order.
 
-   * *Step-6*: Arrange the Eigen vectors with their corresponding eigen values in descending order.
+   * *Step-6*: Arrange the Eigen vectors with their corresponding  eigen values in descending order.
  
-   * *Step-7*: Choose first k highest eigen vectors. 
+   * *Step-7*: Choose first k largest eigen vectors. 
 
    * *Step-8*: Project the data on to k eigen vectors.
 
@@ -36,6 +36,6 @@ PCA Algorithm is summarized as follows
 = Function roadmap =
 
  * *PCA* 
-   * [FeatureReduction]
+    * {{{ FeatureReduction }}} 
      
   
