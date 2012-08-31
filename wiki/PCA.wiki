@@ -1,4 +1,6 @@
-#summary One-sentence summary of this page.
+#summary Principal Component Analysis
+
+NOTE: This is an ongoing development and therefore the documentation is not yet ready.
 
 = Introduction =
  Principal Component Analysis (PCA) is one of the widely used Dimensionality Reduction Technique. In Pattern Recognition, Dimensionality Reduction can be categorized as Feature selection or Feature Projection. PCA is an unsupervised Feature reduction or Feature projection technique which does not require any information about class labels. The central idea of PCA is to reduce the dimensionality of large data set in to low dimensional space while preserving as much as possible variation present in the data.
