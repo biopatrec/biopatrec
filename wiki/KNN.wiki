@@ -1,4 +1,7 @@
-#summary One-sentence summary of this page.
+#summary k-Nearest Neighbor
+
+NOTE: This is an ongoing development and therefore the documentation is  
+not yet ready.
 
 = Introduction =
 
