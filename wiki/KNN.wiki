@@ -1,0 +1,41 @@
+#summary One-sentence summary of this page.
+
+= Introduction =
+
+ k-Nearest Neighbor algorithm (KNN) is a non parametric lazy learning algorithm one of most simple machine learning algorithms. Decision maker in k-NN based on majority voting of its neighbors by using the euclidean distance  as criterion for measuring the distance also k-NN is not based on assumptions of the underlying data distribution but it works to estimate the distribution.     
+
+= Algorithm ==
+ The input of KNN is the training data with its label.
+ # Computes the euclidean distance _d(x',x,,j,,)_ between test object _x'_ and the training data _x,,j,,_  _j=1,...,n_ where _n_ is the number of data in training sets.
+ # Find the _k-minimum_ distance _d,,k,,_ (nearest vectors).
+ # Find the associated label for those nearest vectors.
+ # Create the voting by compute the number of nearest vectors from same class.
+ # Choosing the winning label which it has highest vote.
+
+   
+= Choosing _k_  =
+ Choosing _k_ plays a key role on affect the KNN performance where small _k_ can be sensitive to the noisy data and if _k_ is too large the   neighborhood may include too many data from other classes.
+ 
+ Choosing _k_ heuristically using cross validation technique based on evaluating Root Mean Square Error (RMSE) of validation data it can be one of best methods to estimate optimal k with lowest RMSE.
+
+= Functions Roadmap =
+ ==Training== 
+
+
+
+
+
+ * {{{EvaluateKNN}}}
+   * {{{InitKNN}}}
+   * {{{FastTestKNN}}}
+     * {{{K_Nearest_Neighbor}}}
+       * {{{EuclidDist}}}
+
+
+ == Testing ==
+
+ * {{{KNNTest}}}
+   * {{{K_Nearest_Neighbor}}}
+
+ 
+ 
