@@ -47,10 +47,10 @@ There are two training methods:
    * {{{InitSom}}}
      * {{{unitCoords}}}
      * {{{RandomWeights}}}
-     * {{{lineaInitial}}}
      * {{{Sigma}}}
      * {{{Eta}}}
      * {{{unitDists}}}
+       * {{{VectorDistance}}}
    * {{{StochasticTraining}}}
      * {{{FindClosest}}}
      * {{{UpdateWeights}}}
