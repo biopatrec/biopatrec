@@ -99,16 +99,21 @@ Containing all features of !BioPatRec ETT, plus:
 
  * *Augmented Reality Environment*
 
+ * *Game Control*
 
 = Demonstrations =
 
-== Initial testing of the Virtual Reality Enviroment ==
-<wiki:video url="http://www.youtube.com/watch?v=nBixj_vEOQo"/>
+== Initial testing of simultaneous control  ==
+
+<wiki:video url="http://www.youtube.com/watch?v=6W5plVzXe1k&feature=player_detailpage"/>
 
 == Initial testing of a multifunctional prosthesis  ==
 
 <wiki:video url="http://www.youtube.com/watch?feature=player_embedded&v=nxPToKzuXF4"/>
 
-== Initial testing of simultaneous control  ==
+== Initial testing of the Virtual Reality Enviroment ==
 
-<wiki:video url="http://www.youtube.com/watch?v=6W5plVzXe1k&feature=player_detailpage"/>
+<wiki:video url="http://www.youtube.com/watch?v=nBixj_vEOQo"/>
+
+== Demonstration of Game Control  ==
+<wiki:video url="http://www.youtube.com/watch?v=PHK8slnn2Us&feature=plcp"/>
