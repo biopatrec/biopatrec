@@ -33,11 +33,46 @@ PCA Algorithm is summarized as follows
    Consider Eigenvalue is Lamda.
   ∑ ^𝛌^i / ∑^𝛌^j > Thershold(eg.0.9999) where i = 1,2,....k and j = 1,2,....N
                   
-         
+  
+== Implementation == 
+
+ Before perfoming Principal Component Analysis the data should be normalized to bring the data in same scale. Extracting Mean and Standard Deviation for trFeature Sets and uses the same Mean and Standard Deviation for computing PCA on Validation and Testing Sets.
+  All the Functions will be processed in SigFeatures. There will be specific Check box after the GetSigFeatures in PatRec before Normalization  in order to use according to the requirements.   
+ 
+ * *PcaNormalization* function computes  data normalization.
+    * Input
+      * trFeatures (Training Features) 
+    * Output
+      * Normalized Data, Mean, Standard Deviation.
+                      
+ 
+ * *FeatureReduction* function is the main algorithm for PCA.
+   * Input
+     * data (Features X Samples)
+     * Mean
+     * Standard Deviation
+   * Output
+     * projected Data
+
+ * *RunPCA* Function compute PCA for trFeatures, vFeatures, tFeatures window by window.
+   * Input
+     * [sigFeatures]
+     * Mean
+     * Standard Deviation
+   *Output
+    * sigFeatures 
+
+       if PCA is selected it will consider the output sigFeatures which consists of reduced Feature sets for Training , Validation and Testing.
   
 = Function roadmap =
 
- * *PCA* 
+ * *Normalizing Data for PCA* 
+    * {{{PcaNormalization}}}
+
+ * *PCA Main Algorithm*
     * {{{ FeatureReduction }}} 
+
+ * * Computing PCA for Training, Validation and  Testing* 
+    *  {{{ RunPCA }}}
      
   
