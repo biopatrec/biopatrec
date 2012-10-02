@@ -29,11 +29,6 @@ A beta version of BioPatRec has been released to:
   * *Aalborg University, Denmark*
   * !BioPatRec interest: Augmented Reality
 
- * Robert S. Krieger, MSc.c
-  * Biomedical Eng.
-  * *California Institute of Technology, USA* 
-  * !BioPatRec interest: Prosthetic devices and control
-
  * Prathamesh Dhanpalwar, MSc.c
   * Biomedical Eng.
   * *Chalmers University of Technology, Sweden*
