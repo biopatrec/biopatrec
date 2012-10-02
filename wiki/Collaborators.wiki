@@ -24,6 +24,11 @@ A beta version of BioPatRec has been released to:
   * *IBM Research, Almaden, USA*
   * !BioPatRec interest: PatRec
 
+ * Alejandra Aranceta-Garza, BE, PhD.c
+  * Neurohpysiology Bioengineer
+  * *Strathclyde University, Glasgow*
+  * !BioPatRec interest: PatRec
+
  * Morten Bak Kristoffersen, MSc.c
   * Medialogy 
   * *Aalborg University, Denmark*
