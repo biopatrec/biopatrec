@@ -20,6 +20,7 @@ For quick user instructions see [BioPatRec_StartupGuide], or more detailed infor
   * [MLP] Multi-layers Perceptron
   * [RFN] Regulatory Feedback Networks
   * [SOM] Self-Organizing Map
+  * [Supervised_SOM] Supervised Self-Organizing Map
   * [KNN] k-Nearest Neighbor
 
 
