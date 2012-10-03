@@ -88,7 +88,12 @@ Containing all features of !BioPatRec ETT, plus:
  * *Pattern Recognition*
   * Simultaneous pattern recognition / Pattern recognition of mixed classes
   * Different methods to construct the [xSets] (see PatRec), especially useful for simultaneous movements.
-  * Different classifier topologies available (see [PatRec_Topologies])
+  * Different classifier topologies (see [PatRec_Topologies])
+  * Algorithms
+   * [PCA]
+   * [SOM]
+   * [KNN]
+   * [ICA]
 
  * *Control*
   * Control algorithms:
