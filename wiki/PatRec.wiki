@@ -18,7 +18,7 @@ For quick user instructions see [BioPatRec_StartupGuide], or more detailed infor
   * [PCA] Principal Component Analysis
 
  * Pattern Recognition
-  * [Discriminant_Analysis] 
+  * [Discriminant_Analysis DA] Discriminant Analysis 
   * [KNN] k-Nearest Neighbor
   * [MLP] Multi-layers Perceptron
   * [RFN] Regulatory Feedback Networks
