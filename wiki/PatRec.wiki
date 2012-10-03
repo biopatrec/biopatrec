@@ -11,17 +11,19 @@ The pattern recognition module is organized in:
 For quick user instructions see [BioPatRec_StartupGuide], or more detailed information in [GUI_PatRec]. For a general overview of the functions involved see [BioPatRec_Roadmap].
 
 == Algorithms ==
+ * Signal Processing
+  * [ICA] Independent Component Analysis
 
  * Feature selection
   * [PCA] Principal Component Analysis
 
  * Pattern Recognition
   * [Discriminant_Analysis] 
+  * [KNN] k-Nearest Neighbor
   * [MLP] Multi-layers Perceptron
   * [RFN] Regulatory Feedback Networks
   * [SOM] Self-Organizing Map
-  * [Supervised_SOM] Supervised Self-Organizing Map
-  * [KNN] k-Nearest Neighbor
+  * [SSOM] Supervised Self-Organizing Map
 
 
 == Offline !PatRec == 
