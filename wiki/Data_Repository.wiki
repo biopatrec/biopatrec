@@ -1,6 +1,6 @@
 #summary Data Repository
 
-This folder in BioPatRec contains a repository of myoelectric recording sessions ([recSession]) useful for development, as well as for algorithms benchmarking on common data sets.
+This folder contains a repository of myoelectric recording sessions ([recSession]) useful for development, as well as for algorithms benchmarking on common data sets.
 
  * [10mov4chUntargetedForearm]
   * 10 hand motions
