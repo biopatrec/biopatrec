@@ -1,8 +1,9 @@
 #summary One-sentence summary of this page.
 
+NOTE: This is an ongoing development and therefore the documentation is not yet ready.
 = Introduction =
 
-Supervised Self-Organizing Map (SSOM) is a supervised artificial neural network, this network  has the same model as in [SOM]. The learning in this model is based on  supervised learning i.e. the input-output transformation adjusted by the system parameters.  
+Supervised Self-Organizing Map (SSOM) is a supervised artificial neural network, this network  has the same model as  [SOM]. The learning in this model is based on  supervised learning i.e. the input-output transformations are adjusted by the system parameters.  
 
 
 = Algorithm =
@@ -13,34 +14,55 @@ Supervised Self-Organizing Map (SSOM) is a supervised artificial neural network,
  == Stochastic Training.==
  The algorithm is summarized as follows:
 
-  # Add the label last columns to the input data.    
-  # *Initialization:* Randomly choosing the initial weight vectors  _W,,j,,_ (with same dimension of input data).The only restriction is that _W,,j,,_ to be different for _j=1,2,...,n_ where _n_ is the number of neurons in the lattice.
+  # Add the labels in the last columns to the input data.    
+  # *Initialization:* Randomly choosing the initial weight vectors  _W,,j,,_ with same dimension of input data. The only restriction is that _W,,j,,_ to be different for _j=1,2,...,n_ where _n_ is the number of neurons in the grid.
   # *Sampling:* Draw randomly the input vector _x_ from the input data sets.
-  # * Similarity matching:* Find the best-matching(winning) neuron _i(x)_ at time-step _t_ by using the minimum-distance criterion where
+  # * Similarity matching:* Find the best-matching(winning) neuron _i(x)_ at time-step _t_ by using the minimum-euclidean distance criterion where
         _i(x)=arg min || x(t) - W,,j,, | , j=1,2,...,n_
   # *Updating:* Adjust the synaptic-weight vector of all excited neurons by using the update formula *_W,,j,,(t+1)=W,,j,,(t) + eta(t) h,,cj,,(t) ( x(t) - W,,j,,(t) )    ,   j=1,2,...,n_*  where _eta(t)_ is a learning rate parameter and _h,,cj,,(t)_ is the neighborhood function centered around the winning neuron _i(x)_; both _eta(t)_ and _h,,cj,,(t)_are varied dynamically during learning.
-  # *Continuation:* Continue with step 3 to 5 for some iterations.
+  # *Continuation:* Continue  step 3 to 5 for some iterations.
 
  
  == Batch Training.==
  In the Batch Training the weight vectors for all input data vectors are simultaneously update.
 
  The algorithm is summarized as follows:
-  # Add the label last columns to the input data.
-  # Randomly choosing the initial weight vectors  _W,,j,,_ (with same dimension of input data).The only restriction is that _W,,j,,_ to be different for _j=1,2,...,n_ where _n_ is the number of neurons in the lattice.
-  # Find the best-matching (winning) neuron according to 4 in Stochastic Training for all input data sets. 
-  # Calculate the sum of vectors in each Voronoi set by:
-   _S,,j,,_=sum(_x,,j,,_)   ,_j=1,2.....,nv,,i,,_. where _nv,,i,,_ is Voronoi set of unit _i_.
-  # Calculate the number of sample in each Voronoi (_nv,,i,,_) set _i_.
-  # W,,i,,(t+1)=sum( _h,,ij,,(t)_ _S,,j,,(t)_ ) / sum( _nv,,j,,_ _h,,ij,,(t)_ )  ,_j=1,2.....,m_. where _m,_ is number of neurons , _h,,ij,,(t)_ is a neighborhood function centered around the neuron _i_ at time _t_ and _nv,,j,,_ is  number of samples in the Voronoi set _j_.
-  # Continue with step 3 to 6 for some iterations.
+  # Add the labels in the last columns to the input data.
+  # Randomly choosing the initial weight vectors  _W,,j,,_ with same    dimension of input data.The only restriction is that _W,,j,,_ to be   different for _j=1,2,...,n_ where _n_ is the number of neurons in the   grid.
+  # Find the best-matching(winning) neuron _i(x)_ according to 4 in Stochastic Training.
+  # For each wining neuron _j_ calculate _S,,j,,_ is the sum of corresponding input data sets _x,,i,,_ to wining neuron _j_
+           _S,,j,,_=sum(_x,,i,,_)   ,_i=1,2......,m_ where _m_ is the number of the input data sets corresponding to wining neuron _j_ and _j=1,2,...,n_ where _n_ is the number of neurons in the grid.
+  # For each wining neuron _j_ calculate _A,,j,,_ is the number of input data sets _x,,i,,_ corresponding to that winning neuron _j_
+  # _W(t+1)_=( _h,,ij,,(t)_  _S(t)_ ) / (  _A(t)_  _h,,ij,,(t)_ ). where _h,,ij,,(t)_ is a neighborhood function centered around the wining neuron _i_ at time _t_.
+  # Continue  step 3 to 6 for some iterations.
 
  == Classification==
 
- # Take out the added columns from the weight matrix that represents the neuron output. 
- #  Find the best-matching(winning) neuron according to 4 in Stochastic Training for each test pattern.
- # The output of test pattern is the associated neuron output.
+ # Take out the added columns from the weight matrix that represents the output for the neurons. 
+ #  Find the best-matching(winning) neuron i(x) according to 4 in Stochastic Training for test set x.
+ # The classification of x is the associated output to i(x) .
 
+==GUIDE==
+ GUI_SOM is an interface which is connected to [PatRec] for selecting  different configurations for SOM such as the Grid Shape, Neighbor Functions and Visualizing Map for SOM according to the choice.
+
+* Grid Shape
+
+ * Rectangular Grid
+ * Hexagonal Grid
+
+* Neighbor Function
+
+ * Bubble
+ * Gaussian
+ * Cutgaussian
+ * Epinchikov
+ * Butter worth 2nd order
+
+* Visualize SOM
+
+ * yes
+ * No 
+  
 
 = Functions Roadmap =
 
