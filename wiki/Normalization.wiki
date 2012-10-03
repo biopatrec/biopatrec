@@ -13,7 +13,7 @@ Normalization is usually required to avoid that features with large magnitudes e
  * Mid-range 0, Range 2 (-1 to 1), preferred in:
    * [MLP]
  * Norm-Log (x>=0), preferred in:
-   * [SOM], [KNN] and [Supervised_SOM].
+   * [SOM], [KNN] and [SSOM].
 
 = How to add a normalization method? =
 
