@@ -18,47 +18,83 @@ There are two training methods:
  == Stochastic Training.==
  The algorithm is summarized as follows:
 
-  # *Initialization:* Randomly choosing the initial weight vectors _W,,j,,_.The only restriction is that _W,,j,,_ to be different for _j=1,2,...,n_ where _n_ is the number of neurons in the lattice.
+  # *Initialization:* Randomly choosing the initial weight vectors _W,,j,,_.The only restriction is that _W,,j,,_ to be different for _j=1,2,...,n_ where _n_ is the number of neurons in the grid.
   # *Sampling:* Draw randomly the input vector _x_ from the input data sets.
-  # *Simmilarity matching:* Find the best-matching(winning) neuron _i(x)_ at time-step _t_ by using the minimum-distance criterion where
+  # *Simmilarity matching:* Find the best-matching(winning) neuron _i(x)_ at time-step _t_ by using the minimum-euclidean distance criterion where
         _i(x)=arg min || x(t) - W,,j,, | , j=1,2,...,n_
   # *Updating:* Adjust the synaptic-weight vector of all excited neurons by using the update formula *_W,,j,,(t+1)=W,,j,,(t) + eta(t) h,,cj,,(t) ( x(t) - W,,j,,(t) )    ,   j=1,2,...,n_*  where _eta(t)_ is a learning rate parameter and _h,,cj,,(t)_ is the neighborhood function centered around the winning neuron _i(x)_; both _eta(t)_ and _h,,cj,,(t)_are varied dynamically during learning.
-  # *Continuation:* Continue with step 2 to 4 for some iterations.
+  # *Continuation:* Continue  step 2 to 4 for some iterations.
 
  
  == Batch Training.==
- In the Batch Training all the input data vectors are simultaneously    used to update all the weight vectors.
+ In the Batch Training the weight vectors for all input data vectors are simultaneously updated.
 
  The algorithm is summarized as follows:
-  # Find the best-matching(winning) neuron _i_ according to 3 in Stochastic Training. 
-  # Calculate the sum of vectors in each Voronoi set by:
-   _S,,j,,_=sum(_x,,j,,_)   ,_j=1,2.....,nv,,i,,_. where _nv,,i,,_ is Voronoi set of unit _i_.
-  # The number of sample in each Voronoi (_nv,,i,,_) set _i_.
-  # W,,i,,(t+1)=sum( _h,,ij,,(t)_ _S,,j,,(t)_ ) / sum( _nv,,j,,_ _h,,ij,,(t)_ )  ,_j=1,2.....,m_. where _m,_ is number of neurons , _h,,ij,,(t)_ is a neighborhood function centered around the neuron _i_ at time _t_ and _nv,,j,,_ is  number of samples in the Voronoi set _j_.
-  # Continue with step 1 to 4 for some iterations.
+  # Randomly choosing the initial weight vectors  _W,,j,,_ with same dimension of input data.The only restriction is that _W,,j,,_ to be different for _j=1,2,...,n_ where _n_ is the number of neurons in the grid.
+  # Find the best-matching(winning) neuron _i(x)_ according to 3 in Stochastic Training.
+  # For each wining neuron _j_ calculate _S,,j,,_ is the sum of corresponding input data sets _x,,i,,_ to  wining neuron _j_
+           _S,,j,,_=sum(_x,,i,,_)   ,_i=1,2......,m_ where _m_ is the number of the input data sets corresponding to  wining neuron _j_ and _j=1,2,...,n_ where _n_ is the number of neurons in the grid.
+  # For each wining neuron _j_ calculate _A,,j,,_ is the number of input data sets _x,,i,,_ corresponding to that winning neuron _j_
+  # _W(t+1)_= (_h,,ij,,(t)_  _S(t)_ ) / (  _A(t)_  _h,,ij,,(t)_ ). where _h,,ij,,(t)_ is a neighborhood function centered around the wining neuron _i_ at time _t_.
+  # Continue  step 2 to 5 for some iterations.
 
+ == Classification==
+
+
+ # Find the best-matching(winning) neuron i(x) according to 3 in Stochastic Training for test set x. 
+ # Find the nearest labeled neuron to i(x).
+ # The output of test set is the associated label to labeled neuron.
+
+==GUIDE==
+ GUI_SOM is an interface which is connected to [PatRec] for selecting  different configurations for SOM such as the Grid Shape, Neighbor Functions and Visualizing Map for SOM according to the choice.
+
+* Grid Shape
+
+ * Rectangular Grid
+ * Hexagonal Grid
+
+* Neighbor Function
+
+ * Bubble
+ * Gaussian
+ * Cutgaussian
+ * Epinchikov
+ * Butter worth 2nd order
+
+* Visualize SOM
+
+ * yes
+ * No 
+  
 
 = Functions Roadmap =
+
+==GUIDE==
+
+ * {{{GUI_SOM}}}
 ==Training== 
 
 
  * {{{SOM_Maping}}}
-  * {{{EvaluateSom}}}
-   * {{{InitSom}}}
+  * {{{EvaluateSOM}}}
+   * {{{InitSOM}}}
      * {{{unitCoords}}}
      * {{{RandomWeights}}}
-     * {{{Sigma}}}
-     * {{{Eta}}}
      * {{{unitDists}}}
        * {{{VectorDistance}}}
    * {{{StochasticTraining}}}
+     * {{{Sigma}}}
+     * {{{Eta}}}
      * {{{FindClosest}}}
      * {{{UpdateWeights}}}
-     * {{{GetNeurLab}}}
+       * {{{StochasticNeighborFunction}}}   
    * {{{BatchTrainig}}}
      * {{{VectorDistance}}}
-     * {{{GetNeurLab}}}
+     * {{{BatchNeighborFunction}}}
+   * {{{GetNeurLab}}}
    * {{{FastTestSOM}}}
+     * {{{FindClosest}}}
+   * {{{FullTestSOM}}}
      * {{{FindClosest}}}
    
 
