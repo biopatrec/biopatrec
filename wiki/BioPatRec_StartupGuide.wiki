@@ -36,7 +36,7 @@ At the MATLAB command window
  * Type !BioPatRec
  * Click _Pattern Recognition_
  * Click _Get Sig. Features_
- * Select the file containing the [recSession] structure (e.g. any `*.mat` file in _data examples_)
+ * Select the file containing the [recSession] structure (e.g. any `*.mat` file in [Data_Repository Data Repository])
 
 The latter will take you to the Signal Treatment GUI, now:
 
