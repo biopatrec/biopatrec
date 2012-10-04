@@ -1,4 +1,4 @@
-#summary Surface electromyography
+#summary Surface ElectroMyoGraphy
 
 The quality of the recorded myoelectric signals depends strongly on two things:
 
@@ -17,7 +17,7 @@ Recording electrodes:
 
 Reference electrode:
  * As far as possible from the recording electrodes
- * Place in an electrically neural tissue
+ * Place in an electrically neutral tissue
  * Good electrical contact
 
 NOTE: Do NOT forget to use a reference electrode!!!
