@@ -33,10 +33,10 @@ The last parameter is an identifier to state which motor is connected to the mov
 
 == Motors Object ==
 
-The motors are initialised in the _Load_patRec_ function, before the movements. They are retrieved from _motors.def_ where each line represents a motor and its position. 
+The motors are initialised in the _Load_patRec_ function, before the movements. They are retrieved from _motors.def_ where each line represents a motor and its position or speed during activation (in percentage). 
 
 ||#1||#2||#3||
-||id||type||percentage of position||
+||id||type||percentage of position or speed||
 
 Each movement is then created using the motor class (motor.m). 
 
