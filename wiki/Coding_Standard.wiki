@@ -6,7 +6,7 @@ The conding standard used in this development is based in the proposed MATLAB co
 
 == Header ==
 
-Every source file must include the header in [Copyright notice]
+Every source file must include this [Copyright_Notice header]
  
 == Coding Standard ==
  
