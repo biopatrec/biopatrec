@@ -1,4 +1,4 @@
-#summary Collaboration
+#summary List of users, collaborators, and contributors
 
 = Who's in? ==
 
@@ -23,6 +23,16 @@ A beta version of BioPatRec has been released to:
   * Cognitive Computing
   * *IBM Research, Almaden, USA*
   * !BioPatRec interest: PatRec
+
+ * Jie Liu, PhD.
+  * The Sensory Motor Performance Program
+  * *Northwestern University, Rehabilitation Institute of Chicago, USA*
+  * !BioPatRec interest: BioPatRec
+
+ * Daphne Boere, BME, MSc.
+  * Myoelectric transradial prosthesis control
+  * *Roessingh Research and Development / University of Twente, the Netherlands*
+  * BioPatRec interest: Myoelectric signal processing and PatRec
 
  * Alejandra Aranceta-Garza, BE, PhD.c
   * Neurohpysiology Bioengineer
