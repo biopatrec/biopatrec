@@ -27,12 +27,12 @@ A beta version of BioPatRec has been released to:
  * Jie Liu, PhD.
   * The Sensory Motor Performance Program
   * *Northwestern University, Rehabilitation Institute of Chicago, USA*
-  * !BioPatRec interest: BioPatRec
+  * !BioPatRec interest: BioPatRec applied to exoskeletons
 
  * Daphne Boere, BME, MSc.
   * Myoelectric transradial prosthesis control
   * *Roessingh Research and Development / University of Twente, the Netherlands*
-  * BioPatRec interest: Myoelectric signal processing and PatRec
+  * !BioPatRec interest: Myoelectric signal processing and PatRec
 
  * Alejandra Aranceta-Garza, BE, PhD.c
   * Neurohpysiology Bioengineer
