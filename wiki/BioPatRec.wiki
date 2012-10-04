@@ -36,6 +36,7 @@ https://biopatrec.googlecode.com/svn/wiki/img/Biopatrec_flow.png
 If you are planning to contribute or develop further using this platform, you might want to consider the following
 
  * [Coding_Standard] (simple, easy and useful!)
+ * [Updating Updating the source code and wiki]
  * [Copyright_Notice] (keep the connection and play fair)
 
 If you wish to commit changes or upgrades to BioPatRec, the easiest way is to submit a _patch_ using Tortoise. See this [http://www.igorexchange.com/node/87#branches Tortoise SVN Tutorial] for more information.
