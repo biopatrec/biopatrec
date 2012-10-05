@@ -29,7 +29,7 @@ A beta version of BioPatRec has been released to:
   * *Northwestern University, Rehabilitation Institute of Chicago, USA*
   * !BioPatRec interest: BioPatRec applied to exoskeletons
 
- * Daphne Boere, BME, MSc.
+ * Daphne Boere, BME, PhD.c
   * Myoelectric transradial prosthesis control
   * *Roessingh Research and Development / University of Twente, the Netherlands*
   * !BioPatRec interest: Myoelectric signal processing and PatRec
@@ -37,7 +37,7 @@ A beta version of BioPatRec has been released to:
  * Alejandra Aranceta-Garza, BE, PhD.c
   * Neurohpysiology Bioengineer
   * *Strathclyde University, Glasgow*
-  * !BioPatRec interest: PatRec
+  * !BioPatRec interest: Myoelectric signal processing and PatRec
 
  * Morten Bak Kristoffersen, MSc.c
   * Medialogy 
@@ -57,14 +57,14 @@ A beta version of BioPatRec has been released to:
  * Ali Fouad, MSc.c / Siva Kumar, MSc.c
   * Complex Adaptive Systems / Biomedical Eng.
   * *Chalmers University of Technology, Sweden*
-  * !BioPatRec interest: [PCA] and [SOM]
+  * !BioPatRec interest: [PCA], [ICA], [KNN] and [SOM]
 
  * Joakim Arver, MSc.c
   * Biomedical Eng.
   * *Chalmers University of Technology, Sweden*
   * !BioPatRec interest: Initial contributions on the [VRE]
 
- * Per Förstber, MSc.c / Gustav Josefsson, MSc.c
+ * Per Förstberg, MSc.c / Gustav Josefsson, MSc.c
   * Biomedical Eng.
   * *Chalmers University of Technology, Sweden*
   * !BioPatRec interest: Analog front ends and myoelectric signal acquisition
