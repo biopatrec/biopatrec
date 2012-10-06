@@ -61,11 +61,20 @@ There are two training methods:
  * Epinchikov
  * Butter worth 2nd order
 
-* Visualize SOM
+* Visualize U-matrix
 
  * yes
  * No 
-  
+
+==U-matrix==
+
+ U-matrix (unified distance matrix) is one methods to visualize high-dimensional space on a 2-D a gray-scale image . Where, it represented by the distance between each two neighbors neuron in the map which in turn represent the intermediate spot between those two neighbors .
+
+
+
+
+
+
 
 = Functions Roadmap =
 
@@ -92,11 +101,17 @@ There are two training methods:
      * {{{VectorDistance}}}
      * {{{BatchNeighborFunction}}}
    * {{{GetNeurLab}}}
+     * {{{FindClosest}}}
    * {{{FastTestSOM}}}
      * {{{FindClosest}}}
    * {{{FullTestSOM}}}
      * {{{FindClosest}}}
-   
+   * {{{showUDMatrix}}}
+     * {{{createUDMat}}}
+     * {{{UDMatCoords}}}
+     * {{{plotUDMatrix}}}
+       * {{{syntaxNeuron}}}
+     * {{{getColor}}}
 
    
 
