@@ -40,21 +40,20 @@ There are two training methods:
 
  == Classification==
 
-
  # Find the best-matching(winning) neuron i(x) according to 3 in Stochastic Training for test set x. 
  # Find the nearest labeled neuron to i(x).
  # The output of test set is the associated label to labeled neuron.
 
-==GUIDE==
- GUI_SOM is an interface which is connected to [PatRec] for selecting  different configurations for SOM such as the Grid Shape, Neighbor Functions and Visualizing Map for SOM according to the choice.
+
+= Implementation =
+
+ When SOM is selected as PatRec in [GUI_PatRec] an additional GUI for configuration of SOM (GUI_SOM) will automatically appear. This GUI allows the selection of different Grid Shape, Neighbor Functions and Visualization of the Map.
 
 * Grid Shape
-
  * Rectangular Grid
  * Hexagonal Grid
 
 * Neighbor Function
-
  * Bubble
  * Gaussian
  * Cutgaussian
@@ -62,27 +61,22 @@ There are two training methods:
  * Butter worth 2nd order
 
 * Visualize U-matrix
-
  * yes
  * No 
+
+These parameters are saved in _algConf_ and send as an additional parameter in OfflinePatRec.
 
 ==U-matrix==
 
  U-matrix (unified distance matrix) is one methods to visualize high-dimensional space on a 2-D a gray-scale image . Where, it represented by the distance between each two neighbors neuron in the map which in turn represent the intermediate spot between those two neighbors .
 
-
-
-
-
-
-
 = Functions Roadmap =
 
-==GUIDE==
+==GUI==
 
  * {{{GUI_SOM}}}
-==Training== 
 
+==Training== 
 
  * {{{SOM_Maping}}}
   * {{{EvaluateSOM}}}
@@ -113,10 +107,7 @@ There are two training methods:
        * {{{syntaxNeuron}}}
      * {{{getColor}}}
 
-   
-
 == Testing ==
-
 
  * {{{SOMTest}}}
    * {{{FindClosest}}}
