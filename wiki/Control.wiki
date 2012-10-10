@@ -36,6 +36,7 @@ The new loading system is managed with a text file, /Control/ValidControlAlgs.tx
 The control algorithms are loaded with InitControl.m that appends an inputed patRec structure with an associated controlAlg structure. If a patRec has an associated controlAlg structure it can be reached by the command patRec.controlAlg.
 
 == Steps to implement control algorithms in future releases ==
+The following steps have to made in order to be able to use a new control algorithm with BioPatRec.
 
 * Set up the algorithm and default parameters in ValidControlAlgs.txt
 * Name the routine file same as stated in ValidControlAlgs.txt
