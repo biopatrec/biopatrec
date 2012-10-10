@@ -106,6 +106,8 @@ Containing all features of !BioPatRec ETT, plus:
 
  * *Game Control*
 
+See the [Important_coding_changes]
+
 = Demonstrations =
 
 == Initial testing of simultaneous control  ==
