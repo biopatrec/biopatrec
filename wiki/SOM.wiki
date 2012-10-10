@@ -15,7 +15,7 @@ There are two training methods:
  * Stochastic Training.
  * Batch Training.
 
- == Stochastic Training.==
+ == Stochastic Training^[1]^.==
  The algorithm is summarized as follows:
 
   # *Initialization:* Randomly choosing the initial weight vectors _W,,j,,_.The only restriction is that _W,,j,,_ to be different for _j=1,2,...,n_ where _n_ is the number of neurons in the grid.
@@ -26,7 +26,7 @@ There are two training methods:
   # *Continuation:* Continue  step 2 to 4 for some iterations.
 
  
- == Batch Training.==
+ == Batch Training^[2]^.==
  In the Batch Training the weight vectors for all input data vectors are simultaneously updated.
 
  The algorithm is summarized as follows:
@@ -68,13 +68,25 @@ These parameters are saved in _algConf_ and send as an additional parameter in O
 
 ==U-matrix==
 
- U-matrix (unified distance matrix) is one methods to visualize high-dimensional space on a 2-D a gray-scale image . Where, it represented by the distance between each two neighbors neuron in the map which in turn represent the intermediate spot between those two neighbors .
+ Unified distance matrix (U-matrix) is one methods to visualize high-dimensional space on a 2-D a gray-scale image . Where, it represented by the distance between each two neighbors neuron in the map which in turn represent the intermediate spot between those two neighbors .
+
+
+==Adding SOM into [BioPatRec]==
+
+ * *Adding GUI_SOM into [BioPatRec].*
+  * On the  [GUI_PatRec] interface (GUI_PatRec.fig) add two static texts SOM_allConfig and SOM_selecConfig.
+  * In the pm_SelectAlgorithm_Callback routine in GUI_PatRec, call  load_algConf routine. The load_algConf routine takes [GUI_PatRec] handles as input and it returns handles after uploading the algorithm configurations to [GUI_PatRec] again.     
+  * Before OfflinePatRec rutine in [GUI_PatRec], call parameter SOM_selecConfig from [GUI_PatRec] handles and save it as _algConf_ if the selected algorithm is SOM or [SSOM] otherwise algConf is empty.
+
+ * *Adding SOM rutines into [BioPatRec].*
+  * In the OfflinePatRecTraining routine, call SOM_Maping routine if the selected algorithm is SOM. 
+  * In OneShotPatRec routine, call SOMTest routine if the selected algorithm is SOM.  
 
 = Functions Roadmap =
 
 ==GUI==
-
- * {{{GUI_SOM}}}
+ * {{{load_algConf}}}
+   * {{{GUI_SOM}}}
 
 ==Training== 
 
@@ -111,3 +123,8 @@ These parameters are saved in _algConf_ and send as an additional parameter in O
 
  * {{{SOMTest}}}
    * {{{FindClosest}}}
+{{cite book}}
+==References==
+---------------------------------------------------------------------
+ # Simon O. Haykin ,''Neural Networks and Learning Machines (3rd ed.)'',PEARSON, pp.(464-465),ISBN13:978-0-13-129376-2.
+ # Juha Vesanto, Johan Himberg, Esa Alhoniemi and Parhankangs,''SOM Toolbox'',Helsinki University of Technology,pp.(9-11),ISBN 951-22-4951-0.
