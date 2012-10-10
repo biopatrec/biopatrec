@@ -75,7 +75,7 @@ These parameters are saved in _algConf_ and send as an additional parameter in O
 
  * *Adding GUI_SOM into [BioPatRec].*
   * On the  [GUI_PatRec] interface (GUI_PatRec.fig) add two static texts SOM_allConfig and SOM_selecConfig.
-  * In the pm_SelectAlgorithm_Callback routine in GUI_PatRec, call  load_algConf routine. The load_algConf routine takes [GUI_PatRec] handles as input and it returns handles after uploading the algorithm configurations to [GUI_PatRec] again.     
+  * In the pm_SelectAlgorithm_Callback routine in GUI_PatRec, call  load_algConf routine. The load_algConf routine takes [GUI_PatRec] handles as input and it returns handles to [GUI_PatRec] again after uploading the algorithm configurations.     
   * Before OfflinePatRec rutine in [GUI_PatRec], call parameter SOM_selecConfig from [GUI_PatRec] handles and save it as _algConf_ if the selected algorithm is SOM or [SSOM] otherwise algConf is empty.
 
  * *Adding SOM rutines into [BioPatRec].*
