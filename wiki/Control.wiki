@@ -29,14 +29,14 @@ These two routines are called in the realtime patrec functions such as:
 
 = Note on future releases =
 
-Future releases of BioPatRec will load control algorithms differently from the current solution. The new loading system will keep the GUI up to date with all available algorithms and also offer a quick way to change algorithm parameters.
+Future releases of BioPatRec will load control algorithms differently from the _!BioPatRec ETT_ release. The new loading system will keep the GUI up to date with all available algorithms and also offer a quick way to change algorithm parameters.
 
 The new loading system is managed with a text file, /Control/ValidControlAlgs.txt that contains the name of all available algorithms and a set of default parameters specific for each algorithm. 
 
 The control algorithms are loaded with InitControl.m that appends an inputed patRec structure with an associated controlAlg structure. If a patRec has an associated controlAlg structure it can be reached by the command patRec.controlAlg.
 
 == Steps to implement control algorithms in future releases ==
-The following steps have to made in order to be able to use a new control algorithm with BioPatRec.
+The following steps have to be made in order to be able to use a new control algorithm with BioPatRec.
 
  * Set up the algorithm and default parameters in ValidControlAlgs.txt
  * Name the routine file same as stated in ValidControlAlgs.txt
