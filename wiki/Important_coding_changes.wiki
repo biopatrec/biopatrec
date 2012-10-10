@@ -1,0 +1,11 @@
+#summary Summary of important coding changes
+
+= From ETT to TVÅ =
+
+== Additional variable for !OfflinePatRec: algConf ==
+Since [SOM] and [SSOM] needed special configurations, the struct variable _algConf_ is now available for transiting configuration parameters. The calling of the following routines was modified to include the _algConf_ variable inmediatly after _tType_.
+
+  * {{{OfflinePatRec}}}
+  * {{{OfflinePatRecTraining}}}
+
+In order to use the struct _algConf_, just save it in the [GUI_PatRec] handles. The it will be sent to {{{OfflinePatRec}}} by {{{pb_RunOfflineTraining_Callback}}}. This variable is saved inside patRec.patRecTrained.
