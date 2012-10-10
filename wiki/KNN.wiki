@@ -1,7 +1,7 @@
 #summary k-Nearest Neighbor
 
 NOTE: This is an ongoing development and therefore the documentation is  
-not yet ready.
+not yet finalized.
 
 = Introduction =
 
@@ -42,7 +42,8 @@ The training procedure is only to choose optimal k.
      * {{{EuclidDist}}}
 
 
- ==References==
+
 -------------------------------------------------------------------- 
+=References:=
  # Xindong Wu, Vipin Kumar,J. Ross Quinlan, Joydeep Ghosh, Qiang Yang, Hiroshi Motoda ,Geoffrey J. McLachlan, Angus Ng, Bing Liu, Philip S. Yu,Zhi-Hua Zhou, Michael Steinbach, David J. Hand and Dan Steinberg, ''Top 10 algorithms in data mining'', Springer-Verlag London Limited 2007,pp.(22-23).
  
