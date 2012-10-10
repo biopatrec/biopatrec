@@ -123,7 +123,7 @@ These parameters are saved in _algConf_ and send as an additional parameter in O
 
  * {{{SOMTest}}}
    * {{{FindClosest}}}
-{{cite book}}
+
 ==References==
 ---------------------------------------------------------------------
  # Simon O. Haykin ,''Neural Networks and Learning Machines (3rd ed.)'',PEARSON, pp.(464-465),ISBN13:978-0-13-129376-2.
