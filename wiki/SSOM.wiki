@@ -11,7 +11,7 @@ Supervised Self-Organizing Map (SSOM) is a supervised artificial neural network,
  * Stochastic Training.
  * Batch Training.
 
- == Stochastic Training.==
+ == Stochastic Training^[1]^.==
  The algorithm is summarized as follows:
 
   # Add the labels in the last columns to the input data.    
@@ -23,7 +23,7 @@ Supervised Self-Organizing Map (SSOM) is a supervised artificial neural network,
   # *Continuation:* Continue  step 3 to 5 for some iterations.
 
  
- == Batch Training.==
+ == Batch Training^[2]^.==
  In the Batch Training the weight vectors for all input data vectors are simultaneously update.
 
  The algorithm is summarized as follows:
@@ -42,16 +42,16 @@ Supervised Self-Organizing Map (SSOM) is a supervised artificial neural network,
  #  Find the best-matching(winning) neuron i(x) according to 4 in Stochastic Training for test set x.
  # The classification of x is the associated output to i(x) .
 
-==GUIDE==
- GUI_SOM is an interface which is connected to [PatRec] for selecting  different configurations for SOM such as the Grid Shape, Neighbor Functions and Visualizing Map for SOM according to the choice.
+= Implementation =
+
+
+ When SSOM is selected as PatRec in [GUI_PatRec] an additional GUI for configuration of SSOM (GUI_SOM) will automatically appear  . This GUI allows the selection of different Grid Shape, Neighbor Functions and Visualization of the Map.
 
 * Grid Shape
-
  * Rectangular Grid
  * Hexagonal Grid
 
 * Neighbor Function
-
  * Bubble
  * Gaussian
  * Cutgaussian
@@ -59,22 +59,29 @@ Supervised Self-Organizing Map (SSOM) is a supervised artificial neural network,
  * Butter worth 2nd order
 
 * Visualize U-matrix
-
  * yes
  * No 
-  
 
+These parameters are saved in _algConf_ and send as an additional parameter in OfflinePatRec.
 
 ==U-matrix==
 
- U-matrix (unified distance matrix) is one methods to visualize high-dimensional space on a 2-D a gray-scale image . Where, it represented by the distance between each two neighbors neuron in the map which in turn represent the intermediate spot between those two neighbors .
+ Unified distance matrix (U-matrix) is one methods to visualize high-dimensional space on a 2-D a gray-scale image . Where, it represented by the distance between each two neighbors neuron in the map which in turn represent the intermediate spot between those two neighbors .
+
+==Adding SSOM into [BioPatRec]==
+ 
+ Check Adding GUI_SOM into BioPatRec in [SOM].   
+ * *Adding [SSOM] rutines into [BioPatRec].*
+  * In the OfflinePatRecTraining routine, call SSOM_Maping routine if the selected algorithm is SSOM. 
+  * In OneShotPatRec routine, call SSOMTest routine if the selected algorithm is SSOM.  
 
 
 = Functions Roadmap =
 
 ==GUIDE==
 
- * {{{GUI_SOM}}}
+ * {{{load_algConf}}}
+   * {{{GUI_SOM}}}
 
 ==Training== 
 
@@ -116,3 +123,9 @@ Supervised Self-Organizing Map (SSOM) is a supervised artificial neural network,
 
  * {{{SSOMTest}}}
    * {{{FindClosest}}}
+
+
+ ==References==
+---------------------------------------------------------------------
+ # Simon O. Haykin ,''Neural Networks and Learning Machines (3rd ed.)'',PEARSON, pp.(464-465),ISBN13:978-0-13-129376-2.
+ # Juha Vesanto, Johan Himberg, Esa Alhoniemi and Parhankangs,''SOM Toolbox'',Helsinki University of Technology,pp.(9-11),ISBN 951-22-4951-0.
