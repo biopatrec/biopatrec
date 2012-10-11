@@ -47,7 +47,7 @@ There are two training methods:
 
 = Implementation =
 
- When SOM is selected as PatRec in [GUI_PatRec] an additional GUI for configuration of SOM (GUI_SOM) will automatically appear. This GUI allows the selection of different Grid Shape, Neighbor Functions and Visualization of the Map.
+ When SOM is selected as PatRec algorithm in the [GUI_PatRec], an additional GUI for configuration of SOM (GUI_SOM) will automatically appear. This GUI allows the selection of different Grid Shape, Neighbor Functions and Visualization of the Map.
 
 * Grid Shape
  * Rectangular Grid
@@ -64,19 +64,14 @@ There are two training methods:
  * yes
  * No 
 
-These parameters are saved in _algConf_ and send as an additional parameter in OfflinePatRec.
+These parameters are saved in a struct variable (_algConf_) and then added to the [GUI__PatRec] handles to later be retrieved for OfflinePatRec. See [Important_coding_changes] for more details.
 
 ==U-matrix==
 
- Unified distance matrix (U-matrix) is one methods to visualize high-dimensional space on a 2-D a gray-scale image . Where, it represented by the distance between each two neighbors neuron in the map which in turn represent the intermediate spot between those two neighbors .
+ Unified distance matrix (U-matrix) is one methods to visualize high-dimensional space on a 2-D a gray-scale image . Where, it represented by the distance between each two neighbors neuron in the map which in turn represent the intermediate spot between those two neighbors. Some of these routines are borrowed from the SOM Toolbox^[2]^ and adapted to BioPatRec.
 
 
 ==Adding SOM into [BioPatRec]==
-
- * *Adding GUI_SOM into [BioPatRec].*
-  * On the  [GUI_PatRec] interface (GUI_PatRec.fig) add two static texts SOM_allConfig and SOM_selecConfig.
-  * In the pm_SelectAlgorithm_Callback routine in GUI_PatRec, call  load_algConf routine. The load_algConf routine takes [GUI_PatRec] handles as input and it returns handles to [GUI_PatRec] again after uploading the algorithm configurations.     
-  * Before OfflinePatRec rutine in [GUI_PatRec], call parameter SOM_selecConfig from [GUI_PatRec] handles and save it as _algConf_ if the selected algorithm is SOM or [SSOM] otherwise algConf is empty.
 
  * *Adding SOM rutines into [BioPatRec].*
   * In the OfflinePatRecTraining routine, call SOM_Maping routine if the selected algorithm is SOM. 
