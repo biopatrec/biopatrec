@@ -31,8 +31,8 @@ see the implementation of [SOM]
 
 ==GUIDE==
 
- * {{{load_algConf}}}
-   * {{{GUI_SOM}}}
+ 
+ * {{{GUI_SOM}}}
 
 ==Training== 
 
