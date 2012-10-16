@@ -38,8 +38,8 @@ The control algorithms are loaded with !InitControl.m that appends an inputted p
 == Steps to implement control algorithms in future releases ==
 The following steps have to be made in order to be able to use a new control algorithm with !BioPatRec.
 
- * Set up the algorithm and default parameters in ValidControlAlgs.txt
- * Name the routine file same as stated in ValidControlAlgs.txt
+ * Set up the algorithm and default parameters in !ValidControlAlgs.txt
+ * Name the routine file same as stated in !ValidControlAlgs.txt
  * (Optional) Create an initialization file called Init'!YourControlAlg'.m
 
 == Initialization of control algorithm ==
