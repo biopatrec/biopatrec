@@ -18,9 +18,9 @@ There are two training methods:
  == Stochastic Training^[1]^.==
  The algorithm is summarized as follows:
 
-  # *Initialization:* Randomly choosing the initial weight vectors _W,,j,,_.The only restriction is that _W,,j,,_ to be different for _j=1,2,...,n_ where _n_ is the number of neurons in the grid.
+  # *Initialization:* Randomly choosing the initial weight vectors _W,,j,,_ with same dimension of input data.The only restriction is that _W,,j,,_ to be different for _j=1,2,...,n_ where _n_ is the number of neurons in the grid.
   # *Sampling:* Draw randomly the input vector _x_ from the input data sets.
-  # *Simmilarity matching:* Find the best-matching(winning) neuron _i(x)_ at time-step _t_ by using the minimum-euclidean distance criterion where
+  # *Similarity matching:* Find the best-matching(winning) neuron _i(x)_ at time-step _t_ by using the minimum-euclidean distance criterion where
         _i(x)=arg min || x(t) - W,,j,, | , j=1,2,...,n_
   # *Updating:* Adjust the synaptic-weight vector of all excited neurons by using the update formula *_W,,j,,(t+1)=W,,j,,(t) + eta(t) h,,cj,,(t) ( x(t) - W,,j,,(t) )    ,   j=1,2,...,n_*  where _eta(t)_ is a learning rate parameter and _h,,cj,,(t)_ is the neighborhood function centered around the winning neuron _i(x)_; both _eta(t)_ and _h,,cj,,(t)_are varied dynamically during learning.
   # *Continuation:* Continue  step 2 to 4 for some iterations.
@@ -42,7 +42,7 @@ There are two training methods:
 
  # Find the best-matching(winning) neuron i(x) according to 3 in Stochastic Training for test set x. 
  # Find the nearest labeled neuron to i(x).
- # The output of test set is the associated label to labeled neuron.
+ # The output of test set is the associated label to the nearest labeled neuron.
 
 
 = Implementation =
