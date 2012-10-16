@@ -40,7 +40,7 @@ There are two training methods:
 
  == Classification==
 
- # Find the best-matching(winning) neuron i(x) according to 3 in Stochastic Training for test set x. 
+ # For a test set x, find the best-matching(winning) neuron i(x) according to 3 in Stochastic Training. 
  # Find the nearest labeled neuron to i(x).
  # The output of test set is the associated label to the nearest labeled neuron.
 
@@ -80,8 +80,8 @@ These parameters are saved in a struct variable (_algConf_) and then added to th
 = Functions Roadmap =
 
 ==GUI==
- * {{{load_algConf}}}
-   * {{{GUI_SOM}}}
+ 
+ * {{{GUI_SOM}}}
 
 ==Training== 
 
