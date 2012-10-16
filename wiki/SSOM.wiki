@@ -6,75 +6,26 @@ NOTE: This is an ongoing development and therefore the documentation is not yet 
 Supervised Self-Organizing Map (SSOM) is a supervised artificial neural network, this network  has the same model as  [SOM]. The learning in this model is based on  supervised learning i.e. the input-output transformations are adjusted by the system parameters.  
 
 
-= Algorithm =
- There are two training methods:
+= Algorithm  ^[1]^=
+ Generally, SSOM algorithm  has the same model as  [SOM] even the training methods . In order to make SSOM  , the input vector is formed into two parts _trSets_ = [_trSets_ , _trOuts_], where _trSets_ is the input features matrix and _trOuts_ is the corresponding labels matrix.      
+
+There are two training methods:
  * Stochastic Training.
  * Batch Training.
-
- == Stochastic Training^[1]^.==
- The algorithm is summarized as follows:
-
-  # Add the labels in the last columns to the input data.    
-  # *Initialization:* Randomly choosing the initial weight vectors  _W,,j,,_ with same dimension of input data. The only restriction is that _W,,j,,_ to be different for _j=1,2,...,n_ where _n_ is the number of neurons in the grid.
-  # *Sampling:* Draw randomly the input vector _x_ from the input data sets.
-  # * Similarity matching:* Find the best-matching(winning) neuron _i(x)_ at time-step _t_ by using the minimum-euclidean distance criterion where
-        _i(x)=arg min || x(t) - W,,j,, | , j=1,2,...,n_
-  # *Updating:* Adjust the synaptic-weight vector of all excited neurons by using the update formula *_W,,j,,(t+1)=W,,j,,(t) + eta(t) h,,cj,,(t) ( x(t) - W,,j,,(t) )    ,   j=1,2,...,n_*  where _eta(t)_ is a learning rate parameter and _h,,cj,,(t)_ is the neighborhood function centered around the winning neuron _i(x)_; both _eta(t)_ and _h,,cj,,(t)_are varied dynamically during learning.
-  # *Continuation:* Continue  step 3 to 5 for some iterations.
+see training methods of [SOM]
 
  
- == Batch Training^[2]^.==
- In the Batch Training the weight vectors for all input data vectors are simultaneously update.
-
- The algorithm is summarized as follows:
-  # Add the labels in the last columns to the input data.
-  # Randomly choosing the initial weight vectors  _W,,j,,_ with same    dimension of input data.The only restriction is that _W,,j,,_ to be   different for _j=1,2,...,n_ where _n_ is the number of neurons in the   grid.
-  # Find the best-matching(winning) neuron _i(x)_ according to 4 in Stochastic Training.
-  # For each wining neuron _j_ calculate _S,,j,,_ is the sum of corresponding input data sets _x,,i,,_ to wining neuron _j_
-           _S,,j,,_=sum(_x,,i,,_)   ,_i=1,2......,m_ where _m_ is the number of the input data sets corresponding to wining neuron _j_ and _j=1,2,...,n_ where _n_ is the number of neurons in the grid.
-  # For each wining neuron _j_ calculate _A,,j,,_ is the number of input data sets _x,,i,,_ corresponding to that winning neuron _j_
-  # _W(t+1)_=( _h,,ij,,(t)_  _S(t)_ ) / (  _A(t)_  _h,,ij,,(t)_ ). where _h,,ij,,(t)_ is a neighborhood function centered around the wining neuron _i_ at time _t_.
-  # Continue  step 3 to 6 for some iterations.
 
  == Classification==
 
- # Take out the added columns from the weight matrix that represents the output for the neurons. 
- #  Find the best-matching(winning) neuron i(x) according to 4 in Stochastic Training for test set x.
+ # Take out same dimension of _trOuts_ from the weight matrix that represents the output for the neurons. 
+ # For test set x, find the best-matching(winning) neuron i(x) according to 4 in Stochastic Training.
  # The classification of x is the associated output to i(x) .
 
 = Implementation =
 
-
- When SSOM is selected as PatRec in [GUI_PatRec] an additional GUI for configuration of SSOM (GUI_SOM) will automatically appear  . This GUI allows the selection of different Grid Shape, Neighbor Functions and Visualization of the Map.
-
-* Grid Shape
- * Rectangular Grid
- * Hexagonal Grid
-
-* Neighbor Function
- * Bubble
- * Gaussian
- * Cutgaussian
- * Epinchikov
- * Butter worth 2nd order
-
-* Visualize U-matrix
- * yes
- * No 
-
-These parameters are saved in _algConf_ and send as an additional parameter in OfflinePatRec.
-
-==U-matrix==
-
- Unified distance matrix (U-matrix) is one methods to visualize high-dimensional space on a 2-D a gray-scale image . Where, it represented by the distance between each two neighbors neuron in the map which in turn represent the intermediate spot between those two neighbors .
-
-==Adding SSOM into [BioPatRec]==
+see the implementation of [SOM]
  
- Check Adding GUI_SOM into BioPatRec in [SOM].   
- * *Adding [SSOM] rutines into [BioPatRec].*
-  * In the OfflinePatRecTraining routine, call SSOM_Maping routine if the selected algorithm is SSOM. 
-  * In OneShotPatRec routine, call SSOMTest routine if the selected algorithm is SSOM.  
-
 
 = Functions Roadmap =
 
@@ -127,5 +78,4 @@ These parameters are saved in _algConf_ and send as an additional parameter in O
 
  ==References==
 ---------------------------------------------------------------------
- # Simon O. Haykin ,''Neural Networks and Learning Machines (3rd ed.)'',PEARSON, pp.(464-465),ISBN13:978-0-13-129376-2.
- # Juha Vesanto, Johan Himberg, Esa Alhoniemi and Parhankangs,''SOM Toolbox'',Helsinki University of Technology,pp.(9-11),ISBN 951-22-4951-0.
+ # Teuvo Kohonen ,''Self-Organizing Maps  (3rd ed.)'',Springer, pp.(215-216),ISBN13:978-3540679219.
