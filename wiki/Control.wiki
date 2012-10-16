@@ -60,7 +60,7 @@ The initialization process that are executed when a control algorithm is selecte
 
  * patRec.outBuffer
 
-The output buffer can be used by the control algorithms as they wish, and are by default set to be a matrix with !patRec.!nOuts columns and !bufferSize row. The !bufferSize value can either be set as a parameter or an internal property to the algorithm.
+The output buffer can be used by the control algorithms as they wish, and are by default set to be a matrix with patRec.nOuts columns and bufferSize row. The bufferSize value can either be set as a parameter or an internal property to the algorithm.
 
  * patRec.controlAlg.parameters.bufferSize
  * patRec.controlAlg.prop.bufferSize
