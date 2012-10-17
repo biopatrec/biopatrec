@@ -1,4 +1,7 @@
 #summary One-sentence summary of this page.
+
+*NOTE: This is ongoing work and therefore the documentation found in this page is not 100% accurate until this notice has disappeared.*
+
 This page gives a run down of the different control algorithms using an example with four simultaneous movements.
 
 = Control Algorithms Example =
