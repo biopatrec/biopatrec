@@ -1,6 +1,6 @@
 #summary One-sentence summary of this page.
-This page describes the MajorityVoteSimultaneous control strategy
+This page describes the !MajorityVoteSimultaneous control strategy
 
-= MajorityVoteSimultaneous =
+= !MajorityVoteSimultaneous =
 
 Add your content here.
