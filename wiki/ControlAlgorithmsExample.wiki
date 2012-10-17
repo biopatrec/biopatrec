@@ -67,4 +67,4 @@ https://biopatrec.googlecode.com/svn/wiki/img/controlAlgEx/speed_rampModified.pn
 
 == !CombinedControl ==
 
-The combined control allows for the combination of two different control strategies where control algorithm one is first applied and then control algorithm two. This allow for smoothing of both the outputted movements and their speeds.
+The [CombinedControl] allows for the combination of two different control strategies where control algorithm one is first applied and then control algorithm two. This allow for smoothing of both the outputted movements and their speeds.
