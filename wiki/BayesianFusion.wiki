@@ -1,6 +1,6 @@
 #summary One-sentence summary of this page.
-This page describes the BayesianFusion control strategy.
+This page describes the !BayesianFusion control strategy.
 
-= BayesianFusion =
+= !BayesianFusion =
 
 Add your content here.
