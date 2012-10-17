@@ -28,6 +28,10 @@ When a prediction is made (this is done with the routine !OneShotPatRecClassifie
 
 https://biopatrec.googlecode.com/svn/wiki/img/controlAlgEx/MajorityVote.png
 
+Below is a simulation of real time pattern recognition of six simultaneous movements, both the predicted movements and the outputted movements are shown in the figure. Here a buffer size of 5 was used
+
+https://biopatrec.googlecode.com/svn/wiki/img/controlAlgEx/simulationMajorityVote.png
+
 == !MajorityVoteSimultaneous ==
 
 [MajorityVoteSimultaneous] is a little different than the [MajorityVote] control. This control algorithm stores the predicted movements in an output buffer that has the same number of columns as the size of the patRec movOutIdx list. This makes simultaneous movements, e.g. "Open Hand + Flex Hand" to have their own columns in the output buffer.
@@ -37,6 +41,12 @@ The problem that arise when [MajorityVote] is used for simultaneous control is t
 If the simultaneous movement get it's column in the output buffer this problem can be avoided.
 
 https://biopatrec.googlecode.com/svn/wiki/img/controlAlgEx/MajorityVoteSimultaneous.png
+
+Below is a simulation of real time pattern recognition of six simultaneous movements, both the predicted movements and the outputted movements are shown in the figure. Here a buffer size of 5 was used.
+
+https://biopatrec.googlecode.com/svn/wiki/img/controlAlgEx/simulation_MajorityVoteSimultaneous.png
+
+Compare the results with those for MajorityControl and one can see that the MajorityVoteSimultaneous does not have the movement interruptions that are present in MajorityVote.
 
 == !BayesianFusion ==
 
