@@ -19,13 +19,13 @@ When a prediction is made (this is done with the routine !OneShotPatRecClassifie
  * [RampModified]
  * [CombinedControl]
 
-== MajorityVote ==
+== !MajorityVote ==
 
 [MajorityVote] control algorithm stores the predicted movements in an output buffer that has the same number of columns as nOuts. The predicted movement indices are used to set the columns of the predicted movements to 1 and 0 for the non predicted ones. The movements that are occuring most within the buffer are outputted.
 
 https://biopatrec.googlecode.com/svn/wiki/img/controlAlgEx/MajorityVote.png
 
-== MajorityVoteSimultaneous ==
+== !MajorityVoteSimultaneous ==
 
 [MajorityVoteSimultaneous] is a little different than the [MajorityVote] control. This control algorithm stores the predicted movements in an output buffer that has the same number of columns as the size of the patRec movOutIdx list. This makes simultaneous movements, e.g. "Open Hand + Flex Hand" to have their own columns in the output buffer.
 
@@ -35,7 +35,7 @@ If the simultaneous movement get it's column in the output buffer this problem c
 
 https://biopatrec.googlecode.com/svn/wiki/img/controlAlgEx/MajorityVoteSimultaneous.png
 
-== BayesianFusion ==
+== !BayesianFusion ==
 
 [BayesianFusion] operates on the outVec, i.e. the probabilities of the movements. The probabilities are stored in the output buffer and the product of each row is taken to give the probabilities of the output movements. To decrease the controller delay a weight matrix can be used to weigh the recent probabilities more then older ones. This weight matrix is turned on and off by setting the parameter "weights" to 1/0.
 
@@ -55,7 +55,7 @@ The outputted movement speed for two different movements are shown in the figure
 
 https://biopatrec.googlecode.com/svn/wiki/img/controlAlgEx/speed_ramp.png
 
-== RampModified ==
+== !RampModified ==
 
 The [RampModified] strategy handles the misclassifications differently than [Ramp]. Instead of using a downCounter parameter to decrease the counter it stores the counter vector into a buffer and uses the buffer to see how long ago the movement last was predicted. If the movement has been predicted within a certain number of predictions, the counter is resumed from the last value.
 
@@ -65,6 +65,6 @@ The outputted movement speed for two different movements are shown in the figure
 
 https://biopatrec.googlecode.com/svn/wiki/img/controlAlgEx/speed_rampModified.png
 
-== CombinedControl ==
+== !CombinedControl ==
 
 The combined control allows for the combination of two different control strategies where control algorithm one is first applied and then control algorithm two. This allow for smoothing of both the outputted movements and their speeds.
