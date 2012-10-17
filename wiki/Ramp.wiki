@@ -1,6 +1,6 @@
 #summary One-sentence summary of this page.
 This page describes the Ramp control strategy.
 
-= !Ramp =
+= Ramp =
 
 Add your content here.
