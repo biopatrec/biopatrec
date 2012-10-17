@@ -66,3 +66,14 @@ The output buffer can be used by the control algorithms as they wish, and are by
  * patRec.controlAlg.prop.bufferSize
 
 If the bufferSize is a parameter, it should be set with a default value in !ValidControlAlgs.txt. If the bufferSize is an internal property, it should be set in an initialization file named Init'!YourControlAlg'.m that takes a !patRec struct as input and gives it back as an output. If neither a parameter nor a property named !bufferSize exists the output buffer is initialized with only one row.
+
+== Control Algorithms Implemented in Future Releases == 
+
+  * [MajorityVote]
+  * [MajorityVoteSimultaneous]
+  * [BayesianFusion]
+  * [Ramp]
+  * [RampModified]
+  * [CombinedControl]
+
+A run down of the concept behind these algorithm is given in [ControlAlgorithmsExample].
