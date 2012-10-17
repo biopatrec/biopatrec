@@ -1,6 +1,6 @@
 #summary One-sentence summary of this page.
-This page describes the MajorityVote control strategy.
+This page describes the !MajorityVote control strategy.
 
-= MajorityVote =
+= !MajorityVote =
 
 Add your content here.
