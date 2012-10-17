@@ -2,7 +2,25 @@
 
 This folder contains a repository of myoelectric recording sessions ([recSession]) useful for development, as well as for algorithms benchmarking on common data sets.
 
- * [10mov4chUntargetedForearm]
-  * 10 hand motions
-  * 4 bipolar electrodes
-  * 17 subjects
+== 10mov4chUntargetedForearm ==
+  * 10 hand and wrist motions
+  * 3 seconds contraction time with 3 seconds for relaxation between each repetition
+  * 3 repetitions of each motion
+  * 4 bipolar electrodes (Disposable Ag/AgCl)
+  * 1 cm electrode diameter
+  * 2 cm inter-electrode distance for the bipole
+  * Electrodes were equally spaced around the most proximal third of the forearm.
+  * The first channel was always placed along the extensor carpi ulnaris
+  * The proximal electrode of each bipole was always connected to the positive terminal of the BioAmp.
+  * 17 subjects (original study)
+  * 20 subjects (final release)
+  * BioAmp:
+   * In-house design (!MyoAmpF2F4-VGI8)
+   * CMRR > 130 dB
+   * Gain 71 dB
+   * Embedded active ﬁltering:
+    * 4th order high-pass ﬁlter at 20 Hz
+    * 2nd order low-pass ﬁlter at 400 Hz
+    * Notch ﬁlter at 50 Hz. 
+   * Galvanic isolation rated to 1,500 Vrms
+  * Signals were digitalized at 2 kHz with a 14-bits resolution
