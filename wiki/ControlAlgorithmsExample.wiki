@@ -1,0 +1,14 @@
+#summary One-sentence summary of this page.
+A run down of the different control algorithms using an example with four simultaneous movements.
+
+= Introduction =
+
+To better understand the different control algorithms that are available to choose from an example using four simultaneous movements will be presented here.
+
+
+= Details =
+
+Add your content here.  Format your content with:
+  * Text in *bold* or _italic_
+  * Headings, paragraphs, and lists
+  * Automatic links to other wiki pages
