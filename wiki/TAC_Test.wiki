@@ -29,7 +29,9 @@ In order to run this TAC Test we first need a few things:
  * [patRec] - a working classifier to move the subject hand is required.
  * [VRE] - an open Virtual Reality session must be running and functional.
 
-_*Note:*_ The TAC test only supports a total of six movements. Close/Open Hand, Flex/Extend Hand and Supination/Pronation. If more movements are added to the test, this will generate some errors.
+_*Note:*_ 
+ * The TAC test only supports a total of six movements. Close/Open Hand, Flex/Extend Hand and Supination/Pronation. If more movements are added to the test, this will generate some errors.
+ * Support has however been added in BioPatRec_TVÅ to allow for performing TAC tests when only having 4 movements. This is however not recommended.
 
 = Configuration =
 
@@ -39,14 +41,13 @@ The parameters are:
 
  * Repetitions - The amount of repetitions to do for each trial.
  * Trials - The amount of trials to do during the test.
- * Execution time - The total time to complete each movement.
- * TAC Allowance - The required distance to be within in order to consider the test completed. Hands to be within ± of value.
+ * Trial time out - The total time to complete each movement.
+ * Target Width - The required distance to be within in order to consider the test completed. Hands to be within ± of value.
  * Speed - The speed of which the subject hand moves.
- * Idling time - The required time the subject must stay within the allowed distance.
+ * Dwell time - The required time the subject must stay within the allowed distance.
 
 = Recommendations = 
-To have a good test the following values are recommended;
+To have a good test the following values are recommended for a test with 3-DOF;
  * Execution time: 15-20 seconds
- * Speed: 2-3
- * Allowance: 5-8 (lower values are more difficult)
- * Idling time: 1-2 s (higher values are more difficult)
+ * Target width: 5-8 (lower values are more difficult)
+ * Dwell time: 1-2 s (higher values are more difficult)
