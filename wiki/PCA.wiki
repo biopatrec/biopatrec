@@ -12,21 +12,19 @@ NOTE: This is an ongoing development and therefore the documentation is not yet 
 PCA Algorithm is summarized as follows
   
    
-   * *Step-1*: Compute the Mean 
-                   
-   * *Step-2*: Subtract the mean from Original  data.
+   * *Step-1*: Compute the Normalization
 
-   * *Step-3*: Compute sample Covariance matrix.
+   * *Step-2*: Compute sample Covariance matrix.
 
-   * *Step-4*: Compute Eigen vectors and Eigen values. 
+   * *Step-3*: Compute Eigen vectors and Eigen values. 
 
-   * *Step-5*: Sort Eigen values in descending order.
+   * *Step-4*: Sort Eigen values in descending order.
 
-   * *Step-6*: Arrange the Eigen vectors with their corresponding  eigen values in descending order.
+   * *Step-7*: Arrange the Eigen vectors with their corresponding  eigen values in descending order.
  
-   * *Step-7*: Choose first k largest eigen vectors. 
+   * *Step-8*: Choose first k largest eigen vectors. 
 
-   * *Step-8*: Project the data on to k eigen vectors.
+   * *Step-9*: Project the data on to k eigen vectors.
 
 === How to Chose k ===
    To choose k following criterion is used.
@@ -36,43 +34,29 @@ PCA Algorithm is summarized as follows
   
 == Implementation == 
 
- Before perfoming Principal Component Analysis the data should be normalized to bring the data in same scale. Extracting Mean and Standard Deviation for trFeature Sets and uses the same Mean and Standard Deviation for computing PCA on Validation and Testing Sets.
-  All the Functions will be processed in SigFeatures. There will be specific Check box after the GetSigFeatures in PatRec before Normalization  in order to use according to the requirements.   
- 
- * *PcaNormalization* function computes  data normalization.
-    * Input
-      * trFeatures (Training Features) 
-    * Output
-      * Normalized Data, Mean, Standard Deviation.
-                      
- 
- * *FeatureReduction* function is the main algorithm for PCA.
-   * Input
-     * data (Features X Samples)
-     * Mean
-     * Standard Deviation
-   * Output
-     * projected Data
+ Before perfoming Principal Component Analysis (PCA) the data should be normalized to bring the data in same scale.When performing PCA in [PatRec] the first step is selection of normalization. [PatRec] has various [Normalization] methods such that the choice of normalization method entirely depends according to [PatRec] algorithms. If one should need better classification performance using PCA feature reduction, the best preferred choice is ''Norm-Log'' [Normalization] for SOM,KNN and Discriminate Analysis. 
 
- * *RunPCA* Function compute PCA for trFeatures, vFeatures, tFeatures window by window.
-   * Input
-     * [sigFeatures]
-     * Mean
-     * Standard Deviation
-   *Output
-    * sigFeatures 
+ The data is normalized according to [PatRec] structure where the training and validation sets are normalized.The testing set is normalized in [Accuracy_PatRec] function where, the test set is normalized using NormalizationSet and feed the output called 'X' as input to [PCATest] function.
+ 
+ The PCA is performed on the Training data Set and reduce the dimesions of [trSets]. Save the Eigen vectors of Training set and project the Validation(vSet) and Testing set(tSet) on to that Eigen vectors.
 
-       if PCA is selected it will consider the output sigFeatures which consists of reduced Feature sets for Training , Validation and Testing.
+ = Adding PCA in BioPatRec =
+  * In [OfflinePatRec], add [FeatureReduction] fuction after trSets,and vSets Normalization and save Eigen Vectors in PatRec.
+  * In [Accuracy_PatRec] function add [PCATest] funtion after tSets Normalzation
+
   
 = Function roadmap =
 
- * *Normalizing Data for PCA* 
-    * {{{PcaNormalization}}}
+ * *PCAFeatureReduction* 
+    * {{{Algorithm for PCA}}}
 
- * *PCA Main Algorithm*
-    * {{{ FeatureReduction }}} 
+ * *FeatureReduction*
+    * {{{ Traning }}} 
+    * {{{ Validation }}} 
 
- * * Computing PCA for Training, Validation and  Testing* 
-    *  {{{ RunPCA }}}
+
+ * * PCATest* 
+    *  {{{ Test }}}
+     
      
   
