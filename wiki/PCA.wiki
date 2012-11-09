@@ -33,30 +33,40 @@ PCA Algorithm is summarized as follows
                   
   
 == Implementation == 
+  The implementation of PCA in PatRec is as follows
 
- Before perfoming Principal Component Analysis (PCA) the data should be normalized to bring the data in same scale.When performing PCA in [PatRec] the first step is selection of normalization. [PatRec] has various [Normalization] methods such that the choice of normalization method entirely depends according to [PatRec] algorithms. If one should need better classification performance using PCA feature reduction, the best preferred choice is ''Norm-Log'' [Normalization] for SOM,KNN and Discriminate Analysis. 
+ PCA requires normalization for the data. Data is normalized according to the [PatRec] normalizations method.
 
- The data is normalized according to [PatRec] structure where the training and validation sets are normalized.The testing set is normalized in [Accuracy_PatRec] function where, the test set is normalized using NormalizationSet and feed the output called 'X' as input to [PCATest] function.
- 
- The PCA is performed on the Training data Set and reduce the dimesions of [trSets]. Save the Eigen vectors of Training set and project the Validation(vSet) and Testing set(tSet) on to that Eigen vectors.
+ *1. Compute PCA on Training Set and save Eigen Vector of Training Set in PatRec.
 
- = Adding PCA in BioPatRec =
-  * In [OfflinePatRec], add [FeatureReduction] fuction after trSets,and vSets Normalization and save Eigen Vectors in PatRec.
-  * In [Accuracy_PatRec] function add [PCATest] funtion after tSets Normalzation
+ *2. For Validation and Testing Sets, Project the Eigen vectors of  Trainig Set on to the Testing and Validation.
 
-  
+ *3. Training and Validation sets both are used in Offline training and Testing set is used in [Accuracy_PatRec].
+
+= Adding PCA in [BioPatRec]=
+ * PatRec GUI
+  * Popup Menu is created and Called it as 'pm_FeatureReduction'.
+  * pm_FeatureReduction callback function is modified such that, If 'PCA' has selected in Popup Menu then, instead of considering top 4, top 3 or top 2 Features, It automatically selects all Features.
+
+* [OfflinePatRec]
+   
+ * A new variable called 'FeatureReduction' struct is saved in PatRec which contains Eigen vectors and algorithm named as 'PCA'
+
+
+
 = Function roadmap =
-
- * *PCAFeatureReduction* 
-    * {{{Algorithm for PCA}}}
-
- * *FeatureReduction*
-    * {{{ Traning }}} 
-    * {{{ Validation }}} 
-
-
- * * PCATest* 
-    *  {{{ Test }}}
-     
+  
+ * *Training* 
+  * PCAFeatureReduction 
+  * FeatureReduction
+    * Input  : trSets, vSets
+    * Output : trSets, vSets
+  
+  * *Testing*
+    * ApplyFeatureRedction
+      * Input : x (Accuracy_PatRec)
+      * Output: x
+    * PCATest
+    
      
   
