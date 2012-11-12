@@ -8,7 +8,6 @@ Self-Organizing Map is  unsupervised  artificial neural network. SOM consists of
 
 In summary, SOM is feedforward structure based on competitive learning, the output neurons of the network compete among themselves and the closest neuron to the input data set going to be the winning neuron.
 The principal goal of SOM is to transform the high dimension (arbitrary dimension) input data into one or two dimensional discrete map.
-  
 
 = Algorithm =
 There are two training methods:
@@ -119,7 +118,11 @@ These parameters are saved in a struct variable (_algConf_) and then added to th
  * {{{SOMTest}}}
    * {{{FindClosest}}}
 
-==References==
+= Credits =
+
+Implemented and documented by Ali Fouad. This implementation is partially based on [http://www.cis.hut.fi/somtoolbox/download/ The SOM toolbox] ^[2]^
+
+=References=
 ---------------------------------------------------------------------
  # Simon O. Haykin ,''Neural Networks and Learning Machines (3rd ed.)'',PEARSON, pp.(464-465),ISBN13:978-0-13-129376-2.
  # Juha Vesanto, Johan Himberg, Esa Alhoniemi and Parhankangs,''SOM Toolbox'',Helsinki University of Technology,pp.(9-11),ISBN 951-22-4951-0.
