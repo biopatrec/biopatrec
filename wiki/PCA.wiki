@@ -3,16 +3,16 @@
 NOTE: This is an ongoing development and therefore the documentation is not yet ready.
 
 = Introduction =
- Principal Component Analysis (PCA) is one of the widely used Dimensionality Reduction Technique. In Pattern Recognition, Dimensionality Reduction can be categorized as Feature selection or Feature Projection. PCA is an unsupervised Feature reduction or Feature projection technique which does not require any information about class labels. The central idea of PCA is to reduce the dimensionality of large data set in to low dimensional space while preserving as much as possible variation present in the data.
+ Principal Component Analysis (PCA) is a widely used "dimensionality reduction" technique. In Pattern Recognition, dimensionality reduction can be categorized as feature selection or feature projection. PCA is an unsupervised feature reduction or feature projection technique which does not require any information about the class labels. The central idea of PCA is to reduce the dimensionality of large data sets in to a low dimensional space while preserving as much as possible the variation present in the data.
 
- PCA is a linear transformation also called as karhunenloeve tranform (KLT). It transforms number of correlated variables into small number    of uncorrelated variables called as Principal Components (PC's).The first PC accounts much of variability in the data and the succeeding components accounts remaining variability. It is a true eigen vector based multivariate analysis reveling internal structure of the data which is best explains the variance in the data. 
+ PCA is a linear transformation also called as karhunenloeve tranform (KLT). It transforms number of correlated variables into small number    of uncorrelated variables called as Principal Components (PCs). The first PCs account for most of the variability in the data. 
 
 
 = Algorithm =
 PCA Algorithm is summarized as follows
   
    
-   * *Step-1*: Compute the Normalization
+   * *Step-1*: [Normalization]
 
    * *Step-2*: Compute sample Covariance matrix.
 
@@ -35,23 +35,20 @@ PCA Algorithm is summarized as follows
 == Implementation == 
   The implementation of PCA in PatRec is as follows
 
- PCA requires normalization for the data. Data is normalized according to the [PatRec] normalizations method.
+ PCA requires normalization for the data. Data is normalized according to the [PatRec] [Normalization normalization methods].
 
- *1. Compute PCA on Training Set and save Eigen Vector of Training Set in PatRec.
+ *1. Compute PCA on [xSets Training Set] and save Eigen Vector of [xSets Training Set] in [patRec].
 
- *2. For Validation and Testing Sets, Project the Eigen vectors of  Trainig Set on to the Testing and Validation.
-
- *3. Training and Validation sets both are used in Offline training and Testing set is used in [Accuracy_PatRec].
+ *2. For [xSets Validation and Testing Sets], project the Eigen vectors of the Training Set on to the Testing and Validation Sets.
 
 = Adding PCA in [BioPatRec]=
- * PatRec GUI
-  * Popup Menu is created and Called it as 'pm_FeatureReduction'.
-  * pm_FeatureReduction callback function is modified such that, If 'PCA' has selected in Popup Menu then, instead of considering top 4, top 3 or top 2 Features, It automatically selects all Features.
 
-* [OfflinePatRec]
-   
- * A new variable called 'FeatureReduction' struct is saved in PatRec which contains Eigen vectors and algorithm named as 'PCA'
+ * [GUI_PatRec]
+  * Create a popup menu and name it 'pm_FeatureReduction'.
+  * pm_FeatureReduction callback function is modified such that, If 'PCA' has selected in popup menu then, instead of considering top 4, top 3 or top 2 Features, all features are automatically selected.
 
+ * [OfflinePatRec] 
+  * A new variable called 'featureReduction' is saved in patRec which contains the Eigen vectors and algorithm named as 'PCA'
 
 
 = Function roadmap =
@@ -67,6 +64,6 @@ PCA Algorithm is summarized as follows
       * Input : x (Accuracy_PatRec)
       * Output: x
     * PCATest
-    
-     
-  
+
+= Created and documented by: =
+
