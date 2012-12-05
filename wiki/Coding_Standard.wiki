@@ -2,7 +2,7 @@
 
 = Introduction =
  
-The conding standard used in this development is based in the proposed MATLAB coding standard by [http://www.me.chalmers.se/~mwahde/courses/aa/2011/MatlabCodingStandard.pdf Sandberg and Wahde at Chalmers University of Technology]
+The conding standard used in this development is based in the proposed MATLAB coding standard by [http://www.me.chalmers.se/~mwahde/courses/aa/2012/MatlabCodingStandard.pdf Sandberg and Wahde at Chalmers University of Technology]
 
 == Header ==
 
