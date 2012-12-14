@@ -100,7 +100,9 @@ Containing all features of !BioPatRec ETT, plus:
    * Ramp
 
  * *Virtual Reality Environment* ([VRE])
-  * Virtual arm 
+  * Virtual arm
+  * Handles fractions
+  * Left/Right 
 
  * *Augmented Reality Environment*
 
