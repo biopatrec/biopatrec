@@ -85,24 +85,27 @@ We demonstrate BioPatRec with the real-time control of a virtual hand and multif
 
 Containing all features of !BioPatRec ETT, plus:
 
+ * *Recordings*
+  * A virtual limb can now display the requested motion to facilitate the user instructions.
+
  * *Pattern Recognition*
   * Simultaneous pattern recognition / Pattern recognition of mixed classes
   * Different methods to construct the [xSets] (see PatRec), especially useful for simultaneous movements.
   * Different classifier topologies (see [PatRec_Topologies])
-  * Algorithms
+  * New algorithms
    * [PCA]
    * [SOM]
    * [KNN]
    * [ICA]
 
  * *Control*
-  * Control algorithms:
+  * New control algorithms:
    * Ramp
 
  * *Virtual Reality Environment* ([VRE])
   * Virtual arm
-  * Handles fractions
-  * Left/Right 
+  * Communication now handles fractions
+  * Left/Right limbs
 
  * *Augmented Reality Environment*
 
