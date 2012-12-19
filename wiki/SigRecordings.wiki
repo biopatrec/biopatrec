@@ -9,3 +9,7 @@ BioPatRec allows the recording of bio-electric signals through different devices
 Recordings can be done as a single time-defined event for fast signal quality evaluation; as a recording session for further processing and PatRec; and as continues recordings for real-time control. There are specific GUIs for each of them. See [BioPatRec_StartupGuide] for quick user instructions and [BioPatRec_Roadmap] for an overview of the functions involved.
 
 A recording session will generate a [recSession] structure, which can be later used for signal treatment (SigTreatment).
+
+= Recording Session =
+
+The recording session is facilitated by a GUI showing the user which motions need to be executed. In "!BioPatRec ETT", this is done by displaying images and a progress bar that decreases according to the time left for either contraction or relaxation. In "!BioPatRec Två", since simultaneous motions were also included, a virtual limb can also be selected to display the requested motions.
