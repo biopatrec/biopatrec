@@ -13,10 +13,15 @@
  * sFilter (spatial filter)
  * selFeatures (selected features ID, cell) 
  * topology
+ * featureReduction (structure for the feature reduction algorithm if any)
  * movOutIdx (index for the movements related to the output 
  * normSets (normalization information, struct)
+ * floorNoise (average feature value during the resting period)
  * patRecTrained
+ * trTime (training time)
+ * tTime (testing time)
  * acc (accuracy per movement plus the over all accuracy in the last row) 
+ * confMat (confusion matrix)
  * date
 
-According to the algorithm used (see [PatRec_Algorithms], additional variables in patRecTrained contain the required information (training) for applying the trained classifier.
+According to the algorithm used (see [PatRec_Algorithms]), additional variables in patRecTrained contain the required information for applying the trained classifier. Same applies for the information saved in featureReduction.
