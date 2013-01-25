@@ -29,6 +29,11 @@ A beta version of BioPatRec has been released to:
   * *Northwestern University, Rehabilitation Institute of Chicago, USA*
   * !BioPatRec interest: BioPatRec applied to exoskeletons
 
+ * Christian Antfolk, PhD.
+  * Dept. of Measurement Technology and Industrial Electrical Engineering
+  * *Lund University, Sweden*
+  * !BioPatRec interest: PatRec
+
  * Daphne Boere, BME, PhD.c
   * Myoelectric transradial prosthesis control
   * *Roessingh Research and Development / University of Twente, the Netherlands*
