@@ -34,6 +34,11 @@ A beta version of BioPatRec has been released to:
   * *Lund University, Sweden*
   * !BioPatRec interest: PatRec
 
+ * Alexander Boschmann, PhD.c
+  * Research Associate, Computer Engineering Group
+  * *University of Paderborn, Germany*
+  * !BioPatRec interest: PatRec and SVM.
+
  * Daphne Boere, BME, PhD.c
   * Myoelectric transradial prosthesis control
   * *Roessingh Research and Development / University of Twente, the Netherlands*
