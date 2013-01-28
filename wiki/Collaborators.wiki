@@ -64,7 +64,7 @@ A beta version of BioPatRec has been released to:
   * *University of Applied Sciences Jena, Germany*
   * !BioPatRec interest: General
 
- * Alf Bjørnar, MSc.c / Kristian Berrum, MSc.c
+ * Alf B. Bertnum, MSc.c / Kristian Berrum, MSc.c
   * Engineering Cybernetics
   * *Norwegian University of Science and Technology, Norway*
   * !BioPatRec interest: General
