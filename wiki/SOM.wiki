@@ -87,9 +87,9 @@ These parameters are saved in a struct variable (_algConf_) and then added to th
  * {{{SOM_Maping}}}
   * {{{EvaluateSOM}}}
    * {{{InitSOM}}}
-     * {{{unitCoords}}}
+     * {{{NeuronCoordinates}}}
      * {{{RandomWeights}}}
-     * {{{unitDists}}}
+     * {{{NeuronDistances}}}
        * {{{VectorDistance}}}
    * {{{StochasticTraining}}}
      * {{{Sigma}}}
@@ -100,18 +100,18 @@ These parameters are saved in a struct variable (_algConf_) and then added to th
    * {{{BatchTrainig}}}
      * {{{VectorDistance}}}
      * {{{BatchNeighborFunction}}}
-   * {{{GetNeurLab}}}
+   * {{{GetNeuronLabel}}}
      * {{{FindClosest}}}
    * {{{FastTestSOM}}}
      * {{{FindClosest}}}
    * {{{FullTestSOM}}}
      * {{{FindClosest}}}
-   * {{{showUDMatrix}}}
-     * {{{createUDMat}}}
+   * {{{ShowUDMatrix}}}
+     * {{{CreateUDMat}}}
      * {{{UDMatCoords}}}
-     * {{{plotUDMatrix}}}
-       * {{{syntaxNeuron}}}
-     * {{{getColor}}}
+     * {{{PlotUDMatrix}}}
+       * {{{SyntaxNeuron}}}
+     * {{{GetColor}}}
 
 == Testing ==
 
