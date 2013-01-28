@@ -40,9 +40,9 @@ see the implementation of [SOM]
  * {{{SSOM_Mapping}}}
   * {{{EvaluateSSOM}}}
    * {{{InitSSOM}}}
-     * {{{unitCoords}}}
+     * {{{NeuronCoordinates}}}
      * {{{RandomWeights}}}
-     * {{{unitDists}}}
+     * {{{NeuronDistances}}}
        * {{{VectorDistance}}}
    * {{{SSOMStochasticTraining}}}
      * {{{Sigma}}}
@@ -57,14 +57,14 @@ see the implementation of [SOM]
      * {{{FindClosest}}}
    * {{{FullTestSSOM}}}
      * {{{FindClosest}}}
-   * {{{GetNeurLab}}}
+   * {{{GetNeuronLabel}}}
      * {{{FindClosest}}}
-   * {{{showUDMatrix}}}
-     * {{{createUDMat}}}
+   * {{{ShowUDMatrix}}}
+     * {{{CreateUDMat}}}
      * {{{UDMatCoords}}}
-     * {{{plotUDMatrix}}}
-       * {{{syntaxNeuron}}}
-     * {{{getColor}}}
+     * {{{PlotUDMatrix}}}
+       * {{{SyntaxNeuron}}}
+     * {{{GetColor}}}
 
 
    
