@@ -64,6 +64,11 @@ A beta version of BioPatRec has been released to:
   * *University of Applied Sciences Jena, Germany*
   * !BioPatRec interest: General
 
+ * Alf Bjørnar, MSc.c / Kristian Berrum, MSc.c
+  * Engineering Cybernetics
+  * *Norwegian University of Science and Technology, Norway*
+  * !BioPatRec interest: General
+
  * Ali Fouad, MSc.c / Siva Kumar, MSc.c
   * Complex Adaptive Systems / Biomedical Eng.
   * *Chalmers University of Technology, Sweden*
