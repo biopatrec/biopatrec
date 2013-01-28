@@ -30,15 +30,15 @@ The training procedure is only to choose optimal k.
  * {{{EvaluateKNN}}}
    * {{{InitKNN}}}
    * {{{FastTestKNN}}}
-     * {{{K_Nearest_Neighbor}}}
+     * {{{K_NearestNeighbor}}}
        * {{{EuclidDist}}}
    * {{{FullTestKNN}}}
-     * {{{K_Nearest_Neighbor}}}
+     * {{{K_NearestNeighbor}}}
        * {{{EuclidDist}}}
  == Testing ==
 
  * {{{KNNTest}}}
-   * {{{K_Nearest_Neighbor}}}
+   * {{{K_NearestNeighbor}}}
      * {{{EuclidDist}}}
 
 
