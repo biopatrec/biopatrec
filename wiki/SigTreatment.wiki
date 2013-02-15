@@ -43,6 +43,7 @@ This can be easily done by following these steps:
  * Add the filter name/ID in [GUI_SigTreatment], either
   * pm_frequencyFilters, or
   * pm_spatialFilters
+ This is done by using the instruction "guide" from the MATLAB command window. Then open the figure [GUI_SigTreatment], double click on the desired pop menu, and modify the property "string" to add the name/ID of your filter.
  * Add the call to your filtering function in ApplyFilters.
 
 Take a look to ApplyFilters to see how the current filters are called. All information you require are provided in [sigTreated].
