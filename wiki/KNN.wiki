@@ -5,22 +5,22 @@ not yet finalized.
 
 = Introduction =
 
- k-Nearest Neighbor algorithm (KNN) is a non parametric lazy learning algorithm (there is no explicit training), one of most simple machine learning algorithms. Decision maker in the traditional k-NN based on majority voting of its neighbors by using the euclidean distance  as criterion for measuring the distance, also k-NN is not based on assumptions of the underlying data distribution but it works to estimate the distribution.
+ k-Nearest Neighbor algorithm (k-NN) is a non parametric lazy learning algorithm (there is no explicit training), one of most simple machine learning algorithms. Decision maker in the traditional k-NN based on majority voting of its neighbors by using the euclidean distance  as criterion for measuring the distance, also k-NN is not based on assumptions of the underlying data distribution but it works to estimate the distribution.
 
  The majority voting in traditional k-NN refers to only one output. In the sense, there is no possibility to have more than one output from the decision maker in case of multi-classes. Therefore, the decision maker of modified k-NN is based on making a prediction for each class, and inclusion each class which has prediction over 0.5 in the output.  
 
 = Algorithm^[1]^ ==
 
- In KNN, there is no explicit training. The input of KNN is the training data with its label.
+ In k-NN, there is no explicit training. The input of k-NN is the training data with its label.
  # Computes the euclidean distance _d(x',x,,j,,)_ between test object _x'_ and the training data _x,,j,,_  _j=1,...,n_ where _n_ is the number of data in training sets.
  # Find the _k-minimum_ distance _d,,k,,_ (nearest vectors).
  # Create the voting by compute the number of nearest vectors from same class.
- # Make prediction by dividing the voting for each class by k.
+ # Make prediction by dividing the voting for each class by _k_.
  # Inclusion each class which has prediction over 0.5 in the output.
 
    
 = Choosing _k_  =
- Choosing _k_ plays a key role on affect the KNN performance where small _k_ can be sensitive to the noisy data and if _k_ is too large the   neighborhood may include too many data from other classes.
+ Choosing _k_ plays a key role on affect the k-NN performance where small _k_ can be sensitive to the noisy data and if _k_ is too large the   neighborhood may include too many data from other classes.
  
  Choosing _k_ heuristically using cross validation technique based on evaluating Root Mean Square Error (RMSE) of validation data it can be one of best methods to estimate optimal k with lowest RMSE.
 
