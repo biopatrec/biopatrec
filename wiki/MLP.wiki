@@ -15,7 +15,9 @@ Settings such as learning rate (eta) and ANN topology can be done in the main fu
  * The number of hidden layers and hidden neurons can be easily modify in the nHn matrix.
   * 1 hidden layer with 10 neurons -> `nHn = 10`;  
   * 3 hidden layer with 10 neurons each -> `nHn = [10 10 10]`;  
-  * 2 hidden layer with different neurons each -> `nHn = [6 14]`;  
+  * 2 hidden layer with different neurons each -> `nHn = [6 14]`;   
+
+NOTE: The number of hidden neurons can be different for each hidden layers. It also can be smaller than the number of input neurons if several layers exist, however `nHn = nIn/2` will cause an error. In any case, a rule of thumb is to use at least the same number of hidden neurons as input neurons.  
 
 == Training Algorithms ==
 
@@ -29,7 +31,7 @@ Although several algorithms have been implemented to train the MLP, so far the b
 
 Backpropagation
  * Eta = 0.1
- * `nHn = [nIn*2 nIn*2]`
+ * `nHn = [nIn nIn]` 
  * batchTr = 0     
 
 = Functions roadmap =
