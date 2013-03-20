@@ -9,3 +9,7 @@ Since [SOM] and [SSOM] needed special configurations, the struct variable _algCo
   * {{{OfflinePatRecTraining}}}
 
 In order to use the struct _algConf_, just save it in the [GUI_PatRec] handles. The it will be sent to {{{OfflinePatRec}}} by {{{pb_RunOfflineTraining_Callback}}}. This variable is saved inside patRec.patRecTrained.
+
+== Control algorithms ==
+
+The way the control algorithms are added changed. See: [Control] for details
