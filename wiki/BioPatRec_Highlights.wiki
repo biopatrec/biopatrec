@@ -81,7 +81,7 @@ We demonstrate BioPatRec with the real-time control of a virtual hand and multif
  * *Virtual Reality Environment* ([VRE])
   * A virtual lower arm with 7 degrees of freedom
 
-=== !BioPatRec TVÅ (coming soon) ===
+=== !BioPatRec TVÅ (pre-release available) ===
 
 Containing all features of !BioPatRec ETT, plus:
 
@@ -95,6 +95,7 @@ Containing all features of !BioPatRec ETT, plus:
   * New algorithms
    * [PCA]
    * [SOM]
+   * [SSOM]
    * [KNN]
    * [ICA]
 
@@ -103,15 +104,24 @@ Containing all features of !BioPatRec ETT, plus:
    * Ramp
 
  * *Virtual Reality Environment* ([VRE])
-  * Virtual arm
   * Communication now handles fractions
-  * Left/Right limbs
+  * Virtual arm
+  * Left/Right arms
 
- * *Augmented Reality Environment*
+ * *Real-time tests
+  * The Motion Test is now facilitated by using the VRE
 
  * *Game Control*
 
 See the [Important_coding_changes]
+
+=== !BioPatRec TRE (under development) ===
+
+ * *Pattern Recognition*
+  * New algorithms
+   * [SVM]
+
+
 
 = Demonstrations =
 
