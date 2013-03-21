@@ -93,18 +93,14 @@ Containing all features of !BioPatRec ETT, plus:
   * Different methods to construct the [xSets] (see PatRec), especially useful for simultaneous movements.
   * Different classifier topologies (see [PatRec_Topologies])
   * New algorithms
-   * [PCA]
-   * [SOM]
-   * [SSOM]
-   * [KNN]
-   * [ICA]
+   * [MLP_th]
 
  * *Control*
   * New control algorithms:
    * Ramp
 
  * *Virtual Reality Environment* ([VRE])
-  * Communication now handles fractions
+  * The communication now handles fractions
   * Virtual arm
   * Left/Right arms
 
@@ -119,9 +115,11 @@ See the [Important_coding_changes]
 
  * *Pattern Recognition*
   * New algorithms
-   * [SVM]
-
-
+   * [PCA]
+   * [SOM]
+   * [SSOM]
+   * [KNN]
+   * [ICA]
 
 = Demonstrations =
 
