@@ -88,6 +88,9 @@ Containing all features of !BioPatRec ETT, plus:
  * *Recordings*
   * A virtual limb can now display the requested motion to facilitate the user instructions.
 
+ * *Signal Treatment*
+  * Automatic computation of the exact number of time windows available (GUI_SigTreatment).
+
  * *Pattern Recognition*
   * Simultaneous pattern recognition / Pattern recognition of mixed classes
   * Different methods to construct the [xSets] (see PatRec), especially useful for simultaneous movements.
