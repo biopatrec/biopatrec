@@ -89,7 +89,7 @@ Containing all features of !BioPatRec ETT, plus:
   * A virtual limb can now display the requested motion to facilitate the user instructions.
 
  * *Signal Treatment*
-  * Automatic computation of the exact number of time windows available (GUI_SigTreatment).
+  * Automatic computation of the "exact" number of time windows available (GUI_SigTreatment). Before, it was likely that you had to complete the total amount manually.
 
  * *Pattern Recognition*
   * Simultaneous pattern recognition / Pattern recognition of mixed classes
@@ -114,7 +114,7 @@ Containing all features of !BioPatRec ETT, plus:
 
 See the [Important_coding_changes]
 
-=== !BioPatRec TRE (under development) ===
+=== !BioPatRec TRE (coming soon) ===
 
  * *Pattern Recognition*
   * New algorithms
