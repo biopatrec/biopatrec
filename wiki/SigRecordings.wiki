@@ -10,6 +10,8 @@ Recordings can be done as a single time-defined event for fast signal quality ev
 
 A recording session will generate a [recSession] structure, which can be later used for signal treatment (SigTreatment).
 
+For tips on how to record surface EMG see [sEMG]
+
 = Recording Session =
 
 The recording session is facilitated by a GUI showing the user which motions need to be executed. In "!BioPatRec ETT", this is done by displaying images and a progress bar that decreases according to the time left for either contraction or relaxation. In "!BioPatRec Två", since simultaneous motions were also included, a virtual limb can also be selected to display the requested motions.
