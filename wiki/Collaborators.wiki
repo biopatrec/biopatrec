@@ -12,7 +12,7 @@
   * *Integrum AB, Sweden*
   * [VRE] developer
 
-A beta version of BioPatRec has been released to:
+Pre-release versions of BioPatRec have been shared to:
 
  * Tim Gale, BE, MEngSc, PhD.
   * Senior Lecturer: Mechatronics and Medical Engineering
