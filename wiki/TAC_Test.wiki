@@ -8,6 +8,8 @@ The TAC test was originally introduced by Simon _et al._ (2011). For a comprehen
 
  <a href="http://www.rehab.research.va.gov/jour/11/486/simon486.html" target="_blank">Simon AM, Hargrove LJ, Lock BA, Kuiken TA. Target Achievement Control Test: Evaluating real-time myoelectric pattern recognition control of multifunctional upper-limb prostheses. J Rehabil Res Dev. 2011;48(6): 619-28.</a>.
 
+The main differences between the implementation of Simon _et al._ (2011) and ours is that the initial position of the user-controlled hand in their implementation is moved away from the start, and the user has to move it back. In our implementation it is the target position that is moved away from the start.
+
 A test focus exclusivly on the real-time pattern recogtinion would be the [Motion_Test Motion Test].
 
 = Process = 
