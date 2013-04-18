@@ -25,7 +25,8 @@ not yet finalized.
    
 = Implementation =
  * Initially, k has been chosen k=> number of the windows per movement(nW) 
- * The trainings are performed for choosing optimal k based on the lowest  Root Mean Square Error (RMSE) by evaluating  the validation's data with different values of k (k=1 to k=nW). 
+ * The trainings are performed for choosing optimal k based on the lowest  Root Mean Square Error (RMSE) by evaluating  the validation's data with different values of k (k=1 to k=nW).
+ * The training data, training labels, and optimal k are used in the offline-classification and real-time classification.  
 
 = Functions Roadmap =
  ==Training==
