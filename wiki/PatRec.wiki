@@ -19,7 +19,7 @@ For quick user instructions see [BioPatRec_StartupGuide], or more detailed infor
 
  * Pattern Recognition
   * [Discriminant_Analysis DA] Discriminant Analysis 
-  * [KNNS] k-Nearest Neighbor Semi
+  * [KNN] k-Nearest Neighbor Semi
   * [MLP] Multi-layers Perceptron
   * [RFN] Regulatory Feedback Networks
   * [SOM] Self-Organizing Map
