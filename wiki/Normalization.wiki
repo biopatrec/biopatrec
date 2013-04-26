@@ -15,6 +15,8 @@ Normalization is usually required to avoid that features with large magnitudes e
  * Norm-Log (x>=0), preferred in:
    * [SOM], [KNN] and [SSOM].
 
+We haven't observed the need to use any normalization when using LDA as implemented by the statistics toolbox in Matlab.
+
 = How to add a normalization method? =
 
  * Add the processing function in [NormalizeSets_TrV]. The parameters required to normalize future data sets must be included in the struct _normSets_. This function must normalize the training and validation sets independently. See the other normalization function as example.
