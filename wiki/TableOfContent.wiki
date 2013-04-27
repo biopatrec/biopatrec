@@ -17,6 +17,8 @@
   * [sigTreated]
   * [sigFeatures]
   * [patRec]
+  * [motionTest]
+  * [tacTest]
  * [Data_Repository Data Repository]  
  * Data sets
   * [xSets]
