@@ -10,7 +10,7 @@ Every source code file in BioPatRec has the following header:
 %
 % BioPatRec was initially developed by Max J. Ortiz C. at Integrum AB and 
 % Chalmers University of Technology. All authors’ contributions must be kept
-% acknowledged below in the section "Updates % Contributors". 
+% acknowledged below in the section "Updates & Contributors". 
 %
 % Would you like to contribute to science and sum efforts to improve 
 % amputees’ quality of life? Join this project! or, send your comments to:
