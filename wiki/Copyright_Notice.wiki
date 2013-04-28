@@ -8,7 +8,7 @@ Every source code file in BioPatRec has the following header:
 % the GNU Lesser General Public License (LGPL). See the file "LICENSE" for 
 % the full license governing this code and copyrights.
 %
-% BioPatRec was initially developed by Max J. Ortiz C. at Integrum AB and 
+% BioPatRec was initially developed by Max Ortiz C. at Integrum AB and 
 % Chalmers University of Technology. All authors’ contributions must be kept
 % acknowledged below in the section "Updates & Contributors". 
 %
