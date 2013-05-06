@@ -38,11 +38,13 @@ https://biopatrec.googlecode.com/svn/wiki/img/Biopatrec_flow.png
 
 If you are planning to contribute or develop further using this platform, you might want to consider the following
 
- * [Coding_Standard] (simple, easy and useful!)
+ * [Coding_Standard Coding Standard] (simple, easy and useful!)
  * [Updating Updating the source code and wiki]
  * [Copyright_Notice File header and copyright notice] (keep the connection and play fair)
 
 If you wish to commit changes or upgrades to BioPatRec, the easiest way is to submit a _patch_ using Tortoise. See this [http://www.igorexchange.com/node/87#branches Tortoise SVN Tutorial] for more information.
+
+When comparing different algorithms, remember that small variations in signal processing and training settings can make a difference on the final results.
 
 Join the google group if you are interested on receiving updates
 http://groups.google.com/group/biopatrec
