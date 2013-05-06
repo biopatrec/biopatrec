@@ -22,7 +22,8 @@ We demonstrate BioPatRec with the real-time control of a virtual hand and multif
 
 == Features per release and module ==
 
-=== !BioPatRec ETT ===
+=== !BioPatRec ETT  ===
+Available online in the "Downloads" tab.
 
  * *Recordings*
   * Dedicated GUI for customization of the recording sessions:
@@ -81,9 +82,11 @@ We demonstrate BioPatRec with the real-time control of a virtual hand and multif
  * *Virtual Reality Environment* ([VRE])
   * A virtual lower arm with 7 degrees of freedom
 
-=== !BioPatRec TVÅ (pre-release available) ===
+=== !BioPatRec TVÅ ===
 
-Containing all features of !BioPatRec ETT, plus:
+Pre-release available upon request.
+
+The TVÅ version contains all features of !BioPatRec ETT, plus:
 
  * *Recordings*
   * A virtual limb can now display the requested motion to facilitate the user instructions.
