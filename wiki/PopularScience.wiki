@@ -1,0 +1,45 @@
+#summary Popular "science" on artificial limbs
+
+= Popular “Science” on Artificial Limbs / Bionic Limbs / Robotic Prostheses =
+
+Hesitant on publishing this kind of information in this site, we have finally decided to do it in a more “educated” way as an attempt to better communicate science. So let’s try to add the “science” part to these popular articles while still keeping things popular enough to be understood for the general public.
+
+If you are looking at this page as an introduction to the field, or just for curiosity, please be aware that the content of these articles has not been scientifically reviewed, and therefore any information provided must be taken with caution, and not as the absolute truth. Of course, we cannot generalize completely, as few of them can be rather accurate.
+
+It is probably not a surprise for anybody the fact that the media tend to exaggerate and raise false expectations on what science and technology can currently offer. At the same time, there is no doubt that the amount and quality of the work done by the scientists and engineers featured in these videos deserves recognition and respect. Unfortunately, their work is often misinterpreted by some “journalist” that feel that without exaggerated promises of futuristic achievements, it is not interesting enough to be published. With that being said, it is our responsibility as a community of scientists to share and comment on these articles, so please feel free to do so!
+
+
+== Quick and true facts: ==
+
+ * We don’t really have the technology today to fully replace the functionality of a biological limb, thus we are not really close to create a “Robocop”, and definitely there is no need to worry about the threat of “Terminator” anytime soon.
+
+ * The term "bionic" is often misused and therefore now ambiguous. There was a time when it meant an augmentation to the biological capabilities (stronger, faster, more accurate, etc...). The fact is that if we cannot fully replace the biological limbs, we can hardly augmented them, as an exoskeleton would do for instance.
+
+ * The media often use the phrase "mind controlled" or "thought controlled". This is at some extend true, but only because the brain basically controls everything we do! However, this might give the false impression that the prosthesis is controlled by simple "imagining" or "thinking", without any other muscular or physical response, whereas in reality these signals are often recorded from muscles or the motor cortex rather than in any other area of the brain where "imagination" can take place (e.g. prefrontal cortex).
+ 
+ * Most of the advanced technology presented by the media has only been used in controlled environments (research labs), and is it not really close to be a clinical reality for patients.
+
+ * Lower limb prosthetics currently do a better job restoring functionality than upper limb.
+
+ * We have progressed tremendously on the hardware and software of robotic arms; we are now struggling on how to control them. As today, we cannot really do it naturally and intuitively.
+
+ * We have rather advanced prosthetic devices since decades ago, and yet, most of the patients do not use robotic prostheses.
+
+ * Although the previous points are rather pessimistic, there are a lot of intelligent and dedicated people trying to improve robotic prostheses, so we'll get there!
+
+== On artificial limbs ==
+
+ * [http://edition.cnn.com/video/#/video/international/2013/05/02/art-movement-michael-mcloughlin-robotic-arm.cnn Robotic arm grasps the future] by CNN in May 2013.
+ * [http://www.bbc.co.uk/news/health-17139965 Can you build a bionic body? The arm] by BBC News in Mar 2012.
+ * [http://vimeo.com/43486048# Hugh Herr, Bionic Man - Part 1] by The Next List in Jun 2012.
+ * [http://www.youtube.com/watch?v=KCUwoxuAdYQ "I was a one-sided person": THE DEKA Arm, a VA Research partnership with DoD] by Veterans Health Admin sometime before Apr 2012.
+ * [http://www.bbc.co.uk/news/uk-england-tyne-16746496 Soldier Andrew Garthwaite to get bionic arm controlled by mind] by BBC News in Jan 2012.
+ * [http://www.youtube.com/watch?v=3HsccKwoeOM&feature=related Modular Prosthetic Limb] by JHU/APL sometime before Feb 2011.
+ * [http://news.discovery.com/tech/videos/tech-man-controls-robotic-hand-with-mind.htm Man controls robotic hand with mind] by Discovery Channel in Dec 2010.
+ * [http://cnettv.cnet.com/2001-1_53-50005779.html '60 Minutes': Revolutionizing prosthetics] by CBS News sometime before 2009.
+ * [http://www.youtube.com/watch?v=T6R5bm6qx2E Cutting edge prosthetic arms] by Pentagon Channel sometime before May 2008.
+
+== On commercially available prostheses ==
+
+ * [http://edition.cnn.com/video/?/video/business/2013/01/31/make-create-innovate-i-limb-prosthetics-will-am-britney-spears.cnn#/video/business/2013/01/31/make-create-innovate-i-limb-prosthetics-will-am-britney-spears.cnn The bionic hand with the human touch] by CNN in Jan 2013.
+ * [http://www.bbc.co.uk/news/health-13378036 Amputee Patrick demonstrates his new bionic hand] by BBC news in May 2011.
