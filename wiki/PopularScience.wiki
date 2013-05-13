@@ -2,8 +2,6 @@
 
 = Popular “Science” on Artificial Limbs / Bionic Limbs / Robotic Prostheses =
 
-Hesitant on publishing this kind of information in this site, we have finally decided to do it in a more “educated” way as an attempt to better communicate science. So let’s try to add the “science” part to these popular articles while still keeping things popular enough to be understood for the general public.
-
 If you are looking at this page as an introduction to the field, or just for curiosity, please be aware that the content of these articles has not been scientifically reviewed, and therefore any information provided must be taken with caution, and not as the absolute truth. Of course, we cannot generalize completely, as few of them can be rather accurate.
 
 It is probably not a surprise for anybody the fact that the media tend to exaggerate and raise false expectations on what science and technology can currently offer. At the same time, there is no doubt that the amount and quality of the work done by the scientists and engineers featured in these videos deserves recognition and respect. Unfortunately, their work is often misinterpreted by some “journalist” that feel that without exaggerated promises of futuristic achievements, it is not interesting enough to be published. With that being said, it is our responsibility as a community of scientists to share and comment on these articles, so please feel free to do so!
@@ -32,7 +30,6 @@ It is probably not a surprise for anybody the fact that the media tend to exagge
  * [http://edition.cnn.com/video/#/video/international/2013/05/02/art-movement-michael-mcloughlin-robotic-arm.cnn Robotic arm grasps the future] by CNN in May 2013.
  * [http://www.bbc.co.uk/news/health-17139965 Can you build a bionic body? The arm] by BBC News in Mar 2012.
  * [http://vimeo.com/43486048# Hugh Herr, Bionic Man - Part 1] by The Next List in Jun 2012.
- * [http://www.youtube.com/watch?v=KCUwoxuAdYQ "I was a one-sided person": THE DEKA Arm, a VA Research partnership with DoD] by Veterans Health Admin sometime before Apr 2012.
  * [http://www.bbc.co.uk/news/uk-england-tyne-16746496 Soldier Andrew Garthwaite to get bionic arm controlled by mind] by BBC News in Jan 2012.
  * [http://www.youtube.com/watch?v=3HsccKwoeOM&feature=related Modular Prosthetic Limb] by JHU/APL sometime before Feb 2011.
  * [http://news.discovery.com/tech/videos/tech-man-controls-robotic-hand-with-mind.htm Man controls robotic hand with mind] by Discovery Channel in Dec 2010.
