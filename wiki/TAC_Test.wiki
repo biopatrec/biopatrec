@@ -20,8 +20,6 @@ In the TAC Test GUI, the wanted movement is displayed, along with the current pr
 
 Once the subject hand has all of it's DoFs within the set allowance (set in interface) it has to stay within this allowance for a set amount of time (set in interface). If the user goes outside of the allowance the time for idling is reset. After completion there is a short break (~3 seconds) after the next target position is displayed, and so on.
 
-
-
 After all trials and repetitions have been completed the data from the test can be saved to a local file. It is also presented in graphs where the completion time, completion rate and selection time are displayed.
 
 = Requirements =
@@ -48,7 +46,16 @@ The parameters are:
  * Speed - The speed of which the subject hand moves.
  * Dwell time - The required time the subject must stay within the allowed distance.
 
+= Results =
+
+ * Selection Time...
+ * Completion Time...
+ * Path Efficiency. This is the rate between the shortest possible trajectory to the target, over the actual path taken. Computed by TrackStateSpace .
+
+At the end of the test, these information is saved in the structure tacTest, which results can be extracted using TacTestReulsts.
+
 = Recommendations = 
+
 To have a good test the following values are recommended for a test with 3-DOF;
  * Execution time: 15-20 seconds
  * Target width: 5-8 (lower values are more difficult)
