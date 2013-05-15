@@ -1,4 +1,4 @@
-#TrackStateSpace is used to track the posture of the virtual limb during the [TAC_Test].
+#summary TrackStateSpace is used to track the posture of the virtual limb during the [TAC_Test].
 
 = Introduction =
 
@@ -104,3 +104,5 @@ The movement matrix [movMat] does currently only handle the movements
  * Supinate
 
 if any other movements are used in the [TAC_Test], or movements are altered using pop-menus in [GUI_TestPatRec_Mov2Mov], the tracker will not work correctly.
+
+TrackStateSpace use movements stored in the [patRec] to track the limb, while VRE uses the pop-menus in GUI_TestPatRec_Mov2Mov. If movements are changed in those pop-menus, the tracking will be completely different from what the VRE is showing.
