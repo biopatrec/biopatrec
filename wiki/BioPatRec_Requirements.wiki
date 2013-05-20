@@ -10,21 +10,21 @@ BioPatRec was initially developed in Matlab `R2009`, however the latest version 
 
 == Data Acquisition ==
 
-The DAQ routines currently work with the Matlab "session-based interface (SBI)". The "legacy" routines can be made available under request.
+The DAQ routines currently work with the Matlab's "Session-based Interface" (SBI). The "legacy" routines can be made available on request.
 
-We have used the simplest National Instruments card (USB-6009) for most of our experiments. We expect any NI card to work seemly, however you won’t know until you try it. In theory, the SBI should allow you to USB a wide variety of DAQ cards.
+We have used the simplest National Instruments card (USB-6009) for most of our experiments. We expect any NI card to work seemly, however you won’t know until you try it. In theory, the SBI should allow you to use a wide variety of DAQ cards.
 
-If you are planning to use the USB-6009 card you will need the drivers [http://joule.ni.com/nidu/cds/view/p/id/2604/lang/en NI-DAQmx]
+If you are planning to use the USB-6009 card, you will need the drivers [http://joule.ni.com/nidu/cds/view/p/id/2604/lang/en NI-DAQmx]
 
 Note: Other devices using SCI have been used as well. These routines and the "legacy" routines for MATLAB can be made available upon request.
 
 == Virtual Reality Enviroment ==
 
-In order to run the Virtual Reality Environment you must currently use a machine running Windows. The software has been tested and checked to run successfully on Windows 7 64-bit machines.
+In order to run the Virtual Reality Environment, you must use a machine running Windows. The software has been tested and checked to run successfully on Windows 7 64-bit machines.
 
-In order to run the software the computer must be compatible with OpenGL rendering. Any NVidia and ATI card can be used, and most SiS, Intel and S3 cards are compatible. To make sure if it is compatible, check with your graphic card vendor to make sure it supports *OpenGL 1.2.1*.
+In order to run the software, the computer must be compatible with OpenGL rendering. Any NVidia and ATI card can be used, and most SiS, Intel and S3 cards are compatible. To make sure if it is compatible, check with your graphic card vendor to make sure it supports *OpenGL 1.2.1*.
 
-Other hardware, such as CPU, has not been thoroughly tested in order to say for certain which level of CPU is required to run this application. The system has been tested and works with: 
+Other hardware, such as CPU, has not been thoroughly tested in order to say the level of CPU required to run this application. The system has been tested and works with: 
  * Intel Core i7 2,8 GHz
  * Intel Core i5 2,4 GHz
  * Intel Core i3 2,1 GHz
