@@ -28,7 +28,7 @@ See [BioPatRec_Roadmap] for quick overview of the relevant functions in each mod
 
 https://biopatrec.googlecode.com/svn/wiki/img/Biopatrec_flow.png
 
-!BioPatRec has a modular design based in data structures. This means that as long as you use the same data structures, you could use the different modules independently if you wish.
+!BioPatRec has a modular design based in data structures. This means that as long as you use the same data structures, you can use different modules independently if you wish.
 
  * Data Structures
   * [recSession]
