@@ -13,7 +13,7 @@ All the routines associated with communications can be found in the *Comm* folde
 == Analog Front-Ends ==
 === Session-Based Interface ===
 
-The SBI routines have been tested for the NI-USB6009, however, many other DAQ cards could be used under this paradigm, see [http://www.mathworks.se/help/toolbox/daq/bskx95j-1.html "About the Session-Based Interface"]. You can use function [TestSBI_NI_USB6009] to test the different acquisition possibilities of SBI. In our experience, the NI-USB6009 is an affordable option for data acquisition.
+The SBI routines have been tested for the NI-USB6009, however, many other DAQ cards could be used under this paradigm, see [http://www.mathworks.se/help/toolbox/daq/bskx95j-1.html "About the Session-Based Interface"]. You can use the function [TestSBI_NI_USB6009] to test the different acquisition possibilities of SBI. In our experience, the NI-USB6009 is an affordable option for data acquisition.
 
 The SBI can be used for both inputs and outputs, however, we mostly use it for inputs (recordings).
 
@@ -23,7 +23,7 @@ See [Troubleshooting] for issues.
 
 === Biopotenial Amplifiers ===
 
-We have developed several low-cost high-CMRR biopotenial amplifiers for our research. We have specific designs for ENG and EMG. If you are looking for bio-amps, we might be able to help you.
+We have developed several low-cost, high-CMRR biopotenial amplifiers for our research. We have specific designs for ENG and EMG. If you are looking for bio-amps, we might be able to help you.
 
 == Other peripherals ==
 
@@ -32,14 +32,14 @@ We have developed several low-cost high-CMRR biopotenial amplifiers for our rese
 
 = Outputs =
 
-We have established a easy communication protocol to produce physically meaningful outputs (see the Movements_Protocol)
+We have established an easy communication protocol to produce physically meaningful outputs (see the Movements_Protocol)
 
 == Virtual Reality Environment ==
 
-In order to easily test and quickly control a prosthesis from the BioPatRec a Virtual Reality Environment ([VRE]) has been developed. Please see relevant page for more information.
+In order to easily test and quickly control a prosthesis from the BioPatRec, a Virtual Reality Environment ([VRE]) has been developed. Please see relevant page for more information.
 
 == Prosthetic Devices ==
 
-We have developed routines to control prosthetic devices using PWMs or servo motors. The output command is transmitted using the Serial Communication Interface (SCI) to a microcontroller (see the Movements_Protocol).
+We have developed routines to control prosthetic devices using PWMs for servo motors. The output command is transmitted using the Serial Communication Interface (SCI) to a microcontroller (see the Movements_Protocol).
 
 ... coming soon...
