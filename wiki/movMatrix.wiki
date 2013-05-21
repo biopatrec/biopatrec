@@ -1,4 +1,4 @@
-#movMatrix is a matrix that represents the different movements trained in the [PatRec] structure, it is used by the [TrackStateSpace] function.
+#summary movMatrix is a matrix that represents the different movements trained in the [PatRec] structure, it is used by the [TrackStateSpace] function.
 
 = Introduction =
 
