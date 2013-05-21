@@ -1,4 +1,4 @@
-#CalculatePathLength is a subfunction to the [TrackStateSpace] and is used when calculating the [pathEfficiency] in the [TAC_Test].
+#summary CalculatePathLength is a subfunction to the [TrackStateSpace] and is used when calculating the [pathEfficiency] in the [TAC_Test].
 
 = Introduction =
 
