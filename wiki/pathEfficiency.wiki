@@ -1,4 +1,4 @@
-#pathEfficiency is a performance metric that is calculated during each repetition in the [TAC_Test].
+#summary is a performance metric that is calculated during each repetition in the [TAC_Test].
 
 = Introduction =
 
