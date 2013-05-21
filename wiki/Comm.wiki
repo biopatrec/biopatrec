@@ -23,7 +23,7 @@ See [Troubleshooting] for issues.
 
 === Biopotential Amplifiers ===
 
-We have developed several low-cost, high-CMRR biopotential amplifiers for our research. We have specific designs for ENG and EMG. If you are looking for bio-amps, we might be able to help you.
+We have developed several low-cost, high-CMRR biopotential amplifiers for our research. We have specific designs for ENoG and EMG. If you are looking for bio-amps, we might be able to help you.
 
 == Other peripherals ==
 
