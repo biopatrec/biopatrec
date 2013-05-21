@@ -13,7 +13,7 @@ All the routines associated with communications can be found in the *Comm* folde
 == Analog Front-Ends ==
 === Session-Based Interface ===
 
-The SBI routines have been tested for the NI-USB6009, however, many other DAQ cards could be used under this paradigm, see [http://www.mathworks.se/help/toolbox/daq/bskx95j-1.html "About the Session-Based Interface"]. You can use the function [TestSBI_NI_USB6009] to test the different acquisition possibilities of SBI. In our experience, the NI-USB6009 is an affordable option for data acquisition.
+The SBI routines have been tested for the NI-USB6009, however, many other DAQ cards could be used under this paradigm, see [http://www.mathworks.se/help/daq/about-the-session-based-interface.html "About the Session-Based Interface"]. You can use the function [TestSBI_NI_USB6009] to test the different acquisition possibilities of SBI. In our experience, the NI-USB6009 is an affordable option for data acquisition.
 
 The SBI can be used for both inputs and outputs, however, we mostly use it for inputs (recordings).
 
@@ -21,9 +21,9 @@ Since BioPatRec was developed before SBI, we also have available the "legacy" ro
 
 See [Troubleshooting] for issues.
 
-=== Biopotenial Amplifiers ===
+=== Biopotential Amplifiers ===
 
-We have developed several low-cost, high-CMRR biopotenial amplifiers for our research. We have specific designs for ENG and EMG. If you are looking for bio-amps, we might be able to help you.
+We have developed several low-cost, high-CMRR biopotential amplifiers for our research. We have specific designs for ENG and EMG. If you are looking for bio-amps, we might be able to help you.
 
 == Other peripherals ==
 
