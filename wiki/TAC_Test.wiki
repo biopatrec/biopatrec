@@ -1,4 +1,4 @@
-#summary TAC Test is used for practical evaluation and testing of the controllability of a prosthetic device.
+#summary is used for practical evaluation and testing of the controllability of a prosthetic device.
 
 = Introduction =
 
@@ -52,7 +52,8 @@ The parameters are:
  * Completion Time...
  * Path Efficiency. This is the rate between the shortest possible trajectory to the target, over the actual path taken. Computed by TrackStateSpace .
 
-At the end of the test, these information is saved in the structure tacTest, which results can be extracted using TacTestReulsts.
+At the end of the test, these information is saved in the structure tacTest, which results can be extracted using TacTestResults. Additionally, [GUI_SSPresentation] is a GUI that can be used to visualize trajectories recorded by [TrackStateSpace] during a [TAC_Test].
+
 
 = Recommendations = 
 
