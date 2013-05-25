@@ -13,7 +13,7 @@ It is probably not a surprise for anybody the fact that the media tend to exagge
 
  * The term "bionic" is often misused and therefore now ambiguous. There was a time when it meant an augmentation to the biological capabilities (stronger, faster, more accurate, etc...). The fact is that if we cannot fully replace the biological limbs, we can hardly augmented them, as an exoskeleton would do for instance.
 
- * The media often use the phrase "mind controlled" or "thought controlled". This is at some extend true, but only because the brain basically controls everything we do! However, this might give the false impression that the prosthesis is controlled by simple "imagining" or "thinking", without any other muscular or physical response, whereas in reality these signals are often recorded from muscles or the motor cortex rather than in any other area of the brain where "imagination" can take place (e.g. prefrontal cortex).
+ * The media often use the phrase "mind controlled" or "thought controlled". This is at some extend true, but only because the brain basically controls everything we do! However, this might give the false impression that the prosthesis is controlled by simple "imagining" or "thinking", without any other muscular or physiological response, whereas in reality these signals are often recorded from muscles or the motor cortex rather than in any other area of the brain where "imagination" can take place (e.g. prefrontal cortex).
  
  * Most of the advanced technology presented by the media has only been used in controlled environments (research labs), and is it not really close to be a clinical reality for patients.
 
@@ -35,6 +35,7 @@ It is probably not a surprise for anybody the fact that the media tend to exagge
  * [http://news.discovery.com/tech/videos/tech-man-controls-robotic-hand-with-mind.htm Man controls robotic hand with mind] by Discovery Channel in Dec 2010.
  * [http://cnettv.cnet.com/2001-1_53-50005779.html '60 Minutes': Revolutionizing prosthetics] by CBS News sometime before 2009.
  * [http://www.youtube.com/watch?v=T6R5bm6qx2E Cutting edge prosthetic arms] by Pentagon Channel sometime before May 2008.
+ * [http://youtu.be/R0_mLumx-6Y Dean Kamen's Robotic "Luke" Arm] by Spectrum Magazine in 2008.
 
 == On commercially available prostheses ==
 
@@ -45,4 +46,5 @@ It is probably not a surprise for anybody the fact that the media tend to exagge
 
 Keep in mind that these presentation might also have mistakes, and that presenters would mostly focused on their group's work, and of course their approach to the different problems.
 
- * [http://www.youtube.com/watch?v=y_NGycsdW5o Robotics: New Possibilities in Prosthetic Limbs] by Michael Goldfarb at Vanderbilt University (2010).
+ * [http://www.youtube.com/watch?v=MLvwTlbj1Y8 Todd Kuiken: A prosthetic arm that "feels"] at TED in Oct 2011.
+ * [http://www.youtube.com/watch?v=y_NGycsdW5o Robotics: New Possibilities in Prosthetic Limbs] by Michael Goldfarb at Vanderbilt University in 2010.
