@@ -45,4 +45,4 @@ It is probably not a surprise for anybody the fact that the media tend to exagge
 
 Keep in mind that these presentation might also have mistakes, and that presenters would mostly focused on their group's work, and of course their approach to the different problems.
 
-* [http://www.youtube.com/watch?v=y_NGycsdW5o Robotics: New Possibilities in Prosthetic Limbs] by Michael Goldfarb at Vanderbilt University (2010).
+ * [http://www.youtube.com/watch?v=y_NGycsdW5o Robotics: New Possibilities in Prosthetic Limbs] by Michael Goldfarb at Vanderbilt University (2010).
