@@ -28,7 +28,7 @@ It is probably not a surprise for anybody the fact that the media tend to exagge
 == On artificial limbs ==
 
  * [http://edition.cnn.com/video/#/video/international/2013/05/02/art-movement-michael-mcloughlin-robotic-arm.cnn Robotic arm grasps the future] by CNN in May 2013.
-  * A similar advanced arm was presented by Dean Kamen in 2007, see links at the bottom of the page for comparison.
+  * A similar advanced arm was presented by Dean Kamen in 2007, see links at the bottom of the page for comparison. Currently, none of them can be fully control by the patient.
  * [http://www.bbc.co.uk/news/health-17139965 Can you build a bionic body? The arm] by BBC News in Mar 2012.
  * [http://vimeo.com/43486048# Hugh Herr, Bionic Man - Part 1] by The Next List in Jun 2012.
  * [http://www.bbc.co.uk/news/uk-england-tyne-16746496 Soldier Andrew Garthwaite to get bionic arm controlled by mind] by BBC News in Jan 2012.
