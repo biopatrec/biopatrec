@@ -2,7 +2,13 @@
 
 = Intent interpretation =
 
-This page will describe the intent interpretation part of the NTNU implementation.
+== Simultaneous proportional control ==
+As seen on the front page of the [NTNU] contribution, there is figure showing the details for this part. It is divided into two parts, containing three operations for simultaneous proportional control:
+ * Linear mapping
+ * Nonlinear flutter rejection filter
+ * Gain and threshold adjustments
+
+These operations together make the intent interpretation for the simultaneous proportional control.
 
 
-= Details =
+=== Details ===
