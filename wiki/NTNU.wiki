@@ -1,0 +1,22 @@
+#summary NTNU
+
+= Introduction =
+
+These pages will contain a documentation of the contributions from NTNU. Since this still is a ongoing work, it will be separated from the main hierarchy at this moment.
+
+At this instance, the purpose of this work, is to implement the functionality already in place at the lab at the Institute of Cybernetics at NTNU, over to the !BioPatRec system.
+
+The main area of development the last years, have been simultaneous proportional myoelectric control ^[1]^.
+
+
+= Details =
+
+Currently, the model being developed, is split into three parts:
+ * [NTNU_Preprocessing Preprocessing]
+ * [NTNU_Intent_interpretation Intent interpretation]
+ * [NTNU_Output Output]
+
+Each of these parts, are representing the steps in the model from the work of Fougner ^[1]^, see figure *"to be inserted"*, and beside the model is a scenario of simultaneous proportional control.
+
+= References =
+ # Fougner, Anders. Robust, Coordinated and Proportional Myoelectric Control of Upper-Limb Prostheses. Diss. Norwegian University of Science and Technology, 2013.
