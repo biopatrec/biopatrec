@@ -1,4 +1,4 @@
-#summary NTNU
+#summary A description of the NTNU contribution
 
 = Introduction =
 
