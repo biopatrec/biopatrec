@@ -122,11 +122,24 @@ see [Control]
 see [Motors_Protocol]
 
 === Object-oriented (OOP) ===
- * MotorsOn / MotorsOff
-  * Update2PWMusingSCI (DC motors)
-  * UpdatePWMusingSCI_PanTilt (Servo motors)
+ * Move buttons at GUI_TestPatRec_Mov2Mov
+  * MoveMotor (GUI)
+   * Update2PWMusingSCI (DC motors)
+   * UpdatePWMusingSCI_PanTilt (Servo motors) 
+ * RealtimePatRec
+  * MotorsOn / MotorsOff (real-time)
+   * Update2PWMusingSCI (DC motors)
+   * UpdatePWMusingSCI_PanTilt (Servo motors)
+
+ * Using Standard Prosthetic Components (SPC) and wifi
+  * Move buttons at GUI_TestPatRec_Mov2Mov
+   * MoveMotorWifi
+    * ActivateSP_FixedTime
+  * RealtimePatRec
+   * MotorsOn_SPCwifi
+   * MotorsOff_SPCwifi
 
 === Non-OOP ===
- *ActivateMotors
+ * ActivateMotors
   * Update2PWMusingSCI (DC motors)
   * Not working for servo motors
