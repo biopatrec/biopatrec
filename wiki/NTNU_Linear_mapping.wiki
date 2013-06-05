@@ -1,0 +1,26 @@
+#summary The linear mapping function of the simultaneous proportional control
+
+NOTE: This is an ongoing development and therefore the documentation is not yet finalised.
+
+= Linear mapping =
+
+Given a system on the form of formula *[Eq. 1]*, and that there is linear mapping, there are estimators designed to create the relation between the input and output in the system ^[1]^ ^(norwegian source)^.
+
+ F = Ax *[Eq. 1]*
+
+In the formula, x is the input feature vector, A is the matrix mapping x to F, and F is the output vector containing the output intent estimate for the prosthesis control.
+
+Firstly, the algorithm must go through the offline-training in BioPatRec. During the offline-training, the F and x is known from the system training, being in the [xSets xSets] data structure. Thus A can be calculated and used for further estimation.
+
+Lastly, the algorithm is ready to be run through a choice of estimators:
+ * Normal linear estimator
+ * Decoupled linear estimator
+
+== Normal linear estimator ==
+
+
+== Decoupled linear estimator ==
+
+
+= References =
+ # Linnerud, Ådne Solhaug. Lab-oppsett for proteseforskning. Diss. Norwegian University of Science and Technology, 2012.
