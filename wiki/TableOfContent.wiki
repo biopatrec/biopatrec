@@ -28,3 +28,7 @@
  * [Collaborators Who's in?]
   * Projects
    * [NTNU]
+    * [NTNU_Preprocessing Preprocessing]
+    * [NTNU_Intent_interpretation Intent interpretation]
+    * [NTNU_Output Output]
+    * [NTNU_System_training System training]
