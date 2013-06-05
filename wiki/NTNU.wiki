@@ -21,7 +21,7 @@ Currently, the model being developed, is split into four parts:
   * [NTNU_Screen_guided_training Screen guided training (SGT)]
   * [NTNU_Prosthesis_guided_training Prosthesis guided training (PGT)]
 
-Each of the three first parts, are representing the steps in the model from the work of Fougner ^[1]^, see figure *"to be inserted"*, and beside the model is a scenario of simultaneous proportional control. The last part, [NTNU_System_training system training], is containing information about the training of the system, thereof [NTNU_Screen_guided_training SGT] and [NTNU_Prosthesis_guided_training PGT]. In the figure being shown, the system training is fed into part 4 during the offline-training of the algorithms.
+Each of the three first parts, are representing the steps in the model from the work of Fougner ^[1]^, see figure *"to be inserted"*, and beside the model is a scenario of simultaneous proportional control. The last part, system training, is containing information about the training of the system, thereof [NTNU_Screen_guided_training SGT] and [NTNU_Prosthesis_guided_training PGT]. In the figure being shown, the system training is fed into part 4 during the offline-training of the algorithms.
 
 = References =
  # Fougner, Anders. Robust, Coordinated and Proportional Myoelectric Control of Upper-Limb Prostheses. Diss. Norwegian University of Science and Technology, 2013.
