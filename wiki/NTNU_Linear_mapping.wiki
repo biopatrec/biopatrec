@@ -4,7 +4,7 @@ NOTE: This is an ongoing development and therefore the documentation is not yet 
 
 = Linear mapping =
 
-Given a system on the form of equation 1 ^[Eq. 1]^, and that there is linear mapping, there are estimators designed to create the relation between the input and the output in the system ^[1]^ ^(norwegian source)^.
+Given a system on the form of equation 1 ^[Eq. 1]^, and that there is linear mapping, there are estimators designed to create the relation between the input and the output of the system ^[1]^ ^(norwegian source)^.
 
  F = Ax *[Eq. 1]*
 
