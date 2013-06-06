@@ -10,14 +10,14 @@ Given a system on the form of equation 1 ^[Eq. 1]^, and that there is linear map
 
 In the formula, x is the input feature vector, A is the matrix mapping x to F, and F is the output vector containing the output intent estimate for the prosthesis control.
 
-Firstly, the algorithm must go through the offline-training in !BioPatRec. During the offline-training, the F and x is known from the system training, being in the [xSets xSets] data structure. Thus A can be calculated and used for further estimation.
-
-Lastly, the algorithm is ready to be run through a choice of estimators:
+Two steps are necessary for the estimators in linear mapping. Firstly, the algorithm must go through the offline-training in !BioPatRec. During the offline-training, the F and x is known from the system training, being in the [xSets xSets] data structure. Thus A can be calculated and used for further estimation. Lastly, the algorithm is ready to be run, and can do so in accordance to the estimator chosen. Both of these steps have a choice of estimators:
  * Normal linear estimator
  * Decoupled linear estimator
 
 == Normal linear estimator ==
-
+This estimator uses linear regression for its calculation of the matrix A. Which in Matlab can be interpreted as:
+ A = F/x
+Here it's important to notice, that Matlab interprets the input and calculates it different than 
 
 == Decoupled linear estimator ==
 
