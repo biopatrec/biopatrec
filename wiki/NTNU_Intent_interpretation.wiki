@@ -11,5 +11,3 @@ As seen on the front page of the [NTNU] contribution, there is figure showing th
  * [NTNU_Gain_and_threshold_adjustments Gain and threshold adjustments]
 
 These operations together make the intent interpretation for the simultaneous proportional control.
-
-=== Details ===
