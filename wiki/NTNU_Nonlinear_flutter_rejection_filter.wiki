@@ -1,5 +1,7 @@
 #summary Information about the nonlinear flutter rejection filter
 
+NOTE: This is an ongoing development and therefore the documentation is not yet finalised.
+
 = Nonlinear flutter rejection filter =
 
 The purpose of this filter is to suppress fast and small-amplitude variations in the estimate of the output; thus, the estimate is smoothed and the motors of the output-device are relieved of oscillating actuations. This improves the stability of the prosthesis control, as the actuation estimates are kept constant for small variations in the estimate of the input to the motors.
