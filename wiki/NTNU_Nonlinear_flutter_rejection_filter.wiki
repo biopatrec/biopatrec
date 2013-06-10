@@ -7,4 +7,4 @@ The purpose of this filter is to suppress fast and small-amplitude variations in
 == Details ==
 For details around the filter, see the nonlinear flutter rejection filter in the figure on the [NTNU front page] of the NTNU contribution. The only thing to notice, is that the nonlinearity in the filter is defined by y = |x| tanh(k x).
 
-The code is implemented within the function called _!NonlinearFlutterRejectionFilter_.
+The code is implemented within the function called _!NonlinearFlutterRejectionFilter_, and is located inside the proportional control folder.
