@@ -15,11 +15,32 @@ Two steps are necessary for the estimators in linear mapping. Firstly, the algor
  * Decoupled linear estimator
 
 == Normal linear estimator ==
-This estimator uses linear regression for its calculation of the matrix A. Which in Matlab can be interpreted as:
- A = F/x
-Here it's important to notice, that Matlab interprets the input and calculates it different than 
+This estimator uses linear regression for its calculation of the matrix A. Which in Matlab can be interpreted as in equation 2 ^[Eq. 2]^.
+ A = F/x *[Eq. 2]*
+Here it's important to notice, that the Matlab-operator "/", is interpreted according to the format of the input. See documentation within Matlab for details ("doc /" or "doc mrdivide").
+
+After estimating the A matrix, the algorithm is ready for realtime-calculation. This calculation is done through equation 1 ^[Eq. 1]^.
 
 == Decoupled linear estimator ==
+In this estimation the F vector is decomposed to three feature vectors: mean ^[Eq. 3]^, standard deviation ^[Eq. 4]^ and form ^[Eq. 5]^.
+
+ F,,mean,, = _mean_(F) *[Eq. 3]*
+
+ F,,std,,  = _std_(F)  *[Eq. 4]*
+
+ F,,form,, = (F-F,,mean,,)/F,,std,, *[Eq. 5]*
+
+For the estimation of the A matrix in decoupled linear estimation, equation 6 ^[Eq. 6]^, 7 ^[Eq. 7]^ and 8 ^[Eq. 8]^ are used.
+
+ A,,mean,, = F,,mean,,/x *[Eq. 6]*
+
+ A,,std,, = F,,std,,/x *[Eq. 7]*
+
+ A,,form,, = F,,form,,/x *[Eq. 8]*
+
+After the offline-calculation, the A matrix can be run through equation 9 ^[Eq. 9]^ with the realtime-feed of EMG-data.
+
+ F = (A,,form,, x).{{{*}}}(A,,std,, x) + A,,mean,, x *[Eq. 9]*
 
 
 = References =
