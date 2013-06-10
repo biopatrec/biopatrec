@@ -14,6 +14,8 @@ Two steps are necessary for the estimators in linear mapping. Firstly, the algor
  * Normal linear estimator
  * Decoupled linear estimator
 
+The offline-training is implemented within the _!OfflineProportionalControl_ function, and the online-training is implemented within the _!LinearMapping_ function. Both are inside the proportional control folder.
+
 == Normal linear estimator ==
 This estimator uses linear regression for its calculation of the matrix A. Which in Matlab can be interpreted as in equation 2 ^[Eq. 2]^.
  A = F/x *[Eq. 2]*
@@ -41,7 +43,6 @@ For the estimation of the A matrix in decoupled linear estimation, equation 6 ^[
 After the offline-calculation, the A matrix can be run through equation 9 ^[Eq. 9]^ with the realtime-feed of EMG-data.
 
  F = (A,,form,, x).{{{*}}}(A,,std,, x) + A,,mean,, x *[Eq. 9]*
-
 
 = References =
  # Linnerud, Ådne Solhaug. Lab-oppsett for proteseforskning. Diss. Norwegian University of Science and Technology, 2012.
