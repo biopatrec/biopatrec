@@ -1,0 +1,14 @@
+#summary Delsys Trigno Wireless System  Details.
+
+= Delsys Trigno Wireless System =
+
+A multimodul system is a system consisting of more than one type of sensor. A multimodul unit (MMU) is a unit that by itself is a multimodul system. The Delsys Trigno Wireless System consists of sensors that has surface electromyography (SEMG) and a 3-axis accelerometer. 
+
+The Delsys Trigno Wireless System has a base station and 16 Trigno sensors that can communicate wirelessly with the base station. Ecery sensor has 4 channels. One channel for the SEMG and three channels for the accelerometer.
+
+This list contains the most the most important features of the System.
+* 16 EMG channels.
+* 48 acceleromter channels.
+* All sensor are wireless.
+* 64 channels real-time analog output.
+*  
