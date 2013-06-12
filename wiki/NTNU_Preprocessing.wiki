@@ -2,7 +2,10 @@
 
 = Preprocessing =
 
-In the figure of the [NTNU] contribution page shows the model that
+The figure on the [NTNU] contribution page shows the structure of the preprocessing. However only the first to parts under preprocessing has been modified at NTNU.
+
+These modifications was made in order to add support for the Delsys Trigno
+Wireless System.
 
 = Details =
 
