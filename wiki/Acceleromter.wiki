@@ -2,4 +2,4 @@
 
 = Accelerometer data =
 
-BioPatRec only supports EMG data. However the [DTWS Delsys Trigno Wireless System] includes a accelerometer in addition to the EMG.
+BioPatRec only supports EMG data. However the [DTWS Delsys Trigno Wireless System] includes a accelerometer in addition to the EMG. In order to store this data a new variable must be added to recSession. 
