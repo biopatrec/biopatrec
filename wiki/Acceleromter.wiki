@@ -21,7 +21,7 @@ adata is a 4 dimensional variable containing accelerometer data. The dimensions 
  * mov (description of the movements performed)
  * date
  * cmt (comments)
- * tdata (total data, Samples x Channels x Movements) 
- * adata (total data, Samples x Axes x Sensors x Movements)
+ * tdata (total EMG data, Samples x Channels x Movements) 
+ * adata (total accelerometer data, Samples x Axes x Sensors x Movements)
 
 With this structure there will be support for storing accelerometer data in BioPatRec. However There are currently no handles for these data samples.  
