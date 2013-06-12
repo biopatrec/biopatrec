@@ -1,0 +1,5 @@
+#summary Accelerometer data in BioPatRec.
+
+= Accelerometer data =
+
+Add your content here.
