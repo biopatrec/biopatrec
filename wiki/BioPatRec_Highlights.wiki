@@ -82,7 +82,7 @@ Available online in the "Downloads" tab.
  * *Virtual Reality Environment* ([VRE])
   * A virtual lower arm with 7 degrees of freedom
 
-=== !BioPatRec TVÅ ===
+=== !BioPatRec TVA ===
 
 Pre-release available upon request.
 
