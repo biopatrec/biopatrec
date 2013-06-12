@@ -37,7 +37,7 @@ Most of the training phase is taking care by the function _OfflinePatRec_, which
    * # Outputs = # Individual movements.
   * _Mixed Out_. This means that the mixed classes (or simultaneous movements) will also be used during the training phase.
    * # Outputs = # Individual movements. 
-  NOTE: Only _"All Mov"_ is available in [BioPatRec_Highlights#BioPatRec_ETT BioPatRec ETT]. The rest are under testing.
+  NOTE: Only _"All Mov"_ is available in [BioPatRec_Highlights#BioPatRec_ETT BioPatRec ETT]. The other options relate to simultaneous control which is available from [BioPatRec_Highlights#BioPatRec_TVA BioPatRec TVÅ].
 
  * *[Normalization]*. The training and validation sets are normalized according to the selected option. 
 
