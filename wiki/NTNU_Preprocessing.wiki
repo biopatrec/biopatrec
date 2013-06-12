@@ -1,4 +1,4 @@
-#Added support for Delsys Trigno Wireless System under preprocessing.
+#summary Added support for Delsys Trigno Wireless System under preprocessing.
 
 = Preprocessing =
 
