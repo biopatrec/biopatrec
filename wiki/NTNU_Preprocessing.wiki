@@ -1,5 +1,7 @@
 #summary Added support for Delsys Trigno Wireless System under preprocessing.
 
+NOTE: This is an ongoing development and therefore the documentation is not yet finalized.
+
 = Preprocessing =
 
 The figure on the [NTNU] contribution page shows the structure of the preprocessing. However only the first to parts under preprocessing has been modified at [NTNU].
