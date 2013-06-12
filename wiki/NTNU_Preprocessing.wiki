@@ -5,9 +5,8 @@
 The figure on the [NTNU] contribution page shows the structure of the preprocessing. However only the first to parts under preprocessing has been modified at NTNU.
 
 These modifications was made in order to add support for the Delsys Trigno
-Wireless System.
+Wireless System, which is the primary sensor system at NTNU. There is now available support for Delsys Trigno Wireless System under [SigRecordings Recordings] and [SigRecordings Recording Session].
 
-= Details =
 
 Add your content here.  Format your content with:
   * Text in *bold* or _italic_
