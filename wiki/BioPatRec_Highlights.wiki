@@ -133,6 +133,10 @@ See the [Important_coding_changes]
 
 <wiki:video url="http://www.youtube.com/watch?v=6W5plVzXe1k&feature=player_detailpage"/>
 
+== Evaluation of simultaneous control  ==
+
+<wiki:video url="http://www.youtube.com/watch?v=SQ5CYrjAUP0&feature=youtu.be"/>
+
 == Initial testing of a multifunctional prosthesis  ==
 
 <wiki:video url="http://www.youtube.com/watch?feature=player_embedded&v=nxPToKzuXF4"/>
