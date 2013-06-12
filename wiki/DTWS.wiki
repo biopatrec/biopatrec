@@ -7,8 +7,8 @@ A multimodul system is a system consisting of more than one type of sensor. A mu
 The Delsys Trigno Wireless System has a base station and 16 Trigno sensors that can communicate wirelessly with the base station. Ecery sensor has 4 channels. One channel for the SEMG and three channels for the accelerometer.
 
 This list contains the most the most important features of the System.
-* 16 EMG channels.
-* 48 acceleromter channels.
-* All sensor are wireless.
-* 64 channels real-time analog output.
-*  
+ * 16 EMG channels.
+ * 48 acceleromter channels.
+ * All sensor are wireless.
+ * 64 channels real-time analog output.
+ *  
