@@ -37,12 +37,12 @@ Most of the training phase is taking care by the function _OfflinePatRec_, which
    * # Outputs = # Individual movements.
   * _Mixed Out_. This means that the mixed classes (or simultaneous movements) will also be used during the training phase.
    * # Outputs = # Individual movements. 
-  NOTE: Only _"All Mov"_ is available in [BioPatRec_Highlights#BioPatRec_ETT BioPatRec ETT]. The other options relate to simultaneous control which is available from [BioPatRec_Highlights#BioPatRec_TVÅ BioPatRec TVÅ].
+  NOTE: Only _"All Mov"_ is available in [BioPatRec_Highlights#BioPatRec_ETT BioPatRec ETT]. The other options relate to simultaneous control which is available from [BioPatRec_Highlights#BioPatRec_TVA BioPatRec TVÅ].
 
  * *[Normalization]*. The training and validation sets are normalized according to the selected option. 
 
  * *Creation of the classifier topology.* The same classifier can be constructed in different topologies, such as One-Vs-All, One-Vs-One, etc... see [PatRec_Topologies] for details.
- NOTE: Only the _single classifier_ topology is available in [BioPatRec_Highlights#BioPatRec_ETT BioPatRec ETT]. The other options relate to simultaneous control which is available from [BioPatRec_Highlights#BioPatRec_TVÅ BioPatRec TVÅ].
+ NOTE: Only the _single classifier_ topology is available in [BioPatRec_Highlights#BioPatRec_ETT BioPatRec ETT]. The other options relate to simultaneous control which is available from [BioPatRec_Highlights#BioPatRec_TVA BioPatRec TVÅ].
 
  * *Training of the classifier.* The OfflinePatRec function calls OfflinePatRecTraining to proceed with the classifier(s) training. The function OfflinePatRec returns the [patRec] structure containing all information required for further utilization of the classifier(s).
 
