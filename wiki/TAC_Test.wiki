@@ -61,3 +61,9 @@ To have a good test the following values are recommended for a test with 3-DOF;
  * Execution time: 15-20 seconds
  * Target width: 5-8 (lower values are more difficult)
  * Dwell time: 1-2 s (higher values are more difficult)
+
+= Demos =
+
+== Individual Vs. Simultaneous Control  ==
+
+<wiki:video url="http://www.youtube.com/watch?v=SQ5CYrjAUP0&feature=youtu.be"/>
