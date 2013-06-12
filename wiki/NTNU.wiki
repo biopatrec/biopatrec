@@ -1,6 +1,6 @@
 #summary A description of the NTNU contribution
 
-NOTE: This is an ongoing development and therefore the documentation is not yet finalised.
+NOTE: This is an ongoing development and therefore the documentation is not yet finalized.
 
 = Introduction =
 
