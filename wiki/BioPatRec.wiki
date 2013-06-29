@@ -8,10 +8,10 @@
  * See [BioPatRec_StartupGuide Startup Guide] for quick instructions ("How To's")
  * See [BioPatRec_Requirements Requirements] for (yes, exactly!) the system requirements.   
 
-Scientific reference:
+Reference article:
 [http://www.scfbm.org/content/8/1/11 Ortiz-Catalan, M., Brånemark, R., and Håkansson, B., “BioPatRec: A modular research platform for the control of artiﬁcial limbs based on pattern recognition algorithms”, Source Code for Biology and Medicine, 2013, 8:11]
 
-= For Developers/Researches =
+= For Developers/Researchers =
 
 If you are interested on developing further using this platform, or simple understand the nuts and bolts of !BioPatRec, the following links are for you.
 
