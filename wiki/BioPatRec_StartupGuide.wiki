@@ -71,8 +71,8 @@ Demo on how to:
 Coming from the MATLAB command window
 
  * Type !BioPatRec
- * Click _Pattern Recognition
- * Select _Get Sig. Features_ to load the file with the [sigFeatures] structure. If you only have the [recSession] structure file, see "How to pre-process ..." (howto before).
+ * Click _Pattern Recognition_
+ * Select _Get Sig. Features_ to load the file with the [sigFeatures] structure. If you only have the [recSession] structure file, see "How to pre-process ...".
 
 Coming from the Signal Treatment GUI
 
@@ -82,7 +82,7 @@ Coming from the Signal Treatment GUI
  * Select _Training Method_ (if required)
  * Select _Normalization_ (if required)
  * Select _Movements_ (default: _Individual Mov_)
- * Select _Topology_ (default: _Single Classifier_, see [Classifier_Topologies])
+ * Select _Topology_ (default: _Single Classifier_, see [PatRec_Topologies])
  * Tick _Randomized sets_ if you want the training, validation and testing sets to be mixed randomly before training (normally checked)
  * Click _Run Off-line Training_
 
