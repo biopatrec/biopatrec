@@ -9,7 +9,7 @@
 
  * Nichlas Sander, MSc.
   * Biomedical Engineering and Computer Science
-  * *Integrum AB, Sweden*
+  * *Chalmers University of Technology / Integrum AB, Sweden*
   * [VRE] developer
 
 Pre-release versions of BioPatRec have been shared to:
