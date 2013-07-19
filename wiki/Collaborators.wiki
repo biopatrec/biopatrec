@@ -4,7 +4,7 @@
 
  * Max J. Ortiz C., EE, PhD.c
   * Natural Control of Artificial Limbs Through an Osseointegrated Implant 
-  * *Chalmers University of Technology / Integrum AB, Sweden*
+  * *Chalmers University of Technology / Centre of Orthopaedic Osseointegration / Integrum AB, Sweden*
   * !BioPatRec developer
 
  * Nichlas Sander, MSc.
