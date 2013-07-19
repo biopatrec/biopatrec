@@ -76,6 +76,13 @@ The following tests of prediction and control performance can be used:
 
 NOTE: To do any real-time testing you must have configured your DAQ card, see [BioPatRec_StartupGuide].
 
+= Simultaneous Pattern Recognition =
+or prediction of mixed-labels | mixed-labels | mixed-motions.
+
+In order to evaluate the prediction of simultaneous movements you have to record such movements. Be sure that you used that option in the Recording Session GUI (SigRecordings).
+
+NOTE: The feature of simultaneous control is available from version TVÅ.
+
 = Adding a New !PatRec Algorithm =
 
 Create all the related functions (files) inside a new folder with a clear name for your new algorithm. This folder must be inside !PatRec folder.
