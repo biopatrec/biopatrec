@@ -46,8 +46,13 @@ Pre-release versions of BioPatRec have been shared to:
 
  * Alejandra Aranceta-Garza, BE, PhD.c
   * Neurohpysiology Bioengineer
-  * *Strathclyde University, Glasgow*
+  * *Strathclyde University, Scotland*
   * !BioPatRec interest: Myoelectric signal processing and PatRec
+
+ * Ali H. Al-Timemy, PhD.c
+  * Centre for Robotics and Neural Systems
+  * *Plymouth University, England*
+  * !BioPatRec interest: Myoelectric prosthetic control
 
  * Morten Bak Kristoffersen, MSc.c
   * Medialogy 
