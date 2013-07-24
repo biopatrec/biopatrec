@@ -17,7 +17,7 @@ To add a control algorithm you have to initialize it in:
 
  * !InitControl
 
-and the add the executing routine in:
+and then add the executing routine in:
 
  * !ApplyControl
 
