@@ -36,7 +36,7 @@ These matrices are constructed by the functions:
  * GetSets_Stack or,
  * GetSets_Stack_MixedOut
 
-NOTE: It might seems like the second one is not need it since the first one can handle both cases, however, if mixed movements want to be treated as individual movements, this can only be process by the first one.
+NOTE: It might seems like the second one is not need since the first one can handle both cases, however, if mixed movements want to be treated as individual movements, this can only be process by the first one.
 
  * The xSets are constructed by stacking sets of signal features.
  * Each set is constructed by obtaining the first signal features per each channel, then the second features per channel and so on, until all the selected features are part of the row.
