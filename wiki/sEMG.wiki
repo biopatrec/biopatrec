@@ -1,9 +1,9 @@
 #summary Surface ElectroMyoGraphy
 
-The quality of the recorded myoelectric signals depends strongly on two things:
+The quality of the recorded myoelectric signals depends strongly on the following:
 
- * BioAmps
- * Electrodes
+ * BioAmps (Bio-electrical amplifiers)
+ * Electrodes and their placements
 
 = Electrode placement for sEMG = 
 
@@ -17,7 +17,7 @@ Recording electrodes:
 
 Reference electrode:
  * As far as possible from the recording electrodes
- * Place in an electrically neutral tissue
+ * Place in an electrically neutral tissue (bony parts)
  * Good electrical contact
 
 NOTE: Do NOT forget to use a reference electrode!!!
@@ -28,6 +28,8 @@ For a very quick overview on sEMG see:
 
  [http://www.delsys.com/Attachments_pdf/WP_SEMGintro.pdf De Luca, C., Surface Electromyography: Detection and Recording: DelSys; 2002.]
 
-For scientist see:
+For a deeper understanding see:
 
- Merletti R, Parker P: Electromyography: Physiology, Engineering, and Noninvasive Applications. New Jersey, USA: John Wiley & Sons; 2004
+ Merletti, R. & Parker, P., *Electromyography: Physiology, Engineering, and Noninvasive Applications*, New Jersey, USA: John Wiley & Sons; 2004
+
+ Barbero, M., Merletti, R., & Rainoldi, A., *Atlas of Muscle Innervation Zones: Understanding Surface Electromyography and Its Applications*, Springer; 2012.
