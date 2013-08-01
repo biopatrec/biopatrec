@@ -39,6 +39,11 @@ Pre-release versions of BioPatRec have been shared to:
   * *University of Paderborn, Germany*
   * !BioPatRec interest: PatRec and SVM.
 
+ * Cosima Prahm, PhD.c
+  * Department of Surgery, CD Laboratory for Bionic Reconstruction
+  * *Medical University of Vienna*
+  * BioPatRec interest: Real-time control and rehabilitation
+
  * Daphne Boere, BME, PhD.c
   * Myoelectric transradial prosthesis control
   * *Roessingh Research and Development / University of Twente, the Netherlands*
