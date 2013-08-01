@@ -89,7 +89,7 @@ Pre-release available upon request.
 The TVÅ version contains all features of !BioPatRec ETT, plus:
 
  * *Recordings*
-  * A virtual limb can now display the requested motion to facilitate the user instructions.
+  * A virtual limb can now display the requested motion to facilitate the user instructions (Screen-Guided Training, SGT).
 
  * *Signal Treatment*
   * Automatic computation of the "exact" number of time windows available (GUI_SigTreatment). Before, it was likely that you had to complete the total amount manually.
@@ -103,7 +103,7 @@ The TVÅ version contains all features of !BioPatRec ETT, plus:
 
  * *Control*
   * New control algorithms:
-   * Ramp
+   * Velocity Ramp
 
  * *Virtual Reality Environment* ([VRE])
   * The communication now handles fractions
