@@ -4,14 +4,14 @@
 
 If you are looking at this page as an introduction to the field, or just for curiosity, please be aware that the content of these articles has not been scientifically reviewed, and therefore any information provided must be taken with caution, and not as the absolute truth. Of course, we cannot generalize completely, as few of them can be rather accurate.
 
-It is probably not a surprise for anybody the fact that the media tend to exaggerate and raise false expectations on what science and technology can currently offer. At the same time, there is no doubt that the amount and quality of the work done by the scientists and engineers featured in these videos deserves recognition and respect. Unfortunately, their work is often misinterpreted by some “journalist” that feel that without exaggerated promises of futuristic achievements, it is not interesting enough to be published. With that being said, it is our responsibility as a community of scientists to share and comment on these articles, so please feel free to do so!
+It is probably not a surprise for anybody the fact that the media tend to exaggerate and raise false expectations on what science and technology can currently offer. At the same time, there is no doubt that the amount and quality of the work done by the scientists and engineers featured in these videos deserves recognition and respect. Unfortunately, their work is often misinterpreted by some “journalist” that feel that without exaggerated promises of futuristic achievements, it is not interesting enough to be published. With that being said, it is our responsibility as a community of professionals and scientists to share and comment on these articles, so please feel free to do so!
 
 
 == Quick and true facts: ==
 
  * We don’t really have the technology today to fully replace the functionality of a biological limb, thus we are not really close to create a “Robocop”, and definitely there is no need to worry about the threat of “Terminator” anytime soon.
 
- * The term "bionic" is often misused and therefore now ambiguous. There was a time when it meant an augmentation to the biological capabilities (stronger, faster, more accurate, etc...). The fact is that if we cannot fully replace the biological limbs, we can hardly augmented them, as an exoskeleton would do for instance.
+ * The term "bionic" is often misused and therefore now ambiguous. There was a time when it meant an augmentation to the biological capabilities (stronger, faster, more accurate, etc...). Although originally was more on the side of biologically inspired mechatronics. Anyway, the fact is that if we cannot fully replace the biological limbs, we can hardly augmented them, as an exoskeleton would do for instance.
 
  * The media often use the phrase "mind controlled" or "thought controlled". This is at some extend true, but only because the brain basically controls everything we do! However, this might give the false impression that the prosthesis is controlled by simple "imagining" or "thinking", without any other muscular or physiological response, whereas in reality these signals are often recorded from muscles or the motor cortex rather than in any other area of the brain where "imagination" can take place (e.g. prefrontal cortex).
  
@@ -25,10 +25,10 @@ It is probably not a surprise for anybody the fact that the media tend to exagge
 
  * Although the previous points are rather pessimistic, there are a lot of intelligent and dedicated people trying to improve robotic prostheses, so we'll get there!
 
-== On artificial limbs ==
+== Media on artificial limbs ==
 
  * [http://edition.cnn.com/video/#/video/international/2013/05/02/art-movement-michael-mcloughlin-robotic-arm.cnn Robotic arm grasps the future] by CNN in May 2013.
-  * A similar advanced arm was presented by Dean Kamen in 2007, see links at the bottom of the page for comparison. Currently, none of them can be fully control by the patient.
+  * A similar (not quite the same) advanced arm was presented by Dean Kamen in 2007, see links at the bottom of the page for comparison. Currently, none of them can be fully control by the patient.
  * [http://www.scienceupdate.com/2012/12/arm/ Thought-controlled prosthetics] by AAAS in Dec 2012.
  * [http://www.bbc.co.uk/news/health-17139965 Can you build a bionic body? The arm] by BBC News in Mar 2012.
  * [http://vimeo.com/43486048# Hugh Herr, Bionic Man - Part 1] by The Next List in Jun 2012.
@@ -39,14 +39,14 @@ It is probably not a surprise for anybody the fact that the media tend to exagge
  * [http://www.youtube.com/watch?v=T6R5bm6qx2E Cutting edge prosthetic arms] by Pentagon Channel sometime before May 2008.
  * [http://youtu.be/R0_mLumx-6Y Dean Kamen's Robotic "Luke" Arm] by Spectrum Magazine in 2008.
 
-== On commercially available prostheses ==
+== Media on commercially available prostheses ==
 
  * [http://edition.cnn.com/video/?/video/business/2013/01/31/make-create-innovate-i-limb-prosthetics-will-am-britney-spears.cnn#/video/business/2013/01/31/make-create-innovate-i-limb-prosthetics-will-am-britney-spears.cnn The bionic hand with the human touch] by CNN in Jan 2013.
  * [http://www.bbc.co.uk/news/health-13378036 Amputee Patrick demonstrates his new bionic hand] by BBC news in May 2011.
 
 == Talks and Academic Lectures ==
 
-Keep in mind that these presentation might also have mistakes, and that presenters would mostly focused on their group's work, and of course their approach to the different problems.
+Keep in mind that presenters would mostly focused on their group's work, and of course their own approach to the different problems.
 
  * [http://www.youtube.com/watch?v=MLvwTlbj1Y8 Todd Kuiken: A prosthetic arm that "feels"] at TED in Jul 2011.
  * [http://youtu.be/3dGgSuaQg1s Bionic Being: The New Prosthetics] by Shawn Kelly at Carnegie Mellon University in Jun 2011.
