@@ -2,7 +2,7 @@
 
 The quality of the recorded myoelectric signals depends strongly on the following:
 
- * BioAmps (Bio-electrical amplifiers)
+ * Bio-electrical amplifiers
  * Electrodes and their placements
 
 = Electrode placement for sEMG = 
