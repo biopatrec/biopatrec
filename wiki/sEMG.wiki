@@ -28,6 +28,8 @@ For a very quick overview on sEMG see:
 
  [http://www.delsys.com/Attachments_pdf/WP_SEMGintro.pdf De Luca, C., Surface Electromyography: Detection and Recording: DelSys; 2002.]
 
+ See also the recomendation of [http://www.seniam.org/ SENIAM].
+
 For a deeper understanding see:
 
  Merletti, R. & Parker, P., *Electromyography: Physiology, Engineering, and Noninvasive Applications*, New Jersey, USA: John Wiley & Sons; 2004
