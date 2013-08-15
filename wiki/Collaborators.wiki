@@ -64,11 +64,6 @@ Pre-release versions of BioPatRec have been shared to:
   * *Aalborg University, Denmark*
   * !BioPatRec interest: Augmented Reality
 
- * Prathamesh Dhanpalwar, MSc.c
-  * Biomedical Eng.
-  * *Chalmers University of Technology, Sweden*
-  * !BioPatRec interest: Myoelectric signals acquisition
-
  * Veronika Handrick, MSc.c
   * Biomedical Eng.
   * *University of Applied Sciences Jena, Germany*
@@ -79,15 +74,25 @@ Pre-release versions of BioPatRec have been shared to:
   * *Norwegian University of Science and Technology, Norway*
   * !BioPatRec interest: General
 
- * Ali Fouad, MSc.c / Siva Kumar, MSc.c
-  * Complex Adaptive Systems / Biomedical Eng.
-  * *Chalmers University of Technology, Sweden*
-  * !BioPatRec interest: [PCA], [ICA], [KNN] and [SOM]
+ * GauravJit Singh, BS
+  * Biomedical Eng.
+  * *Drexel University, USA*
+  * !BioPatRec interest: Prosthetic devices and control
 
  * Joakim Arver, MSc.c
   * Biomedical Eng.
   * *Chalmers University of Technology, Sweden*
   * !BioPatRec interest: Initial contributions on the [VRE]
+
+ * Prathamesh Dhanpalwar, MSc.c
+  * Biomedical Eng.
+  * *Chalmers University of Technology, Sweden*
+  * !BioPatRec interest: Myoelectric signals acquisition
+
+ * Ali Fouad, MSc.c / Siva Kumar, MSc.c
+  * Complex Adaptive Systems / Biomedical Eng.
+  * *Chalmers University of Technology, Sweden*
+  * !BioPatRec interest: [PCA], [ICA], [KNN] and [SOM]
 
  * Per Förstberg, MSc.c / Gustav Josefsson, MSc.c
   * Biomedical Eng.
