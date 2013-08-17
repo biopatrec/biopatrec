@@ -3,10 +3,19 @@
 = Requirements =
 
  * Matlab R2011b
-  * Data Acquisition Toolbox (recordings)
-  * Statistics Toolbox ([Discriminant_Analysis])
+  * Data Acquisition Toolbox for recordings
+  * Statistics Toolbox for [Discriminant_Analysis]
 
-BioPatRec was initially developed in Matlab `R2009`, however the latest version was only tested in `R2011b`. Some parts of BioPatRec might work in previous versions, but the VRE and the data acquisition routines need `R2011b`.
+BioPatRec was initially developed in Matlab `R2009`, however the latest version was only tested in `R2011b`. Some parts of BioPatRec might work in previous versions, but the VRE and the data acquisition routines need `R2011b`. So far, everything seems to be working with `R2012b`.
+
+== Running on Mac ==
+
+comments...
+
+
+== Running on Linux ==
+
+Everything seems to work currently when running a virtual machine with windows, even de data acquisition and VRE.
 
 == Data Acquisition ==
 
