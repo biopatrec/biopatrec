@@ -42,7 +42,7 @@ Pre-release versions of BioPatRec have been shared to:
  * Cosima Prahm, PhD.c
   * Department of Surgery, CD Laboratory for Bionic Reconstruction
   * *Medical University of Vienna, Austria*
-  * BioPatRec interest: Real-time control and rehabilitation
+  * !BioPatRec interest: Real-time control and rehabilitation
 
  * Daphne Boere, BME, PhD.c
   * Myoelectric transradial prosthesis control
@@ -52,7 +52,7 @@ Pre-release versions of BioPatRec have been shared to:
  * Vincent Hall, PhD.c
   * Molecular Organisation and Assembly in Cells
   * *University of Warwick, England*
-  * BioPatRec interest: PatRec
+  * !BioPatRec interest: PatRec
 
  * Ali H. Al-Timemy, PhD.c
   * Centre for Robotics and Neural Systems
