@@ -2,7 +2,7 @@
 
 = Who's in? ==
 
- * Max J. Ortiz C., EE, PhD.c
+ * Max Ortiz C., EE, PhD.c
   * Natural Control of Artificial Limbs Through an Osseointegrated Implant 
   * *Chalmers University of Technology / Centre of Orthopaedic Osseointegration / Integrum AB, Sweden*
   * !BioPatRec developer
@@ -41,7 +41,7 @@ Pre-release versions of BioPatRec have been shared to:
 
  * Cosima Prahm, PhD.c
   * Department of Surgery, CD Laboratory for Bionic Reconstruction
-  * *Medical University of Vienna*
+  * *Medical University of Vienna, Austria*
   * BioPatRec interest: Real-time control and rehabilitation
 
  * Daphne Boere, BME, PhD.c
@@ -49,15 +49,20 @@ Pre-release versions of BioPatRec have been shared to:
   * *Roessingh Research and Development / University of Twente, the Netherlands*
   * !BioPatRec interest: Myoelectric signal processing and PatRec
 
- * Alejandra Aranceta-Garza, BE, PhD.c
-  * Neurohpysiology Bioengineer
-  * *Strathclyde University, Scotland*
-  * !BioPatRec interest: Myoelectric signal processing and PatRec
+ * Vincent Hall, PhD.c
+  * Molecular Organisation and Assembly in Cells
+  * *University of Warwick, England*
+  * BioPatRec interest: PatRec
 
  * Ali H. Al-Timemy, PhD.c
   * Centre for Robotics and Neural Systems
   * *Plymouth University, England*
   * !BioPatRec interest: Myoelectric prosthetic control
+
+ * Alejandra Aranceta-Garza, BE, PhD.c
+  * Neurohpysiology Bioengineer
+  * *Strathclyde University, Scotland*
+  * !BioPatRec interest: Myoelectric signal processing and PatRec
 
  * Morten Bak Kristoffersen, MSc.c
   * Medialogy 
@@ -74,7 +79,7 @@ Pre-release versions of BioPatRec have been shared to:
   * *Norwegian University of Science and Technology, Norway*
   * !BioPatRec interest: General
 
- * GauravJit Singh, BS
+ * !GauravJit Singh, BS.c
   * Biomedical Eng.
   * *Drexel University, USA*
   * !BioPatRec interest: Prosthetic devices and control
