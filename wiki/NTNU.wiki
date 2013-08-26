@@ -4,7 +4,7 @@ NOTE: This is an ongoing development and therefore the documentation is not yet 
 
 = Introduction =
 
-These pages will contain a documentation of the contributions from NTNU. Since this still is a ongoing work, it will be separated from the main hierarchy at this moment.
+These pages will contain a documentation of the contributions from *Norwegian University of Science and Technology* (NTNU). Since this still is a ongoing work, it will be separated from the main hierarchy at this moment.
 
 At this instance, the purpose of this work, is to implement the functionality already in place at the lab at the Institute of Cybernetics at NTNU, over to the !BioPatRec system.
 
