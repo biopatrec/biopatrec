@@ -89,20 +89,30 @@
   * *Drexel University, USA*
   * !BioPatRec interest: Prosthetic devices and control
 
+ * Joel Falk-Dahlin, MSc.c
+  * Complex Adaptive System, Applied Physics.
+  * *Chalmers University of Technology, Sweden*
+  * !BioPatRec interest: Post-processing and control
+
+ * Luca Caltagirone, MSc.c
+  * Complex Adaptive System, Applied Physics.
+  * *Chalmers University of Technology, Sweden*
+  * !BioPatRec interest: Signal processing and PatRec
+
  * Joakim Arver, MSc.c
   * Biomedical Eng.
   * *Chalmers University of Technology, Sweden*
   * !BioPatRec interest: Initial contributions on the [VRE]
 
- * Prathamesh Dhanpalwar, MSc.c
-  * Biomedical Eng.
-  * *Chalmers University of Technology, Sweden*
-  * !BioPatRec interest: Myoelectric signals acquisition
-
  * Ali Fouad, MSc.c / Siva Kumar, MSc.c
   * Complex Adaptive Systems / Biomedical Eng.
   * *Chalmers University of Technology, Sweden*
   * !BioPatRec interest: [PCA], [ICA], [KNN] and [SOM]
+
+ * Prathamesh Dhanpalwar, MSc.c
+  * Biomedical Eng.
+  * *Chalmers University of Technology, Sweden*
+  * !BioPatRec interest: Myoelectric signals acquisition
 
  * Per Förstberg, MSc.c / Gustav Josefsson, MSc.c
   * Biomedical Eng.
