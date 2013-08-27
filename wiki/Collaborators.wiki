@@ -12,12 +12,17 @@
   * *Chalmers University of Technology / Integrum AB, Sweden*
   * [VRE] developer
 
-Pre-release versions of BioPatRec have been shared to:
+== Pre-release versions of BioPatRec have been shared to: ==
 
  * Tim Gale, BE, MEngSc, PhD.
   * Senior Lecturer: Mechatronics and Medical Engineering
   * *University of Tasmania, Australia*
   * !BioPatRec interest: Signal processing and PatRec
+
+ * Ganesh, Naik, PhD.
+  * Chancellor's Post Doctoral Research Fellow, A/DRsch Ctre for Health Technologies
+  * *University of Technology Sydney, Australia*
+  * !BioPatRec interest: Myoelectric signal processing and PatRec
 
  * Tsvi Achler, MD, PhD.
   * Cognitive Computing
@@ -64,7 +69,7 @@ Pre-release versions of BioPatRec have been shared to:
   * *Strathclyde University, Scotland*
   * !BioPatRec interest: Myoelectric signal processing and PatRec
 
- * Morten Bak Kristoffersen, MSc.c
+ * Morten Bak Kristoffersen, MSc
   * Medialogy 
   * *Aalborg University, Denmark*
   * !BioPatRec interest: Augmented Reality
