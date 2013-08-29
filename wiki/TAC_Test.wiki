@@ -10,7 +10,9 @@ The TAC test was originally introduced by Simon _et al._ (2011). For a comprehen
 
 The main differences between the implementation of Simon _et al._ (2011) and ours is that the initial position of the user-controlled hand in their implementation is moved away from the start, and the user has to move it back. In our implementation it is the target position that is moved away from the start.
 
-A test focus exclusivly on the real-time pattern recogtinion would be the [Motion_Test Motion Test].
+A considerably simpler evaluation of this sort was presented in: Dupont, A., & Morin, E. L. (1994). A myoelectric control evaluation and trainer system. IEEE Trans Rehabil Eng, 2(2), 100–107.
+
+NOTE: A test focus exclusively on the real-time pattern recognition would be the [Motion_Test Motion Test].
 
 = Process = 
 
