@@ -64,12 +64,17 @@
   * *Plymouth University, England*
   * !BioPatRec interest: Myoelectric prosthetic control
 
- * Alejandra Aranceta-Garza, BE, PhD.c
+ * Alejandra Aranceta-Garza, PhD.c
   * Neurohpysiology Bioengineer
   * *Strathclyde University, Scotland*
   * !BioPatRec interest: Myoelectric signal processing and PatRec
 
- * Morten Bak Kristoffersen, MSc
+ * Ghulam Rasool, PhD.c
+  * Systems Engineering Department
+  * *University of Arkansas at Little Rock, USA*
+  * !BioPatRec interest: Signal processing and myoelectric control
+
+ * Morten Bak Kristoffersen, MSc.
   * Medialogy 
   * *Aalborg University, Denmark*
   * !BioPatRec interest: Augmented Reality
@@ -82,12 +87,7 @@
  * Alf B. Bertnum, MSc.c / Kristian Berrum, MSc.c
   * Engineering Cybernetics
   * *Norwegian University of Science and Technology, Norway*
-  * !BioPatRec interest: General
-
- * !GauravJit Singh, BS.c
-  * Biomedical Eng.
-  * *Drexel University, USA*
-  * !BioPatRec interest: Prosthetic devices and control
+  * !BioPatRec interest: Initial contribution to [NTNU] section.
 
  * Joel Falk-Dahlin, MSc.c
   * Complex Adaptive System, Applied Physics.
@@ -118,5 +118,11 @@
   * Biomedical Eng.
   * *Chalmers University of Technology, Sweden*
   * !BioPatRec interest: Analog front ends and myoelectric signal acquisition
+
+ * !GauravJit Singh, BS.c
+  * Biomedical Eng.
+  * *Drexel University, USA*
+  * !BioPatRec interest: Prosthetic devices and control
+
 
 Note: To avoid hurting anyone's feelings, the title used corresponds to the time in which they initially received !BioPatRec, unless otherwise requested.
