@@ -57,7 +57,7 @@ The [GUI_PatRec] includes sets of the top features, or more commonly used, for t
    * fID (Vector of cells with the features ID)
   * Output:
    * xFeatures
-  * This funtion call the specific funtions to compute each feature using :
+  * This function call the specific functions to compute each feature using :
    * pF (structure received by each function to compute a feature)
     * pF.ch (channels)
     * pF.sp (samples)
