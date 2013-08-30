@@ -30,6 +30,8 @@ The Matlab/NI drivers are not as stable as you would expect. If you have experie
 
  * *Problem:* Error: 'Attempted to access data(:,1); index out of bounds because size(data)=[0,0].'
   * *Solutions:* This has been solved using the same procedure than the error before.
+ * *Problem:* Error: 'A class definition must be in an "@" directory.'
+ * *Solutions:* The reason for the problem may be use of character '@' in the path of BioPatRec. In fact, OOP in Matlab also uses folders starting with the character '@'. Once you have a '@' in your path, Matlab confuses this character with its procedure for defining a class. The solution is not to use '@' in folder or file names.
 
 = Myoelectric signals recording =
 
