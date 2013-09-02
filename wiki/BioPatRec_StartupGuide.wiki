@@ -42,7 +42,7 @@ The latter will take you to the Signal Treatment GUI, now:
 
  * Select the movements to be used by highlighting the name (all are selected by default)
  * Tick the _Add "rest" as a movement_ if you want to have "no movement" or "rest" as a pattern/class/movement.
- * Select the percentage of the contraction time that you will like to use. If you select _1_, you will include the transient period of the movement. If you chose _0.5_, you will probably only use the signals corresponding to the steady state of the movement or the isometric contraction.
+ * Select the percentage of the contraction time that you will like to use. If you select _1_, you will include the transient period of the movement. If you chose _0.5_, you will probably only use the signals corresponding to the steady state of the movement or the isometric contraction. A 0.7 cTp is recommended see [http://www.scfbm.org/content/8/1/11 BioPatRec article]
  * Select the channels to be used by highlighting the number (all are selected by default)
  * Click _Pre-processing_
 
@@ -54,7 +54,7 @@ Now that the movements and channels have been selected you can
   * The number of available windows with the selected method will be given in _No. windows_
  * Select how many windows will be use for the training, validation and testing set
   * This can be done by changing the percentage or directly the number of windows
-  * Before continue be sure that the _No. windows_ is the same as the _Total_ windows, otherwise you will get an error!
+  * Before continue be sure that the _No. windows_ is the same as the _Total_ windows, otherwise you will get an error! (This is automatically done from TVÅ version)
  * Click _Treat_
 
 The structure [sigFeatures] will be generated as a result, and it can be saved using the menu _Data_ then _Save Features_. This will avoid that you go through the whole signal processing process next time.
