@@ -54,7 +54,7 @@ Now that the movements and channels have been selected you can
   * The number of available windows with the selected method will be given in _No. windows_
  * Select how many windows will be use for the training, validation and testing set
   * This can be done by changing the percentage or directly the number of windows
-  * Before continue be sure that the _No. windows_ is the same than the _Total_ windows, otherwise you will get an error!
+  * Before continue be sure that the _No. windows_ is the same as the _Total_ windows, otherwise you will get an error!
  * Click _Treat_
 
 The structure [sigFeatures] will be generated as a result, and it can be saved using the menu _Data_ then _Save Features_. This will avoid that you go through the whole signal processing process next time.
