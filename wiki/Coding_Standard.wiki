@@ -65,7 +65,7 @@ Names of GUIs must start with "GUI_"
 
  _e.g.: GUI_ThisIsAFuction_
 
-Components inside the GUI are consider as a variables so the follow the same criteria as variables with the addition of to letters that identifies it type of componenet.
+Components inside the GUI are consider as a variables so they follow the same criteria as variables with the addition of to letters that identifies it type of component.
 
  _e.g. A checkbox component would be named "cb_variable"_
 
