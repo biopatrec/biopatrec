@@ -2,6 +2,9 @@
 
 = Feature extraction =
 
+https://biopatrec.googlecode.com/svn/wiki/img/Biopatrec_signalfeatures_featurevectors.png
+_Feature vectors constructed from myoelectric signals.  [http://www.scfbm.org/content/8/1/11 Fig. 4 from BioPatRec paper]_
+
 Although there are few PatRec algorithms that can be feed directly with time series, such as myoelectric signals, the vast majority require discrete values. In our case, these signal features are extracted from fixed time windows, or signal segmentation, handle by SigTreatment.
 
 See BioPatRec_StartupGuide for quick user instructions and BioPatRec_Roadmap for an overview of the functions involved.
