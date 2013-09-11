@@ -24,6 +24,9 @@ The signal treatment module contains routines to:
   * overlap (if required)
   * Number of time windows per set (training, validation and testing)
 
+https://biopatrec.googlecode.com/svn/wiki/img/Biopatrec_paper/Biopatrec_siganlprocessing_timewindow.png
+ _[http://www.scfbm.org/content/8/1/11 Fig. 3 from BioPatRec paper]_
+
 These functions are easily accessible from the [GUI_SigTreatment] which is loaded by the [Load_patRec] function requiring [recSession]. Once the signal segmentation is accomplished, feature extraction continues [SigFeatures]. Additionally, filters can also be called in the GUI_Recordings for one-shot recordings.
 
 See [BioPatRec_StartupGuide] for quick user instructions and [BioPatRec_Roadmap] for an overview of the functions involved.
@@ -31,6 +34,11 @@ See [BioPatRec_StartupGuide] for quick user instructions and [BioPatRec_Roadmap]
 Currently, signal treatment and feature extraction are embedded in the same GUI ([GUI_SigTreatment]). However, since an intermediate structure ([sigTreated]) is created before proceeding with [SigFeatures], these two process can be easily split into different GUIs (if required). We haven't seen the need for that though. 
 
 A summary of features can be find in [BioPatRec_Highlights].
+
+The following illustration shows how the myoelectric signals were treated in the [http://www.scfbm.org/content/8/1/11 BioPatRec paper] experiment.
+
+https://biopatrec.googlecode.com/svn/wiki/img/Biopatrec_paper/Biopatrec_signaltreatment.png
+ _[http://www.scfbm.org/content/8/1/11 Fig. 7 from BioPatRec paper]_
 
 = More signal treatment? =
 
