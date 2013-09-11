@@ -14,7 +14,7 @@ These are all matrices (r x c) of signal features values where:
  * c = columns = number of channels times number of features (set of features, or features vector)
 
 Depending on the PatRec algorithms
-([LDA], [MLP], [RFN],...), the use of the validation set can change, however, the testing set must be used only after the training is completed.
+([DA], [MLP], [RFN],...), the use of the validation set can change, however, the testing set must be used only after the training is completed.
 
 For each xSets there is a xOuts, these are:
 
