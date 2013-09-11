@@ -13,7 +13,8 @@ These are all matrices (r x c) of signal features values where:
  * r = rows = number of sets
  * c = columns = number of channels times number of features (set of features, or features vector)
 
-Depending on the [PatRec_Algorithms], the use of the validation set can change, however, the testing set must be used only after the training is completed.
+Depending on the PatRec algorithms
+([DA], [MLP], [RFN],...), the use of the validation set can change, however, the testing set must be used only after the training is completed.
 
 For each xSets there is a xOuts, these are:
 
@@ -21,10 +22,16 @@ For each xSets there is a xOuts, these are:
  * *vOuts*
  * *tOuts*
 
+xSets and xOuts are ultimately 2 dimensional matrices where sets of a given phase (e.g. training) are stack over each other. Once all movements are merged, they can be distinguished by the xOuts matrices.
+
 These are (r x c) matrices where
 
  * r = rows = number of data sets
  * c = columns = number of outputs 
+
+https://biopatrec.googlecode.com/svn/wiki/img/Biopatrec_paper/Biopatrec_patternrecognition_thexSets.png
+ [http://www.scfbm.org/content/8/1/11 Fig. 5 from BioPatRec paper]_
+
 
 Each data set in this case is a vector of 0s represent an _off_ output, and 1 an _on_ output. e.g. If the features vector r = 3 of xSets, corresponds to the class 2, then in r = 3 of xOut will be: 0 1 0 ...
 
