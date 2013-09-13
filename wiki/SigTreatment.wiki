@@ -7,7 +7,12 @@ NOTE: we are currently on the documentation process
 The signal treatment module contains routines to:
 
  * Remove movements and channels which are of no interest (for any reason)
- * Remove transient periods of the contraction (if required)
+ * Remove transient periods of the contraction (if required). This is done by selecting a contraction time percentage (cTp) between 0 and 1. A cTp of 0.7 is recommended as it includes part of the transient period. The following picture illustrates its effect:
+
+https://biopatrec.googlecode.com/svn/wiki/img/Biopatrec_paper/Biopatrec_cTp.png
+ _[http://www.scfbm.org/content/8/1/11 Fig. 2 from BioPatRec paper]_
+
+
  * Add the _no movement_ or _rest_ condition as a movement automatically from the recorded session.
  * Apply filters
   * Frequency
