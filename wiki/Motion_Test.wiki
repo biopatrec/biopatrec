@@ -2,7 +2,7 @@
 
 = Introduction =
 
-The Motion Test was originally introduced by Kuiken _et al._ (2009) as one of the first real-time evaluations of pattern recognition applied in prosthetic control.The test started by asking the user to mime and keep the random trained motion for a period of time. If it takes acceptable time the system performs next motion. For a comprehensive explanation and rationale of this test, see:
+The Motion Test was originally introduced by Kuiken _et al._ (2009) as one of the first real-time evaluation tools of myoelectric pattern recognition. For a comprehensive explanation and rationale of this test, see:
 
  [http://jama.jamanetwork.com/article.aspx?articleid=183371 Kuiken TA, Lock BA, Lipschutz RDR, Miller LA, Stubbleﬁeld KAK, Englehart KBK, Li G: Targeted muscle reinnervation for real-time myoelectric control of multifunction artiﬁcial arms. JAMA: the journal of the American Medical Association 2009, 301(6):619–628.]
 
