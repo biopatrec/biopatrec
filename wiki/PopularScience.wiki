@@ -26,7 +26,7 @@ It is probably not a surprise for anybody the fact that the media tend to exagge
  * Although the previous points are rather pessimistic, there are a lot of intelligent and dedicated people trying to improve robotic prostheses, so we'll get there!
 
 == Media on artificial limbs ==
-
+ * [http://www.newscientist.com/article/dn24265-man-controls-new-prosthetic-leg-using-thought-alone.html#.UlFY31BmjTo Man controls new prosthetic leg using thought alone] by !NewScientist in Sep 2013.
  * [http://edition.cnn.com/video/#/video/international/2013/05/02/art-movement-michael-mcloughlin-robotic-arm.cnn Robotic arm grasps the future] by CNN in May 2013.
   * A similar (not quite the same) advanced arm was presented by Dean Kamen in 2007, see links at the bottom of the page for comparison. Currently, none of them can be fully control by the patient.
  * [http://www.scienceupdate.com/2012/12/arm/ Thought-controlled prosthetics] by AAAS in Dec 2012.
