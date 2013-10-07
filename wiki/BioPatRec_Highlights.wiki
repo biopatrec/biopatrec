@@ -128,6 +128,7 @@ See the [Important_coding_changes]
    * [ICA]
 
 = Demonstrations =
+Note: If the following videos are not displayed, be sure that you are allowing your browser to run scripts. You will find a little "shield" icon on the top-right of your browser if you are using Chrome. Click it, and allow the scripts.
 
 == Initial testing of simultaneous control  ==
 
