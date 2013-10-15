@@ -25,6 +25,7 @@
  * [Coding_Standard Coding Standard]
  * [Coding_Tips Coding Tips]
  * [Troubleshooting]
+ * [Important_coding_changes Important coding changes]
  * [Collaborators Who's in?]
   * Projects
    * [NTNU]
