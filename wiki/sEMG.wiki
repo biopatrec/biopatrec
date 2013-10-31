@@ -28,6 +28,8 @@ For a very quick overview on sEMG see:
 
  [http://www.delsys.com/Attachments_pdf/WP_SEMGintro.pdf De Luca, C., Surface Electromyography: Detection and Recording: DelSys; 2002.]
 
+ Didactic materials freely available at [http://www.delsys.com/KnowledgeCenter/KnowledgeCenter.html Delsys Knowledge Center] 
+
  See also the recomendation of [http://www.seniam.org/ SENIAM].
 
 For a deeper understanding see:
