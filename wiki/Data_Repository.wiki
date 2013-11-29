@@ -53,7 +53,7 @@ Remember that even if you are using the same data to compare different algorithm
   * Amplifiers:
    * In-house design (!MyoAmpF2F4-VGI8)
    * CMRR > 130 dB
-   * Gain 66 dB
+   * Gain 66 dB (2,000 linear)
    * Embedded active ﬁltering:
     * 4th order high-pass ﬁlter at 20 Hz
     * 2nd order low-pass ﬁlter at 400 Hz
