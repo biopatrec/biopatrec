@@ -39,6 +39,4 @@ In order to easily test and quickly control a prosthesis from the BioPatRec, a V
 
 == Prosthetic Devices ==
 
-We have developed routines to control prosthetic devices using PWMs for servo motors. The output command is transmitted using the Serial Communication Interface (SCI) to a microcontroller (see the Movements_Protocol).
-
-... coming soon...
+We have developed routines to control prosthetic devices using PWMs for servos or DC motors. The output command is transmitted using the Serial Communication Interface (SCI) to a microcontroller (see the Movements_Protocol).
