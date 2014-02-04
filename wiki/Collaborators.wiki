@@ -59,7 +59,7 @@
   * *University of Warwick, England*
   * !BioPatRec interest: PatRec
 
- * Ali H. Al-Timemy, PhD.c
+ * Ali H. Al-Timemy, PhD.c, and Peidong Liang, PhD.c
   * Centre for Robotics and Neural Systems
   * *Plymouth University, England*
   * !BioPatRec interest: Myoelectric prosthetic control
