@@ -26,6 +26,9 @@ It is probably not a surprise for anybody the fact that the media tend to exagge
  * Although the previous points are rather pessimistic, there are a lot of intelligent and dedicated people trying to improve robotic prostheses, so we'll get there!
 
 == Media on artificial limbs ==
+ * [https://www.youtube.com/watch?v=io-jtlPv7y4 Robotic Drumming Prosthesis] by Georgia Tech, Mar 2014.
+ * [http://www.bbc.com/news/health-26036429 Bionic hand allows patient to 'feel'] by BBC, 5 Feb 2014.
+ * [https://www.youtube.com/watch?v=n9wyyuxI9Y8 Restoration of natural sensation] by Cleveland VAMC and CWRU, Dec 2013. 
  * [http://www.cnbc.com/id/101233869 How the business of bionics is changing lives] by CNBC in Nov 2013.
  * [http://www.cnn.com/2013/10/02/tech/innovation/bionic-leg-orig-ideas/ Bionic leg helps shark-attack victim walk] by CNN in Oct 2013. 
  * [http://www.nbcchicago.com/news/local/Chicago-Doctors-Unveil-First-Thought-Controlled-Bionic-Leg-225250672.html Chicago Doctors Unveil First Thought-Controlled Bionic Leg] by NBC and [http://www.newscientist.com/article/dn24265-man-controls-new-prosthetic-leg-using-thought-alone.html#.UlFY31BmjTo NewScientists] in Sep 2013.
