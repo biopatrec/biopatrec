@@ -48,7 +48,7 @@ The latter will take you to the Signal Treatment GUI, now:
 
 Now that the movements and channels have been selected you can
 
- * Select frequency or spatial filters
+ * Select frequency or spatial filters (See SigTreatment for more info)
  * Select the way to extract time windows
   * _Overlapped Cons_ is normally used with a time window length of 0.2 seconds and overlap of 0.05 seconds
   * The number of available windows with the selected method will be given in _No. windows_
