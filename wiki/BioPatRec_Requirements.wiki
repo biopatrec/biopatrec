@@ -11,12 +11,12 @@ BioPatRec was initially developed in Matlab `R2009`, however the latest version 
 
 == Running on Mac ==
 
-comments...
+Everything seems to work currently when running a virtual machine with windows.
 
 
 == Running on Linux ==
 
-Everything seems to work currently when running a virtual machine with windows, even de data acquisition and VRE.
+Everything seems to work currently when running a virtual machine with windows, even the data acquisition and VRE.
 
 == Data Acquisition ==
 
