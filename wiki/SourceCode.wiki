@@ -1,0 +1,23 @@
+#summary Source code and data repository
+
+Since it is not longer possible to upload new files in the "Downloads" section (according to google some ppl were abusing it). The source code is now distributed via google drive (zip files). The source code has been split from the recording repository to facilitate the distribution.
+
+= BioPatRec Source Code =
+
+Description of the releases in [BioPatRec_Highlights BioPatRec Highlights]
+
+ * [https://drive.google.com/file/d/0B7walwEpPjq3U1VfWV8yV0ppUXc/edit?usp=sharing BioPatRec TVÅ]
+
+ * [https://drive.google.com/file/d/0B7walwEpPjq3Rnhla3VYQzlHUE0/edit?usp=sharing BioPatRec ETT]
+
+= EMG Repository =
+
+Description of the data sets in [Data_Repository Data Repository]
+
+ * [https://drive.google.com/file/d/0B7walwEpPjq3VjFlZlJGV3Q4WlU/edit?usp=sharing 6mov8chFUS]
+
+ * [https://drive.google.com/file/d/0B7walwEpPjq3Z1NESVFOeDBIWTA/edit?usp=sharing 10mov4chForearmUntargeted]
+
+ * [https://drive.google.com/file/d/0B7walwEpPjq3SE1JRjEzN2hiT0k/edit?usp=sharing 6mov8chFUS_MLP_Th]
+
+ * [https://drive.google.com/file/d/0B7walwEpPjq3SXdkRk9rOFhER1k/edit?usp=sharing 6mov8chFUS_MLP_Topologies]
