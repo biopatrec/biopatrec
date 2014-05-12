@@ -4,6 +4,8 @@ This folder contains a repository of myoelectric recording sessions ([recSession
 
 Remember that even if you are using the same data to compare different algorithms, small variations in signal processing and training settings can make a difference on the final results.
 
+The recording session described below can be download from [SourceCode Source Code]
+
 == 10mov4chUntargetedForearm ==
   * 10 hand and wrist motions
    * Hand Open/Close
