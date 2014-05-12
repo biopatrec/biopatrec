@@ -100,6 +100,8 @@ The TVÅ version contains all features of !BioPatRec ETT, plus:
   * Different classifier topologies (see [PatRec_Topologies])
   * New algorithms
    * [MLP_th]
+   * [SOM]
+   * [SSOM]
 
  * *Control*
   * New control algorithms:
@@ -122,8 +124,6 @@ See the [Important_coding_changes]
  * *Pattern Recognition*
   * New algorithms
    * [PCA]
-   * [SOM]
-   * [SSOM]
    * [KNN]
    * [ICA]
 
