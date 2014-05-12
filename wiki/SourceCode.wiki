@@ -2,6 +2,8 @@
 
 Since it is not longer possible to upload new files in the "Downloads" section (according to google some ppl were abusing it). The source code is now distributed via google drive (zip files). The source code has been split from the recording repository to facilitate the distribution.
 
+Google drive might show you the content of each zip file, so just click "File" and then "Download".
+
 = BioPatRec Source Code =
 
 Description of the releases in [BioPatRec_Highlights BioPatRec Highlights]
