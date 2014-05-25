@@ -26,6 +26,7 @@ It is probably not a surprise for anybody the fact that the media tend to exagge
  * Although the previous points are rather pessimistic, there are a lot of intelligent and dedicated people trying to improve robotic prostheses, so we'll get there!
 
 == Media on artificial limbs ==
+ * [http://www.armytimes.com/videonetwork/3167215175001/Marine-is-First-to-Receive-Experimental-Prosthetic-Control-System Marine is first to recieve experimental prosthetic control system] by Military Times, 2014.
  * [http://www.bbc.com/news/technology-27373329 Robot hand and arm gets official approval] by BBC, May 2014.
   * See related link at the bottom of this page.
  * [http://www.npr.org/2014/03/07/283458260/can-a-prosthetic-limb-feel Can a prosthetic limb feel?] by TED hour, Mar 2014.
