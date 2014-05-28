@@ -25,5 +25,8 @@ Each of the three first parts, are representing the steps in the model from the 
 
 https://biopatrec.googlecode.com/svn/wiki/img/Prosthesis_Control_Model_and_SimProp2D.jpg
 
+= Source code =
+
+ * [https://drive.google.com/file/d/0B7walwEpPjq3MnFxem5WaWxFSTQ/edit?usp=sharing BioPatRec ETT NTNU]
 = References =
  # Fougner, Anders. Robust, Coordinated and Proportional Myoelectric Control of Upper-Limb Prostheses. Diss. Norwegian University of Science and Technology, 2013.
