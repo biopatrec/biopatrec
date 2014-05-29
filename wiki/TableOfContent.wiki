@@ -21,8 +21,7 @@
   * [motionTest]
   * [tacTest]
  * [Data_Repository Data Repository]  
- * Data sets
-  * [xSets]
+ * Data sets: the [xSets]
  * [Coding_Standard Coding Standard]
  * [Coding_Tips Coding Tips]
  * [Troubleshooting]
@@ -30,3 +29,4 @@
  * [Collaborators Who's in?]
   * Projects
    * [NTNU]
+ * [PopularScience Popular Science]
