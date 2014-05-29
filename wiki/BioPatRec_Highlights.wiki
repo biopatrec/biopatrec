@@ -130,6 +130,12 @@ See the [Important_coding_changes]
 = Demonstrations =
 Note: If the following videos are not displayed, be sure that you are allowing your browser to run scripts. You will find a little "shield" icon on the top-right of your browser if you are using Chrome. Click it, and allow the scripts.
 
+== Used for the treatment of PLP  ==
+
+<wiki:video url="https://www.youtube.com/watch?v=0wp-SigTeLs"/>
+
+[http://journal.frontiersin.org/Journal/10.3389/fnins.2014.00024/abstract Link to the scientific article]
+
 == Initial testing of simultaneous control  ==
 
 <wiki:video url="http://www.youtube.com/watch?v=6W5plVzXe1k&feature=player_detailpage"/>
