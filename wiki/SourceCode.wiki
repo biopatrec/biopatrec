@@ -8,7 +8,7 @@ Google drive might show you the content of each zip file, so just click "File" a
 
 Description of the releases in [BioPatRec_Highlights BioPatRec Highlights]
 
- * [https://drive.google.com/file/d/0B7walwEpPjq3U1VfWV8yV0ppUXc/edit?usp=sharing BioPatRec TVÅ] ([http://ieeexplore.ieee.org/xpl/articleDetails.jsp?arnumber=6744619 reference])
+ * [https://drive.google.com/file/d/0B7walwEpPjq3U1VfWV8yV0ppUXc/edit?usp=sharing BioPatRec TVÅ] ([http://ieeexplore.ieee.org/xpl/articleDetails.jsp?arnumber=6744619 reference], this is an open access article, please ask for it to IEEE if they "forget" it and block its free access {{{[it has happened]}}})
 
  * [https://drive.google.com/file/d/0B7walwEpPjq3Rnhla3VYQzlHUE0/edit?usp=sharing BioPatRec ETT] ([http://www.scfbm.org/content/8/1/11/ reference])
 
