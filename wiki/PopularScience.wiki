@@ -52,6 +52,10 @@ It is probably not a surprise for anybody the fact that the media tend to exagge
  * [http://www.youtube.com/watch?v=3HsccKwoeOM&feature=related Modular Prosthetic Limb] by JHU/APL sometime before Feb 2011.
  * [http://youtu.be/R0_mLumx-6Y Dean Kamen's Robotic "Luke" Arm] by Spectrum Magazine in 2008.
 
+*Hardware on budget*
+ * [http://www.gereports.com/post/93402305860/the-boy-and-the-bionic-hand-a-chance-hospital The Boy and the Bionic Hand] by GE in Aug 2014.
+ * [http://www.gizmag.com/inexpensive-prostheses/26009/ Inexpensive home-brewed prostheses created using 3D printers] by Gizmag in Jan 2013.
+
 *Alternatives*
  * [http://youtu.be/FTJW5YSRZhw 7 Finger Robot] by MIT July 2014.
 
