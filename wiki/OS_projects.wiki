@@ -1,0 +1,13 @@
+#summary other open source projects
+
+= General =
+
+ *[http://openprosthetics.org/ Open Prosthetics]
+
+= Control =
+
+ * [http://www.sce.carleton.ca/faculty/chan/index.php?page=matlab Myoelectric Control (MECLab)]
+
+= Hardware =
+
+ * [http://opensourcehand.wordpress.com/ Open Source Hand]
