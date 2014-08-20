@@ -29,4 +29,5 @@
  * [Collaborators Who's in?]
   * Projects
    * [NTNU]
+ * [OS_projects Related open source projects]
  * [PopularScience Popular Science]
