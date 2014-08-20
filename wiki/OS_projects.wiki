@@ -2,7 +2,7 @@
 
 = General =
 
- *[http://openprosthetics.org/ Open Prosthetics]
+ * [http://openprosthetics.org Open Prosthetics]
 
 = Control =
 
