@@ -20,10 +20,9 @@ Settings such as learning rate (eta) and ANN topology can be done in the main fu
 NOTE: The number of hidden neurons can be different for each hidden layers. It also can be smaller than the number of input neurons if several layers exist, however `nHn = nIn/2` will cause an error. In any case, a rule of thumb is to use at least the same number of hidden neurons as input neurons.  
 
 If you want to edit the number of hidden neurons without restrictions, there need to be some changes in the following functions: 
-In ANN_Perceptron change line 51 to this line:
+In ANN_Perceptron change line 52 to this line:
 
-`% Randomize weights -+1 
-ANN.w(1:max([nHn nIn nOn]),1:max([nHn nOn]),1:length(nHn)+1) = -1 + rand(max([nHn nIn nOn]),max([nHn nOn]),length(nHn)+1) .* 2;  % weight`
+`ANN.w(1:max([nHn nIn nOn]),1:max([nHn nOn]),1:length(nHn)+1) = -1 + rand(max([nHn nIn nOn]),max([nHn nOn]),length(nHn)+1) .* 2;  % weight`
 
 And in Init_ANN_Perceptron change ANN.w and ANN.dw to
 
