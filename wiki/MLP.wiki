@@ -22,14 +22,14 @@ NOTE: The number of hidden neurons can be different for each hidden layers. It a
 If you want to edit the number of hidden neurons without restrictions, there need to be some changes in the following functions: 
 In ANN_Perceptron change line 51 to this line:
 
-% Randomize weights -+1 
-ANN.w(1:max([nHn nIn nOn]),1:max([nHn nOn]),1:length(nHn)+1) = -1 + rand(max([nHn nIn nOn]),max([nHn nOn]),length(nHn)+1) .* 2;  % weight
+`% Randomize weights -+1 
+ANN.w(1:max([nHn nIn nOn]),1:max([nHn nOn]),1:length(nHn)+1) = -1 + rand(max([nHn nIn nOn]),max([nHn nOn]),length(nHn)+1) .* 2;  % weight`
 
 And in Init_ANN_Perceptron change ANN.w and ANN.dw to
 
-ANN.w       = zeros(max([nHn nIn nOn]),max([nHn nOn]),length(nHn)+1);  % weight
+`ANN.w       = zeros(max([nHn nIn nOn]),max([nHn nOn]),length(nHn)+1);  % weight`
 
-ANN.dw      = zeros(max([nHn nIn nOn]),max([nHn nOn]),length(nHn)+1);  % capital delta weight or change in weight
+`ANN.dw      = zeros(max([nHn nIn nOn]),max([nHn nOn]),length(nHn)+1);  % capital delta weight or change in weight`
 
 Because nIn should only concern the first dimension (inputlayer). If used in the 2nd dimension (as in the original code) there will be an error that matrix dimensions don't agree if nHn < nIn.
 
