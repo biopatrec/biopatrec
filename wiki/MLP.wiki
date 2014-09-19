@@ -30,7 +30,7 @@ And in Init_ANN_Perceptron change ANN.w and ANN.dw to
 
 `ANN.dw      = zeros(max([nHn nIn nOn]),max([nHn nOn]),length(nHn)+1);  % capital delta weight or change in weight`
 
-Because nIn should only concern the first dimension (inputlayer). If used in the 2nd dimension (as in the original code) there will be an error that matrix dimensions don't agree if nHn < nIn.
+Because nIn should only concern the first dimension (inputlayer). If used in the 2nd dimension of the weight matrix (as in the original code) there will be an error that matrix dimensions don't agree if nHn < nIn.
 
 
 == Training Algorithms ==
