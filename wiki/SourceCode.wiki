@@ -16,7 +16,7 @@ Description of the releases in [BioPatRec_Highlights BioPatRec Highlights]
 
 Description of the data sets in [Data_Repository Data Repository]
 
- * [https://drive.google.com/file/d/0B7walwEpPjq3VjFlZlJGV3Q4WlU/edit?usp=sharing 6mov8chFUS] - [http://ieeexplore.ieee.org/xpl/articleDetails.jsp?arnumber=6744619 reference article].
+ * 6mov8chFUS [https://drive.google.com/file/d/0B7walwEpPjq3VjFlZlJGV3Q4WlU/edit?usp=sharing Site 1], [https://www.dropbox.com/s/ooxw0a57dmqr2a8/6mov8chFUS.zip?dl=0 Site 2] - [http://ieeexplore.ieee.org/xpl/articleDetails.jsp?arnumber=6744619 reference article].
 
  * [https://drive.google.com/file/d/0B7walwEpPjq3Z1NESVFOeDBIWTA/edit?usp=sharing 10mov4chForearmUntargeted] -  [http://www.scfbm.org/content/8/1/11/ reference article].
 
