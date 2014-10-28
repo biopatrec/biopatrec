@@ -13,7 +13,11 @@ This is a quick and general overview of the most relevant functions used in BioP
    * [InitSBI_NI]
 
  * [pb_ApplyButter] (Apply Butter)
-  * [ApplyButterFilter]
+  * ApplyButterFilter
+
+ * [pb_Extract] (Extract Signal Features)
+  * ExtractSigFeature
+   * GetSigFeatures
 
  * Menus
   * File
@@ -27,8 +31,12 @@ This is a quick and general overview of the most relevant functions used in BioP
    * Recording Session
     * GUI_RecordingSession
   * Filters
-   * ...
-   * ...
+   * Power Line Harmonics
+   * Notch 50 Hz
+   * Spatial
+    * SDF
+    * DDF
+    * DDF Abs
 
 == GUI_Recording Session ==
 
