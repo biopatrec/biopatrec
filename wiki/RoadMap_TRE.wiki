@@ -1,0 +1,145 @@
+#summary Tree-like representation of the most relevant routines
+
+= Function Roadmap BioPatRec TRE =
+
+This is a quick and general overview of the most relevant functions used in BioPatRec. These are functions or GUIs names.
+
+= Recordings (SigRecordings)=
+
+== GUI_Recordings ==
+
+ * [pb_StartRecording] (Start Recording)
+  * [DAQShow_SBI]
+   * [InitSBI_NI]
+
+ * [pb_ApplyButter] (Apply Butter)
+  * [ApplyButterFilter]
+
+ * Menus
+  * File
+   * Load
+    * DataShow or,
+    * GUI_RecordingSessionShow
+    * Compatibility_recSession (if necessary)
+  * Recordings
+   * One-shot
+    * pb_StartRecording
+   * Recording Session
+    * GUI_RecordingSession
+  * Filters
+   * ...
+   * ...
+
+== GUI_Recording Session ==
+
+ * pb_Record
+  * calls GUI_Recordings 
+  * calls GUI_AFEselection 
+   * pb_record (GUI_AFEselection)
+    * RecordingSession
+      * for SBI - NI
+       * InitSBI_NI
+       * DataShow
+
+== GUI_RecordingSessionShow ==
+
+ * pb_Load
+  * DataShow
+
+= Signal Treatment (SigTreatment)=
+
+ * pb_preProcessing (in GUI_SigTreatment, and uses [recSession])
+  * PreProcessing
+   * Split_recSession_Mov
+   * Split_recSession_Ch
+   * RemoveTransient_cTp (returns [sigTreated])
+   * AddRestAsMovement (uses [recSession] and complements [sigTreated])
+
+ * pb_treat (in GUI_SigTreatment, and uses [sigTreated])
+  * TreatData 
+   * ApplyFilters
+    * [Filters]
+   * GetData (returns sets of raw signal trData, vData and tData)
+    * Time window cutting (Non-overlapped, Overlapped cons, etc..)
+
+  * Signal features extraction proceeds (see below)
+
+ * pb_treatFolder
+  * Same than pb_treat but for a set of files located in a specific folder. The files must be named: 1, 2, 3,...
+
+= Signal Features (SigFeatures)=
+
+  * GetAllSigFeatures (uses [xData] and returns [sigFeatures])
+   * GetSigFeatures
+    * Calls every feature computation routines {{{GetSigFeatures_xxx}}}
+
+= Pattern Recognition (PatRec) =
+
+ * Main GUI: [GUI_PatRec]
+
+ * OfflinePatRec
+  * Rand_sigFeatures
+  * Get the [xSets]
+   * GetSets_Stack, or
+   * GetSets_Stack_IndvMov, or
+   * GetSets_Stack_MixedOut
+  * Normalize_TrV
+  * Creates ([PatRec_Topologies])
+  * OfflinePatRecTraining (returns [patRec])
+   * xTraining routines (MLP, LDA, etc...)
+  * [Accuracy_patRec] (uses [patRec])
+   * NormalizeSet
+   * OneShotPatRecClassifier
+    * Calls ([PatRec_Topologies])
+     * OneShotPatRec
+      * xTest routines
+
+ * RealtimePatRec (uses [patRec])
+  * InitSBI_NI
+  * [SignalProcessing_RealtimePatRec]
+   * ApplyFilters
+   * GetSigFeatures
+   * NormalizeSet
+  * OneShotPatRecClassifier
+    * Calls ([PatRec_Topologies])
+     * OneShotPatRec
+      * xTest routines
+
+= Control Algorithms =
+
+see [Control]
+
+ * InitControl
+ * ApplyControl
+
+ Used inside of:
+   * RealtimePatRec
+   * MotionTest
+   * TACTest
+
+= Device Control =
+
+see [Motors_Protocol]
+
+=== Object-oriented (OOP) ===
+ * Move buttons at GUI_TestPatRec_Mov2Mov
+  * MoveMotor (GUI)
+   * Update2PWMusingSCI (DC motors)
+   * UpdatePWMusingSCI_PanTilt (Servo motors) 
+ * RealtimePatRec
+  * MotorsOn / MotorsOff (real-time)
+   * Update2PWMusingSCI (DC motors)
+   * UpdatePWMusingSCI_PanTilt (Servo motors)
+
+ * Using Standard Prosthetic Components (SPC) and wifi
+  * Move buttons at GUI_TestPatRec_Mov2Mov
+   * MoveMotorWifi
+    * ActivateSP_FixedTime
+  * RealtimePatRec
+   * MotorsOn_SPCwifi
+   * MotorsOff_SPCwifi
+
+=== Non-OOP ===
+ * ActivateMotors
+  * Update2PWMusingSCI (DC motors)
+  * Not working for servo motors
