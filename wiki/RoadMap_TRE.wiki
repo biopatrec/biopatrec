@@ -44,7 +44,12 @@ This is a quick and general overview of the most relevant functions used in BioP
   * calls GUI_Recordings 
   * calls GUI_AFEselection 
    * pb_record (GUI_AFEselection)
-    * RecordingSession or RampRecordingSession (if Ramp is selected)
+    * if RAMP is selected
+     * ObtainRampMin
+     * ObtainRampMax
+     * RampRecordingSession
+    * else
+     * RecordingSession 
       * for SBI - NI
        * InitSBI_NI
        * DataShow
