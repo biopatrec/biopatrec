@@ -9,8 +9,8 @@
  * rT (relaxation time)
  * nM (number of movements)
  * nR (number of repetitions)
- * dev (device used for the recordings)
  * nCh (number of channels)
+ * dev (device used for the recordings)
  * mov (description of the movements performed)
  * date
  * cmt (comments)
@@ -18,7 +18,7 @@
 
 Previously due to the heritage of the [EMG_AQ] the following fields were included
 
- * cTp (contration time percentage)
- * trdata( data extracted using the cTp)
+ * cTp (contraction time percentage)
+ * trdata(data extracted using the cTp)
 
-These two fields are now removed from the [recSession] and became part of [sigTreated]. 
+These two fields are no longer in the [recSession] and became part of [sigTreated]. 
