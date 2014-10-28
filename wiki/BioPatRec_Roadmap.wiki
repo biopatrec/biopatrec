@@ -1,5 +1,9 @@
 #summary Tree-like representation of the most relevant routines
 
+ * [[RoadMap_ETT]]
+ * [[RoadMap_TVA]]
+ * [[RoadMap_TRE]]
+
 = Introduction =
 
 This is a quick and general overview of the most relevant functions used in BioPatRec. These are functions or GUIs names.
