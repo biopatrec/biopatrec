@@ -51,7 +51,7 @@ The recording session described below can be download from [SourceCode Source Co
   * Electrodes were equally spaced around the most proximal third of the forearm.
   * The first channel was always placed along the extensor carpi ulnaris
   * The proximal electrode of each bipole was always connected to the positive terminal of the BioAmp.
-  * 17 subjects
+  * 17 subjects ([http://ieeexplore.ieee.org/xpl/articleDetails.jsp?arnumber=6744619 published study])
   * Amplifiers:
    * In-house design (!MyoAmpF2F4-VGI8)
    * CMRR > 130 dB
