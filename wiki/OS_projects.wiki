@@ -1,6 +1,6 @@
 #summary other open source projects
 
-These are few links to other open source projects related to prosthetics
+These are few links to other open source projects related to limb prosthetics
 
 = General =
 
@@ -13,6 +13,11 @@ These are few links to other open source projects related to prosthetics
 = Hardware =
 
  * [http://www.openhandproject.org./ The Open Hand Project]
+ * [http://www.openbionics.com Open Bionics]
  * [http://opensourcehand.wordpress.com/ Open Source Hand]
  * [https://www.dropbox.com/sh/hwy7ayc3t47g6i7/AADvk3FDkp9xKv0K514O5eHda?dl=0 Wrist Quick Disconnect]
  * [http://www.unb.ca/research/institutes/biomedical/pdcp.html The Prosthetic Device Communication Protocol (PDCP)]
+
+= Data =
+
+ * [http://ninapro.hevs.ch/ Ninaweb] (sEMG and kinematic data of hand movements)
