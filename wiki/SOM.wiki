@@ -4,64 +4,63 @@ NOTE: This is an ongoing development and therefore the documentation is not yet 
 
 = Introduction =
 
-Self-Organizing Map is  unsupervised  artificial neural network. SOM consists of nodes or neurons represented by one or two dimensional grid ,the usual arrangement of the neurons is a regular spacing in a hexagonal or rectangular grid. Each  neuron has a weight vector of the same dimension as the input data vectors.
+Self-Organizing Map (SOM) is an unsupervised Artificial Neural Networks (ANN) that was introduced and developed by Teuvo Kohonen (1982). The basic model of SOM consists of an input layer fully connected as a forward connection to an output layer (computational layer). This output layer contains a fixed number of output neurons arranged in a two dimensional grid of R rows and C columns in a regular spacing hexagonal or rectangular grid shape. Each output neuron is represented by d-dimensional weights vector W=[w,,1,,,w,,2,,,...,w,,d,,] , which is basically the input-output connections. Intuitively, the weight vector (W) is required to be as same dimension as the input layer.
 
-In summary, SOM is feedforward structure based on competitive learning, the output neurons of the network compete among themselves and the closest neuron to the input data set going to be the winning neuron.
-The principal goal of SOM is to transform the high dimension (arbitrary dimension) input data into one or two dimensional discrete map.
+The fundamental goal of the SOM is to transform the high-dimensional input space into two-dimensional output space. However, during the 'training' process, the weights vector (W) is updated to preserve geometric relationships (topologies) in such a way that the identical input patterns are mapped into closely located output neurons and, vice-versa. Having done the training process, the training set were mapped into 2-dimensional grid and  used as references for making a prediction. The prediction of SOM is made based on the geometric relationship between the references and the output neuron of any testing pattern, which makes SOM one of the most popular classifiers.
 
-= Algorithm =
-There are two training methods:
- * Stochastic Training.
- * Batch Training.
+= Training algorithms =
+There are two training methods to create the geometric relationship:
+ * Stochastic^[1]^ Training (default).
+ * Batch^[2]^ Training.
 
  == Stochastic Training^[1]^.==
- The algorithm is summarized as follows:
+ The algorithm can be summarized by the following steps:
 
-  # *Initialization:* Randomly choosing the initial weight vectors _W,,j,,_ with same dimension of input data.The only restriction is that _W,,j,,_ to be different for _j=1,2,...,n_ where _n_ is the number of neurons in the grid.
-  # *Sampling:* Draw randomly the input vector _x_ from the input data sets.
-  # *Similarity matching:* Find the best-matching(winning) neuron _i(x)_ at time-step _t_ by using the minimum-euclidean distance criterion where
-        _i(x)=arg min || x(t) - W,,j,, | , j=1,2,...,n_
-  # *Updating:* Adjust the synaptic-weight vector of all excited neurons by using the update formula *_W,,j,,(t+1)=W,,j,,(t) + eta(t) h,,cj,,(t) ( x(t) - W,,j,,(t) )    ,   j=1,2,...,n_*  where _eta(t)_ is a learning rate parameter and _h,,cj,,(t)_ is the neighborhood function centered around the winning neuron _i(x)_; both _eta(t)_ and _h,,cj,,(t)_are varied dynamically during learning.
-  # *Continuation:* Continue  step 2 to 4 for some iterations.
+  For each iteration _t_:
+  # *Sampling:* Randomly choose 70% of the input patterns from the training patterns set _X_.
+  # *Similarity matching:* For each of the selected pattern _k_, the Best-Matching Neuron (BMN) is selected competitively by using the Euclidean Distance as a criterion for measuring the similarity between _x(k,d)_ and _W(i,d)_:
+        _*c= min,,i,, || x,,k,d,,(t) - W,,i,,(t) | | , ∀ i*_
+  # *Updating:* The weights of the neurons are updated cooperatively, in such a way that the winner _W(c,d)_ and neighbor neurons - that centered around the winner on the grid - are updated to be more similar to _X(k,d)_:
+   _*W,,i,d,,(t+1)=W,,i,d,,,(t) + eta(t) h,,ci,,(t) ( x,,k,d,,(t) - W,,i,d,,(t) ) ,   ∀ i*_ 
+   
+   where _eta(t)_ ∈ (0,1) is learning rate at training step _t_, and  _h,,ci,,(t)_ ∈ [0,1] is the value of the neighborhood function at neuron _i_ when neighborhood function is centered on the winner _c_ at training step _t_.
+4. Repeat step 2 and 3 for each pattern _k_. 
+
+5. Repeat previous steps unit _t_=50. 
 
  
  == Batch Training^[2]^.==
- In the Batch Training the weight vectors for all input data vectors are simultaneously updated.
 
- The algorithm is summarized as follows:
-  # Randomly choosing the initial weight vectors  _W,,j,,_ with same dimension of input data.The only restriction is that _W,,j,,_ to be different for _j=1,2,...,n_ where _n_ is the number of neurons in the grid.
-  # Find the best-matching(winning) neuron _i(x)_ according to 3 in Stochastic Training.
-  # For each wining neuron _j_ calculate _S,,j,,_ is the sum of corresponding input data sets _x,,i,,_ to  wining neuron _j_
-           _S,,j,,_=sum(_x,,i,,_)   ,_i=1,2......,m_ where _m_ is the number of the input data sets corresponding to  wining neuron _j_ and _j=1,2,...,n_ where _n_ is the number of neurons in the grid.
-  # For each wining neuron _j_ calculate _A,,j,,_ is the number of input data sets _x,,i,,_ corresponding to that winning neuron _j_
-  # _W(t+1)_= (_h,,ij,,(t)_  _S(t)_ ) / (  _A(t)_  _h,,ij,,(t)_ ). where _h,,ij,,(t)_ is a neighborhood function centered around the wining neuron _i_ at time _t_.
-  # Continue  step 2 to 5 for some iterations.
-
- == Classification==
-
- # For a test set x, find the best-matching(winning) neuron i(x) according to 3 in Stochastic Training. 
- # Find the nearest labeled neuron to i(x).
- # The output of test set is the associated label to the nearest labeled neuron.
-
-
+ The algorithm can be summarized by the following steps:
+ 
+ For each iteration _t_:
+  # For each training pattern _x(j,d)  ,∀ j_, the BMN is selected competitively by using the Euclidean Distance as a criterion for measuring the similarity between _x(j,d)_ and _W(i,d)_:
+   _*c,,j,,= min,,i,, || x,,j,,(t) - W,,i,, | | , ∀ i,j*_
+  # The indexes _c_ are partitioned into _G_ different groups of Voronoi cell, considering that same _c_  can associate to one or _m_ different training patterns as Voronoi cell.
+  # The neurons weights  are updated according to : 
+   _*W,,i,,(t+1)=(∑,,g=1,, m,,g,,  h,,ci,,(t)  ̅X,,g,,) / (∑,,g=1,, m,,g,,  h,,ci,,(t))  if  (∑,,g=1,, m,,g,,  h,,ci,,(t)) ≠ 0, ∀ i*_ 
+   otherwise _*W,,i,,(t+1)=W,,i,,(t)*_
+ Where _m,,g,,_ ≥ 1 is the number of BMN in Voronoi cell _g_,  _ ̅X,,g,,_ is the mean of the associated training patterns to the Voronoi cell _g_, and _h,,ci,,_ ∈ [0,1] is the value of the neighborhood function at neuron _i_ when neighborhood function is centered on Voronoi cell g.   
+ 
+ 4.Repeat previous steps unit _t_=50.
 = Implementation =
 
  When SOM is selected as PatRec algorithm in the [GUI_PatRec], an additional GUI for configuration of SOM (GUI_SOM) will automatically appear. This GUI allows the selection of different Grid Shape, Neighbor Functions and Visualization of the Map.
 
 * Grid Shape
- * Rectangular Grid
- * Hexagonal Grid
+ * Rectangular Grid.
+ * Hexagonal Grid (default).
 
 * Neighbor Function
- * Bubble
- * Gaussian
- * Cutgaussian
- * Epinchikov
- * Butter worth 2nd order
+ * Bubble.
+ * Gaussian.
+ * Cutgaussian.
+ * Triangular.
+ * Butter worth 2nd order (default).
 
 * Visualize U-matrix
- * yes
- * No 
+ * yes.
+ * No (default). 
 
 These parameters are saved in a struct variable (_algConf_) and then added to the [GUI__PatRec] handles to later be retrieved for OfflinePatRec. See [Important_coding_changes] for more details.
 
