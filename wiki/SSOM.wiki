@@ -3,28 +3,38 @@
 NOTE: This is an ongoing development and therefore the documentation is not yet ready.
 = Introduction =
 
-Supervised Self-Organizing Map (SSOM) is a supervised artificial neural network, this network  has the same model as  [SOM]. The learning in this model is based on  supervised learning i.e. the input-output transformations are adjusted by the system parameters.  
+Supervised Self-Organizing Map (SSOM) is the supervised version of [SOM]. It is generally known as the supervised learning that takes the class-identity into account in the learning phase. The idea behind SSOM is summarized as that, throughout the learning phase, each output neuron _i_ makes its own prediction _Y(i,M)_  of M movements which represents the percentage of the learning that was gained.   
 
 
 = Algorithm  ^[1]^=
- Generally, SSOM algorithm  has the same model as  [SOM] even the training methods . In order to make SSOM  , the input vector is formed into two parts _trSets_ = [_trSets_ , _trOuts_], where _trSets_ is the input features matrix and _trOuts_ is the corresponding labels matrix.      
+ Generally, SSOM algorithm has the same network architecture as in [SOM] even the training methods . In order to make SSOM ,the training set (_X_) and weights matrix (_W_) were formed as:
+  _*X,,n,d+M,, = [X,,n,d,, , O,,n,M,,]*_.
+   _*W,,i,d,M,,=[W,,i,d,, , Y,,i,M,,]*_.
+
+ Where  _X,,n,d,,_  denotes the input training patterns, having _d_ to represent the features per pattern _n_. _O,,n,M,,_ is the label vector (class-identity) which is associated with pattern _n_, consisting of _M_ movements that can take values at 1 or 0 assigned to either one or two movements. The _W,,i,d,,_ is weights vector per neuron _i_ initialized randomly, and _Y,,i,M,,_ is the prediction of neuron _i_ per M movements which is also initialized randomly.      
 
 There are two training methods:
  * Stochastic Training.
- * Batch Training.
+ * Batch Training (default).
 see training methods of [SOM]
 
  
-
- == Classification==
-
- # Take out same dimension of _trOuts_ from the weight matrix that represents the output for the neurons. 
- # For test set x, find the best-matching(winning) neuron i(x) according to 4 in Stochastic Training.
- # The classification of x is the associated output to i(x) .
-
 = Implementation =
 
-see the implementation of [SOM]
+* Grid Shape
+ * Rectangular Grid (default).
+ * Hexagonal Grid.
+
+* Neighbor Function
+ * Bubble.
+ * Gaussian (default).
+ * Cutgaussian.
+ * Triangular.
+ * Butter worth 2nd order.
+
+* Visualize U-matrix
+ * yes.
+ * No (default). 
  
 
 = Functions Roadmap =
