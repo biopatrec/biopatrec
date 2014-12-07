@@ -5,28 +5,24 @@ not yet finalized.
 
 = Introduction =
 
- k-Nearest Neighbor Semi (k-NNS) is a modified algorithm of the traditional k-Nearest Neighbor (k-NN). It is a non parametric lazy learning algorithm, and one of most simple machine learning algorithms. The basic idea of k-NNS is, finding a group of k training vectors in the training set that are closest (neighbors) to the test vector, and then making a prediction for this group. So, that requires memorizing the entire training data and training label.
+k-Nearest Neighbour Semi (k-NNS) is a modified algorithm of the traditional k-Nearest Neighbour (k-NN). It is a non-parametric lazy learning algorithm characterized as being one of the simplest machine learning algorithms. The purpose of k-NNS is focused on finding a group of k training patterns in the training set that are closest (in Euclidean distance) to the testing pattern followed by a certain classifications based upon the label on the predominance of particular classes in k.
 
- The prediction of k-NNS is based on making a prediction for each class, which is the proportion of each class exists in this group, and the output of k-NNS includes only the class that got a prediction more than or equal to 0.5.
- 
- The performance of k-NNS is primarily  based on the size of that group (k), where estimation of the group size  represents a knowledge of the data distribution. Different methods deal with the issue of k, but evaluating the classification accuracy of the validation's data with different values of k might be one of best estimation methods.
+The prediction of k-NNS differs from k-NN in that, the first has a prediction which is individual-class prediction based on proportion per class which exists in k, whereas the second is based on Majority Voting ^[1]^ to determine the dominant class in k.. More precisely, the output of k-NNS includes only the classes that gained a prediction more than or equal to 0.5, whereas the output of k-NN includes only one single winner, which is not suitable in the case of simultaneous movements prediction.  
 
- In summary, k-NNS  makes the prediction based on prior knowledge of  the data distribution, which makes the classification more reliable.    
+= Algorithm ==
 
-= Algorithm^[1]^ ==
-
- The algorithm can be summarized as below.
- # Computes the Euclidean distance _d (x', x,, j,,)_ between test vector _x'_ and the training data _x,,j,,_  _j=1,...,n_ where _n_ is the number of data in training sets.
- # Find the _k-minimum_ distance _d,,k,,_ (group of k nearest vectors).
- # Compute the number each class exist in this group.
- # Compute the proportion of each class exist in this group by dividing the number each class over k.
- # Include each class which has a prediction over 0.5 in the output.
+ The algorithm can be summarized by the following steps.
+ # Compute the Euclidean distance _d (p, x,,j,,)_ between test vector _p_ and the training set _x,,j,,_ for each _j=1,...,n_  where _n_ is the number of pattern in training sets.
+ # Find the _k-minimum_ distance _d,,k,,_ (group of the _k_ nearest vectors).
+ # Compute the proportion of each class in _k_.
+ # Inclusion each class that was gained a prediction more than or equal to 0.5 in the output of _k-NNS_.
 
    
 = Implementation =
- * Initially, k has been chosen k=> number of the windows per movement(nW) 
- * The trainings are performed for choosing optimal k based on the lowest  Root Mean Square Error (RMSE) by evaluating  the validation's data with different values of k (k=1 to k=nW).
- * The training data, training labels, and optimal k are used in the offline-classification and real-time classification.  
+ 
+ * The training phase is performed for choosing the optimal _k_ (based on the lowest  Root Mean Square Error (_RMSE_)), by evaluating  the validation set with different values of _k_ (from _k_=1 to the number of windows per class(_nW_)).
+ * Following the training phase, the validation set is added to the training set and used as references for making a prediction. 
+  
 
 = Functions Roadmap =
  ==Training==
