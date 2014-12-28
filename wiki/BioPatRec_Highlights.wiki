@@ -126,6 +126,7 @@ See the [Important_coding_changes]
 
  * *Signal Treatment*
   * Downsampling option
+  * Scaling option to ADC resolution 2^(n-1)
 
  * *Pattern Recognition*
   * New algorithms
