@@ -12,7 +12,7 @@
  * nCh (number of channels)
  * dev (device used for the recordings)
  * comm (communication mode, Wifi or COM)
-  * comn (COM name, available only in case of COM communication) 
+ * comn (COM name, available only in case of COM communication) 
  * mov (description of the movements performed)
  * date
  * cmt (comments)
