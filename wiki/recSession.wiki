@@ -15,6 +15,11 @@
  * date
  * cmt (comments)
  * tdata (total data, Samples x Channels x Movements)
+ * RampParameters (available only in case of ramp recording session)
+  * rampMin (RMS mean value between all channels of the Minimum Voluntary Contraction session) 
+  * rampMax (RMS mean value between all channels of each Maximum Voluntary Contraction session, RMSmean x Movements)
+  * minData (data of the Minimum Voluntary Contraction session, Samples x Channels)
+  * maxData (data of the Maximum Voluntary Contraction session, Samples x Channels)
 
 Previously due to the heritage of the [EMG_AQ] the following fields were included
 
