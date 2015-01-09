@@ -23,3 +23,9 @@ Description of the data sets in [Data_Repository Data Repository]
  * [https://drive.google.com/file/d/0B7walwEpPjq3SE1JRjEzN2hiT0k/edit?usp=sharing 6mov8chFUS_MLP_Th] - [http://publications.lib.chalmers.se/records/fulltext/176132/local_176132.pdf reference article].
 
  * [https://drive.google.com/file/d/0B7walwEpPjq3SXdkRk9rOFhER1k/edit?usp=sharing 6mov8chFUS_MLP_Topologies] - [http://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=6611081&isnumber=6609410 reference article].
+
+= SVN checkout =
+
+No code has been uploaded to the SVN, however you might need to add images via the SVN in order to displayed them in the wiki
+
+SVN check out: https://biopatrec.googlecode.com/svn
