@@ -45,15 +45,27 @@ This is a quick and general overview of the most relevant functions used in BioP
   * calls GUI_AFEselection 
    * pb_record (GUI_AFEselection)
     * if RAMP is selected
-     * ObtainRampMin
-     * ObtainRampMax
-     * RampRecordingSession
-    * else
-     * RecordingSession 
+     * ObtainRampMin (record ramp parameters about minimum voluntary contraction)
+     * ObtainRampMax (record ramp parameters about maximum voluntary contraction)
+     * RecordingSession (passing ramp parameters) 
       * for SBI - NI
        * InitSBI_NI
-       * DataShow
-
+       * RecordingSession_ShowData (called by listener every time new tWs samples are available) 
+      * for other custom devices 
+       * ConnectDevice 
+       * SetDeviceStartAcquisition 
+       * until the set recording time is not finished
+        * tWs_Acquisition (acquire tWs samples from the device in use..)
+        * RecordingSession_ShowData (..and shows new time window, it also updates the ramp tracking plot)
+       * StopAcquisition
+      * DataShow 
+    * else
+     * RecordingSession
+      * for SBI - NI
+       * ..
+      * for other custom devices
+       * ..
+      * DataShow 
 == GUI_RecordingSessionShow ==
 
  * pb_Load
