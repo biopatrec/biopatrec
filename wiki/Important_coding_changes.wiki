@@ -13,3 +13,15 @@ In order to use the struct _algConf_, just save it in the [GUI_PatRec] handles. 
 == Control algorithms ==
 
 The way the control algorithms are added changed. See: [Control] for details
+
+
+= From TVÅ to TRE =
+
+== Additional variables for recSession: RampParameters ==
+In order to implement the ramp recording session was necessary to add several variables to the recSession structure. For further detail check out the new data structure at [recSession]. 
+
+== Functions for other custom acquisition devices ==
+In BioPatRec_TRE are available a new set of functions useful to implement your own custom acquisition device and use it during your PatRec sessions. Check out into the [COMM] section.
+
+== new recording GUI == 
+A new GUI is now available for your recording session. To do that, it has been necessary to make several little changes in functions such as DataShow, RecordingSession etc..
