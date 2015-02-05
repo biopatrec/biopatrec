@@ -26,6 +26,8 @@ Description of the data sets in [Data_Repository Data Repository]
 
 = SVN checkout =
 
-No code has been uploaded to the SVN, however you might need to add images via the SVN in order to displayed them in the wiki
+No code has been uploaded to the SVN, however you might need to add images via the SVN in order to display them in the wiki
 
 SVN check out: https://biopatrec.googlecode.com/svn
+
+To do this you will need a "GoogleCode.com Password" that you can find only once you are logged. After the login click on "Profile" in the upper right corner, and than on "Settings".
