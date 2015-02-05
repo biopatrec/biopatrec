@@ -27,7 +27,7 @@ These two routines are called in the realtime patrec functions such as:
  * !MotionTest
  * [TACTest]
 
-= Note on future releases =
+= How to add a new control algorithm from BioPatRec_TVÅ =
 
 Future releases of BioPatRec will load control algorithms differently from the _!BioPatRec ETT_ release. The new loading system will keep the GUI up to date with all available algorithms and also offer a quick way to change algorithm parameters.
 
@@ -35,7 +35,7 @@ The new loading system is managed with a text file, /Control/!ValidControlAlgs.t
 
 The control algorithms are loaded with !InitControl.m that appends an inputted patRec structure with an associated controlAlg structure. If a patRec has an associated controlAlg structure it can be reached by the command patRec.controlAlg.
 
-== Steps to implement control algorithms in future releases ==
+== Steps to implement control algorithms  ==
 The following steps have to be made in order to be able to use a new control algorithm with !BioPatRec.
 
  * Set up the algorithm and default parameters in !ValidControlAlgs.txt
@@ -44,7 +44,7 @@ The following steps have to be made in order to be able to use a new control alg
 
 == Initialization of control algorithm ==
 
-When a control algorithm is initialized, a !controlAlg struct is created. This structure contains by default the fields,
+When a control algorithm is initialized, a controlAlg struct is created. This structure contains by default the fields,
 
  * name
  * fnc
@@ -65,7 +65,7 @@ The output buffer can be used by the control algorithms as they wish, and are by
  * patRec.controlAlg.parameters.bufferSize
  * patRec.controlAlg.prop.bufferSize
 
-If the bufferSize is a parameter, it should be set with a default value in !ValidControlAlgs.txt. If the bufferSize is an internal property, it should be set in an initialization file named Init'!YourControlAlg'.m that takes a !patRec struct as input and gives it back as an output. If neither a parameter nor a property named !bufferSize exists the output buffer is initialized with only one row.
+If the bufferSize is a parameter, it should be set with a default value in !ValidControlAlgs.txt. If the bufferSize is an internal property, it should be set in an initialization file named Init'!YourControlAlg'.m that takes a !patRec struct as input and gives it back as an output. If neither a parameter nor a property named bufferSize exists the output buffer is initialized with only one row.
 
 == Control Algorithms Implemented in Future Releases == 
 
