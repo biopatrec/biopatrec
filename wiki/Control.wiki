@@ -4,14 +4,15 @@
 
 In the *control* folder routines for device/[VRE] control following the [Movements_Protocol] are provided, as well as control algorithms to be executed during realtime pattern recognition.
 
-= Control algorithms =
+The control algorithms can be selected in the [GUI_TestPatRec_Mov2Mov]
 
-The following control algorithms can be selected in the [GUI_TestPatRec_Mov2Mov]
+== Control algorithms ==
 
  * Majority vote
  * Buffer output
 
-= How to add a new control algorithm in BioPatRec_Ett =
+
+= How to add a new control algorithm in !BioPatRec_Ett =
 
 To add a control algorithm you have to initialize it in:
 
@@ -27,7 +28,8 @@ These two routines are called in the realtime patrec functions such as:
  * !MotionTest
  * [TACTest]
 
-= How to add a new control algorithm from BioPatRec_TVÅ =
+
+= How to add a new control algorithm from !BioPatRec_TVÅ =
 
 Future releases of BioPatRec will load control algorithms differently from the _!BioPatRec ETT_ release. The new loading system will keep the GUI up to date with all available algorithms and also offer a quick way to change algorithm parameters.
 
@@ -35,14 +37,15 @@ The new loading system is managed with a text file, /Control/!ValidControlAlgs.t
 
 The control algorithms are loaded with !InitControl.m that appends an inputted patRec structure with an associated controlAlg structure. If a patRec has an associated controlAlg structure it can be reached by the command patRec.controlAlg.
 
-== Steps to implement control algorithms  ==
+== Steps to implement new control algorithms  ==
+
 The following steps have to be made in order to be able to use a new control algorithm with !BioPatRec.
 
  * Set up the algorithm and default parameters in !ValidControlAlgs.txt
  * Name the routine file same as stated in !ValidControlAlgs.txt
  * (Optional) Create an initialization file called Init'!YourControlAlg'.m
 
-== Initialization of control algorithm ==
+== Initialization of control algorithms ==
 
 When a control algorithm is initialized, a controlAlg struct is created. This structure contains by default the fields,
 
