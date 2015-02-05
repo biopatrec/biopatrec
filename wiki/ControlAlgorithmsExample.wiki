@@ -4,6 +4,10 @@
 
 This page gives a run down of the different control algorithms using an example with four simultaneous movements.
 
+This was implemented and published in:
+
+[http://publications.lib.chalmers.se/records/fulltext/178879/178879.pdf Falk-Dahlin J., Evaluation of Post-Processing Strategies for Simultaneous Pattern Recognition Based Myoelectric Prosthetic Control, Master Thesis in Complex Adaptive Systems, Chalmers University of Technology, Sweden]
+
 = Control Algorithms Example =
 
 To better understand the different control algorithms that are available to choose from, an example using four simultaneous movements is presented here along with how the data is treated in each control algorithm.
