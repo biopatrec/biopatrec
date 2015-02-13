@@ -131,9 +131,25 @@ See the [Important_coding_changes]
  * *Pattern Recognition*
   * New algorithms
    * [PCA]
-   * [KNN]
    * [ICA]
+  * Computation of sensitivity, precision, specificity, NPV, F1
+
+See the [Important_coding_changes]
+
+=== !BioPatRec FRA (coming later) ===
+
+ * *Recordings*
+  * Proportional
+
+ * *Signal Treatment*
+  * Noise addition
+
+ * *Pattern Recognition*
+  * New algorithms
+   * [KNN]
    * [SVM]
+
+See the [Important_coding_changes]
 
 = Demonstrations =
 Note: If the following videos are not displayed, be sure that you are allowing your browser to run scripts. You will find a little "shield" icon on the top-right of your browser if you are using Chrome. Click it, and allow the scripts.
