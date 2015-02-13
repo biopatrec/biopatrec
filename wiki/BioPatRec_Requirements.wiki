@@ -7,7 +7,9 @@
   * Statistics Toolbox for [Discriminant_Analysis Discriminant Analysis]
   * Instrument Control Toolbox for the [VRE] (tcpip function)
 
-BioPatRec was initially developed in Matlab `R2009`, however the latest version was only tested in `R2011b`. Some parts of BioPatRec might work in previous versions, but the VRE and the data acquisition routines need `R2011b`. So far, everything seems to be working with `R2012b`.
+BioPatRec was initially developed in Matlab `R2009`, however the latest version was only tested in `R2011b`. Some parts of BioPatRec might work in previous versions, but the VRE and the data acquisition routines need `R2011b`. So far, everything seems to be working with `R2014a`.
+
+*NOTE: There is a bug with Matlab 2014b where the progress bar doesn't display properly anymore (thank you Matlab), but it works fine in R2014a.*
 
 == Running on Mac ==
 
