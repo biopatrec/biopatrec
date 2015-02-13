@@ -5,6 +5,8 @@
  * [BioPatRec_StartupGuide Startup Guide] 
  * [BioPatRec_Requirements Requirements]
  * [BioPatRec_Roadmap Functions roadmap]
+  * [RoadMap_TVA]
+  * [RoadMap_TRE]
  * [SourceCode Source Code]
  * BioPatRec
   * [Comm]
