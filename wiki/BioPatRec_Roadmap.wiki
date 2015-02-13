@@ -4,6 +4,6 @@
 
 The roadmaps provide a quick and general overview of the most relevant function within BioPatRec.
 
- * [[RoadMap_ETT]]
- * [[RoadMap_TVA]]
- * [[RoadMap_TRE]]
+ * [RoadMap_ETT]
+ * [RoadMap_TVA]
+ * [RoadMap_TRE]
