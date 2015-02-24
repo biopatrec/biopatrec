@@ -26,8 +26,7 @@ This is a quick and general overview of the most relevant functions used in BioP
     * GUI_RecordingSessionShow
     * Compatibility_recSession (if necessary)
   * Recordings
-   * One-shot
-    * pb_StartRecording
+   * Recordings
    * Recording Session
     * GUI_RecordingSession
   * Filters
@@ -55,7 +54,7 @@ This is a quick and general overview of the most relevant functions used in BioP
        * ConnectDevice 
        * SetDeviceStartAcquisition 
        * until the set recording time is not finished
-        * tWs_Acquisition (acquire tWs samples from the device in use..)
+        * Acquire_tWs (acquire tWs samples from the device in use..)
         * RecordingSession_ShowData (..and shows new time window, it also updates the ramp tracking plot)
        * StopAcquisition
       * DataShow 
