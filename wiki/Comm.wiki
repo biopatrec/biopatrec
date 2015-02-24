@@ -38,8 +38,8 @@ This function creates and returns the connection object. Depending on how your p
 If your device needs some parameters passed by PC or every sort of setting procedure, all those routines should be here in this .m file. It must include all the setting parts to be done before the acquisition start. This function takes as parameter the connection object that has been made by the previous ConnectDevice function. In this way, it does not matter if your device communicates with wireless or serial protocol, as long as you use Matlab functions like fwrite(obj,'C','char'), the communication will work. 
 This function must also be able to send the start command to the device in way to begin the acquisition.
 
-==== tWs_Acquisition ====
-This functions must return a number of acquired samples equal to tWs (time window samples). So, here you can write your custom routines to get samples from your device. 
+==== Acquire_tWs ====
+This functions returns a new window of samples. The number of acquired samples can be edited by the tWs (time window samples) parameter, it is passed in the function calling. So, here you can write your custom routines to get samples from your device. 
 
 ==== StopAcquisition ====
 This is used to send the stop acquisition command to the device.
