@@ -94,6 +94,7 @@ Keep in mind that presenters would mostly focused on their group's work, and of 
  * [http://www.youtube.com/watch?v=y_NGycsdW5o Robotics: New Possibilities in Prosthetic Limbs] by Michael Goldfarb at Vanderbilt University, 2010.
 
 ==== Hardware ====
+ * [https://youtu.be/75wpABkscHU Developing world's lightest ever prosthetic hand] by Gerwin Smit at TEDx Delft, Dec 2013.
  * [https://www.youtube.com/watch?v=jaRNbgRK8k4 A helping hand with prosthetics] by Joel Gibbard at TEDx Exeter, Apr 2013.
  * [http://www.ted.com/talks/david_sengeh_the_sore_problem_of_prosthetic_limbs The sore problem of prosthetic limbs] by David Sengeh at TED, Mar 2014.
  * [http://www.ted.com/talks/krista_donaldson_the_80_prosthetic_knee_that_s_changing_lives The $80 prosthetic knee that's changing lives] by Krista Donaldson at TED Women, Dec 2013.
