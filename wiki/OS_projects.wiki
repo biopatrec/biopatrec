@@ -12,7 +12,8 @@ These are few links to other open source projects related to limb prosthetics
 
 = Hardware =
 
- * [http://www.openhandproject.org./ The Open Hand Project]
+ * [http://www.openhandproject.org The Open Hand Project]
+ * [http://enablingthefuture.org E-NABLE]
  * [http://www.openbionics.com Open Bionics]
  * [http://opensourcehand.wordpress.com/ Open Source Hand]
  * [https://www.dropbox.com/sh/hwy7ayc3t47g6i7/AADvk3FDkp9xKv0K514O5eHda?dl=0 Wrist Quick Disconnect]
