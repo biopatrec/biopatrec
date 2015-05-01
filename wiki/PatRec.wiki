@@ -25,6 +25,9 @@ For quick user instructions see [BioPatRec_StartupGuide], or more detailed infor
   * [SOM] Self-Organizing Map
   * [SSOM] Supervised Self-Organizing Map
 
+ * [Netlab]
+  * [GLM_NL] General Linear Model
+  * [MLP_NL] Multi-layers Perceptron
 
 == Offline !PatRec == 
 
