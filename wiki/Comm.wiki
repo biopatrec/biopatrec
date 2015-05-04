@@ -29,6 +29,8 @@ Here few tips..
 
 All the acquisition process must be divided into these .m files
 
+https://biopatrec.googlecode.com/svn/wiki/img/BioPatRec_TRE/BioPatRec_TRE_OCDfunctions.png
+
 ==== ConnectDevice ====
 This function creates and returns the connection object. Depending on how your peripheral communicates with the PC, you can use predefined Matlab functions to connect it, such as
  * obj = tcpip('localhost', 30000, 'NetworkRole', 'client') for Wireless connections
