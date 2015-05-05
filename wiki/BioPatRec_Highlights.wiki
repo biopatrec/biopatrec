@@ -123,10 +123,11 @@ See the [Important_coding_changes]
 
  * *Recordings*
   * Ramp
+  * New recording GUI for an unlimited amount of channels
 
  * *Signal Treatment*
   * Downsampling option
-  * Scaling option to ADC resolution 2^(n-1)
+  * Scaling option (to ADC resolution 2^[n-1])
 
  * *Pattern Recognition*
   * New algorithms
