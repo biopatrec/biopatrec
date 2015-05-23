@@ -27,6 +27,7 @@ It is probably not a surprise for anybody the fact that the media tend to exagge
 
 == Media on artificial limbs ==
 *Control*
+ * [http://www.nytimes.com/2015/05/21/technology/a-bionic-approach-to-prosthetics-controlled-by-thought.html?ref=technology&_r=1 Prosthetic Limbs, Controlled by Thought] by The New York Times, May 2014.
  * [http://youtu.be/16dlxeDxuWM Can modern prosthetics actually help reclaim the sense of touch?] by PBS, Feb 2015.
  * [http://www.pbs.org/newshour/updates/chuck-yeager-advanced-arm-prosthetics/ The Chuck Yeager of advanced arm prosthetics] by PBS, Feb 2015.
  * [http://www.newsweek.com/mind-controlled-prosthetic-arm-tested-sweden-276281 Mind-Controlled Prosthetic Arm Tested in Sweden] by Newsweek, Oct 2014.
