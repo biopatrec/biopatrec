@@ -1,0 +1,21 @@
+    BioPatRec, Copyright (C) 2009 Max J. Ortiz C.
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Lesser General Public License as 
+    published by the Free Software Foundation, either version 3 of the 
+    License, or any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    The full GNU GLP and LGPL licenses are available at
+    <http://www.gnu.org/licenses/>.
+
+    This software was made open to the public with the hope that through
+    community contributions, we can all make the prosthetic developments
+    required to help patients in need.
+
+    Everybody is welcome to sum efforts and contribute to this project.
+    Please contact: maxo@chalmers.se for more information.
