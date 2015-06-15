@@ -1,9 +1,0 @@
-#summary Tree-like representation of the most relevant routines
-
-= Introduction =
-
-The roadmaps provide a quick and general overview of the most relevant function within BioPatRec.
-
- * [RoadMap_ETT]
- * [RoadMap_TVA]
- * [RoadMap_TRE]
