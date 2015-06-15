@@ -1,6 +1,0 @@
-#summary One-sentence summary of this page.
-This page describes the !CombinedControl control strategy.
-
-= !CombinedControl =
-
-Add your content here.
