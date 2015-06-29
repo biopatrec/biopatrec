@@ -11,6 +11,6 @@ Would you like to contribute and sum efforts to improve amputees’ quality of l
 
 Reference: [Ortiz-Catalan, M., Brånemark, R., and Håkansson, B., “BioPatRec: A modular research platform for the control of artiﬁcial limbs based on pattern recognition algorithms”, Source Code for Biology and Medicine, 2013, 8:11](http://www.scfbm.org/content/8/1/11/)
 
-To get started go to BioPatRec wiki!
+To get started go to [BioPatRec wiki!](https://github.com/biopatrec/biopatrec/wiki)
 
 You can browse the wiki to find out what to expect, or visit BioPatRec_Highlights (found in the wiki) to see BioPatRec features and some demos.
