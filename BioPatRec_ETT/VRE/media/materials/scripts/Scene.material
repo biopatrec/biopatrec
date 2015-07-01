@@ -1,0 +1,15 @@
+material defaultMat/SOLID/TEX/hand.jpg/VertCol
+{
+	technique
+	{
+		pass
+		{
+			diffuse vertexcolour
+			specular 0.500000 0.500000 0.500000 12.500000
+			texture_unit
+			{
+				texture hand.jpg
+			}
+		}
+	}
+}

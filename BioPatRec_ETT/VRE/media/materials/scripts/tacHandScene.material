@@ -1,0 +1,20 @@
+material defaultMat/SOLID/TEX/hand_TAC.jpg/VertCol
+{
+	technique
+	{
+		pass
+		{
+			lighting off
+	        scene_blend alpha_blend
+	        depth_check off
+			diffuse vertexcolour
+			specular 0.500000 0.500000 0.500000 12.500000
+
+			texture_unit
+			{
+				texture hand_TAC.jpg
+				alpha_op_ex source1 src_manual src_current 0.5
+			}
+		}
+	}
+}
