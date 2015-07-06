@@ -1,0 +1,28 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%	Create new ControlAlgorithms here
+%
+%	Add parameters and default values that
+%	are to be read upon structure creation
+%
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+{
+name = None
+Default parameters
+}
+
+{
+name = MajorityVote
+Default parameters
+		bufferSize = 3
+}
+
+{
+name = Ramp
+Default parameters
+	        downCount = 2
+	        rampLength = 10
+}
