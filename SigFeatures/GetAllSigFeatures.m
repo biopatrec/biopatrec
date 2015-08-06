@@ -23,6 +23,8 @@
 % ------------------------- Updates & Contributors ------------------------
 % [Contributors are welcome to add their email]
 % 2011-07-27 / Max Ortiz / Creation from EMG_AQ routines
+% 2014-12-01 / Enzo Mastinu  / Added the handling part for the COM port number
+                             % information into the parameters
 % 20xx-xx-xx / Author  / Comment on update
 
 function sigFeatures = GetAllSigFeatures(handles, sigTreated)
@@ -31,13 +33,24 @@ function sigFeatures = GetAllSigFeatures(handles, sigTreated)
     sigFeatures.tW      = sigTreated.tW;
     sigFeatures.nCh     = sigTreated.nCh;
     sigFeatures.mov     = sigTreated.mov;
+    sigFeatures.scaled  = sigTreated.scaled;
+    sigFeatures.noise   = sigTreated.noise;
     
     % temporal conditional to keep compatibility with olrder rec session
     if isfield(sigTreated,'dev')
         sigFeatures.dev     = sigTreated.dev;
     else
         sigFeatures.dev     = 'Unknow';
-    end    
+    end 
+    
+    if isfield(sigTreated,'comm')
+        sigFeatures.comm    = sigTreated.comm;
+        if isfield(sigTreated,'comn')
+            sigFeatures.comn    = sigTreated.comn;
+        end
+    else
+        sigFeatures.comm     = 'N/A';
+    end   
     
     sigFeatures.fFilter = sigTreated.fFilter;
     sigFeatures.sFilter = sigTreated.sFilter;

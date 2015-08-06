@@ -22,7 +22,7 @@ function varargout = GUI_Test_VRE(varargin)
 
 % Edit the above text to modify the response to help GUI_Test_VRE
 
-% Last Modified by GUIDE v2.5 07-Dec-2012 13:46:35
+% Last Modified by GUIDE v2.5 22-Oct-2013 11:25:20
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -73,24 +73,25 @@ function varargout = GUI_Test_VRE_OutputFcn(hObject, eventdata, handles)
 varargout{1} = handles.output;
 
 
-% --- Executes on button press in pb_connect.
-function pb_connect_Callback(hObject, eventdata, handles)
-% hObject    handle to pb_connect (see GCBO)
+% --- Executes on button press in pb_startVRE.
+function pb_startVRE_Callback(hObject, eventdata, handles)
+% hObject    handle to pb_startVRE (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-if(strcmp(get(handles.pb_connect,'String'),'Connect'))
-    port = str2double(get(handles.et_connection,'String'));
-    set(handles.t_msg,'String','Waiting for client connection.');
-    obj = tcpip('127.0.0.1',port,'NetworkRole','server');
-    fopen(obj);
-    set(handles.t_msg,'String','Server established on port');
-    set(handles.pb_connect,'String','Disconnect');
-    handles.com = obj;
-else
-    fclose(handles.com);
-    set(handles.t_msg,'String','Disconnected');
-    set(handles.pb_connect,'String','Connect');
-end
+% % if(strcmp(get(handles.pb_startVRE,'String'),'Connect'))
+% %     port = str2double(get(handles.et_connection,'String'));
+% %     set(handles.t_msg,'String','Waiting for client connection.');
+% %     obj = tcpip('127.0.0.1',port,'NetworkRole','server');
+% %     fopen(obj);
+% %     set(handles.t_msg,'String','Server established on port');
+% %     set(handles.pb_startVRE,'String','Disconnect');
+% %     handles.com = obj;
+% % else
+% %     fclose(handles.com);
+% %     set(handles.t_msg,'String','Disconnected');
+% %     set(handles.pb_startVRE,'String','Connect');
+% % end
+handles = ConnectVRE(handles,'Virtual Reality.exe');
 guidata(hObject,handles);
 
 % --- Executes during object creation, after setting all properties.
@@ -105,19 +106,20 @@ if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgr
     set(hObject,'BackgroundColor','white');
 end
 
-% --- Executes on button press in pb_start.
-function pb_start_Callback(hObject, eventdata, handles)
-% hObject    handle to pb_start (see GCBO)
+% --- Executes on button press in pb_startARE.
+function pb_startARE_Callback(hObject, eventdata, handles)
+% hObject    handle to pb_startARE (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-open('Virtual Reality.exe');
+handles = ConnectVRE(handles,'Augmented Reality.exe');
+guidata(hObject,handles);
 
 % --- Executes on button press in pb_sendValues.
 function pb_sendValues_Callback(hObject, eventdata, handles)
 % hObject    handle to pb_sendValues (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-obj = handles.com;
+obj = handles.vre_Com;
 one = get(handles.tb_value1,'String');
 two = get(handles.tb_value2,'String');
 three = get(handles.tb_value3,'String');
@@ -250,3 +252,60 @@ function tb_value5_CreateFcn(hObject, eventdata, handles)
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
+
+
+% --- Executes on button press in pb_send100.
+function pb_send100_Callback(hObject, eventdata, handles)
+% hObject    handle to pb_send100 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+obj = handles.vre_Com;
+one = get(handles.tb_value1,'String');
+two = get(handles.tb_value2,'String');
+three = get(handles.tb_value3,'String');
+four = get(handles.tb_value4,'String');
+five = get(handles.tb_value5,'String');
+pause on;
+% VREActivation(obj,four,[],two, three, 0);
+tic;
+for i = 1:100
+    fwrite(obj,sprintf('%c%c%c%c%c',checkValues(one),checkValues(two),checkValues(three),checkValues(four), checkValues(five)));
+    if handles.returnValues
+        fread(obj,1);   
+    end
+end
+set(handles.txt_Time,'String',toc);
+
+
+% --- Executes on button press in pb_return.
+function pb_return_Callback(hObject, eventdata, handles)
+% hObject    handle to pb_return (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+% % if handles.returnValues
+% %     fwrite(handles.com,sprintf('%c%c%c%c%c','c',char(7),char(0),char(0),char(0)));
+% %     handles.returnValues = 0;
+% % else
+% %     fwrite(handles.com,sprintf('%c%c%c%c%c','c',char(7),char(1),char(0),char(0)));
+% %     handles.returnValues = 1;
+% % end
+handles = DisconnectVRE(handles);
+guidata(hObject, handles);
+
+
+% --- If Enable == 'on', executes on mouse press in 5 pixel border.
+% --- Otherwise, executes on mouse press in 5 pixel border or over pb_startARE.
+function pb_startARE_ButtonDownFcn(hObject, eventdata, handles)
+% hObject    handle to pb_startARE (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+handles = ConnectVRE(handles,'Augmented Reality.exe');
+guidata(hObject,handles);
+
+% --- Executes on button press in pb_startAREARM.
+function pb_startAREARM_Callback(hObject, eventdata, handles)
+% hObject    handle to pb_startAREARM (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+handles = ConnectVRE(handles,'Augmented Reality ARM.exe');
+guidata(hObject,handles);

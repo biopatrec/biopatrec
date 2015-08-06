@@ -40,6 +40,7 @@ function Load_recSession(recSession, handles)
     st = GUI_SigTreatment();
     stdata = guidata(st);
     set(stdata.et_sF,'String',num2str(recSession.sF));
+    set(stdata.et_downsample,'String',num2str(recSession.sF));
     set(stdata.et_nM,'String',num2str(recSession.nM));
     set(stdata.et_nR,'String',num2str(recSession.nR));
     set(stdata.et_cT,'String',num2str(recSession.cT));

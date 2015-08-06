@@ -25,9 +25,9 @@
 
 function [dataf] = Filter50hz (Fs, data)
 
-N   = 20;  % Order
-Fc1 = 40;  % First Cutoff Frequency
-Fc2 = 60;  % Second Cutoff Frequency
+N   = 6;  % Order
+Fc1 = 49;  % First Cutoff Frequency
+Fc2 = 51;  % Second Cutoff Frequency
 
 [z,p,k] = butter(N/2, [Fc1 Fc2]/(Fs/2), 'stop');
 
@@ -35,3 +35,5 @@ Fc2 = 60;  % Second Cutoff Frequency
 Hd50        = dfilt.df2sos(sos_var, g);
 
 dataf = filter(Hd50,data);
+
+

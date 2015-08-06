@@ -21,6 +21,7 @@
 % ------------------------- Updates & Contributors ------------------------
 % [Contributors are welcome to add their email]
 % 2012-09-01 / Ali Fouad  / Creation
+% 2014-01-14 / Ali Fouad  / Updating of sampling step
 % 20xx-xx-xx / Author  / Comment on update
 
 function SSOM=SSOMStochasticTraining(trSet,SSOM,trOut)
@@ -38,8 +39,9 @@ w=SSOM.w;
 sizeSSOMOut=SSOM.sizeSSOMOut;
 
 % Draw random samples
-p=randperm(length(trOut(:,1)));
-for i=1:size(trSet,1)
+nTrPattern=fix(.7*length(trSet(:,1)));
+p=randperm(length(trSet(:,1)),nTrPattern);
+for i=1:nTrPattern
     % width of neighbour function.
     sigmaT=Sigma(t,sigmaIni,tow1);
     sigmaT(sigmaT==0)=eps;

@@ -64,35 +64,21 @@ function patRec = OfflinePatRecTraining(alg, tType, algConf, trSets, trOuts, vSe
         patRec.algorithm = 'RFN';
         patRec.training = tType;
         patRec.connMat = connMat;            
-        
-    % RFN threshold output   
-    elseif strcmp(alg,'RFN thOut')
-        [connMat accV thOut] = RegulationFeedback_thOut(tType, trSets, trOuts, vSets, vOuts);
-        patRec.algorithm = 'RFN thOut';
-        patRec.training = tType;
-        patRec.connMat = connMat;
-        % temp fix
-        thOut(1:size(connMat,1)) = thOut;
-        patRec.thOut = thOut;            
-        
+            
+    % SOM
     elseif strcmp(alg,'SOM')
         [SOM accV] = SOM_Mapping(trSets, trOuts, vSets, vOuts, tType, algConf);
         patRec.algorithm = 'SOM';
         patRec.training = tType;
         patRec.SOM=SOM;
 
+    % SSOM
     elseif strcmp(alg,'SSOM')
         [SSOM accV] = SSOM_Mapping(trSets, trOuts, vSets, vOuts, tType, algConf);
         patRec.algorithm = 'SSOM';
         patRec.training = tType;
         patRec.SSOM=SSOM;
-        
-    elseif strcmp(alg,'KNN')
-        [KNN accV] = EvaluateKNN(trSets, trOuts, vSets, vOuts, tType);
-        patRec.algorithm = 'KNN';
-        patRec.training = tType;
-        patRec.KNN=KNN;        
-        
+                
     end
     
     % Save the accuracy of the validation set as part of patRec structure;

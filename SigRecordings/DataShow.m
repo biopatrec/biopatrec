@@ -22,74 +22,64 @@
 %
 % ------------------------- Updates & Contributors ------------------------
 % [Contributors are welcome to add their email]
-% 2009-04-15 / Max Ortiz  / Creation
-% 2011-09-20 / Max Ortiz  /  New routine for BioPatRec based in previous implementation
-%                            for EMG_AQ   
+% 2009-04-15 / Max Ortiz    / Creation
+% 2011-09-20 / Max Ortiz    / New routine for BioPatRec based in previous implementation
+%                             for EMG_AQ   
+% 2013-06-01 / Max Ortiz    / Fixed an issue with ploting when cdata is
+%                             slightly bigger that it should be (NI DAQ issues)
+% 2015-02-20 / Enzo Mastinu / Added the scaling of the data: now every channel plot will be 
+                            % dynamically and automatically resize to fit in the proper portion
+                            % of the main plot. This is to avoid overlapping of channels 
+                            % waveforms and to have always the best zoom for every channel.
+% 2015-02-23 / Enzo Mastinu / The scale of every channel plot is now the
+                            % same scale of the channel which has the
+                            % maximum absolute value
+
 
 function DataShow(handles,cdata, sF, sT)
 
-    tt  = 0:1/sF:sT-1/sF;            % Create vector of time
-    nS  = length(cdata(:,1));        % It used to be sF*sT but due to change in lenght witht training data
-    nCh = size(cdata,2);
+    tt          = 0:1/sF:sT-1/sF;            % Create vector of time
+    nS          = length(cdata(:,1));        % It used to be sF*sT but due to change in lenght witht training data
+    nCh         = size(cdata,2);
+    
+    if size(tt,2) ~= size(cdata,1)
+        nSd = size(cdata,1)- size(tt,2); 
+        tt(1,end:end+nSd) = 0;
+    end
 
+    % Initialize plots 
+    ampPP = 5;
+    ymin = -ampPP*2/3;
+    ymax =  ampPP * nCh - ampPP*1/3;
+    
     %Fast Fourier Transform
-    NFFT = 2^nextpow2(nS);                 % Next power of 2 from number of samples
+    NFFT = 2^nextpow2(nS);                                                 % Next power of 2 from number of samples
     f = sF/2*linspace(0,1,NFFT/2);
     dataf = fft(cdata(1:nS,:),NFFT)/nS;    
-    m = 2*abs(dataf((1:NFFT/2),:));
-    m(1,:) =0; 
-
+    m = 2*abs(dataf((1:NFFT/2),:));                                        
     
-    if nCh >= 1
-        axes(handles.a_t0);
-        plot(tt(1:length(cdata(:,1))),cdata(:,1));
-        axes(handles.a_f0);
-        plot(f,m(:,1));
+    % Offset and scale the data
+    offVector = 0:nCh-1;
+    offVector = offVector .* ampPP;
+    Kt = ampPP/(2*max(max(abs(cdata))));
+    Kf = ampPP/(max(max(abs(m))));
+    for j = 1 : nCh
+        tempData(:,j) = cdata(:,j)*Kt + offVector(j);
+        fData(:,j) = m(:,j)*Kf + offVector(j);
     end
-
-    if nCh >= 2
-        axes(handles.a_t1);
-        plot(tt(1:length(cdata(:,1))),cdata(:,2));        
-        axes(handles.a_f1);
-        plot(f,m(:,2));
-    end
-    if nCh >= 3
-        axes(handles.a_t2);        
-        plot(tt(1:length(cdata(:,1))),cdata(:,3));        
-        axes(handles.a_f2);
-        plot(f,m(:,3));
-    end
-    if nCh >= 4
-        axes(handles.a_t3);        
-        plot(tt(1:length(cdata(:,1))),cdata(:,4));
-        axes(handles.a_f3);
-        plot(f,m(:,4));
-    end
-    if nCh >= 5
-        axes(handles.a_t4);
-        plot(tt(1:length(cdata(:,1))),cdata(:,5));
-%        axes(handles.a_f0);
-%        plot(f,m(:,1));
-    end
-
-    if nCh >= 6
-        axes(handles.a_t5);
-        plot(tt(1:length(cdata(:,1))),cdata(:,6));        
-%        axes(handles.a_f1);
-%        plot(f,m(:,2));
-    end
-    if nCh >= 7
-        axes(handles.a_t6);        
-        plot(tt(1:length(cdata(:,1))),cdata(:,7));        
- %       axes(handles.a_f2);
- %       plot(f,m(:,3));
-    end
-    if nCh >= 8
-        axes(handles.a_t7);        
-        plot(tt(1:length(cdata(:,1))),cdata(:,8));
-  %      axes(handles.a_f3);
-  %      plot(f,m(:,4));
-    end
-
     
+    % plot
+    axes(handles.a_t0);
+    plot(tt(1:length(tempData(:,1))),tempData);
+    set(handles.a_t0,'YTick',offVector);
+    set(handles.a_t0,'YTickLabel',0:nCh-1);
+    ylim(handles.a_t0, [ymin ymax]);
+    axes(handles.a_f0);
+    plot(f,fData);
+    set(handles.a_f0,'YTick',offVector);
+    set(handles.a_f0,'YTickLabel',0:nCh-1);
+    xlim(handles.a_f0, [0,sF/2]);
+    ymax =  ampPP * nCh;
+    ylim(handles.a_f0, [ymin ymax]);
+       
 end

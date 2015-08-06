@@ -24,76 +24,38 @@
 % 2012-05-22 / Max Ortiz  / Creation (MoveMotor)
 % 2012-07-03 / Max Ortiz  / Creation of specific routines for activation
 %                           and deactivation to improve speed.
+% 2015-06-11 / Sebastian Karlsson  / Changed to update the current
+%                                    speed/position of all types of motors. 
+%                                    Moved to motor-type identification
+%                                    to be implemented on the connected devices 
+%                                    firmware instead of handled by
+%                                    this function, according to the standardized framework.
+% 2015-07-07 / Enzo Mastinu  / The Update2PWMusingSCI function has been
+%                            replaced with the general SendMotorCommand, 
+%                            used to implement the control framework
 
-function [motors, movement] = MotorsOn(com, movement, motors, degrees)
+function [motors, movement] = MotorsOn(com, movement, motors, ctrl_val)
     
 if strcmp(movement.name,'Rest')
     return;
 end
 
-%pwmIDs = cell2mat(movement.idMotor);
-movMotors = movement.motor;
-noPIDs = size(movMotors,2);
+noPIDs = size(movement.motor,2);
 
-motorPct = [];
-pwmIDs = [];
-
-% Get the IDs of al PWM involved in the selected movement
-for i=1:length(movMotors)
-    motorPct = [motorPct motors(movMotors(i)).pct];
-    pwmIDs = [pwmIDs cell2mat(motors(movMotors(i)).id)];    
-end
-
-% THe following code doesn't work because this routines is only called when
-% the prediction is changed, therefore the effect of the ramp cannot be
-% observed in the current setup.
-% Code for variable speed according to "degrees"
-% mPct = 10*degrees;
-% if mPct >= 100
-%     mPct = 100;
-% end
-% motorPct(1:length(movMotors)) = mPct;
-
-%This only works when movements have motors with the same (motor)type
-%% DC motors
-if (motors(movMotors(1)).type == 0)
+% Activate and update
+for i = 1 : noPIDs
+    % Check the speed Updating
+    motors(movement.motor(1,i)).pct = ctrl_val; %%% SERVE?
+    % Extract control type (defined in "motors.def" file)
+    ctrl_type = motors(movement.motor(1,i)).type;
+    % Extract motor index (defined in "motors.def" file)
+    motor_index = cell2mat(motors(movement.motor(1,i)).id);
+    % Extract movement direction (for speed control)
+    mov_dir = movement.motor(2,i);
     
-    % Get the pwm vectors according to the direction of the movement
-    if movement.vreDir
-        pwmA = zeros(1,noPIDs);
-        pwmB = motorPct;
-    else
-        pwmA = motorPct;
-        pwmB = zeros(1,noPIDs);
+    % Send motor commands
+    if ~SendMotorCommand(com, ctrl_type, motor_index, mov_dir, ctrl_val);
+        disp('Failed'); % CHECK
+        fclose(com);
     end
-    
-    % Activate them
-    for i = 1 : noPIDs
-        % Send motor values
-        if ~Update2PWMusingSCI(com, pwmIDs(i), pwmA(i), pwmB(i));
-            disp('Failed');
-            fclose(com.io);
-        end
-    end
-    
-%% Servo Motors
-elseif motors(movMotors(1)).type == 1  
-
-    % Add the position
-    if(movement.vreDir)
-        movDeg = -degrees;
-    else
-        movDeg = degrees;
-    end
-    
-    motors(movMotors(1)).pct = motors(movMotors(1)).pct + movDeg;    
-    
-    % Send PWM    
-    [result motors(movMotors(1)).pct] = UpdatePWMusingSCI_PanTilt(com, pwmIDs, motors(movMotors(1)).pct);
-    % If no problems where encountered, the ALC must return 1                
-    if ~result
-        disp('Failed');
-        fclose(handles.com.io);
-    end    
-        
-end
+end 

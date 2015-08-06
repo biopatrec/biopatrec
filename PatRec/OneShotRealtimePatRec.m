@@ -25,6 +25,7 @@
 %                          RealtimePatRec
 % 2012-11-23 / Joel Falk-Dahlin / Removed handles in from control
 %                                 functions, speeds are now in patRec
+% 2013-01-02 / Max Ortiz / Added routines for feature reduction
 % 20xx-xx-xx / Author    / Comment on update
 
 function [outMov, outVector, patRec, handles] = OneShotRealtimePatRec(tData, patRec, handles, thresholdGUIData)
@@ -42,10 +43,14 @@ function [outMov, outVector, patRec, handles] = OneShotRealtimePatRec(tData, pat
             outVector = zeros(patRec.nOuts,1);
             outVector(end) = 1;
         else
+            % Apply feature reduction
+            tSet = ApplyFeatureReduction(tSet, patRec);
             % One shoot PatRec
             [outMov, outVector] = OneShotPatRecClassifier(patRec, tSet);
         end
     else
+        % Apply feature reduction
+        tSet = ApplyFeatureReduction(tSet, patRec);
         % One shoot PatRec
         [outMov, outVector] = OneShotPatRecClassifier(patRec, tSet);        
     end
@@ -57,7 +62,7 @@ function [outMov, outVector, patRec, handles] = OneShotRealtimePatRec(tData, pat
             outMov = patRec.nOuts;
         end
     end
-        
+    
     %% Threshold GUI update
     if(isfield(patRec.patRecTrained,'thOut'));
     %set(handles.(sprintf('thPatch%d',outMov-1)), 'FaceColor', [0 1 0]);

@@ -47,6 +47,13 @@
 % 2012-11-23 / Joel Falk-Dahlin / Moved all speeds from handles to the
 %                                 patRec struct. Changed behavior of all
 %                                 speed text boxes
+% 2015-07-16 / Enzo Mastinu / Framework for movements and motors
+%                             implemented, the SPC control does not need
+%                             anymore the MoveMotorWifi or any dedicated
+%                             SPC functions
+% 2015-07-21 / Francesco Clemente / Folder select routines for the Control 
+%                                   Framework. Connection to the robotic 
+%                                   devices has been improved with WiFi fields 
 %
 % 20xx-xx-xx / Author  / Comment on update
 
@@ -74,7 +81,7 @@ function varargout = GUI_TestPatRec_Mov2Mov(varargin)
 
 % Edit the above text to modify the response to help GUI_TestPatRec_Mov2Mov
 
-% Last Modified by GUIDE v2.5 21-Mar-2013 10:08:43
+% Last Modified by GUIDE v2.5 21-Jul-2015 13:39:26
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -109,9 +116,12 @@ function GUI_TestPatRec_Mov2Mov_OpeningFcn(hObject, eventdata, handles, varargin
 % Choose default command line output for GUI_TestPatRec_Mov2Mov
 handles.output = hObject;
 global TAC
+global ctrl_dir
 
 TAC.running = 0;
 TAC.ackTimes = 0;
+
+
 
 % Check if any inputs is made when calling the GUI
 if ~isempty(varargin)
@@ -136,6 +146,13 @@ if ~isempty(varargin)
         end
         
     end
+    
+%     serialportlist = instrhwinfo('serial');
+%     serialportlist = serialportlist.SerialPorts;
+%     for i=1:size(serialportlist)
+%         set(handles.popmenu16,'String',serialportlist(i));
+%     end
+    
 end
 
 % Logo image
@@ -154,7 +171,7 @@ handles.propControl = false;
 guidata(hObject, handles);
 
 % UIWAIT makes GUI_TestPatRec_Mov2Mov wait for user response (see UIRESUME)
-% uiwait(handles.figure1);
+% uiwait(handles.Gui1);
 movegui(hObject,'center');
 
 % --- Outputs from this function are returned to the command line.
@@ -291,7 +308,7 @@ function pb_RealtimePatRec_Callback(hObject, eventdata, handles)
 % hObject    handle to pb_RealtimePatRec (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-    
+set(hObject, 'Enable', 'off');    
 %set(hObject,'Enable','off');
     % validation of patRec loaded
     if ~isfield(handles,'patRec')
@@ -1114,7 +1131,6 @@ movement = handles.mov(mov);
 % Get the degrees to move
 movDeg = str2double(get(handles.et_speed1,'String'));
 
-
 %Check whether to use VRE
 if isfield(handles,'vre_Com')
     global TAC
@@ -1127,15 +1143,24 @@ if isfield(handles,'vre_Com')
     end
 end
 if get(handles.cb_motorCoupling,'Value')
-    % Get the communication obj
-    com = handles.com;
+    % Get the motors obj
     motors = handles.motors;
-    %Activate the motor direction for a short moment.
-    [motors,movement] = MoveMotor(com, movement, movDeg, motors);
+    % Get the communication obj
+    Control_obj = handles.Control_obj;
+    if ~strcmp(Control_obj.status,'open')
+                fopen(Control_obj);
+    end 
     
+    %Activate the motor direction for a short moment.
+    MotorsOn(Control_obj, movement, motors, movDeg);
+    pause(1);
+    MotorsOff(Control_obj, movement, motors);
+    
+    % Save data back
     handles.mov(mov) = movement;
     handles.motors = motors;
     guidata(hObject,handles);
+    
 end
 %Enable the button
 set(hObject,'Enable','on');
@@ -1169,12 +1194,20 @@ if isfield(handles,'vre_Com')
     end
 end
 if get(handles.cb_motorCoupling,'Value')
-    % Get the communication obj
-    com = handles.com;
+    % Get the motors obj
     motors = handles.motors;
-    %Activate the motor direction for a short moment.
-    [motors,movement] = MoveMotor(com, movement, movDeg, motors);
+    % Get the communication obj
+    Control_obj = handles.Control_obj;
+    if ~strcmp(Control_obj.status,'open')
+        fopen(Control_obj);
+    end 
     
+    %Activate the motor direction for a short moment.
+    MotorsOn(Control_obj, movement, motors, movDeg);
+    pause(1);
+    MotorsOff(Control_obj, movement, motors);
+    
+    % Save data back
     handles.mov(mov) = movement;
     handles.motors = motors;
     guidata(hObject,handles);
@@ -1210,12 +1243,20 @@ if isfield(handles,'vre_Com')
     end
 end
 if get(handles.cb_motorCoupling,'Value')
-    % Get the communication obj
-    com = handles.com;
+    % Get the motors obj
     motors = handles.motors;
-    %Activate the motor direction for a short moment.
-    [motors,movement] = MoveMotor(com, movement, movDeg, motors);
+    % Get the communication obj
+    Control_obj = handles.Control_obj;
+    if ~strcmp(Control_obj.status,'open')
+        fopen(Control_obj);
+    end 
     
+    %Activate the motor direction for a short moment.
+    MotorsOn(Control_obj, movement, motors, movDeg);
+    pause(1);
+    MotorsOff(Control_obj, movement, motors);
+    
+    % Save data back
     handles.mov(mov) = movement;
     handles.motors = motors;
     guidata(hObject,handles);
@@ -1251,12 +1292,20 @@ if isfield(handles,'vre_Com')
     end
 end
 if get(handles.cb_motorCoupling,'Value')
-    % Get the communication obj
-    com = handles.com;
+    % Get the motors obj
     motors = handles.motors;
-    %Activate the motor direction for a short moment.
-    [motors,movement] = MoveMotor(com, movement, movDeg, motors);
+    % Get the communication obj
+    Control_obj = handles.Control_obj;
+    if ~strcmp(Control_obj.status,'open')
+    	fopen(Control_obj);
+    end 
     
+    %Activate the motor direction for a short moment.
+    MotorsOn(Control_obj, movement, motors, movDeg);
+    pause(1);
+    MotorsOff(Control_obj, movement, motors);
+    
+    % Save data back
     handles.mov(mov) = movement;
     handles.motors = motors;
     guidata(hObject,handles);
@@ -1293,12 +1342,17 @@ if isfield(handles,'vre_Com')
     end
 end
 if get(handles.cb_motorCoupling,'Value')
-    % Get the communication obj
-    com = handles.com;
+    % Get the motors obj
     motors = handles.motors;
-    %Activate the motor direction for a short moment.
-    [motors,movement] = MoveMotor(com, movement, movDeg, motors);
+    % Get the communication obj
+    Control_obj = handles.Control_obj; 
     
+    %Activate the motor direction for a short moment.
+    MotorsOn(Control_obj, movement, motors, movDeg);
+    pause(1);
+    MotorsOff(Control_obj, movement, motors);
+    
+    % Save data back
     handles.mov(mov) = movement;
     handles.motors = motors;
     guidata(hObject,handles);
@@ -1335,12 +1389,17 @@ if isfield(handles,'vre_Com')
     end
 end
 if get(handles.cb_motorCoupling,'Value')
-    % Get the communication obj
-    com = handles.com;
+    % Get the motors obj
     motors = handles.motors;
-    %Activate the motor direction for a short moment.
-    [motors,movement] = MoveMotor(com, movement, movDeg, motors);
+    % Get the communication obj
+    Control_obj = handles.Control_obj; 
     
+    %Activate the motor direction for a short moment.
+    MotorsOn(Control_obj, movement, motors, movDeg);
+    pause(1);
+    MotorsOff(Control_obj, movement, motors);
+    
+    % Save data back
     handles.mov(mov) = movement;
     handles.motors = motors;
     guidata(hObject,handles);
@@ -1382,12 +1441,17 @@ if isfield(handles,'vre_Com')
     end
 end
 if get(handles.cb_motorCoupling,'Value')
-    % Get the communication obj
-    com = handles.com;
+    % Get the motors obj
     motors = handles.motors;
-    %Activate the motor direction for a short moment.
-    [motors,movement] = MoveMotor(com, movement, movDeg, motors);
+    % Get the communication obj
+    Control_obj = handles.Control_obj; 
     
+    %Activate the motor direction for a short moment.
+    MotorsOn(Control_obj, movement, motors, movDeg);
+    pause(1);
+    MotorsOff(Control_obj, movement, motors);
+    
+    % Save data back
     handles.mov(mov) = movement;
     handles.motors = motors;
     guidata(hObject,handles);
@@ -1424,12 +1488,17 @@ if isfield(handles,'vre_Com')
     end
 end
 if get(handles.cb_motorCoupling,'Value')
-    % Get the communication obj
-    com = handles.com;
+    % Get the motors obj
     motors = handles.motors;
-    %Activate the motor direction for a short moment.
-    [motors,movement] = MoveMotor(com, movement, movDeg, motors);
+    % Get the communication obj
+    Control_obj = handles.Control_obj; 
     
+    %Activate the motor direction for a short moment.
+    MotorsOn(Control_obj, movement, motors, movDeg);
+    pause(1);
+    MotorsOff(Control_obj, movement, motors);
+    
+    % Save data back
     handles.mov(mov) = movement;
     handles.motors = motors;
     guidata(hObject,handles);
@@ -1466,12 +1535,17 @@ if isfield(handles,'vre_Com')
     end
 end
 if get(handles.cb_motorCoupling,'Value')
-    % Get the communication obj
-    com = handles.com;
+    % Get the motors obj
     motors = handles.motors;
-    %Activate the motor direction for a short moment.
-    [motors,movement] = MoveMotor(com, movement, movDeg, motors);
+    % Get the communication obj
+    Control_obj = handles.Control_obj; 
     
+    %Activate the motor direction for a short moment.
+    MotorsOn(Control_obj, movement, motors, movDeg);
+    pause(1);
+    MotorsOff(Control_obj, movement, motors);
+    
+    % Save data back
     handles.mov(mov) = movement;
     handles.motors = motors;
     guidata(hObject,handles);
@@ -1508,12 +1582,20 @@ if isfield(handles,'vre_Com')
     end
 end
 if get(handles.cb_motorCoupling,'Value')
-    % Get the communication obj
-    com = handles.com;
+    % Get the motors obj
     motors = handles.motors;
-    %Activate the motor direction for a short moment.
-    [motors,movement] = MoveMotor(com, movement, movDeg, motors);
+    % Get the communication obj
+    Control_obj = handles.Control_obj;
+    if ~strcmp(Control_obj.status,'open')
+    	fopen(Control_obj);
+    end 
     
+    %Activate the motor direction for a short moment.
+    MotorsOn(Control_obj, movement, motors, movDeg);
+    pause(1);
+    MotorsOff(Control_obj, movement, motors);
+    
+    % Save data back
     handles.mov(mov) = movement;
     handles.motors = motors;
     guidata(hObject,handles);
@@ -1526,19 +1608,28 @@ function pb_connect_Callback(hObject, eventdata, handles)
 % hObject    handle to pb_connect (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-compath = get(handles.et_connect,'String');
-handles.com = Connect_ALC(compath);
-%handles.com = MasterModuleComm(compath);
-if TestConnectionALC(handles.com)==1; %Write S to stop program
-    set(handles.t_msg,'String','Connection established');
-    guidata(hObject,handles);
-else
-    set(handles.t_msg,'String','Wrong connection');
-    fclose(handles.com.io);
+
+if get(handles.rb_serial, 'Value')
+    compath_idx = get(handles.pm_serialportipaddress,'Value');
+    compath     = get(handles.pm_serialportipaddress,'string');
+    compath     = compath(compath_idx);
+    BaudRate    = str2double(get(handles.et_baudrateport,'String'));
+    Control_obj = serial(compath, 'BaudRate', BaudRate);
+elseif get(handles.rb_wifi, 'Value')
+    ip = get(handles.pm_serialportipaddress,'String');
+    port = str2double(get(handles.et_baudrateport,'String'));    
+    Control_obj = tcpip(ip,port,'NetworkRole','client');   
 end
+fopen(Control_obj);
+set(handles.t_msg,'String','Connection established!');
+
+handles.Control_obj = Control_obj;
+guidata(hObject,handles);   
 
 set(handles.pb_testConnection,'Enable','on');
 set(handles.pb_disconnect,'Enable','on');
+set(handles.pb_sensors,'Enable','on');
+
 
 function et_connect_Callback(hObject, eventdata, handles)
 % hObject    handle to et_connect (see GCBO)
@@ -1567,10 +1658,12 @@ function pb_disconnect_Callback(hObject, eventdata, handles)
 % hObject    handle to pb_disconnect (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-fclose(handles.com.io);
+
+fclose(handles.Control_obj)   
 set(handles.t_msg,'String','Disconnected');
 set(handles.pb_testConnection,'Enable','off');
 set(handles.pb_disconnect,'Enable','off');
+set(handles.pb_sensors,'Enable','off');
 
 % --- Executes on button press in pb_testConnection.
 function pb_testConnection_Callback(hObject, eventdata, handles)
@@ -1578,13 +1671,47 @@ function pb_testConnection_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 set(handles.t_msg,'String','Testing connection...');
-if TestConnectionALC(handles.com)==1; %Write S to stop program
-    set(handles.t_msg,'String','Connection established');
-    guidata(hObject,handles);
+
+if TestConnection(handles.Control_obj)
+    set(handles.t_msg,'String','Connection OK');
 else
     set(handles.t_msg,'String','Wrong connection');
-    fclose(handles.com.io);
+    fclose(handles.Control_obj);
 end
+
+% % obtained the ID of the selected device
+%     device = get(handles.pm_prosthesis,'Value');
+%     % run connecting routine accordingly
+%     if device == 1 % Multifunctinal prosthesis with DC motors
+%         if TestConnectionALC(handles.Control_obj)==1; %Write S to stop program
+%             set(handles.t_msg,'String','Connection established');
+%             guidata(hObject,handles);
+%         else
+%             set(handles.t_msg,'String','Wrong connection');
+%             fclose(handles.Control_obj.io);
+%         end
+%     elseif device == 3  % Standard prosthetic units (wireless) 
+%         if isfield(handles,'Control_obj')
+%             Control_obj = handles.Control_obj;
+%             disp(Control_obj);
+%             fclose(Control_obj);
+%         else
+%             Control_obj = tcpip('192.168.100.10',65100,'NetworkRole','client');
+%         end
+%         % Open connection
+%         fopen(Control_obj);
+%         fwrite(Control_obj,'A','char');
+%         fwrite(Control_obj,'C','char')
+%         replay = char(fread(Control_obj,1,'char'));
+%         if strcmp(replay,'C');
+%             set(handles.t_msg,'String','Connection established!');
+%         else
+%             set(handles.t_msg,'String','Error');        
+%         end
+%         fclose(Control_obj);
+%         handles.Control_obj = Control_obj;
+%         guidata(hObject,handles);        
+%     end
 
 
 
@@ -1838,35 +1965,8 @@ function pb_socketConnect_Callback(hObject, eventdata, handles)
 % hObject    handle to pb_socketConnect (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
- set(handles.pb_socketConnect,'Enable','off');
- % Dialog box to open a file
-%[file, path] = uigetfile('*.exe');
-% Check that the loaded file is a "ss" struct
-%if ~isequal(file, 0)
-%    startString = sprintf('start /D%s %s',path,file);
-%    disp(startString);
-%    [a,b] = system(startString);
-%end
-
-% This starts the VRE-environment. Add support for different paths?
-open('Virtual Reality.exe');
-
-%Retrieves specified port.
-port = str2double(get(handles.et_port,'String'));
-
-set(handles.t_msg,'String','Waiting for client connection.');
+handles = ConnectVRE(handles,'Virtual Reality.exe');
 guidata(hObject,handles);
-
-obj = tcpip('127.0.0.1',port,'NetworkRole','server');
-
-fopen(obj);
-set(handles.t_msg,'String',sprintf('Server established on port %d.',port));
-handles.vre_Com = obj;
-guidata(hObject,handles);
-
-set(handles.pb_socketDisconnect,'Enable','on');
-set(handles.pb_Camera,'Enable','on');
-set(handles.pb_ActivateArm,'Enable','on');
 
 % --- Executes during object creation, after setting all properties.
 function et_port_CreateFcn(hObject, eventdata, handles)
@@ -1880,14 +1980,8 @@ function pb_socketDisconnect_Callback(hObject, eventdata, handles)
 % hObject    handle to pb_socketDisconnect (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-set(handles.pb_socketDisconnect,'Enable','off');
-set(handles.pb_Camera,'Enable','off');
-set(handles.pb_ActivateArm,'Enable','off');
-obj = handles.vre_Com;
-fclose(obj);
-set(handles.t_msg,'String','Server disconnected.');
-handles.vre_Com = obj;
- set(handles.pb_socketConnect,'Enable','on');
+handles = DisconnectVRE(handles);
+guidata(hObject,handles);
 
 
 function et_port_Callback(hObject, eventdata, handles)
@@ -1927,11 +2021,10 @@ function pb_Camera_Callback(hObject, eventdata, handles)
 % hObject    handle to pb_Camera (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-%if isfield(handles,'vre_Com')
-obj = handles.vre_Com;
-fwrite(obj,sprintf('%c%c%c%c','c',char(5),char(0),char(0)));
-fread(obj,1);
-%end
+Control_obj = handles.vre_Com;
+fwrite(Control_obj,sprintf('%c%c%c%c','c',char(5),char(0),char(0)));
+fread(Control_obj,1);
+
 
 
 % --- Executes on selection change in pm_controlAlg.
@@ -1978,6 +2071,15 @@ for i = 2:size(controlAlg,2)
 end
 
 set(hObject,'String',names);
+
+
+% --- Executes on button press in pb_socketConnect2.
+function pb_socketConnect2_Callback(hObject, eventdata, handles)
+% hObject    handle to pb_socketConnect2 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+handles = ConnectVRE(handles,'Augmented Reality.exe');
+guidata(hObject,handles);
 
 % --- Executes on button press in cb_keys.
 function cb_keys_Callback(hObject, eventdata, handles)
@@ -2034,7 +2136,77 @@ if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgr
 end
 
 
+% --- Executes on button press in cb_proportionalControl.
+function cb_proportionalControl_Callback(hObject, eventdata, handles)
+% hObject    handle to cb_proportionalControl (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
 
+% Hint: get(hObject,'Value') returns toggle state of cb_proportionalControl
+
+% If proportional control checkbox is checked
+if get(hObject,'Value')
+    % Create proportional control variables if patRec structure is loaded
+    if isfield(handles,'patRec')
+        % Increase maximum speed to 100
+        handles.patRec.control.maxDegPerMov = ones(size(handles.patRec.control.maxDegPerMov)).*100;
+        set(handles.et_allSpeed,'String',100);
+        et_allSpeed_Callback(handles.et_allSpeed,eventdata,handles);
+        
+        % Initialize proportional control
+        handles.patRec = InitPropControl(handles.patRec);
+        
+        % Save guidata because it is used in GUI_ProportionalControl
+        guidata(hObject,handles);
+
+        % Open proportional GUI
+        io.mainGUI = hObject;
+        setappdata(0,'selFeatures',handles.patRec.selFeatures)
+        GUI_ProportionalControl(io);
+        
+    % If no patRec is loaded in GUI, give message instead        
+    else
+        set(t_msg,'String','No PatRec Loaded');
+    end
+    
+% If proportional control checkbox is unchecked
+else
+    % Decrease maximum speed to 5
+    handles.patRec.control.maxDegPerMov = ones(size(handles.patRec.control.maxDegPerMov)).*5;
+    set(handles.et_allSpeed,'String',5);
+    et_allSpeed_Callback(handles.et_allSpeed,eventdata,handles);
+    
+    % Remove all proportional control fields in patRec
+    if isfield(handles.patRec.control,'propControl')
+        handles.patRec.control = rmfield(handles.patRec.control,'propControl');
+    end
+end
+
+% Update GUI-handles
+guidata(hObject,handles);
+
+% --- Executes on button press in pb_propGUI.
+function pb_propGUI_Callback(hObject, eventdata, handles)
+% hObject    handle to pb_propGUI (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% If patRec is loaded, launch proportional Control GUI
+if isfield(handles,'patRec')
+    
+    % If proportional control checkbox is unchecked, check it
+    if ~get(handles.cb_proportionalControl,'Value')
+        set(handles.cb_proportionalControl,'Value',1);
+    end
+    
+    io.mainGUI = hObject;
+    setappdata(0,'selFeatures',handles.patRec.selFeatures)
+    GUI_ProportionalControl(io);
+    
+% If no patRec is loaded, give message    
+else
+    set(t_msg,'String','No PatRec Loaded');
+end
 
 
 % --- Executes on button press in pb_ActivateArm.
@@ -2042,9 +2214,9 @@ function pb_ActivateArm_Callback(hObject, eventdata, handles)
 % hObject    handle to pb_ActivateArm (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-obj = handles.vre_Com;
-fwrite(obj,sprintf('%c%c%c%c%c','c',char(6),char(0),char(0),char(0)));
-fread(obj,1);
+Control_obj = handles.vre_Com;
+fwrite(Control_obj,sprintf('%c%c%c%c%c','c',char(6),char(0),char(0),char(0)));
+fread(Control_obj,1);
 
 
 % --- Executes on button press in pb_SetKeys.
@@ -2062,3 +2234,255 @@ function cb_motionTestVRE_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 % Hint: get(hObject,'Value') returns toggle state of cb_motionTestVRE
+
+
+% --- Executes on button press in pb_ARarm.
+function pb_ARarm_Callback(hObject, eventdata, handles)
+% hObject    handle to pb_ARarm (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+handles = ConnectVRE(handles,'Augmented Reality ARM.exe');
+% Flex the elbow with 90 degrees. 
+VREActivation(handles.vre_Com,90,[],15,1,get(handles.cb_moveTAC,'Value'));
+guidata(hObject,handles);
+
+
+% --- Executes on selection change in pm_prosthesis.
+function pm_prosthesis_Callback(hObject, eventdata, handles)
+% hObject    handle to pm_prosthesis (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: contents = cellstr(get(hObject,'String')) returns pm_prosthesis contents as cell array
+%        contents{get(hObject,'Value')} returns selected item from pm_prosthesis
+
+
+% --- Executes during object creation, after setting all properties.
+function pm_prosthesis_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to pm_prosthesis (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: popupmenu controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+% --- Executes on button press in cb_controls.
+function cb_controls_Callback(hObject, eventdata, handles)
+% hObject    handle to cb_controls (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: get(hObject,'Value') returns toggle state of cb_controls
+
+
+% --- Executes on button press in pb_enableRealTimePatRec.
+function pb_enableRealTimePatRec_Callback(hObject, eventdata, handles)
+% hObject    handle to pb_enableRealTimePatRec (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+set(handles.pb_RealtimePatRec, 'Enable', 'on');  
+
+
+% --- If Enable == 'on', executes on mouse press in 5 pixel border.
+% --- Otherwise, executes on mouse press in 5 pixel border or over pb_ARarm.
+function pb_ARarm_ButtonDownFcn(hObject, eventdata, handles)
+% hObject    handle to pb_ARarm (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+
+% --- Executes on button press in pb_sensors.
+function pb_sensors_Callback(hObject, eventdata, handles)
+% hObject    handle to pb_sensors (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+GUI_Sensors(hObject, eventdata, handles);
+
+
+function et_COM_Callback(hObject, eventdata, handles)
+% hObject    handle to et_COM (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of et_COM as text
+%        str2double(get(hObject,'String')) returns contents of et_COM as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function et_COM_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to et_COM (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function edit35_Callback(hObject, eventdata, handles)
+% hObject    handle to edit35 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of edit35 as text
+%        str2double(get(hObject,'String')) returns contents of edit35 as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function edit35_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to edit35 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function edit36_Callback(hObject, eventdata, handles)
+% hObject    handle to edit36 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of edit36 as text
+%        str2double(get(hObject,'String')) returns contents of edit36 as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function edit36_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to edit36 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function et_baudrateport_Callback(hObject, eventdata, handles)
+% hObject    handle to et_baudrateport (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of et_baudrateport as text
+%        str2double(get(hObject,'String')) returns contents of et_baudrateport as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function et_baudrateport_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to et_baudrateport (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+% --- Executes on selection change in pm_serialportipaddress.
+function pm_serialportipaddress_Callback(hObject, eventdata, handles)
+% hObject    handle to pm_serialportipaddress (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: contents = cellstr(get(hObject,'String')) returns pm_serialportipaddress contents as cell array
+%        contents{get(hObject,'Value')} returns selected item from pm_serialportipaddress
+
+
+% --- Executes during object creation, after setting all properties.
+function pm_serialportipaddress_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to pm_serialportipaddress (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: popupmenu controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+% list all serial ports available
+serialportlist = instrhwinfo('serial');
+if ~isempty(serialportlist.AvailableSerialPorts)
+    serialportlist = serialportlist.SerialPorts;
+    set(hObject,'String',serialportlist);
+else
+    set(hObject,'String','None Available');
+end
+
+% --- Executes on button press in rb_serial.
+function rb_serial_Callback(hObject, eventdata, handles)
+% hObject    handle to rb_serial (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: get(hObject,'Value') returns toggle state of rb_serial
+set(handles.rb_wifi,'Value',0);
+set(handles.pm_serialportipaddress,'Style','popupmenu');
+% list all serial ports available
+serialportlist = instrhwinfo('serial');
+if ~isempty(serialportlist.AvailableSerialPorts)
+    serialportlist = serialportlist.SerialPorts;
+    set(handles.pm_serialportipaddress,'String',serialportlist);
+else
+    set(handles.pm_serialportipaddress,'String','None Available');
+end
+set(handles.et_baudrateport,'String','BaudRate');
+
+% --- Executes on button press in rb_wifi.
+function rb_wifi_Callback(hObject, eventdata, handles)
+% hObject    handle to rb_wifi (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: get(hObject,'Value') returns toggle state of rb_wifi
+set(handles.rb_serial,'Value',0);
+set(handles.pm_serialportipaddress,'Style','edit');
+set(handles.pm_serialportipaddress,'String','IP');
+set(handles.et_baudrateport,'String','Port');
+
+
+% --- Executes on button press in pb_selectctrlfolder.
+function pb_selectctrlfolder_Callback(hObject, eventdata, handles)
+% hObject    handle to pb_selectctrlfolder (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+global ctrl_dir
+
+% check if another folder was added to the path before and, if yes, remove
+% it from the path
+if ctrl_dir
+    rmpath(ctrl_dir);
+end
+
+% add the folder selected by the user to the Matlab path
+ctrl_dir = uigetdir;
+if ctrl_dir
+    addpath(ctrl_dir);
+end
+
+% Re-Initialize control variables
+% newHandles.motors = InitMotors;
+% mov = InitMovements;
+
+handles.mov    = InitMovements();
+handles.motors = InitMotors();
+% Update handles structure
+guidata(hObject, handles);

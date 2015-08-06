@@ -106,8 +106,17 @@ while sim <= maxItr && passV == 0
         end
     elseif strcmp(tType,'PSO')     
         
-        [PSO, ANN] = PSO_MLP(PSO, ANN, trSet(p(1:nEvalRun),:),trOut(p(1:nEvalRun),:));                
-
+        [PSO, ANN] = PSO_MLP(PSO, ANN, trSet(p(1:nEvalRun),:),trOut(p(1:nEvalRun),:));            
+    
+    elseif strcmp(tType,'BP+PSO')                
+        % Run backpropagation
+        for i = 1 : nEvalRun
+            ANN = EvaluateANN(trSet(p(i),:), ANN);
+            ANN = Backpropagation(trSet(p(i),:),trOut(p(i),:),ANN, eta, alpha);
+        end
+        % funtion to W2Pos
+        % Run PSO
+        [PSO, ANN] = PSO_MLP(PSO, ANN, trSet(p(1:nEvalRun),:),trOut(p(1:nEvalRun),:));            
     end
     % Quantify the number of evaluations
     eval = eval + nEvalRun;

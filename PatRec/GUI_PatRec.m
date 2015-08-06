@@ -19,7 +19,10 @@
 % Compute the overal all Accuracy of the patRec algorithm
 %
 % ------------------------- Updates & Contributors ------------------------
-% 2011-11-25 / Max Ortiz  / Created new version from EMG_AQ 
+% 2011-11-25 / Max Ortiz     / Created new version from EMG_AQ 
+% 2014-11-07 / Diep Khong    / Added SVM
+% 2014-12-01 / Enzo Mastinu  / Added the handling part for the COM port number
+                             % information into the parameters
 % 20xx-xx-xx / Author  / Comment on update
 
 function varargout = GUI_PatRec(varargin)
@@ -46,7 +49,7 @@ function varargout = GUI_PatRec(varargin)
 
 % Edit the above text to modify the response to help GUI_PatRec
 
-% Last Modified by GUIDE v2.5 06-Nov-2012 11:48:34
+% Last Modified by GUIDE v2.5 30-Oct-2013 10:35:30
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -120,12 +123,136 @@ function pb_GetFeatures_Callback(hObject, eventdata, handles)
     ss = [];
     
     % Dialog box to open a file
-    [file, path] = uigetfile('*.mat');
+    [file, path] = uigetfile({'*.mat';'*.csv'});
     % Check that the loaded file is a "ss" struct
     if ~isequal(file, 0)
-        load([path,file]);
-        if (exist('recSession','var'))      % Send a recording session for data treatment
+        [pathstr,name,ext] = fileparts(file);
+        if(strcmp(ext,'.mat'))
+            load([path,file]);
+            if (exist('recSession','var'))      % Send a recording session for data treatment
 
+                Load_recSession(recSession, handles);
+                %Enable algorithm selection
+                set(handles.pm_SelectAlgorithm,'Enable','on');
+                set(handles.rb_all,'Enable','on');
+                set(handles.rb_top2,'Enable','on');
+                set(handles.rb_top3,'Enable','on');
+                set(handles.rb_top4,'Enable','on'); 
+
+            elseif (exist('sigFeatures','var'))         % Get sig_Features
+                Load_sigFeatures(sigFeatures, handles);            
+                %Enable algorithm selection
+                set(handles.pm_SelectAlgorithm,'Enable','on');
+                set(handles.rb_all,'Enable','on');
+                set(handles.rb_top2,'Enable','on');
+                set(handles.rb_top3,'Enable','on');
+                set(handles.rb_top4,'Enable','on'); 
+                set(handles.pb_RunOfflineTraining,'Enable','on');
+
+            elseif (exist('treated_data','var'))         % Get sig_Features
+                Load_sigFeatures(treated_data, handles);            
+                %Enable algorithm selection
+                set(handles.pm_SelectAlgorithm,'Enable','on');
+                set(handles.rb_all,'Enable','on');
+                set(handles.rb_top2,'Enable','on');
+                set(handles.rb_top3,'Enable','on');
+                set(handles.rb_top4,'Enable','on'); 
+
+            elseif (exist('patRec','var'))              % Get patRec
+                Load_patRec(patRec, 'GUI_PatRec',[]);
+                set(handles.pm_normSets,'Enable','off'); 
+                set(handles.pm_SelectTopology,'Enable','off'); 
+                set(handles.pm_movMix,'Enable','off'); 
+                set(handles.pm_normSets,'Enable','off'); 
+    %           set(handles.pb_RealtimePatRec,'Enable','on');    
+    %           set(handles.pb_motionTest,'Enable','on');        
+                set(handles.pb_RealtimePatRecGUI,'Enable','on');
+                %Added to enable Mov2Mov-button after loading PatRec
+                set(handles.pb_RealtimePatRecMov2Mov,'Enable','on');
+                %Load all values from the patRec into the GUI.
+                set(handles.et_accuracy,'String',num2str(patRec.acc(end)));
+                set(handles.lb_accuracy,'String',num2str(patRec.acc(1:end-1)));        
+                set(handles.et_trTime,'String',num2str(patRec.trTime));
+                set(handles.et_tTime,'String',num2str(patRec.tTime));
+                disp('%%%%%%%%%%% patRec loaded %%%%%%%%%%%%%');
+                set(handles.t_msg,'String','patRec loaded');            
+            elseif (exist('ss','var'))      % keep compatibility
+                if ~isempty(ss)
+                    recSession.sF  = ss.Fs;
+                    recSession.sT  = ss.Ts;
+                    recSession.nM  = ss.Ne;
+                    recSession.nR  = ss.Nr;
+                    recSession.cT  = ss.Tc;
+                    recSession.rT  = ss.Tr;
+                    recSession.cTp = ss.Psr;
+                    recSession.mov = ss.msg;
+                    recSession.date   = ss.date;
+                    recSession.tdata  = ss.tdata;
+                    %recSession.trdata = ss.trdata;
+
+                    Load_recSession(recSession, handles);            
+                    %Enable algorithm selection
+                    set(handles.pm_SelectAlgorithm,'Enable','on');
+                    set(handles.rb_all,'Enable','on');
+                    set(handles.rb_top2,'Enable','on');
+                    set(handles.rb_top3,'Enable','on');
+                    set(handles.rb_top4,'Enable','on'); 
+                else
+                    disp('That was not a valid training matrix');
+                    errordlg('That was not a valid training matrix','Error');
+                    return;                
+                end  
+            end
+        else
+            %CSV / MCARE
+
+            fid = fopen(file);
+            fullDir = strcat(path,name,ext); % We get the path of the selected file
+            fileDir = dir(fullDir); % We use this to get the size, which is a field of dir
+            movText = fgetl(fid); % We read the first line
+            movText = textscan(movText, '%s', 'Delimiter', ',', 'BufSize', fileDir.bytes); %Scans for objects seperated with commas. We use the filesize as buffer
+            recSession.mov = movText{1}; %And load them into the recSession
+            fclose(fid); %We need to close the file, before we can textscan it with other parameters
+            fid = fopen(file);
+            C = textscan(fid, '%s', 'Delimiter', '\n', 'BufSize', fileDir.bytes); % Scans for objects seperated by line breaks            
+            recSession.date = C{1}{2};
+            recSession.comm = C{1}{3};
+            if strcmp(recSession.comm, 'COM')
+                recSession.comn = C{1}{4};
+            end
+            recSession.sF = csvread(file,3,0,[3, 0, 3, 0]);
+            recSession.nM = csvread(file,3,1,[3, 1, 3, 1]);
+            recSession.sT = csvread(file, 3,2,[3,2,3,2]);
+            recSession.cT = csvread(file, 3,3,[3,3,3,3]);
+            recSession.rT = csvread(file, 3,4,[3,4,3,4]);
+            recSession.nR = csvread(file, 3,5,[3,5,3,5]);
+            recSession.nCh = csvread(file, 3,6,[3,6,3,6]);
+            %Loading raw data
+            rawData = csvread(file,4,0)';
+            %Preallocate memory
+            recSession.tdata = zeros(recSession.sF*recSession.cT*recSession.nR*2,recSession.nCh,recSession.nM); 
+            %Sorts the data
+            for movements = 1 : recSession.nM
+                for channels = 1 : recSession.nCh 
+                    % We iterate over the repititions, as data from MCARE is exported channel-wise (as a subset of each repitition) 
+                    % The system is like this (for 3 repititions and 4
+                    % channels)
+                    %iterator =
+                    % 1 5 9 -> First channel
+                    % 2 6 10 -> Second Channel
+                    % 3 7 11 -> Third Channel
+                    % 4 8 12 -> Fourth Channel
+                    % ^ "lines of data" E.g. "1" = first channel from first
+                    % repition. "5" = first channel from second repitition.
+                    % "2" = second channel from first repitition. 
+                    iterator = channels+((movements-1)*(recSession.nCh*recSession.nR)); 
+                    for repititions = 1 : recSession.nR
+                        recSession.tdata(1+((repititions-1)*(recSession.sF*(recSession.cT+recSession.rT))):repititions*(recSession.sF*(recSession.cT+recSession.rT)),channels,movements) = rawData(:,iterator);
+                        iterator = iterator + recSession.nCh;
+                    end
+                end
+            end
+            
             Load_recSession(recSession, handles);
             %Enable algorithm selection
             set(handles.pm_SelectAlgorithm,'Enable','on');
@@ -133,71 +260,9 @@ function pb_GetFeatures_Callback(hObject, eventdata, handles)
             set(handles.rb_top2,'Enable','on');
             set(handles.rb_top3,'Enable','on');
             set(handles.rb_top4,'Enable','on'); 
-                
-        elseif (exist('sigFeatures','var'))         % Get sig_Features
-            Load_sigFeatures(sigFeatures, handles);            
-            %Enable algorithm selection
-            set(handles.pm_SelectAlgorithm,'Enable','on');
-            set(handles.rb_all,'Enable','on');
-            set(handles.rb_top2,'Enable','on');
-            set(handles.rb_top3,'Enable','on');
-            set(handles.rb_top4,'Enable','on'); 
-            set(handles.pb_RunOfflineTraining,'Enable','on');
-            
-        elseif (exist('treated_data','var'))         % Get sig_Features
-            Load_sigFeatures(treated_data, handles);            
-            %Enable algorithm selection
-            set(handles.pm_SelectAlgorithm,'Enable','on');
-            set(handles.rb_all,'Enable','on');
-            set(handles.rb_top2,'Enable','on');
-            set(handles.rb_top3,'Enable','on');
-            set(handles.rb_top4,'Enable','on'); 
-
-        elseif (exist('patRec','var'))              % Get patRec
-            Load_patRec(patRec, 'GUI_PatRec',[]);
-            set(handles.pm_normSets,'Enable','off'); 
-            set(handles.pm_SelectTopology,'Enable','off'); 
-            set(handles.pm_movMix,'Enable','off'); 
-            set(handles.pm_normSets,'Enable','off'); 
-%           set(handles.pb_RealtimePatRec,'Enable','on');    
-%           set(handles.pb_motionTest,'Enable','on');        
-            set(handles.pb_RealtimePatRecGUI,'Enable','on');
-            %Added to enable Mov2Mov-button after loading PatRec
-            set(handles.pb_RealtimePatRecMov2Mov,'Enable','on');
-            %Load all values from the patRec into the GUI.
-            set(handles.et_accuracy,'String',num2str(patRec.acc(end)));
-            set(handles.lb_accuracy,'String',num2str(patRec.acc(1:end-1)));        
-            set(handles.et_trTime,'String',num2str(patRec.trTime));
-            set(handles.et_tTime,'String',num2str(patRec.tTime));
-            
-        elseif (exist('ss','var'))      % keep compatibility
-            if ~isempty(ss)
-                recSession.sF  = ss.Fs;
-                recSession.sT  = ss.Ts;
-                recSession.nM  = ss.Ne;
-                recSession.nR  = ss.Nr;
-                recSession.cT  = ss.Tc;
-                recSession.rT  = ss.Tr;
-                recSession.cTp = ss.Psr;
-                recSession.mov = ss.msg;
-                recSession.date   = ss.date;
-                recSession.tdata  = ss.tdata;
-                %recSession.trdata = ss.trdata;
-
-                Load_recSession(recSession, handles);            
-                %Enable algorithm selection
-                set(handles.pm_SelectAlgorithm,'Enable','on');
-                set(handles.rb_all,'Enable','on');
-                set(handles.rb_top2,'Enable','on');
-                set(handles.rb_top3,'Enable','on');
-                set(handles.rb_top4,'Enable','on'); 
-            else
-                disp('That was not a valid training matrix');
-                errordlg('That was not a valid training matrix','Error');
-                return;                
-            end           
         end
     end
+    
 
    
     
@@ -208,7 +273,7 @@ function pb_RunOfflineTraining_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
     % Close real-time testing
-%    close(GUI_TestPatRec_Mov2Mov);
+    % close(GUI_TestPatRec_Mov2Mov);
 
     set(handles.t_msg,'String','Offline PatRec Started...');
 %    set(handles.pb_RunOfflineTraining,'Enable','Off');    
@@ -225,7 +290,7 @@ function pb_RunOfflineTraining_Callback(hObject, eventdata, handles)
         set(handles.t_msg,'String','Please select the mix of movements to be used');
         return;
     end
-
+    
     % Collet sigFeatures
     sigFeatures = get(handles.t_sigFeatures,'UserData');
     if isempty(sigFeatures)    
@@ -240,6 +305,10 @@ function pb_RunOfflineTraining_Callback(hObject, eventdata, handles)
     %Normalize
     allNormSets = get(handles.pm_normSets,'String');
     normSets    = char(allNormSets(get(handles.pm_normSets,'Value')));    
+
+    % Select feature reduction algorithm
+    allFeatReducAlg=get(handles.pm_FeatureReduction,'String');
+    featReducAlg=char(allFeatReducAlg(get(handles.pm_FeatureReduction,'Value')));
 
     % Movements mix or individual movements?
     allMovMixes = get(handles.pm_movMix,'String');
@@ -272,7 +341,7 @@ function pb_RunOfflineTraining_Callback(hObject, eventdata, handles)
     topology      = char(allTopologies(get(handles.pm_SelectTopology,'Value')));
     
     % Call rutine for offline pat rec
-    patRec = OfflinePatRec(sigFeatures, selFeatures, randFeatures, normSets, alg, tType, algConf, movMix, topology, confMatFlag);
+    patRec = OfflinePatRec(sigFeatures, selFeatures, randFeatures, normSets, alg, tType, algConf, movMix, topology, confMatFlag, featReducAlg);
         
     % Save and show results
     handles.patRec = patRec;
@@ -280,12 +349,28 @@ function pb_RunOfflineTraining_Callback(hObject, eventdata, handles)
 
     % Save in GUI components to be used by statistics rutines
     % This has to be change 
-    set(handles.lb_accuracy,'UserData',patRec.acc);
+    set(handles.lb_accuracy,'UserData',patRec.performance.acc);
+%     set(handles.lb_precision,'UserData',patRec.performance.precision);
+%     set(handles.lb_recall,'UserData',patRec.performance.recall);
+%     set(handles.lb_f1,'UserData',patRec.performance.f1);
     set(handles.et_accuracy,'UserData',patRec);
     
     % Update GUI
-    set(handles.et_accuracy,'String',num2str(patRec.acc(end)));
-    set(handles.lb_accuracy,'String',num2str(patRec.acc(1:end-1)));        
+    set(handles.et_accuracy,'String',num2str(patRec.performance.acc(end),'%.2f'));
+    set(handles.lb_accuracy,'String',num2str(patRec.performance.acc(1:end-1),'%.2f'));
+    set(handles.et_accTrue,'String',num2str(patRec.performance.accTrue(end),'%.2f'));
+    set(handles.lb_accTrue,'String',num2str(patRec.performance.accTrue(1:end-1),'%.2f'));
+    set(handles.et_precision,'String',num2str(patRec.performance.precision(end),'%.2f'));
+    set(handles.lb_precision,'String',num2str(patRec.performance.precision(1:end-1),'%.2f'));
+    set(handles.et_recall,'String',num2str(patRec.performance.recall(end),'%.2f'));
+    set(handles.lb_recall,'String',num2str(patRec.performance.recall(1:end-1),'%.2f'));
+    set(handles.et_f1,'String',num2str(patRec.performance.f1(end),'%.2f'));
+    set(handles.lb_f1,'String',num2str(patRec.performance.f1(1:end-1),'%.2f'));
+    set(handles.et_specificity,'String',num2str(patRec.performance.specificity(end),'%.2f'));
+    set(handles.lb_specificity,'String',num2str(patRec.performance.specificity(1:end-1),'%.2f'));
+    set(handles.et_npv,'String',num2str(patRec.performance.npv(end),'%.2f'));
+    set(handles.lb_npv,'String',num2str(patRec.performance.npv(1:end-1),'%.2f'));
+    
     set(handles.et_trTime,'String',num2str(patRec.trTime));
     set(handles.et_tTime,'String',num2str(patRec.tTime));
     set(handles.pb_RealtimePatRecGUI,'Enable','on');   
@@ -319,7 +404,7 @@ function pm_SelectAlgorithm_Callback(hObject, eventdata, handles)
            strcmp(alg,'MLP thOut')
        
         set(handles.pm_SelectTraining,'Enable','on');
-        tA = {'Select Training A.','Backpropagation', 'PSO'};
+        tA = {'Select Training A.','Backpropagation', 'EA', 'PSO'};
         set(handles.pm_SelectTraining,'String',tA);
         set(handles.pb_RunOfflineTraining,'Enable','off');   
         set(handles.pm_normSets,'Value',4);
@@ -331,7 +416,7 @@ function pm_SelectAlgorithm_Callback(hObject, eventdata, handles)
         set(handles.pb_RunOfflineTraining,'Enable','off');   
         set(handles.pm_normSets,'Value',1);
 
-    elseif strcmp(alg,'RFN')
+    elseif strcmp(alg,'RFN') % for LDA
         set(handles.pm_SelectTraining,'Enable','on');
         tA = {'Select Training A.','Mean','Mean + PSO','Exclusive Mean'};
         set(handles.pm_SelectTraining,'String',tA);
@@ -354,8 +439,15 @@ function pm_SelectAlgorithm_Callback(hObject, eventdata, handles)
         set(handles.pm_SelectTraining,'String',tA);
         set(handles.pm_SelectTraining,'Value',1);
         set(handles.pb_RunOfflineTraining,'Enable','off');
-        set(handles.pm_normSets,'Value',5);        
+        set(handles.pm_normSets,'Value',5);
         
+    elseif strcmp(alg,'SVM'); % for SVM
+        set(handles.pm_SelectTraining,'Enable','on');
+        tA = {'Select Training A.','linear', 'quadratic', 'polynomial', 'rbf', 'mlp'};
+        set(handles.pm_SelectTraining,'String',tA);
+        set(handles.pm_SelectTraining,'Value',1);
+        set(handles.pb_RunOfflineTraining,'Enable','on');
+        set(handles.pm_normSets,'Value',4);         
     end
         
 
@@ -712,7 +804,7 @@ function m_Stats_CurrentD_Callback(hObject, eventdata, handles)
     nRep = str2double(inputdlg('Write the number of repetitions','Number of Runs'));
     nM   = size(get(handles.lb_movements,'String'),1);    
     
-    confMatFlag = get(handles.cb_confMat,'Value')
+    confMatFlag = get(handles.cb_confMat,'Value');
     
     % safety check
     if isempty(nRep)
@@ -722,41 +814,49 @@ function m_Stats_CurrentD_Callback(hObject, eventdata, handles)
         errordlg('Invalid number','Error')
         return;
     end
+
+    % Init variables
+    accCS       = zeros(nRep,nM+1);
+    accTrue     = zeros(nRep,nM+1);
+    precision   = zeros(nRep,nM+1);
+    recall      = zeros(nRep,nM+1);
+    f1          = zeros(nRep,nM+1);
+    specificity = zeros(nRep,nM+1);
+    npv         = zeros(nRep,nM+1);
     
-    % run the training the given number of times
-    acc = zeros(nRep,nM+1);
     trTime = zeros(1,nRep);
-    tTime = zeros(1,nRep);
-    
+    tTime = zeros(1,nRep);    
     tStd = inf;
     tAcc = 0;
+    % run the training the given number of times
     for i = 1 : nRep
         pb_RunOfflineTraining_Callback(hObject, eventdata, handles);
         
         patRec = get(handles.et_accuracy,'UserData');
-        tempAcc = patRec.acc;
-        %tempAcc = get(handles.lb_accuracy,'UserData');
-        %tempAcc = handles.patRec.acc;   % Handles cannot be used because
-        %once the training is done, the new "patRec" is not updated into
-        %handles since the handles variable was recieved before calling
-        %the training.
+        tempPerformance = patRec.performance;
         
         if confMatFlag
             tempConfMat(:,:,i) = patRec.confMat;
         end
         
-        acc(i,:) = tempAcc;
-        trTime(i) = patRec.trTime;
-        tTime(i) = patRec.tTime;
+        accCS(i,:)      = tempPerformance.acc;
+        accTrue(i,:)    = tempPerformance.accTrue;
+        precision(i,:)  = tempPerformance.precision;
+        recall(i,:)     = tempPerformance.recall;
+        f1(i,:)         = tempPerformance.f1;
+        specificity(i,:)= tempPerformance.specificity;
+        npv(i,:)        = tempPerformance.npv;   
+        trTime(i)       = patRec.trTime;
+        tTime(i)        = patRec.tTime;
 
         set(handles.t_msg,'String',['Runing ' num2str(i)]);
         drawnow;
        
         % Save the best patRec
 %        if std(tempAcc(1:end-1)) <= tStd && tempAcc(end) >= tAcc
-        if tempAcc(end) >= tAcc
+        if tempPerformance.acc(end) >= tAcc
 %            tStd = std(tempAcc(1:end-1));
-            tAcc = tempAcc(end);
+            tAcc = tempPerformance.acc(end);
             tempPatRec = patRec;
         end
         
@@ -769,22 +869,80 @@ function m_Stats_CurrentD_Callback(hObject, eventdata, handles)
     %Old way to transfer data between GUIs
     %set(handles.et_accuracy,'UserData',tempPatRec);    
     
-    % show results
-    tAcc = mean(acc);
-    set(handles.et_accuracy,'String',num2str(tAcc(end)));
-    set(handles.lb_accuracy,'String',num2str(tAcc(1:end-1)'));     
+    % Display results
+    tAcc = mean(accCS);
+    set(handles.et_accuracy,'String',num2str(tAcc(end),'%.2f'));
+    set(handles.lb_accuracy,'String',num2str(tAcc(1:end-1)','%.2f'));     
     set(handles.et_trTime,'String',num2str(mean(trTime)));     
     set(handles.et_tTime,'String',num2str(mean(tTime)));     
+
+    set(handles.et_accTrue,'String',num2str(mean(accTrue(:,end)),'%.2f'));
+    set(handles.lb_accTrue,'String',num2str(mean(accTrue(:,1:end-1))','%.2f'));
+    set(handles.et_precision,'String',num2str(mean(precision(:,end)),'%.2f'));
+    set(handles.lb_precision,'String',num2str(mean(precision(:,1:end-1))','%.2f'));
+    set(handles.et_recall,'String',num2str(mean(recall(:,end)),'%.2f'));
+    set(handles.lb_recall,'String',num2str(mean(recall(:,1:end-1))','%.2f'));
+    set(handles.et_f1,'String',num2str(mean(f1(:,end)),'%.2f'));
+    set(handles.lb_f1,'String',num2str(mean(f1(:,1:end-1))','%.2f'));
+    set(handles.et_specificity,'String',num2str(mean(specificity(:,end)),'%.2f'));
+    set(handles.lb_specificity,'String',num2str(mean(specificity(:,1:end-1))','%.2f'));
+    set(handles.et_npv,'String',num2str(mean(npv(:,end)),'%.2f'));
+    set(handles.lb_npv,'String',num2str(mean(npv(:,1:end-1))','%.2f'));    
+    
     
     % plot results
     figure();
-    boxplot(acc,'plotstyle','compact')
+    boxplot(accCS,'plotstyle','compact')
     hold on;
-    plot(mean(acc),'r*');
-    title('Pattern recognition accuracy')
+    plot(mean(accCS),'r*');
     xlabel('Movements');
-    ylabel('Accuracy');
+    ylabel('Accuracy (class-specific)');
+
+    figure();
+    boxplot(accTrue,'plotstyle','compact')
+    hold on;
+    plot(mean(accTrue),'r*');
+    xlabel('Movements');
+    ylabel('Accuracy (Global)');
     
+    figure();
+    boxplot(recall,'plotstyle','compact')
+    hold on;
+    plot(mean(recall),'r*');
+    xlabel('Movements');
+    ylabel('Recall');
+    
+    figure();
+    boxplot(precision,'plotstyle','compact')
+    hold on;
+    plot(mean(precision),'r*');
+    xlabel('Movements');
+    ylabel('Precision (PPV)');
+
+    figure();
+    boxplot(f1,'plotstyle','compact')
+    hold on;
+    plot(mean(f1),'r*');
+    xlabel('Movements');
+    ylabel('F1');
+    
+    figure();
+    boxplot(specificity,'plotstyle','compact')
+    hold on;
+    plot(mean(specificity),'r*');
+    xlabel('Movements');
+    ylabel('Specificity');
+    
+    figure();
+    boxplot(npv,'plotstyle','compact')
+    hold on;
+    plot(mean(npv),'r*');
+    xlabel('Movements');
+    ylabel('Negative Predicted Value (NPV)');
+    
+    
+    
+    % Confution matrix    
     if confMatFlag
         figure();
         confMat = mean(tempConfMat,3);
@@ -809,18 +967,42 @@ function m_Stats_CurrentD_Callback(hObject, eventdata, handles)
     stats.topology  = patRec.topology;    
     stats.patRecTrained    = patRec.patRecTrained;
     stats.norm      = patRec.normSets;    
-    stats.mean      = tAcc;
-    stats.std       = std(acc);
-    stats.min       = min(acc);
-    stats.max       = max(acc);
-    stats.acc       = acc;
+
+    stats.accCS         = accCS;
+    stats.accCSmn       = mean(accCS)';
+    stats.accCSstd      = std(accCS)';
+
+    stats.accTrue       = accTrue;
+    stats.accTruemn     = mean(accTrue)';
+    stats.accTruestd    = std(accTrue)';
+    
+    stats.recall        = recall;
+    stats.recallmn      = mean(recall)';
+    stats.recallstd     = std(recall)';
+    
+    stats.precision     = precision;
+    stats.precisionmn   = mean(precision)';
+    stats.precisionstd  = std(precision)';
+    
+    stats.f1            = f1;
+    stats.f1mn          = mean(f1)';
+    stats.f1std         = std(f1)';
+    
+    stats.specificity   = specificity;
+    stats.specificitymn = mean(specificity)';
+    stats.specificitystd= std(specificity)';
+    
+    stats.npv           = npv;
+    stats.npvmn         = mean(npv)';
+    stats.npvstd        = std(npv)';
+    
     if confMatFlag
-        stats.confMat   = confMat;    
+        stats.confMat = confMat;    
     end
-    stats.trTime   = trTime;
-    stats.tTime    = tTime;
-    stats.trTimeMean   = mean(trTime);
-    stats.tTimeMean    = mean(tTime);
+    stats.trTime    = trTime;
+    stats.tTime     = tTime;
+    stats.trTimeMean= mean(trTime);
+    stats.tTimeMean = mean(tTime);
     
     disp(stats);
     save('stats.mat','stats');
@@ -874,10 +1056,24 @@ function m_Stats_Group_Callback(hObject, eventdata, handles)
     end
     
     nM   = size(get(handles.lb_movements,'String'),1);
-    acc  = zeros(nRep,nM+1,nS);  
+    accCS       = zeros(nRep,nM+1,nS);  
+    accTrue     = zeros(nRep,nM+1,nS);
+    precision   = zeros(nRep,nM+1,nS);
+    recall      = zeros(nRep,nM+1,nS);
+    f1          = zeros(nRep,nM+1,nS);
+    specificity = zeros(nRep,nM+1,nS);
+    npv         = zeros(nRep,nM+1,nS);    
     trTime = zeros(nRep,nS);
     tTime = zeros(nRep,nS);
-    tAcc = zeros(nS,nM+1);
+    
+    % temporal variable with subjects average
+    tAccCS      = zeros(nS,nM+1);
+    tAccTrue    = zeros(nS,nM+1);
+    tRecall     = zeros(nS,nM+1);
+    tPrecision  = zeros(nS,nM+1);
+    tF1         = zeros(nS,nM+1);
+    tSpecificity= zeros(nS,nM+1);
+    tNPV        = zeros(nS,nM+1);
     
     for i = 1 : nS
         % load data
@@ -897,50 +1093,61 @@ function m_Stats_Group_Callback(hObject, eventdata, handles)
         % run the training the given number of times
         for j = 1 : nRep
             set(handles.t_msg2,'String',['Statistics Rep: ' num2str(j) ' from subject: ' num2str(i)]);
-
-            pb_RunOfflineTraining_Callback(hObject, eventdata, handles)
+            pb_RunOfflineTraining_Callback(hObject, eventdata, handles);    
             patRec = get(handles.et_accuracy,'UserData');
-            acc(j,:,i) = get(handles.lb_accuracy,'UserData');
+            tempPerformance = patRec.performance;            
+            
+            accCS(j,:,i)      = tempPerformance.acc;
+            accTrue(j,:,i)    = tempPerformance.accTrue;
+            precision(j,:,i)  = tempPerformance.precision;
+            recall(j,:,i)     = tempPerformance.recall;
+            f1(j,:,i)         = tempPerformance.f1;
+            specificity(j,:,i)= tempPerformance.specificity;
+            npv(j,:,i)        = tempPerformance.npv;   
+            
             trTime(j,i) = patRec.trTime;
-            tTime(j,i) = patRec.tTime;
+            tTime(j,i)  = patRec.tTime;            
             
             drawnow;
         end        
     
-        % show results
-        tAcc(i,:) = mean(acc(:,:,i));
-        set(handles.et_accuracy,'String',num2str(tAcc(i,end)));
-        set(handles.lb_accuracy,'String',num2str(tAcc(i,1:end-1)'));     
+        % save results
+        tAccCS(i,:)     = mean(accCS(:,:,i));    
+        tAccTrue(i,:)   = mean(accTrue(:,:,i));    
+        tRecall(i,:)    = mean(recall(:,:,i));    
+        tPrecision(i,:) = mean(precision(:,:,i));    
+        tF1(i,:)        = mean(f1(:,:,i));    
+        tSpecificity(i,:) = mean(specificity(:,:,i));    
+        tNPV(i,:)       = mean(npv(:,:,i));    
 
         % plot
         figure();
-        boxplot(acc(:,:,i),'plotstyle','compact')
+        boxplot(accCS(:,:,i),'plotstyle','compact')
         hold on;
-        plot(mean(acc(:,:,i)),'r*');
-        title(['Pattern recognition accuracy: #' num2str(i)]);
+        plot(mean(accCS(:,:,i)),'r*');
         xlabel('Movements');
-        ylabel('Accuracy');
+        ylabel('Accuracy (class-specific)');
     end
 
     set(handles.t_msg2,'String','');
     
     % plot per movement
     figure();
-    boxplot(tAcc,'plotstyle','compact')
+    boxplot(tAccCS,'plotstyle','compact')
     hold on;
-    plot(mean(tAcc),'r*');
+    plot(mean(tAccCS),'r*');
     title('Pattern recognition accuracy, All subjects')
     xlabel('Movements');
-    ylabel('Accuracy');
+    ylabel('Accuracy (class-specific)');
     
     % plots per subject
     figure();
-    boxplot(tAcc(:,1:end-1)','plotstyle','compact')
+    boxplot(tAccCS(:,1:end-1)','plotstyle','compact')
     hold on;
-    plot(mean(tAcc(:,1:end-1),2),'r*');
+    plot(mean(tAccCS(:,1:end-1),2),'r*');
     title('Pattern recognition accuracy, All subjects')
     xlabel('Subjects');
-    ylabel('Accuracy');
+    ylabel('Accuracy (class-specific)');
     
     % Signal features
     fIdx = get(handles.lb_features,'Value');
@@ -948,47 +1155,95 @@ function m_Stats_Group_Callback(hObject, eventdata, handles)
     features = features(fIdx);
     
     % Save stats
-    patRec = get(handles.et_accuracy,'UserData');
+    patRec          = get(handles.et_accuracy,'UserData');
     stats.nSubjects = nS;
     stats.nRep      = nRep;
     stats.nM        = nM;
-    stats.features  = features;
-    stats.algorithm = patRec.patRecTrained(end).algorithm;
-    stats.training  = patRec.patRecTrained(end).training;
-    stats.topology  = patRec.topology;
-    stats.norm      = patRec.normSets.type;    
-    stats.meanSub    = mean(tAcc(:,end));
-    stats.stdSub     = std(tAcc(:,end));
-    stats.minSub     = min(tAcc(:,end));
-    stats.maxSub     = max(tAcc(:,end));    
-    stats.meanMov    = mean(mean(tAcc(:,1:end-1)));
-    stats.stdMov     = std(std(tAcc(:,1:end-1)));
-    stats.minMov     = min(min(tAcc(:,1:end-1)));
-    stats.maxMov     = max(max(tAcc(:,1:end-1)));    
 
-    stats.meanXSub   = tAcc(:,end);
-    stats.stdXSub    = std(tAcc(:,1:end-1)')';
-    stats.minXSub    = min(tAcc(:,1:end-1)')';
-    stats.maxXSub    = max(tAcc(:,1:end-1)')';
+    stats.features.features  = features;
+    stats.features.trSets    = str2double(get(handles.et_trSets,'String'));
+    stats.features.vSets     = str2double(get(handles.et_vSets,'String'));
+    stats.features.tSets     = str2double(get(handles.et_tSets,'String'));    
+    
+    stats.algorithm  = patRec.patRecTrained(end).algorithm;
+    stats.training   = patRec.patRecTrained(end).training;
+    stats.topology   = patRec.topology;
+    stats.norm       = patRec.normSets.type;    
+    stats.lastPatRec = patRec;    
+    
+%     stats.meanSub    = mean(tAccCS(:,end));
+%     stats.stdSub     = std(tAccCS(:,end));
+%     stats.minSub     = min(tAccCS(:,end));
+%     stats.maxSub     = max(tAccCS(:,end));    
+%     stats.meanMov    = mean(mean(tAccCS(:,1:end-1)));
+%     stats.stdMov     = std(std(tAccCS(:,1:end-1)));
+%     stats.minMov     = min(min(tAccCS(:,1:end-1)));
+%     stats.maxMov     = max(max(tAccCS(:,1:end-1)));    
+% 
+%     stats.meanXSub   = tAccCS(:,end);
+%     stats.stdXSub    = std(tAccCS(:,1:end-1)')';
+%     stats.minXSub    = min(tAccCS(:,1:end-1)')';
+%     stats.maxXSub    = max(tAccCS(:,1:end-1)')';
+% 
+%     stats.meanXMov    = mean(tAccCS(:,1:end-1));
+%     stats.stdXMov     = std(tAccCS(:,1:end-1));
+%     stats.minXMov     = min(tAccCS(:,1:end-1));
+%     stats.maxXMov     = max(tAccCS(:,1:end-1));  
 
-    stats.meanXMov    = mean(tAcc(:,1:end-1));
-    stats.stdXMov     = std(tAcc(:,1:end-1));
-    stats.minXMov     = min(tAcc(:,1:end-1));
-    stats.maxXMov     = max(tAcc(:,1:end-1));  
+    stats.accCS         = accCS;
+    stats.accCSXSub     = tAccCS(:,1:end-1)';
+    stats.accCSXMov     = tAccCS;
 
-    stats.accXSub    = tAcc(:,1:end-1)';
-    stats.accXMov    = tAcc;
-    stats.accAll     = acc;
+    stats.accTrue       = accTrue;
+    stats.accTrueXSub   = tAccTrue(:,1:end-1)';
+    stats.accTrueXMov   = tAccTrue;
+    
+    stats.recall        = recall;
+    stats.recallXSub    = tRecall(:,1:end-1)';
+    stats.recallXMov    = tRecall;
+
+    stats.precision     = recall;
+    stats.precisionXSub = tPrecision(:,1:end-1)';
+    stats.precisionXMov = tPrecision;
+
+    stats.f1            = f1;
+    stats.f1XSub        = tF1(:,1:end-1)';
+    stats.f1XMov        = tF1;
+
+    stats.specificity     = specificity;
+    stats.specificityXSub = tSpecificity(:,1:end-1)';
+    stats.specificityXMov = tSpecificity;
+
+    stats.npv           = npv;
+    stats.npvXSub       = tNPV(:,1:end-1)';
+    stats.npvXMov       = tNPV;
 
     stats.trTime    = trTime;
-    stats.tTime    = tTime;
+    stats.tTime     = tTime;
     
     disp(stats);
     save('stats.mat','stats');
 
-    set(handles.et_accuracy,'String',num2str(stats.meanMov));
-    set(handles.lb_accuracy,'String',num2str(stats.meanXMov'));     
+    set(handles.et_accuracy,'String',num2str(mean(tAccCS(:,end)),'%.2f'));
+    set(handles.lb_accuracy,'String',num2str(mean(tAccCS(:,1:end-1))','%.2f'));     
 
+    set(handles.et_accTrue,'String',num2str(mean(tAccTrue(:,end)),'%.2f'));
+    set(handles.lb_accTrue,'String',num2str(mean(tAccTrue(:,1:end-1))','%.2f'));
+    set(handles.et_precision,'String',num2str(mean(tPrecision(:,end)),'%.2f'));
+    set(handles.lb_precision,'String',num2str(mean(tPrecision(:,1:end-1))','%.2f'));
+    set(handles.et_recall,'String',num2str(mean(tRecall(:,end)),'%.2f'));
+    set(handles.lb_recall,'String',num2str(mean(tRecall(:,1:end-1))','%.2f'));
+    set(handles.et_f1,'String',num2str(mean(tF1(:,end)),'%.2f'));
+    set(handles.lb_f1,'String',num2str(mean(tF1(:,1:end-1))','%.2f'));
+    set(handles.et_specificity,'String',num2str(mean(tSpecificity(:,end)),'%.2f'));
+    set(handles.lb_specificity,'String',num2str(mean(tSpecificity(:,1:end-1))','%.2f'));
+    set(handles.et_npv,'String',num2str(mean(tNPV(:,end)),'%.2f'));
+    set(handles.lb_npv,'String',num2str(mean(tNPV(:,1:end-1))','%.2f'));     
+    
+    set(handles.et_trTime,'String',num2str(mean(mean(trTime,2))));     
+    set(handles.et_tTime,'String',num2str(mean(mean(tTime,2))));     
+    
+    
     set(handles.t_msg,'String','Statistics completed and saved in the "stast.mat" file');
 
 
@@ -1362,3 +1617,559 @@ function cb_floorNoise_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 % Hint: get(hObject,'Value') returns toggle state of cb_floorNoise
+
+
+% --- Executes on selection change in pm_FeatureReduction.
+function pm_FeatureReduction_Callback(hObject, eventdata, handles)
+% hObject    handle to pm_FeatureReduction (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: contents = cellstr(get(hObject,'String')) returns pm_FeatureReduction contents as cell array
+%        contents{get(hObject,'Value')} returns selected item from pm_FeatureReduction
+    allFeatures = cellstr(get(handles.lb_features,'String'));
+    allFeatReducAlg=get(handles.pm_FeatureReduction,'String');
+    selFeatReduc=char(allFeatReducAlg(get(handles.pm_FeatureReduction,'Value')));
+    if strcmp(selFeatReduc,'PCA')
+        set(handles.lb_features,'Value',1:length(allFeatures));
+    end
+
+
+% --- Executes during object creation, after setting all properties.
+function pm_FeatureReduction_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to pm_FeatureReduction (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: popupmenu controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+% --- Executes on selection change in lb_precision.
+function lb_precision_Callback(hObject, eventdata, handles)
+% hObject    handle to lb_precision (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: contents = cellstr(get(hObject,'String')) returns lb_precision contents as cell array
+%        contents{get(hObject,'Value')} returns selected item from lb_precision
+
+
+% --- Executes during object creation, after setting all properties.
+function lb_precision_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to lb_precision (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: listbox controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+% --- Executes on selection change in listbox5.
+function listbox5_Callback(hObject, eventdata, handles)
+% hObject    handle to listbox5 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: contents = cellstr(get(hObject,'String')) returns listbox5 contents as cell array
+%        contents{get(hObject,'Value')} returns selected item from listbox5
+
+
+% --- Executes during object creation, after setting all properties.
+function listbox5_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to listbox5 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: listbox controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+% --- Executes on selection change in listbox6.
+function listbox6_Callback(hObject, eventdata, handles)
+% hObject    handle to listbox6 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: contents = cellstr(get(hObject,'String')) returns listbox6 contents as cell array
+%        contents{get(hObject,'Value')} returns selected item from listbox6
+
+
+% --- Executes during object creation, after setting all properties.
+function listbox6_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to listbox6 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: listbox controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function edit12_Callback(hObject, eventdata, handles)
+% hObject    handle to edit12 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of edit12 as text
+%        str2double(get(hObject,'String')) returns contents of edit12 as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function edit12_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to edit12 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function edit13_Callback(hObject, eventdata, handles)
+% hObject    handle to edit13 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of edit13 as text
+%        str2double(get(hObject,'String')) returns contents of edit13 as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function edit13_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to edit13 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function edit14_Callback(hObject, eventdata, handles)
+% hObject    handle to edit14 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of edit14 as text
+%        str2double(get(hObject,'String')) returns contents of edit14 as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function edit14_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to edit14 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+% --- Executes on selection change in lb_recall.
+function lb_recall_Callback(hObject, eventdata, handles)
+% hObject    handle to lb_recall (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: contents = cellstr(get(hObject,'String')) returns lb_recall contents as cell array
+%        contents{get(hObject,'Value')} returns selected item from lb_recall
+
+
+% --- Executes during object creation, after setting all properties.
+function lb_recall_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to lb_recall (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: listbox controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+% --- Executes on selection change in lb_f1.
+function lb_f1_Callback(hObject, eventdata, handles)
+% hObject    handle to lb_f1 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: contents = cellstr(get(hObject,'String')) returns lb_f1 contents as cell array
+%        contents{get(hObject,'Value')} returns selected item from lb_f1
+
+
+% --- Executes during object creation, after setting all properties.
+function lb_f1_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to lb_f1 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: listbox controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function et_precision_Callback(hObject, eventdata, handles)
+% hObject    handle to et_precision (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of et_precision as text
+%        str2double(get(hObject,'String')) returns contents of et_precision as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function et_precision_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to et_precision (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function edit16_Callback(hObject, eventdata, handles)
+% hObject    handle to edit16 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of edit16 as text
+%        str2double(get(hObject,'String')) returns contents of edit16 as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function edit16_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to edit16 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function edit17_Callback(hObject, eventdata, handles)
+% hObject    handle to edit17 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of edit17 as text
+%        str2double(get(hObject,'String')) returns contents of edit17 as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function edit17_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to edit17 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+function edit19_Callback(hObject, eventdata, handles)
+% hObject    handle to edit19 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of edit19 as text
+%        str2double(get(hObject,'String')) returns contents of edit19 as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function edit19_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to edit19 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function edit20_Callback(hObject, eventdata, handles)
+% hObject    handle to edit20 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of edit20 as text
+%        str2double(get(hObject,'String')) returns contents of edit20 as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function edit20_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to edit20 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function et_f1_Callback(hObject, eventdata, handles)
+% hObject    handle to et_f1 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of et_f1 as text
+%        str2double(get(hObject,'String')) returns contents of et_f1 as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function et_f1_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to et_f1 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function edit22_Callback(hObject, eventdata, handles)
+% hObject    handle to edit22 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of edit22 as text
+%        str2double(get(hObject,'String')) returns contents of edit22 as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function edit22_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to edit22 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function edit23_Callback(hObject, eventdata, handles)
+% hObject    handle to edit23 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of edit23 as text
+%        str2double(get(hObject,'String')) returns contents of edit23 as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function edit23_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to edit23 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+% % % %                                                                  
+function et_recall_Callback(hObject, eventdata, handles)
+% hObject    handle to et_recall (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of et_recall as text
+%        str2double(get(hObject,'String')) returns contents of et_recall as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function et_recall_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to et_recall (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+% --- Executes on selection change in lb_specificity.
+function lb_specificity_Callback(hObject, eventdata, handles)
+% hObject    handle to lb_specificity (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: contents = cellstr(get(hObject,'String')) returns lb_specificity contents as cell array
+%        contents{get(hObject,'Value')} returns selected item from lb_specificity
+
+
+% --- Executes during object creation, after setting all properties.
+function lb_specificity_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to lb_specificity (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: listbox controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function et_specificity_Callback(hObject, eventdata, handles)
+% hObject    handle to et_specificity (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of et_specificity as text
+%        str2double(get(hObject,'String')) returns contents of et_specificity as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function et_specificity_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to et_specificity (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+% --- Executes on selection change in lb_npv.
+function lb_npv_Callback(hObject, eventdata, handles)
+% hObject    handle to lb_npv (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: contents = cellstr(get(hObject,'String')) returns lb_npv contents as cell array
+%        contents{get(hObject,'Value')} returns selected item from lb_npv
+
+
+% --- Executes during object creation, after setting all properties.
+function lb_npv_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to lb_npv (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: listbox controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function et_npv_Callback(hObject, eventdata, handles)
+% hObject    handle to et_npv (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of et_npv as text
+%        str2double(get(hObject,'String')) returns contents of et_npv as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function et_npv_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to et_npv (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+% --- Executes on selection change in lb_accTrue.
+function lb_accTrue_Callback(hObject, eventdata, handles)
+% hObject    handle to lb_accTrue (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: contents = cellstr(get(hObject,'String')) returns lb_accTrue contents as cell array
+%        contents{get(hObject,'Value')} returns selected item from lb_accTrue
+
+
+% --- Executes during object creation, after setting all properties.
+function lb_accTrue_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to lb_accTrue (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: listbox controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function et_accTrue_Callback(hObject, eventdata, handles)
+% hObject    handle to et_accTrue (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of et_accTrue as text
+%        str2double(get(hObject,'String')) returns contents of et_accTrue as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function et_accTrue_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to et_accTrue (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end

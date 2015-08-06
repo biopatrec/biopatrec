@@ -22,13 +22,16 @@
 % ------------------------- Updates & Contributors ------------------------
 % [Contributors are welcome to add their email]
 % 2012-06-01 / Ali Fouad  / Creation
-% 20xx-xx-xx / Author  / Comment on update
+% 2014-12-04 / Ali Fouad  / Fixed warning message due to empty set
 
-function [trSet vSet mMin]= NormalizeSets_normLog(trSet, vSet)
+function [trSet, vSet, mMin]= NormalizeSets_normLog(trSet, vSet)
 mMin =min(trSet);
 
+trSet = log(abs(trSet - repmat(mMin,size(trSet,1),1)) +1);
 
-trSet = log(abs(trSet - repmat(mMin,size(trSet,1),[])) +1);
+vSet  = log(abs(vSet  - repmat(mMin,size(vSet ,1),1)) +1);
 
-vSet  = log(abs(vSet  - repmat(mMin,size(vSet ,1),[])) +1);
+% the following code produce a warning after Matlab 13a
+%trSet = log(abs(trSet - repmat(mMin,size(trSet,1),[])) +1);   
+%vSet  = log(abs(vSet  - repmat(mMin,size(vSet ,1),[])) +1);
 

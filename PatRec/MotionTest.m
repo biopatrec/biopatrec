@@ -22,16 +22,25 @@
 %
 % --------------------------Updates--------------------------
 % [Contributors are welcome to add their email]
-% 2012-01-xx / Max Ortiz  / Creation from MotionTestLegacy
-% 2012-05-29 / Max Ortiz  / Addition of "clear" commands
-% 2012-07-24 / Max Ortiz  / Use fpTW to compute the predition time of the
-%                           first prediction in order to calculate the selection time
-% 2012-10-05 / Joel Falk-Dahlin  / Added ApplyControl after OneShotPatRec
-%                                  to allow for the use of control algorithms in the motion test
-% 2012-10-26 / Joel Falk-Dahlin  / Added ApplyProportionalControl
-% 2011-11-06 / Max Ortiz  / Create RealimePatRec_OneShot to concentrate
-%                           critical routines of realtime patrec
+% 2012-01-xx / Max Ortiz        / Creation from MotionTestLegacy
+% 2012-05-29 / Max Ortiz        / Addition of "clear" commands
+% 2012-07-24 / Max Ortiz        / Use fpTW to compute the predition time of the
+%                                 first prediction in order to calculate the selection time
+% 2012-10-05 / Joel Falk-Dahlin / Added ApplyControl after OneShotPatRec
+%                                 to allow for the use of control algorithms in the motion test
+% 2012-10-26 / Joel Falk-Dahlin / Added ApplyProportionalControl
+% 2012-11-06 / Max Ortiz        / Create RealimePatRec_OneShot to concentrate
+%                                 critical routines of realtime patrec
+% 2013-01-29 / Nichlas Sander   / Added possibility to use VRE as guidance
+%                                 during the motion test.
+% 2015-02-02 / Enzo Mastinu     / All this function has been re-organizated
+%                                 to be compatible with the functions
+%                                 placed into COMM/AFE folder. For more
+%                                 details read RecordingSession.m log.
+                            
 % 20xx-xx-xx / Author     / Comment on update
+
+
 
 function motionTest = MotionTest(patRecX, handlesX)
 
@@ -73,7 +82,7 @@ global m;
 %% Init variable
 patRec  = patRecX;
 handles = handlesX;
-pDiv    = 2;        % Peeking devider
+pDiv    = 4;        % Peeking devider
 trials  = str2double(get(handles.et_trials,'String'));
 nR      = str2double(get(handles.et_nR,'String'));
 timeOut = str2double(get(handles.et_timeOut,'String'));
@@ -113,7 +122,7 @@ else
 end
 
 %% Is there an option for coupling with the motors?
-if isfield(handles,'cb_motorCoupling') %&& ~isfield(handles,'com')
+if isfield(handles,'cb_motorCoupling')
     motorCoupling = get(handles.cb_motorCoupling,'Value');    
 else
     motorCoupling = 0;
@@ -122,29 +131,21 @@ end
 %% Init motionTest structure
 motionTest.patRec   = patRec;
 motionTest.sF       = patRec.sF;
-motionTest.tW       = patRec.tW;
+% motionTest.tW       = patRec.tW;
 motionTest.trails   = trials;
 motionTest.nR       = nR;
 motionTest.timeOut  = timeOut;
 
-%% Initialize DAQ card
-% Note: A function for DAQ selection will be required when more cards are
-% added
+sF                  = motionTest.sF;
+nCh                 = length(patRec.nCh);       
+ComPortType         = patRec.comm;
+deviceName          = patRec.dev;
 
-if strcmp(patRec.dev,'ADH')
-    
-else % at this poin everything else is SBI (e.g.NI-USB6009)
-    chAI = zeros(1,8);
-    chAI(patRec.nCh) = 1;
-    % create the SBI
-    s = InitSBI_NI(patRec.sF,timeOut,chAI);
-    % Change the peek time
-    s.NotifyWhenDataAvailableExceeds = (patRec.sF*patRec.tW)/pDiv; % Max 0.05, or 20 times per second
-    %Add listener
-    lh = s.addlistener('DataAvailable', @MotionTest_OneShot);
-    %Test the DAQ by ploting the data
-    %lh = s.addlistener('DataAvailable', @plotDataTest);
-end
+% Get sampling time
+sT = motionTest.timeOut;
+tW = sT/100;                                                           % Time window size
+tWs = tW*sF;                                                           % Time window samples
+
 
 %% Motion Test
 % Note: Probabily this way of testing only works for the NI
@@ -156,6 +157,7 @@ if trainUsingVre
     end
 end
 
+
 % run over all the trails
 for t = 1 : trials
     
@@ -165,7 +167,7 @@ for t = 1 : trials
         pause(1);
     end
     
-    % repite the movement the chosen times
+    % repeat the movement the chosen times
     for r = 1 : nR
         % Randomize the aperance of the requested movement
         mIdx = randperm(patRec.nM - 1); % It doesn't include "rest"
@@ -174,7 +176,7 @@ for t = 1 : trials
             
             %Select movement
             movementObjects = handles.movList(patRec.movOutIdx{mIdx(m)});
-            mov = patRec.mov{mIdx(m)};    
+            mov = patRec.mov{mIdx(m)};
             %Prepare
             for i = 1 : 3;
                 % Warn the user
@@ -220,10 +222,9 @@ for t = 1 : trials
             % Ask the user to execute movement
             set(handles.t_msg,'String',mov);
             drawnow;
-            %% Start test
-            s.startBackground();  % Start the data acquision for timeOut seconds        
             
-             % Move the VRE into place.
+            
+            % Move the VRE into place.
             for i = 1:length(movementObjects)
                 movementObject = movementObjects(i);
                 if trainUsingVre
@@ -234,14 +235,55 @@ for t = 1 : trials
                 end
             end
             
-            %selTimeTic = tic;    % Start counting after user instruction,
-                                  % which might not be as preciase as start counting just after a
-                                  % movement is predicted.
             
-            % Wait until it has finished done
-            %s.IsDone  % will report 0    
-            s.wait(); % rather than while    
-            %s.IsDone  % will report 1
+            cData = zeros(tWs,nCh);
+            if strcmp (ComPortType, 'NI')
+
+                % Init SBI
+                sCh = 1:nCh;
+                s = InitSBI_NI(sF,sT,sCh); 
+                s.NotifyWhenDataAvailableExceeds = tWs;                            % PEEK time
+                lh = s.addlistener('DataAvailable', @MotionTest_OneShot); 
+
+                % Start DAQ
+                s.startBackground();                                               % Run in the backgroud
+
+                if ~s.IsDone                                                       % check if is done
+                    s.wait();
+                end
+                delete(lh);
+
+            %%%%% Motion Test with other custom device %%%%%   
+            else
+                
+                % Prepare handles for next function calls
+                handles.deviceName  = deviceName;
+                handles.ComPortType = ComPortType;
+                if strcmp (ComPortType, 'COM')
+                    handles.ComPortName = patRec.comn;
+                end
+                handles.sF          = sF;
+                handles.sT          = sT;
+                handles.nCh         = nCh;
+                handles.sTall       = sT;
+
+                % Connect the chosen device, it returns the connection object
+                obj = ConnectDevice(handles);
+
+                % Set the selected device and Start the acquisition
+                SetDeviceStartAcquisition(handles, obj);
+
+                for timeWindowNr = 1:sT/tW
+
+                    cData = Acquire_tWs(deviceName, obj, nCh, tWs);            % acquire a new time window of samples
+                    acquireEvent.Data = cData;
+                    MotionTest_OneShot(0, acquireEvent);                       
+                end
+
+                % Stop acquisition
+                StopAcquisition(deviceName, obj);
+            end
+            
             
             %Reset the VRE.
             if trainUsingVre
@@ -318,8 +360,6 @@ end
 % Saved any modification to patRec
 motionTest.patRec   = patRec;
 
-%Delete listener SBI
-delete (lh)
 pause off;
 
 % show results
@@ -337,8 +377,8 @@ disp(motionTest);
 % Clear key variables
 clear mIdx;
 clear m;
-    
 end
+
 
 function MotionTest_OneShot(src,event)
 
@@ -437,10 +477,10 @@ function MotionTest_OneShot(src,event)
             end            
         end   
         
-        if ~isnan(compTime)
-            src.stop();
-            pause(1);
-        end
+%         if ~isnan(compTime)
+%             src.stop();
+%             pause(1);
+%         end
         % Next cycle
         nTW = nTW + 1;
     end

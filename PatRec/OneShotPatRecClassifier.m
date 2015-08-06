@@ -50,9 +50,17 @@ function [outMov outVector] = OneShotPatRecClassifier(patRec, x)
 
         [outMov outVector] = PatRec_OneVsAll(patRec, x);
 
+    elseif strcmp(patRec.topology,'One-vs-All Th')
+
+        [outMov outVector] = PatRec_OneVsAllT(patRec, x);
+
     elseif strcmp(patRec.topology,'One-vs-One')
 
         [outMov outVector] = PatRec_OneVsOne(patRec, x);
+
+    elseif strcmp(patRec.topology,'One-vs-One DoF')
+
+        [outMov outVector] = PatRec_OneVsOneDoF(patRec, x);
         
     elseif strcmp(patRec.topology,'All-and-One')
 

@@ -25,190 +25,223 @@
 % 2011-08-03 / Max Ortiz  / Separation of "SignalProcessing_RealtimePatRec"
 % 2011-11-17 / Max Ortiz  / Added the motors coupling
 % 2011-12-07 / Nichlas Sander / Added VRE Coupling and VRE commands.
-% 2011-12-07 / Max Ortiz  / Upgrade to Session-based interface for DAQ,the
+% 2011-12-07 / Max Ortiz  / Upgrade to Session-based interface for DAQ, the
 %                           prevous version was called RealtimePatRec_Legacy.m
 % 2012-08-13 / Morten Kristoffersen  / Added GUI interface to see and control 
 % 									   the threshold values for the MLP ThOut algorithm.
-% 2012-10-05 / Joel Falk-Dahlin  / Changed inputs and outputs of
-%                                  ApplyControl to work with updated version.
-%                                  Removed InitControl since it is
-%                                  performed inside the GUI
-% 2012-10-26 / Joel Falk-Dahlin  / Added ApplyProportionalControl
-% 2012-11-06 / Max Ortiz  / Create RealimePatRec_OneShot to concentrate
-%                           critical routines of realtimepatrec
-% 2012-11-23 / Joel Falk-Dahlin  / Moved speeds from handles to patRec,
-%                                  changed VRE to use the new speeds
-
+% 2012-10-05 / Joel Falk-Dahlin / Changed inputs and outputs of
+%                                 ApplyControl to work with updated version.
+%                                 Removed InitControl since it is
+%                                 performed inside the GUI
+% 2012-10-26 / Joel Falk-Dahlin / Added ApplyProportionalControl
+% 2012-11-06 / Max Ortiz        / Create RealimePatRec_OneShot to concentrate
+%                                 critical routines of realtimepatrec
+% 2012-11-23 / Joel Falk-Dahlin / Moved speeds from handles to patRec,
+%                                 changed VRE to use the new speeds
+% 2013-04-17 / Max Ortiz        / Made independent routines for control of
+%                                 differend devices
+% 2013-06-03 / Max Ortiz        / Addition of necessary routines to control
+%                                 Standard proshetic components (SPC) using wifi.
+% 2014-11-12 / Enzo Mastinu     / Added code for ADS1299 AFE RealTime PatRec
+% 2015-01-20 / Enzo Mastinu     / All this function has been re-organized
+%                                 to be compatible with the functions
+%                                 placed into COMM/AFE folder. For more
+%                                 details read about RecordingSession.m with 
+%                                 other custom devices for BioPatRec_TRE.
+                                
 % 20xx-xx-xx / Author  / Comment on update
+
 function handlesX = RealtimePatRec(patRecX, handlesX)
 
-clear global;
-clear persistent;
+    clear global;
+    clear persistent;
 
-global patRec;
-global handles;
-global nTW;
-global procT;
-global motorCoupling;
-global vreCoupling;
-global pwmIDs;
-global pwmAs;
-global pwmBs;
-global tempData;
-global outVectorMotorLast;
-%global data;            % only needed for testing
-global thresholdGUIData;
+    global patRec;
+    global handles;
+    global nTW;
+    global procT;
+    global motorCoupling;
+    global vreCoupling;
+    global pwmIDs;
+    global pwmAs;
+    global pwmBs;
+    global tempData;
+    global outVectorMotorLast;
+    
+    %global data;            % only needed for testing
+    global thresholdGUIData;
 
+    patRec   = patRecX;
+    handles  = handlesX;
+    nTW      = 1;
+    procT    = [];
+    tempData = [];
+    outVectorMotorLast = zeros(patRec.nOuts,1);
+                         
+    % Get needed info from patRec structure
+    sF                  = patRec.sF;
+    nCh                 = length(patRec.nCh);       
+    ComPortType         = patRec.comm;
+    deviceName          = patRec.dev;
+                         
+    % Get sampling time
+    sT = str2double(get(handles.et_testingT,'String'));
+    tW = sT/100;                                                           % Time window size
+    tWs = tW*sF;                                                           % Time window samples
+   
 
-patRec   = patRecX;
-handles  = handlesX;
-nTW      = 1;
-procT    = [];
-tempData = [];
-outVectorMotorLast = zeros(patRec.nOuts,1);
-pDiv     = 2;        % Peeking devider, the fastest allowed for the DAQ
-                     % which is 20 times per second, so 0.05 for 2k Hz
-% Get sampling time
-sT = str2double(get(handles.et_testingT,'String'));
+    % Initialze control algorithms
+    %patRec = InitControl(patRec); % No longer needed, Initialization is done in GUI
 
-% Initialze control algorithms
-%patRec = InitControl(patRec); % No longer needed, Initialization is done in GUI
-
-%% Is threshold (thOut) used?
-if(isfield(patRec.patRecTrained,'thOut'));
-    %Threshold GUI init
-    thresholdGUI = GUI_Threshold; 
-    thresholdGUIData = guidata(thresholdGUI);
-    set(GUI_Threshold,'CloseRequestFcn', 'set(GUI_Threshold, ''Visible'', ''off'')');
-    xpatch = [1 1 0 0];
-    ypatch = [0 0 0 0];
-        for i=0:patRec.nOuts-1
-            s = sprintf('movementSelector%d',i);
-            s0 = sprintf('thPatch%d',i);
-            s1 = sprintf('meter%d',i);
-            axes(thresholdGUIData.(s1));
-            handles.(s0) = patch(xpatch,ypatch,'b','EdgeColor','b','EraseMode','normal','visible','on');
-            ylim(thresholdGUIData.(s1), [0 1]);
-            xlim('auto');
-            set(thresholdGUIData.(s),'String',patRec.mov(patRec.indMovIdx));
-            if (size(patRec.mov(patRec.indMovIdx),1) < i+1); 
-                set(thresholdGUIData.(s),'Value',size(patRec.indMovIdx,2));
-            else
-                set(thresholdGUIData.(s),'Value',i+1);
+    %% Is threshold (thOut) used?
+    if(isfield(patRec.patRecTrained,'thOut'));
+        %Threshold GUI init
+        thresholdGUI = GUI_Threshold; 
+        thresholdGUIData = guidata(thresholdGUI);
+        set(GUI_Threshold,'CloseRequestFcn', 'set(GUI_Threshold, ''Visible'', ''off'')');
+        xpatch = [1 1 0 0];
+        ypatch = [0 0 0 0];
+            for i=0:patRec.nOuts-1
+                s = sprintf('movementSelector%d',i);
+                s0 = sprintf('thPatch%d',i);
+                s1 = sprintf('meter%d',i);
+                axes(thresholdGUIData.(s1));
+                handles.(s0) = patch(xpatch,ypatch,'b','EdgeColor','b','EraseMode','normal','visible','on');
+                ylim(thresholdGUIData.(s1), [0 1]);
+                xlim('auto');
+                set(thresholdGUIData.(s),'String',patRec.mov(patRec.indMovIdx));
+                if (size(patRec.mov(patRec.indMovIdx),1) < i+1); 
+                    set(thresholdGUIData.(s),'Value',size(patRec.indMovIdx,2));
+                else
+                    set(thresholdGUIData.(s),'Value',i+1);
+                end
             end
-        end
-end
-
-%% Is the VRE selected?
-vreCoupling = 0;
-if isfield(handles,'vre_Com');  
-    %If there is a vre communication, is it open?
-    vreCoupling = strcmp(handles.vre_Com.Status,'open');
-end
-
-
-%% Is there an option for coupling with the motors?
-if isfield(handles,'cb_motorCoupling') %&& ~isfield(handles,'com')
-    motorCoupling = get(handles.cb_motorCoupling,'Value');    
-else
-    motorCoupling = 0;
-end
-
-%Is the motor coupling selected?
-if motorCoupling
-
-    %Initialize
-    motorIdx = zeros(1,10);
-    pwmAs = zeros(1,10);
-    pwmBs = zeros(1,10);
-    movSpeeds = zeros(1,10);
-    
-    % Get the links to the motors
-    for i = 1 : size(motorIdx,2)
-        pmID = ['handles.pm_m' num2str(i)];
-        motorIdx(i) = get(eval(pmID),'Value'); 
-        speedID = ['handles.et_speed' num2str(i)];
-        movSpeeds(i) = str2double(get(eval(speedID),'String')); 
     end
-    
-    % Init variables for control
-    pwmIDs = ['A';'A';'B';'B';'C';'C';'D';'D';'E';'E'];
-    for i = 1 : 2 : size(pwmIDs)
-        pwmAs(i)   = movSpeeds(i);
-        pwmBs(i)   = 0;
-        pwmAs(i+1) = 0;
-        pwmBs(i+1) = movSpeeds(i+1);
-    end;
-    
-    % Arrenge according to selection
-    pwmIDs = pwmIDs(motorIdx);
-    pwmAs = pwmAs(motorIdx);
-    pwmBs = pwmBs(motorIdx);
-    
-end    
 
-%% Initialize DAQ card
-% Note: A function for DAQ selection will be required when more cards are
-% added
-if strcmp(patRec.dev,'ADH')
-    
-else % at this poin everything else is the NI - USB6009
-    chAI = zeros(1,8);  % 8 ch is the limit for the USB6009
-    chAI(patRec.nCh) = 1; 
-    %Init the SBI
-    s = InitSBI_NI(patRec.sF,sT,chAI);
-    % Change the interruption time
-    s.NotifyWhenDataAvailableExceeds = (patRec.sF*patRec.tW)/pDiv;
-    lh = s.addlistener('DataAvailable', @RealtimePatRec_OneShot);
-    %Test the DAQ by ploting the data
-    %lh = s.addlistener('DataAvailable', @plotDataTest);
-end
+    %% Is the VRE selected?
+    vreCoupling = 0;
+    if isfield(handles,'vre_Com');  
+        %If there is a vre communication, is it open?
+        vreCoupling = strcmp(handles.vre_Com.Status,'open');
+    end
 
-
-%% Run the Realtime PatRec
-% Note: Probabily this way of testing only works for the NI
-% Specific funtions per card might be required.
-s.startBackground();
-
-% Wait until it has finished done
-%s.IsDone  % will report 0    
-s.wait(); % rather than while    
-%s.IsDone  % will report 1
-
-%% Finish session
-%Delete listener SBI
-delete (lh)
-
-%Stop motors
-if motorCoupling
-    if(isfield(handles,'movList'))
-        for i=1 : length(handles.movList)
-            [handles.motors, ~] = MotorsOff(handles.com, handles.movList(i), handles.motors);
-        end
+    %% Is there an option for coupling with the motors?
+    if isfield(handles,'cb_motorCoupling') %&& ~isfield(handles,'com')
+        motorCoupling = get(handles.cb_motorCoupling,'Value');    
     else
-        ActivateMotors(handles.com, pwmIDs, pwmAs, pwmBs, 0);
+        motorCoupling = 0;
     end
-end
 
-% Write the average processing time
-set(handles.et_avgProcTime,'String',num2str(mean(procT(2:end))));
-
-handlesX = handles;
-
-%Reset Threshold GUI 
-if(isfield(patRec.patRecTrained,'thOut'));
-    for i=0:patRec.nOuts-1
-        s0 = sprintf('thPatch%d',i);
-        set(handles.(s0), 'YData', [0 0 0 0]);
-        %delete(GUI_Threshold);
-    end
-end
-
-%Plot processing time
-figure();
-hist(procT(2:end));
+%     % Init variables for hard-coded control (not using objects) %% CHECK
+%     if motorCoupling && ~isfield(handles,'movList')
+%         if deviceID == 1 % Multifunctinal prosthesis with DC motors 
+%             [pwmIDs pwmAs pwmBs] = InitMF_Hand_DC_Hardcoded(handles);        
+%         elseif deviceID == 3  % Standard prosthetic units (wireless)
+% 
+%         end
+%     end
     
+    % Get connection object for control external robotic devices
+    if motorCoupling
+        if ~isfield(handles,'Control_obj')
+            set(handles.t_msg,'String','No connection obj found');   
+            return;
+        end
+        if ~strcmp(handles.Control_obj.status,'open')
+            fopen(handles.Control_obj);
+        end        
+    end
+
+    cData = zeros(tWs,nCh);
+    
+    %%%%% Real Time PatRec with NI DAQ card %%%%%
+    if strcmp (ComPortType, 'NI')
+
+        % Init SBI
+        sCh = 1:nCh;
+        s = InitSBI_NI(sF,sT,sCh); 
+        s.NotifyWhenDataAvailableExceeds = tWs;                            % PEEK time
+        lh = s.addlistener('DataAvailable', @RealtimePatRec_OneShot); 
+
+        % Start DAQ
+        s.startBackground();                                               % Run in the backgroud
+
+        if ~s.IsDone                                                       % check if is done
+            s.wait();
+        end
+        delete(lh);
+
+    %%%%% Real Time PatRec with other custom device %%%%%   
+    else
+
+        % Prepare handles for next function calls
+        handles.deviceName  = deviceName;
+        handles.ComPortType = ComPortType;
+        if strcmp (ComPortType, 'COM')
+            handles.ComPortName = patRec.comn;
+        end
+        handles.sF          = sF;
+        handles.sT          = sT;
+        handles.nCh         = nCh;
+        handles.sTall       = sT;
+
+        % Delete connection object
+        if isfield(handles,'obj')
+            delete(handles.obj);
+        end
+
+        % Connect the chosen device, it returns the connection object
+        obj = ConnectDevice(handles);
+        handles.obj = obj;
+
+        % Set the selected device and Start the acquisition
+        SetDeviceStartAcquisition(handles, obj);
+
+        for timeWindowNr = 1:sT/tW
+
+            cData = Acquire_tWs(deviceName, obj, nCh, tWs);            % acquire a new time window of samples
+            acquireEvent.Data = cData;
+            RealtimePatRec_OneShot(0, acquireEvent);                       
+        end
+
+        % Stop acquisition
+        StopAcquisition(deviceName, obj);
+    end
+    
+    %Stop motors
+    if motorCoupling
+        if ~strcmp(handles.Control_obj.status,'open')
+            fopen(handles.Control_obj);
+        end   
+        if(isfield(handles,'movList')) % Is the movement obj used?
+            for i=1 : length(handles.movList)
+                [handles.motors, ~] = MotorsOff(handles.Control_obj, handles.movList(i), handles.motors);
+            end
+        else % from hardcoded GUI GUI_TestPatRec
+            ActivateMotors(handles.com, pwmIDs, pwmAs, pwmBs, 0);
+        end
+    end
+
+    % Write the average processing time
+    set(handles.et_avgProcTime,'String',num2str(mean(procT(2:end))));
+
+    handlesX = handles;
+
+    %Reset Threshold GUI 
+    if(isfield(patRec.patRecTrained,'thOut'));
+        for i=0:patRec.nOuts-1
+            s0 = sprintf('thPatch%d',i);
+            set(handles.(s0), 'YData', [0 0 0 0]);
+            %delete(GUI_Threshold);
+        end
+    end
+
+    %Plot processing time
+    figure();
+    hist(procT(2:end));
+    set(handles.pb_RealtimePatRec, 'Enable', 'on');   
 end
+
 
 function RealtimePatRec_OneShot(src,event)
 
@@ -224,7 +257,6 @@ function RealtimePatRec_OneShot(src,event)
     global pwmBs;    
     global tempData;
     global outVectorMotorLast;
-	
 	global thresholdGUIData;
 
     %Keep saving all recorded data
@@ -245,7 +277,8 @@ function RealtimePatRec_OneShot(src,event)
         [outMov outVector patRec handles] = OneShotRealtimePatRec(tData, patRec, handles, thresholdGUIData);
         
         % GUI and control Updates
-        % Game control
+        
+        % Game control        
         if get(handles.cb_keys,'Value') && outMov(1) ~= 0
             keys = zeros(patRec.nM,1);
             keys(outMov) = 1;
@@ -255,6 +288,18 @@ function RealtimePatRec_OneShot(src,event)
             end
             SendKeys(keys,savedKeys);
         end
+        
+        
+        % Robot control
+        if get(handles.cb_controls,'Value') &&outMov(1) ~=0
+            controls = zeros(patRec.nM,1);
+            controls(outMov) = 1;
+            savedControls = [];
+            if isfield(handles,'savedControls')
+               savedControls = handles.savedControls; 
+            end
+            SendControls(controls,savedControls);
+        end
                 
         % Send vector to the motors
         if(isfield(handles,'movList'))
@@ -263,25 +308,15 @@ function RealtimePatRec_OneShot(src,event)
                 outVectorMotor(outMov) = 1;
                 % Check if the state has change
                 outChanged = find(xor(outVectorMotor, outVectorMotorLast));
-                % Only send information to the motors that have changed
-                % state
+                % Only send information to the motors that have changed state
                 for i = 1 : size(outChanged,1)
                     if outVectorMotor(outChanged(i))
-                        [handles.motors, ~] = MotorsOn(handles.com, handles.movList(outChanged(i)), handles.motors, patRec.control.currentDegPerMov(outChanged(i)));                    
+                        [handles.motors, ~] = MotorsOn(handles.Control_obj, handles.movList(outChanged(i)), handles.motors, patRec.control.currentDegPerMov(outChanged(i)));
                     else
-                        [handles.motors, ~] = MotorsOff(handles.com, handles.movList(outChanged(i)), handles.motors);
+                        [handles.motors, ~] = MotorsOff(handles.Control_obj, handles.movList(outChanged(i)), handles.motors);
                     end
-                end
-            end
-            
-            % To slow for hand open and close since it continuesly send
-            % data to the microcontroller
-%             perfMov = handles.movList(outMov);
-%             if motorCoupling
-%                 %Activate motors here using MoveMotor (for now).
-%                 [handles.motors, ~] = MoveMotor(handles.com, perfMov, 1, z§handles.motors);
-%             end
-            
+                end    
+            end  
             
             % VRE
             if vreCoupling
@@ -293,7 +328,7 @@ function RealtimePatRec_OneShot(src,event)
                     end
                 end
             end
-        else % alternative way for motor control
+        else % alternative way for motor control (hard-coded)
             if motorCoupling
                 ActivateMotors(handles.com, pwmIDs, pwmAs, pwmBs, outMov);
             end
@@ -336,6 +371,8 @@ function RealtimePatRec_OneShot(src,event)
                 end
             end        
         end
+        
+        
     end
  end
 

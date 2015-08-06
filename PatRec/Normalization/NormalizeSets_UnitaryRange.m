@@ -16,7 +16,7 @@
 % acknowledge contributions here and in the project web page (optional).
 %
 % ------------- Function Description -------------
-% Normalization to zero mean and unit variance
+% Normalization between 0 and 1
 % Requires all available sets
 %
 % ------------- Updates -------------

@@ -16,12 +16,14 @@
 % acknowledge contributions here and in the project web page (optional).
 %
 % -------------------------- Function Description -------------------------
-% Function to pre-process bioelectric recordings. It's call from the
+% Function to pre-process bioelectric recordings. It's called from the
 % treatment GUI and requires the handles.
 %
 % ------------------------- Updates & Contributors ------------------------
 % [Contributors are welcome to add their email]
 % 2012-07-07 / Max Ortiz  / Moved out from the preProcessing botton 
+% 2014-12-06 / Max Ortiz  / Added downsampling option
+% 2014-12-28 / Max Ortiz  / Added scaling option 
 % 20xx-xx-xx / Author     / Comment on update
 
 function sigTreated = PreProcessing(handles)
@@ -38,7 +40,7 @@ function sigTreated = PreProcessing(handles)
         recSession = Split_recSession_Mov(movSel, recSession);
     end                
     
-    %Remove channels if required %---------------------------------------
+    %Remove channels, if required %---------------------------------------
     chSel = get(handles.lb_nCh,'Value');        
 
     if length(recSession.nCh) ~= length(chSel)
@@ -50,6 +52,37 @@ function sigTreated = PreProcessing(handles)
         recSession = Split_recSession_Ch(channels, recSession);
         
     end    
+
+    % Downsample, if required %---------------------------------------
+    sF = str2double(get(handles.et_sF,'String'));        
+    dS = str2double(get(handles.et_downsample,'String'));        
+    if sF ~= dS
+        if recSession.sF < dS
+            errordlg('The downsample frequency is higher than the original sF','Error');
+            set(handles.t_msg,'String','Error in downsample frequency');
+            set(handles.et_downsample,'String',num2str(recSession.sF));
+        else
+            recSession = Downsample_recSession(recSession, dS);        
+        end
+    end
+
+    % Add noise, if required %---------------------------------------
+    pStd = str2double(get(handles.et_noise,'String'));        
+    if pStd ~= 0    
+        recSession = AddNoise_recSession(recSession, pStd);        
+    end
+    recSession.noise = pStd;
+    
+    % Scaling, if required %---------------------------------------
+    scalingV = get(handles.pm_scaling,'Value');    
+    scalingS = get(handles.pm_scaling,'String');    
+    scalingBits  = str2double(scalingS{scalingV});
+    if scalingV ~= 1    % If other than None
+        recSession = Scale_recSession(recSession, scalingBits);
+    end
+    recSession.scaled = scalingBits;
+    
+    %% Change from recSession to sigTreated
     
     %Remove trasient %---------------------------------------------------
     cTp = str2double(get(handles.et_cTp,'String'));

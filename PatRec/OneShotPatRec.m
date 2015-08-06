@@ -30,6 +30,7 @@
 %                           routines
 % 2012-03-04 / Max Ortiz  / Added a validation to prevent sending empty
 %                           outMov
+% 2014-11-07 / Diep Khong / Added SVM
 % 20xx-xx-xx / Author / Comment on update 
 
 function [outMov outVector] = OneShotPatRec(patRecTrained,tSet)
@@ -54,11 +55,7 @@ function [outMov outVector] = OneShotPatRec(patRecTrained,tSet)
      elseif strcmp(patRecTrained.algorithm,'SSOM')
 
         [outMov outVector] = SSOMTest(patRecTrained,tSet);   
-        
-    elseif strcmp(patRecTrained.algorithm,'KNN')
-
-       [outMov outVector] = KNNTest(patRecTrained,tSet);        
-                
+                        
     end
 
     % Validation to prevent outMov to be empty which cause problems on the

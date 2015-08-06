@@ -41,679 +41,496 @@
                             % Movements to display are loaded in
                             % varargin{8}. This since previous movements
                             % were simply loaded as strings.
+% 2013-03-07 / Nichlas Sander / When training Arm Flex/Extend the system
+                            % will automatically change the view so the
+                            % user can see the movement.
+% 2013-08-23 / Morten Kristoffersen / Updated the recording sessions to support 
+                            % the new GUI_AFESelection structure 
+% 2014-11-10 / Enzo Mastinu / include routines for ADS1299 AFE recordings using 
+                            % the "afeSettings.name" property to differentiate them,
+                            % add the ramp routines, set the time window
+                            % size to be samplingTime/100, delete the
+                            % peeking time field in the GUI, RMS mean is done 
+                            % "manually" for Matlab compatibility
+                            % reasons
+% 2015-01-12 / Enzo Mastinu / Divided the RecordingSession function into
+                            % several functions: ConnectDevice(),
+                            % SetDeviceStartAcquisition(),
+                            % Acquire_tWs(), StopAcquisition(). 
+                            % These functions has been moved into COMM/AFE 
+                            % folder in separate files. All the parameters
+                            % pass and global variables has been optimized
+                            % due to the new functions. Now this file is
+                            % totally independent from the inner working of
+                            % the all devices. In this way, to introduce a
+                            % new device for acquisition you need to modify
+                            % the files in COMM folder, leaving the recording
+                            % session file almost inalterate.
+% 2015-01-26 / Enzo Mastinu / A new GUI_Recordings has been developed for the
+                            % BioPatRec_TRE release. Now it is possible to
+                            % plot more then 8 channels at the same moment, for 
+                            % time and frequency plots both. It is faster and
+                            % perfectly compatible with the ramp recording 
+                            % session. At the end of the recording session it 
+                            % is possible to check all channels individually, 
+                            % apply offline data process as feature extraction or filter etc.
+
 % 20xx-xx-xx / Author  / Comment
 
 
 
 function [cdata, sF] = RecordingSession(varargin)
 
-global handles;
-global allData;
+    global       handles;
+    global       allData;
+    global       timeStamps;
+    global       samplesCounter;
+    allData      = [];
+    nM           = varargin{1};
+    nR           = varargin{2};
+    cT           = varargin{3};
+    rT           = varargin{4};
+    mov          = varargin{5};
+    handles      = varargin{6};
+    afeSettings  = varargin{7};
+    trainWithVr  = varargin{8};
+    vreMovements = varargin{9};
+    vreLeftHand  = varargin{10};
+    rampStatus   = varargin{11};
 
-allData     = [];
-nM          = varargin{1};
-nR          = varargin{2};
-cT          = varargin{3};
-rT          = varargin{4};
-mov         = varargin{5};
-handles     = varargin{6};
-afeSettings = varargin{7};
-trainWithVr = varargin{8};
-vreMovements = varargin{9};
-vreLeftHand = varargin{10};
-
-distance = 90;
-numJumps = 45;
-
-sT          = (cT+rT)*nR;   % Sampling time, it is the time of contraction + 
-                            % Time of relaxation x Number of repetitions
-
-% Get number of channels and sampling frequency
-% for the device to be displayed
-if afeSettings.NI.show
-    nCh = afeSettings.NI.channels;
-    sF  = afeSettings.NI.sampleRate;
-elseif afeSettings.ADS.show
-    nCh = afeSettings.ADS.channels;
-    sF  = afeSettings.ADS.sampleRate;
-elseif afeSettings.RHA.show
-    nCh = afeSettings.RHA.channels;    
-    sF  = afeSettings.RHA.sampleRate;
-end
-
-if trainWithVr
-    open('Virtual Reality.exe');
-    handles.vreCommunication = tcpip('127.0.0.1',23068,'NetworkRole','server');
-    fopen(handles.vreCommunication);
+    % Get required informations from afeSettings structure
+    nCh          = afeSettings.channels;
+    sF           = afeSettings.sampleRate;
+    deviceName   = afeSettings.name;
+    ComPortType  = afeSettings.ComPortType;
+    if strcmp(ComPortType, 'COM')
+        ComPortName = afeSettings.ComPortName;  
+    end
     
-    %Set up VRE to not return any data. This will speed up the
-    %communication.
-    fwrite(handles.vreCommunication,sprintf('%c%c%c%c%c','c',char(7),char(0),char(0),char(0)));
+    % Save back acquisition parameters to the handles
+    handles.nR          = nR;
+    handles.cT          = cT;
+    handles.rT          = rT;
+    handles.nCh         = nCh;
+    handles.sF          = sF;
+    handles.ComPortType = ComPortType;
+    if strcmp(ComPortType, 'COM')
+        handles.ComPortName = ComPortName;     
+    end
+    handles.deviceName  = deviceName;
+    handles.rampStatus  = rampStatus; 
+    handles.fast        = 0;
     
-    % Send value to show Arm if that value is chosen.
-    sent = 0;
-    for i = 1:nM
-        for j = 1:length(vreMovements{i})
-            movement = vreMovements{i}{j};
-            if ismember(movement.id,[20 21]) && sent == 0
-                fwrite(handles.vreCommunication,sprintf('%c%c%c%c%c','c',char(6),char(1),char(0),char(0)));
-                sent = 1;
+    % Initialization of sampling time
+    sTall         = (cT+rT)*nR;
+    sT            = cT+rT;
+    handles.sTall = sTall;
+    handles.sT    = sT;
+    
+    % Setting for data peeking
+    tW            = sT/100;                                                % Time window size
+    tWs           = tW*sF;                                                 % Time window samples
+    handles.tWs   = tWs;
+    timeStamps    = 0:1/sF:tW-1/sF;                                        % Create vector of time
+    
+    
+    %% Initialize GUI..
+
+    % Initialization of the VRE for training if required
+    if trainWithVr
+        % Parameters for the movement in the VRE
+        distance = 60;
+        numJumps = 30;
+        % Open and connect to the VRE
+        open('Virtual Reality.exe');
+        handles.vreCommunication = tcpip('127.0.0.1',23068,'NetworkRole','server');
+        fopen(handles.vreCommunication);
+
+        %Set up VRE to not return any data. This will speed up the
+        %communication.
+        fwrite(handles.vreCommunication,sprintf('%c%c%c%c%c','c',char(7),char(0),char(0),char(0)));
+
+        % Send value to show Arm if that value is chosen.
+        sent = 0;
+        for i = 1:nM
+            for j = 1:length(vreMovements{i})
+                movement = vreMovements{i}{j};
+                if ismember(movement.id,[20 21]) && sent == 0
+                    fwrite(handles.vreCommunication,sprintf('%c%c%c%c%c','c',char(6),char(1),char(0),char(0)));
+                    sent = 1;
+                end
             end
         end
+
+        if vreLeftHand
+            fwrite(handles.vreCommunication,sprintf('%c%c%c%c%c','c',char(5),char(1),char(0),char(0)));
+        end
     end
-    
-    if vreLeftHand
-        fwrite(handles.vreCommunication,sprintf('%c%c%c%c%c','c',char(5),char(1),char(0),char(0)));
+
+    pause on;
+
+    % Offset the data on plots 
+    ampPP = 5;
+    ymin = -ampPP*2/3;
+    ymax =  ampPP * nCh - ampPP*1/3;
+    sData = zeros(tWs,nCh);   
+    fData = zeros(tWs,nCh);
+    offVector = 0:nCh-1;
+    offVector = offVector .* ampPP;
+    for i = 1 : nCh
+        sData(:,i) = sData(:,i) + offVector(i);
+        fData(:,i) = fData(:,i) + offVector(i);
     end
-end
 
-handles.sF = sF;
-handles.cT = cT;
-handles.rT = rT;
-handles.nCh = nCh;
+    if rampStatus
+        rampParams = varargin{12};
+        % make the ramp objects visible
+        set(handles.a_effortPlot,'Visible','on');   
+        set(handles.txt_effortPlot,'Visible','on');
+        % Init the effort tracking plot and draw the guide line
+        p_effortPlot = plot(handles.a_effortPlot,linspace(0,cT,sF*cT),linspace(0,100,sF*cT),'LineWidth',2);
+        ylim(handles.a_effortPlot, [0 100]);
+        xlim(handles.a_effortPlot, [0 cT]);
+        handles.p_effortPlot = p_effortPlot;
+        axes(handles.a_effortPlot)
+        hLine = line('XData', 0, 'YData', 0, 'Color', 'r', 'Marker', 'o', 'MarkerSize', 8, 'LineWidth', 2);
+        handles.hLine = hLine;
+    end
 
-pause on;
+    % Initialization of progress bar
+    xpatch = [0 0 0 0];
+    ypatch = [0 0 1 1];
+    axes(handles.a_prog);
+    handles.hPatch = patch(xpatch,ypatch,'b','EdgeColor','b','EraseMode','xor','visible','on');
 
-%% Initialize plots
-% Create handles for the plots
-% this is faster than creating the plot everytime
-tt      = 0:1/sF:sT/100-1/sF;   % Create data for sT / 100
-ymin    = -3;
-ymax    = 3;
+    % Allocation of resource to improve speed, total data 
+    recSessionData = zeros(sF*sTall, nCh, nM);
 
-% Init the plots
-if nCh >= 1
-    %axes(handles.a_t0);
-    p_t0 = plot(handles.a_t0,tt,tt);
-    xlim('auto');
-    ylim(handles.a_t0, [ymin ymax]); 
-    handles.p_t0 = p_t0;
-    %axes(handles.a_f0);
-    p_f0 = plot(handles.a_f0,1,1);
-    handles.p_f0 = p_f0;    
-end
-if nCh >= 2
-    p_t1 = plot(handles.a_t1,tt,tt);
-    ylim(handles.a_t1, [ymin ymax]); 
-    p_f1 = plot(handles.a_f1,1,1);
-    handles.p_t1 = p_t1;
-    handles.p_f1 = p_f1;    
-end
-if nCh >= 3
-    p_t2 = plot(handles.a_t2,tt,tt);
-    ylim(handles.a_t2, [ymin ymax]); 
-    p_f2 = plot(handles.a_f2,1,1);
-    handles.p_t2 = p_t2;
-    handles.p_f2 = p_f2;    
-end
 
-if nCh >= 4
-    p_t3 = plot(handles.a_t3,tt,tt);
-    ylim(handles.a_t3, [ymin ymax]); 
-    p_f3 = plot(handles.a_f3,1,1);
-    handles.p_t3 = p_t3;
-    handles.p_f3 = p_f3;    
-end
-
-if nCh >= 5
-    p_t4 = plot(handles.a_t4,tt,tt);
-    ylim(handles.a_t4, [ymin ymax]); 
-    %axes(handles.a_f4);
-    %p_f4 = plot(1,1);
-    handles.p_t4 = p_t4;
-end
-
-if nCh >= 6
-    p_t5 = plot(handles.a_t5,tt,tt);
-    ylim(handles.a_t5, [ymin ymax]); 
-    %axes(handles.a_f5);
-    %p_f5 = plot(1,1);
-    handles.p_t5 = p_t5;
-end
-
-if nCh >= 7
-    p_t6 = plot(handles.a_t6,tt,tt);
-    ylim(handles.a_t6, [ymin ymax]); 
-    %axes(handles.a_f6);
-    %p_f6 = plot(1,1);
-    handles.p_t6 = p_t6;
-end
-
-if nCh >= 8
-    p_t7 = plot(handles.a_t7,tt,tt);
-    ylim(handles.a_t7, [ymin ymax]); 
-    %axes(handles.a_f7);
-    %p_f7 = plot(1,1);
-    handles.p_t7 = p_t7;
-end
-
-%% Initialization of progress bar
-xpatch = [0 0 0 0];
-ypatch = [0 0 1 1];
-%set(handles.figure1,'CurrentAxes',handles.a_prog);
-axes(handles.a_prog);
-handles.hPatch = patch(xpatch,ypatch,'b','EdgeColor','b','EraseMode','xor','visible','on');
-
-%% Initialization of the effort bar
-xpatch = [1 1 0 0];
-ypatch = [0 0 0 0];
-axes(handles.a_effort0);
-handles.hPatch0 = patch(xpatch,ypatch,'b','EdgeColor','b','EraseMode','xor','visible','on');
-axes(handles.a_effort1);
-handles.hPatch1 = patch(xpatch,ypatch,'b','EdgeColor','b','EraseMode','xor','visible','on');
-axes(handles.a_effort1);
-handles.hPatch1 = patch(xpatch,ypatch,'b','EdgeColor','b','EraseMode','xor','visible','on');
-axes(handles.a_effort2);
-handles.hPatch2 = patch(xpatch,ypatch,'b','EdgeColor','b','EraseMode','xor','visible','on');
-axes(handles.a_effort3);
-handles.hPatch3 = patch(xpatch,ypatch,'b','EdgeColor','b','EraseMode','xor','visible','on');
-axes(handles.a_effort4);
-handles.hPatch4 = patch(xpatch,ypatch,'b','EdgeColor','b','EraseMode','xor','visible','on');
-axes(handles.a_effort5);
-handles.hPatch5 = patch(xpatch,ypatch,'b','EdgeColor','b','EraseMode','xor','visible','on');
-axes(handles.a_effort6);
-handles.hPatch6 = patch(xpatch,ypatch,'b','EdgeColor','b','EraseMode','xor','visible','on');
-axes(handles.a_effort7);
-handles.hPatch7 = patch(xpatch,ypatch,'b','EdgeColor','b','EraseMode','xor','visible','on');
-handles.effortMax = 2;
-
-        
-%% Initialize DAQ card
-if afeSettings.NI.active
-    %afeSettings.NI.sampleRate=sF; %overrides the individual samplerate choise in AFS_select
-                                    % instruction from Per and Gustav, why
-                                    % would you overwrite the selected sF?
-                                    
-                                    % All following sF needs to be changed to
-                                    % invidual sF in order to make it work
-                                    % /Per
-    %ai = Init_NI_AI(handles,afeSettings.NI.sampleRate,sT,nCh); %Legacy
-    %Init SBI
-    sCh = 1:nCh;
-    s = InitSBI_NI(afeSettings.NI.sampleRate,sT,sCh);
-    s.NotifyWhenDataAvailableExceeds = (sF*sT)/100;           % PEEK time
-    lh = s.addlistener('DataAvailable', @RecordingSession_ShowData);   
-    
-    dev = afeSettings.NI.name;
-    
-end
-if afeSettings.ADS.active
-    Amp=12;
-    Vref=2.4*2; %*2 is from bipolar reference
-    ByteDepth=3;
-    afeSettings.ADS.sampleRate=sF;  %overrides the individual samplerate choise in AFS_select
-    dataFormat=2;
-    ADS = AFE_PICCOLO(afeSettings.ADS.ComPortType,afeSettings.ADS.sampleRate, ...
-        sT,nCh,Amp,Vref,dataFormat,afeSettings.ADS.name,ByteDepth);
-end
-if afeSettings.RHA.active
-    Amp=200;
-    Vref=2.5;
-    ByteDepth=2;
-    afeSettings.RHA.sampleRate=sF;  %overrides the individual samplerate choise in AFS_select
-    dataFormat=1;
-    RHA = AFE_PICCOLO(afeSettings.RHA.ComPortType,afeSettings.RHA.sampleRate, ...
-        sT,nCh,Amp,Vref,dataFormat,afeSettings.RHA.name,ByteDepth);
-end
-
-%% Allocation of resource to improve speed, total data 
-
-sbiData  = zeros(sF*sT,nCh,nM);
-ADStdata = zeros(sF*sT,nCh,nM);
-RHAtdata = zeros(sF*sT,nCh,nM);
-
-% Warning to the user
-set(handles.t_msg,'String','Get ready to start: 3');
-pause(1);
-set(handles.t_msg,'String','Get ready to start: 2');
-pause(1);
-set(handles.t_msg,'String','Get ready to start: 1');
-pause(1);
-
-relax = importdata('Img/relax.jpg'); % Import Image
-drawnow;
-
-%% Run all movements or excersices
-for ex = 1 : nM
-    disp(['Start ex: ' num2str(ex) ])
+    %% Starting Session..
     
     % Warning to the user
-    fileName = ['Img/' char(mov(ex)) '.jpg'];
-    if ~exist(fileName,'file')
-        fileName = 'Img/relax.jpg';
-    end
-    
-    movI = importdata(fileName); % Import Image
-    set(handles.a_pic,'Visible','on');  % Turn on visibility
-    %axes(handles.a_pic);        % get handles
-    pic = image(movI,'Parent',handles.a_pic);   % set image
-    axis(handles.a_pic,'off');     % Remove axis tick marks
-    
-    % Show warning to prepare
-    set(handles.t_msg,'String',['Get ready for ' mov(ex) ' in 3 s']);
+    set(handles.t_msg,'String','Get ready to start: 3');
     pause(1);
-    set(handles.t_msg,'String',['Get ready for ' mov(ex) ' in 2 s']);
+    set(handles.t_msg,'String','Get ready to start: 2');
     pause(1);
-    set(handles.t_msg,'String',['Get ready for ' mov(ex) ' in 1 s']);
-    %set(handles.a_pic,'Visible','off');  % Turn OFF visibility
-    %delete(pic);                         % Delete image
+    set(handles.t_msg,'String','Get ready to start: 1');
     pause(1);
-    
-    %% Dummy Contraction
-    set(handles.t_msg,'String',mov(ex));
-    if afeSettings.prepare
-        if trainWithVr
-            numberOfMovements = length(vreMovements{ex});
-            tempJumps = numJumps/numberOfMovements;
-            tempDistance = round(distance/tempJumps);
-            vreString = '';
-            for i = 1:numberOfMovements
-                movement = vreMovements{ex}{i};
-                vreString = sprintf('%s%c%c%c%c%c',vreString,char(1),char(movement.idVRE),char(movement.vreDir),char(tempDistance),char(1));
-            end
-            for j = 1:tempJumps
-                fwrite(handles.vreCommunication,vreString);
-            end
-        end
-        
-        pause(cT);
-        set(handles.t_msg,'String','Relax');
-        if trainWithVr
-            fwrite(handles.vreCommunication,sprintf(sprintf('%c%c%c%c%c','r',char(1),char(1),char(1),char(1))));
-        end
-        pic = image(relax,'Parent',handles.a_pic);           % set image
-        axis(handles.a_pic,'off');     % Remove axis tick marks
-        pause(rT);
-    end
+    relax = importdata('Img/relax.jpg'); % Import Image
+    drawnow;
 
-    
-    %% Start DAQ
-    if afeSettings.NI.active
-        % start(ai);
-        % Run in the backgroud
-        s.startBackground();        
-    end
-    if afeSettings.ADS.active
-        ADS.startRecording
-    end
-    if afeSettings.RHA.active
-        RHA.startRecording
-    end
-    
-    %% Repetitions
-    for rep = 1 : nR
-        handles.rep = rep;
-        
-        % Contraction
+    % Run all movements or exercise
+    for ex = 1 : nM
+
+        timeStamps = 0:1/sF:tW-1/sF;                                       % Timestamps used the time vector
+        currentTv = 1;                                                     % Current time vector
+        tV = timeStamps(currentTv):1/sF:(tW-1/sF)+timeStamps(currentTv);   % Time vector used for drawing graphics
+        currentTv = currentTv - 1 + tWs;                                   % Updated everytime tV is updated
+        acquireEvent.TimeStamps = tV';
+
+        if rampStatus == 1
+            % Update ramp params for this exercise
+            handles.RampMin = rampParams{1};
+            handles.currentRampMax = rampParams{2}(ex);
+        end
+
+        disp(['Start ex: ' num2str(ex) ])
+
+        % Warning to the user
+        fileName = ['Img/' char(mov(ex)) '.jpg'];
+        if ~exist(fileName,'file')
+            fileName = 'Img/relax.jpg';
+        end
+
+        movI = importdata(fileName);                                       % Import Image
+        set(handles.a_pic,'Visible','on');                                 % Turn on visibility
+        pic = image(movI,'Parent',handles.a_pic);                          % set image
+        axis(handles.a_pic,'off');                                         % Remove axis tick marks
+
+        % Show warning to prepare
+        set(handles.t_msg,'String',['Get ready for ' mov(ex) ' in 3 s']);
+        pause(1);
+        set(handles.t_msg,'String',['Get ready for ' mov(ex) ' in 2 s']);
+        pause(1);
+        set(handles.t_msg,'String',['Get ready for ' mov(ex) ' in 1 s']);
+        pause(1);
+
+        % Dummy Contraction
         set(handles.t_msg,'String',mov(ex));
-        pic = image(movI,'Parent',handles.a_pic);   % set image
-        axis(handles.a_pic,'off');     % Remove axis tick marks
-        handles.contraction = 1;
-        startContractionTic = tic;
-        if trainWithVr
-            numberOfMovements = length(vreMovements{ex});
-            tempJumps = numJumps/numberOfMovements;
-            tempDistance = round(distance/tempJumps);
-            vreString = '';
-            for i = 1:numberOfMovements
-                movement = vreMovements{ex}{i};
-                vreString = sprintf('%s%c%c%c%c%c',vreString,char(1),char(movement.idVRE),char(movement.vreDir),char(tempDistance),char(1));
+        if afeSettings.prepare
+            if trainWithVr
+                numberOfMovements = length(vreMovements{ex});
+                tempJumps = numJumps/numberOfMovements;
+                tempDistance = round(distance/tempJumps);
+                vreString = '';
+                for i = 1:numberOfMovements
+                    movement = vreMovements{ex}{i};
+                    vreString = sprintf('%s%c%c%c%c%c',vreString,char(1),char(movement.idVRE),char(movement.vreDir),char(tempDistance),char(1));
+                end
+                for j = 1:tempJumps
+                    fwrite(handles.vreCommunication,vreString);
+                end
             end
-            for j = 1:tempJumps
-                fwrite(handles.vreCommunication,vreString);
+
+            pause(cT);
+            set(handles.t_msg,'String','Relax');
+            if trainWithVr
+                fwrite(handles.vreCommunication,sprintf(sprintf('%c%c%c%c%c','r',char(1),char(1),char(1),char(1))));
             end
+            pic = image(relax,'Parent',handles.a_pic);                     % set image
+            axis(handles.a_pic,'off');                                     % Remove axis tick marks
+            pause(rT);
         end
-        pause(cT - toc(startContractionTic));
         
-        % Relax
-        set(handles.t_msg,'String','Relax');
-        startRelaxingTic = tic;
-        if trainWithVr
-            for i = 1:numJumps
-                fwrite(handles.vreCommunication,sprintf(sprintf('%c%c%c%c%c',char(1),char(14),char(1),char(distance/numJumps),char(1))));
+        % Draw figure
+        p_t0 = plot(handles.a_t0, timeStamps, sData);
+        handles.p_t0 = p_t0;
+        xlim(handles.a_t0, [0,tW]);
+        ylim(handles.a_t0, [ymin ymax]);
+        set(handles.a_t0,'YTick',offVector);
+        set(handles.a_t0,'YTickLabel',0:nCh-1);
+        p_f0 = plot(handles.a_f0, timeStamps, fData);
+        handles.p_f0 = p_f0;  
+        xlim(handles.a_f0, [0,sF/2]);
+        ylim(handles.a_f0, [ymin ymax]);
+        set(handles.a_f0,'YTick',offVector);
+        set(handles.a_f0,'YTickLabel',0:nCh-1);
+
+        % Repetitions 
+        %%%%% NI DAQ card %%%%%
+        if strcmp (ComPortType, 'NI')
+           
+            % Init SBI
+            sCh = 1:nCh;
+            s = InitSBI_NI(sF,sTall,sCh);
+            s.NotifyWhenDataAvailableExceeds = tWs;                        % PEEK time
+            lh = s.addlistener('DataAvailable', @RecordingSession_ShowData);   
+
+            % Start DAQ
+            cData = zeros(sF*sTall, nCh, nM);
+            s.startBackground();                                           % Run in the backgroud
+
+            for rep = 1 : nR
+                handles.rep = rep;
+                % Contraction
+                set(handles.t_msg,'String',mov(ex));
+                pic = image(movI,'Parent',handles.a_pic);                  % set image
+                axis(handles.a_pic,'off');                                 % Remove axis tick marks
+                handles.contraction = 1;
+                startContractionTic = tic;
+                if trainWithVr
+                    numberOfMovements = length(vreMovements{ex});
+                    tempJumps = numJumps/numberOfMovements;
+                    tempDistance = round(distance/tempJumps);
+                    vreString = '';
+                    for i = 1:numberOfMovements
+                        movement = vreMovements{ex}{i};
+                        vreString = sprintf('%s%c%c%c%c%c',vreString,char(1),char(movement.idVRE),char(movement.vreDir),char(tempDistance),char(1));
+                    end
+                    for j = 1:tempJumps
+                        fwrite(handles.vreCommunication,vreString);
+                    end
+                end
+                pause(cT - toc(startContractionTic));
+                % Relax
+                set(handles.t_msg,'String','Relax');
+                startRelaxingTic = tic;
+                if trainWithVr
+                    for i = 1:numJumps
+                        fwrite(handles.vreCommunication,sprintf(sprintf('%c%c%c%c%c',char(1),char(14),char(1),char(distance/numJumps),char(1))));
+                    end
+                end
+                pic = image(relax,'Parent',handles.a_pic);                 % set image
+                axis(handles.a_pic,'off');                                 % Remove axis tick marks
+                handles.contraction = 0;
+                pause(rT - toc(startRelaxingTic));
             end
+        
+        % Repetitions other devices     
+        else
+            
+            % Connect the chosen device, it returns the connection object
+            obj = ConnectDevice(handles);
+
+            % Set the selected device and Start the acquisition
+            SetDeviceStartAcquisition(handles, obj);
+
+            for rep = 1 : nR
+                
+                rep   
+                handles.rep = rep;
+                handles.contraction = 1;                                   % 1 means contraction, 0 means relaxation
+                samplesCounter = 1;                                        % variable used to track the progressing time of the recording session
+                UpdateGUI = 1;
+                cData = zeros(tWs, nCh);    
+                
+                tic
+                for timeWindowNr = 1:sT/tW
+
+                    cData = Acquire_tWs(deviceName, obj, nCh, tWs);    % acquire a new time window of samples  
+                    acquireEvent.Data = cData;
+                    RecordingSession_ShowData(0, acquireEvent);            % plot data and add cData to allData vector
+
+                    samplesCounter = samplesCounter + tWs;
+                    switch handles.contraction
+                       case 1
+                            % CONTRACTION
+                            if (samplesCounter/sF) <= cT
+                               % contraction time not expired yet
+                               if UpdateGUI == 1
+                                   % new contraction, the GUI must be updated
+                                   set(handles.t_msg,'String',mov(ex));
+                                   pic = image(movI,'Parent',handles.a_pic);    % set image
+                                   axis(handles.a_pic,'off');                   % Remove axis tick marks
+                                   drawnow;
+                                   if trainWithVr
+                                        numberOfMovements = length(vreMovements{ex});
+                                        tempJumps = numJumps/numberOfMovements;
+                                        tempDistance = round(distance/tempJumps);
+                                        vreString = '';
+                                        for i = 1:numberOfMovements
+                                        movement = vreMovements{ex}{i};
+                                        vreString = sprintf('%s%c%c%c%c%c',vreString,char(1),char(movement.idVRE),char(movement.vreDir),char(tempDistance),char(1));
+                                        end
+                                        for j = 1:tempJumps
+                                        fwrite(handles.vreCommunication,vreString);
+                                        end
+                                   end
+                                   UpdateGUI = 0;
+                               end
+                           else
+                               % contraction time expired
+                               handles.contraction = 0;                    % 1 means contraction, 0 means relaxation
+                               UpdateGUI = 1;
+                               samplesCounter = 1;
+                           end
+                       case 0
+                            % RELAXATION
+                            if (samplesCounter/sF) <= rT
+                                % relaxation time not expired yet
+                                if UpdateGUI == 1
+                                    % new relaxation, the GUI must be updated
+                                    set(handles.t_msg,'String','Relax');
+                                    pic = image(relax,'Parent',handles.a_pic);   % set image
+                                    axis(handles.a_pic,'off');                   % Remove axis tick marks
+                                    drawnow;
+                                    if trainWithVr
+                                        for i = 1:numJumps
+                                            fwrite(handles.vreCommunication,sprintf(sprintf('%c%c%c%c%c',char(1),char(14),char(1),char(distance/numJumps),char(1))));
+                                        end
+                                    end
+                                    UpdateGUI = 0;
+                                end
+                            else
+                               % relaxation time expired
+                               handles.contraction = 1;                % 1 means contraction, 0 means relaxation
+                               if rep ~= nR 
+                                   UpdateGUI = 1;
+                               end
+                               samplesCounter = 1;
+                            end
+                       otherwise
+                          set(handles.t_msg,'String','Error with the Contraction-Relaxation switch statement');
+                    end
+                end
+                toc                 
+            end
+            
+            % Stop acquisition
+            StopAcquisition(deviceName, obj);  
         end
-        pic = image(relax,'Parent',handles.a_pic);   % set image
-        axis(handles.a_pic,'off');     % Remove axis tick marks
-        handles.contraction = 0;
-        pause(rT - toc(startRelaxingTic));        
+
+        % NI DAQ card: "You must delete the listener once the operation is complete"
+        if strcmp(ComPortType,'NI');  
+            if ~s.IsDone                                                   % check if is done
+                s.wait();
+            end
+            delete(lh);
+        end
+        
+        % Save Data
+        recSessionData(:,:,ex) = allData(:,:);
+        % Plot movement just recorded
+        DataShow(handles, allData, sF, sTall);                               
+        % Clean global data for next movement
+        allData = [];                                                      
+        
     end
     
-    %% Save Data
-    if afeSettings.NI.active
-        %check if is done
-        if ~s.IsDone
-            s.wait();
-        end
-        sbiData(:,:,ex) = allData;
-        % clean global data for next movement
-        allData = [];
-        
-    end    
-    if afeSettings.RHA.active
-%         disp('RHA:')
-%         disp(RHA.SamplesAcquired)
-%         disp(RHA.bytesAcquired)
-%         disp(size(RHA.data))
-        data = [RHA.data ; RHA.storeFromBuffer];
-%         disp(size(data))
-%         disp(size(RHAtdata))
-        RHAtdata(:,:,ex)=data * (RHA.vref/(RHA.amplification*2^(RHA.byteDepth*8))); %Converting to input referred voltage
-    end
-    if afeSettings.ADS.active
-%         disp('ADS:')
-%         disp(ADS.SamplesAcquired)
-%         disp(ADS.bytesAcquired)
-%         disp(size(data))
-        
-        data = [ADS.data ; ADS.storeFromBuffer];
-%         disp(size(data))
-%         disp(size(ADStdata))
-        ADStdata(:,:,ex)=data * (ADS.vref/(ADS.amplification*2^(ADS.byteDepth*8))); %Converting to input referred voltage
-    end
     
-end
+    %% Session finish..
+    
+    % Save data into cdata output matrix
+    cdata = recSessionData(:,:,:);
+    
+    set(handles.t_msg,'String','Session Terminated');                  % Show message about acquisition completed
+    fileName = 'Img/Agree.jpg';
+    movI = importdata(fileName);                                       % Import Image
+    set(handles.a_pic,'Visible','on');                                 % Turn on visibility
+    pic = image(movI,'Parent',handles.a_pic);                          % set image
+    axis(handles.a_pic,'off');                                         % Remove axis tick marks
+  
+    % Save Session to file
+    recSession.sF       = sF;
+    recSession.sT       = sTall;
+    recSession.cT       = cT;
+    recSession.rT       = rT;
+    recSession.nM       = nM;
+    recSession.nR       = nR;
+    recSession.nCh      = nCh;
+    recSession.dev      = deviceName;
+    recSession.comm     = ComPortType;
+    if strcmp(ComPortType, 'COM')
+        recSession.comn     = ComPortName;
+    end
+    recSession.mov      = mov;
+    recSession.date     = fix(clock);
+    recSession.cmt      = inputdlg('Additional comment on the recording session','Comments');
+    if rampStatus
+        recSession.ramp.rampMin = rampParams{1};                 % Save the ramp parameters to the file
+        recSession.ramp.rampMax = rampParams{2};
+        recSession.ramp.minData = rampParams{3};
+        recSession.ramp.maxData = rampParams{4};
+    end
 
-
-set(handles.t_msg,'String','Session Terminated');      % Show message about acquisition
-
-%% Save data and compute training data using cTp
-if afeSettings.NI.active
-    delete(lh);
-    NItdata=sbiData;
-else
-    NItdata=[];
-end
-if afeSettings.ADS.active
-    ADStdata=ADStdata;
-    %ADStrdata=ComputeTrainingData(ADStdata,sF,cT,rT,nR,nM,cTp);    
-else
-    ADStdata=[];
-    %ADStrdata=[];
-end
-
-if afeSettings.RHA.active
-    RHAtdata=RHAtdata;
-    %RHAtrdata=ComputeTrainingData(RHAtdata,sF,cT,rT,nR,nM,cTp);    
-else
-    RHAtdata=[];
-    %RHAtrdata=[];
-end
-
-
-%% Save Session to file
-recSession.sF       = sF;
-recSession.sT       = sT;
-recSession.cT       = cT;
-recSession.rT       = rT;
-recSession.nM       = nM;
-recSession.nR       = nR;
-recSession.nCh      = nCh;
-recSession.dev      = dev;
-recSession.mov      = mov;
-recSession.date     = fix(clock);
-recSession.cmt      = inputdlg('Additional comment on the recording session','Comments');
-
-[filename, pathname] = uiputfile({'*.mat','MAT-files (*.mat)'},'Save as', 'Untitled.mat');
+    [filename, pathname] = uiputfile({'*.mat','MAT-files (*.mat)'},'Save as', 'Untitled.mat');
     if isequal(filename,0) || isequal(pathname,0)
        disp('User pressed cancel')
     else
        disp(['User selected ', fullfile(pathname, filename)])
-       if afeSettings.NI.active
-           recSession.tdata    = NItdata;
-           save([pathname,filename],'recSession');
-
-           %recSession.trdata   = NItrdata;
-%           if exist([pathname 'NI\'],'dir') == 0
-%               mkdir(pathname,'NI')
-%           end
-%           save([pathname, 'NI\',filename],'recSession');
-       end
-       if afeSettings.ADS.active
-           recSession.tdata    = ADStdata;
-           %recSession.trdata   = ADStrdata; 
-           %Possible to add string with device info for example recSession.device=afeSettings.ADS.name;
-           if exist([pathname 'ADS1298\'],'dir') == 0
-               mkdir(pathname,'ADS1298')
-           end
-           save([pathname, 'ADS1298\',filename],'recSession');
-           
-           % not needed here any more?
-%            if filters.PLH || filters.BP
-%                recSession.tdata    = ADStdataFiltered;
-%               % recSession.trdata   = ADStrdataFiltered;
-%                if exist([pathname 'ADS1298Filtered\'],'dir') == 0
-%                    mkdir(pathname,'ADS1298Filtered')
-%                end
-%                save([pathname,'ADS1298Filtered\',filename],'recSession');
-%            end
-       end
-       if afeSettings.RHA.active
-           recSession.tdata    = RHAtdata;
-           %recSession.trdata   = RHAtrdata;
-           %Possible to add string with device info for example recSession.device=afeSettings.RHA.name;
-           if exist([pathname 'RHA2216\'],'dir') == 0
-               mkdir(pathname,'RHA2216')
-           end
-           save([pathname 'RHA2216\',filename],'recSession');
-           
-           % not needed here any more?
-%            if filters.PLH || filters.BP
-%                recSession.tdata    = RHAtdataFiltered;
-%                %recSession.trdata   = RHAtrdataFiltered;
-%                if exist([pathname 'RHA2216Filtered\'],'dir') == 0
-%                    mkdir(pathname,'RHA2216Filtered')
-%                end
-%                save([pathname,'RHA2216Filtered\',filename],'recSession');
-%            end
-       end
+       recSession.tdata = recSessionData;
+       save([pathname,filename],'recSession');
     end
-
-% Copy acquired data from the last excersice into cdata
-% Display it
-disp(recSession); 
-
-if afeSettings.NI.show
-    data = NItdata(:,:,end);    
-elseif afeSettings.ADS.show
-    data = ADStdata(:,:,end).* (ADS.vref/(ADS.amplification*2^(ADS.byteDepth*8)));
-elseif afeSettings.RHA.show
-    data = RHAtdata(:,:,end).* (RHA.vref/(RHA.amplification*2^(RHA.byteDepth*8)));
-end
-
-chIdx=1;
-if nCh >= 1
-    cdata(:,1) = data(:,chIdx);
-    chIdx=chIdx+1;
-end
-if nCh >= 2
-    cdata(:,2) = data(:,chIdx);
-    chIdx=chIdx+1;
-end
-if nCh >= 3
-    cdata(:,3) = data(:,chIdx);
-    chIdx=chIdx+1;
-end
-if nCh >= 4
-    cdata(:,4) = data(:,chIdx);
-    chIdx=chIdx+1;
-end
-if nCh >= 5
-    cdata(:,5) = data(:,chIdx);
-    chIdx=chIdx+1;
-end
-if nCh >= 6
-    cdata(:,6) = data(:,chIdx);
-    chIdx=chIdx+1;
-end
-if nCh >= 7
-    cdata(:,7) = data(:,chIdx);
-    chIdx=chIdx+1;
-end
-if nCh >= 8
-    cdata(:,8) = data(:,chIdx);
-end
-
-if trainWithVr
-   fclose(handles.vreCommunication); 
-end
-
-DataShow(handles,cdata,sF,sT);
-set(handles.a_pic,'Visible','off');  % Turn OFF visibility
-delete(pic);        % Delete image
-end
-
-
-function RecordingSession_ShowData(src,event)
-
-    global      handles;
-    global      allData;
-    persistent  timeStamps;
+    disp(recSession);
     
-    % Get info from hendles
-    sF          = handles.sF;
-    nCh         = handles.nCh;
-    effortMax   = handles.effortMax;
-    rep         = handles.rep;
-    cT          = handles.cT;
-    rT          = handles.rT;
-        
-    
-    % Get data
-    if(isempty(allData)) % Fist DAQ callback
-        timeStamps = [];
+    if trainWithVr
+       fclose(handles.vreCommunication); 
     end
     
-    tempData = event.Data;
-    allData = [allData; tempData];
-    timeStamps = [timeStamps; event.TimeStamps];
-
-            %% Status bar update
-            %thisToc = timeStamps(end) - ((rep-1)*(cT+rT));
-            %lastToc = (cT+rT);
-            if handles.contraction
-                thisToc = timeStamps(end) - ((rep-1)*(cT+rT));
-                lastToc = cT;
-            else
-                thisToc = timeStamps(end) - ((rep*cT)+((rep-1)*rT));
-                lastToc = rT;            
-            end
-        
-            x =1-(thisToc/lastToc);
-%             set(handles.figure1,'CurrentAxes',handles.a_prog);
-            set(handles.hPatch,'Xdata',[0 x x 0]);
-
-            
-            %% Display peeked Data
-            aNs = length(tempData(:,1));
-            NFFT = 2^nextpow2(aNs);                 % Next power of 2 from number of samples
-            f = sF/2*linspace(0,1,NFFT/2);
-            dataf = fft(tempData(1:aNs,:),NFFT)/aNs;
-            m = 2*abs(dataf((1:NFFT/2),:));
-            
-            
-            chIdx = 1;%Channel Index for map data
-            if nCh >= 1
-                p_t0 = handles.p_t0;
-                p_f0 = handles.p_f0;
-                set(p_t0,'YData',tempData(:,chIdx));
-                set(p_f0,'XData',f);
-                set(p_f0,'YData',m(:,chIdx));                
-                % Update effort bar
-                xT = mean(abs(tempData(:,chIdx)));
-                x = xT / effortMax;
-                set(handles.hPatch0,'Ydata',[0 x x 0]);
-                
-                chIdx=chIdx+1;
-            end
-            if nCh >= 2
-                p_t1 = handles.p_t1;
-                p_f1 = handles.p_f1;
-                set(p_t1,'YData',tempData(:,chIdx));
-                set(p_f1,'XData',f);
-                set(p_f1,'YData',m(:,chIdx));
-                % Update effort bar
-                xT = mean(abs(tempData(:,chIdx)));
-                x = xT / effortMax;
-                set(handles.hPatch1,'Ydata',[0 x x 0]);
-                                
-                chIdx=chIdx+1;
-            end
-            if nCh >= 3
-                p_t2 = handles.p_t2;
-                p_f2 = handles.p_f2;
-                set(p_t2,'YData',tempData(:,chIdx));
-                set(p_f2,'XData',f);
-                set(p_f2,'YData',m(:,chIdx));
-                 % Update effort bar
-                xT = mean(abs(tempData(:,chIdx)));
-                x = xT / effortMax;
-                set(handles.hPatch2,'Ydata',[0 x x 0]);
-                
-                chIdx=chIdx+1;
-            end
-            if nCh >= 4
-                p_t3 = handles.p_t3;
-                p_f3 = handles.p_f3;
-                set(p_t3,'YData',tempData(:,chIdx));
-                set(p_f3,'XData',f);
-                set(p_f3,'YData',m(:,chIdx));
-                 % Update effort bar
-                xT = mean(abs(tempData(:,chIdx)));
-                x = xT / effortMax;
-                set(handles.hPatch3,'Ydata',[0 x x 0]);
-                
-                chIdx=chIdx+1;
-            end
-            if nCh >= 5
-                p_t4 = handles.p_t4;
-                set(p_t4,'YData',tempData(:,chIdx));
-                 % Update effort bar
-                xT = mean(abs(tempData(:,chIdx)));
-                x = xT / effortMax;
-                set(handles.hPatch4,'Ydata',[0 x x 0]);
-                
-                chIdx=chIdx+1;
-                %set(p_f4,'XData',f);
-                %set(p_f4,'YData',m(:,chIdx));
-            end
-            if nCh >= 6
-                p_t5 = handles.p_t5;
-                set(p_t5,'YData',tempData(:,chIdx));
-                 % Update effort bar
-                xT = mean(abs(tempData(:,chIdx)));
-                x = xT / effortMax;
-                set(handles.hPatch5,'Ydata',[0 x x 0]);
-                
-                chIdx=chIdx+1;
-                %set(p_f5,'XData',f);
-                %set(p_f5,'YData',m(:,chIdx));
-            end
-            if nCh >= 7
-                p_t6 = handles.p_t6;
-                set(p_t6,'YData',tempData(:,chIdx));
-                 % Update effort bar
-                xT = mean(abs(tempData(:,chIdx)));
-                x = xT / effortMax;
-                set(handles.hPatch6,'Ydata',[0 x x 0]);
-                
-                chIdx=chIdx+1;
-                %set(p_f6,'XData',f);
-                %set(p_f6,'YData',m(:,chIdx));
-            end
-            if nCh >= 8
-                p_t7 = handles.p_t7;
-                set(p_t7,'YData',tempData(:,chIdx));
-                 % Update effort bar
-                xT = mean(abs(tempData(:,chIdx)));
-                x = xT / effortMax;
-                set(handles.hPatch7,'Ydata',[0 x x 0]);
-                
-                %set(p_f7,'XData',f);
-                %set(p_f7,'YData',m(:,chIdx));
-            end    
+    % Turn OFF visibility
+    set(handles.a_prog,'visible','off');
+    if(rampStatus)
+        set(handles.a_effortPlot,'visible','off');
+        set(handles.txt_effortPlot,'visible','off');
+        set(p_effortPlot,'visible','off');
+        set(handles.hLine,'visible','off');
+    end
+    set(handles.hPatch,'Xdata',[0 0 0 0]);
     
-
+    % Set visible the offline plot and process panels
+    set(handles.uipanel9,'Visible','on');   
+    set(handles.uipanel7,'Visible','on');
+    set(handles.uipanel8,'Visible','on');
+    set(handles.txt_it,'visible','on');
+    set(handles.txt_ft,'visible','on');
+    set(handles.et_it,'visible','on');
+    set(handles.et_ft,'visible','on');
+    set(handles.txt_if,'visible','on');
+    set(handles.txt_ff,'visible','on');
+    set(handles.et_if,'visible','on');
+    set(handles.et_ff,'visible','on');
+    
+    chVector = 0:nCh-1;
+    set(handles.lb_channels, 'String', chVector);
+    
 end
-
-

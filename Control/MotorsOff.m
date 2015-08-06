@@ -24,6 +24,15 @@
 % 2012-05-22 / Max Ortiz  / Creation (MoveMotor)
 % 2012-07-03 / Max Ortiz  / Creation of specific routines for activation
 %                           and deactivation to improve speed.
+% 2015-06-11 / Sebastian Karlsson  / Moved to motor-type identification
+%                                    to be implemented on the connected devices 
+%                                    firmware instead of handled by
+%                                    this function, according to the standardized framework.
+% 2015-07-07 / Enzo Mastinu  / The Update2PWMusingSCI function has been
+%                            replaced with the general SendMotorCommand, 
+%                            used to implement the control framework
+
+
 
 function [motors, movement] = MotorsOff(com, movement, motors)
 
@@ -31,44 +40,29 @@ if strcmp(movement.name,'Rest')
     return;
 end
 
-%pwmIDs = cell2mat(movement.idMotor);
-movMotors = movement.motor;
-noPIDs = size(movMotors,2);
+noPIDs = size(movement.motor,2);
 
-motorPct = [];
-pwmIDs = [];
-
-% Get the IDs of al PWM involved in the selected movement
-for i=1:length(movMotors)
-    motorPct = [motorPct motors(movMotors(i)).pct];
-    pwmIDs = [pwmIDs cell2mat(motors(movMotors(i)).id)];    
-end
-
-
-%This only works when movements have motors with the same (motor)type
-%% DC motors
-if (motors(movMotors(1)).type == 0)  % DC Motors
-
-    % Get the pwm vectors according to the direction of the movement
-    if movement.vreDir
-        pwmA = zeros(1,noPIDs);
-        pwmB = motorPct;
-    else
-        pwmA = motorPct;
-        pwmB = zeros(1,noPIDs);
-    end
-
-    % Stop
-    for i = 1 : noPIDs
-        if ~Update2PWMusingSCI(com, pwmIDs(i), 0, 0);
+% Activate and update
+for i = 1 : noPIDs
+    % Check the speed Updating
+    motors(movement.motor(1,i)).pct = 0; %%%SERVE?
+    % Extract control type (defined in "motors.def" file)
+    ctrl_type = motors(movement.motor(1,i)).type;
+    % Extract motor index (defined in "motors.def" file)
+    motor_index = cell2mat(motors(movement.motor(1,i)).id);
+    % Extract movement direction (for speed control)
+    mov_dir = movement.motor(2,i);
+    
+    % Send motor commands
+    if(ctrl_type == 0)
+        % if in speed control, PWM must be set to 0
+        if ~SendMotorCommand(com, ctrl_type, motor_index, mov_dir, 0);
             disp('Failed');
             fclose(com.io);
         end
+        
+    elseif(ctrl_type == 1)
+        % if in position control, no commands are needed for the device to
+        % stop
     end
-    
-%% Servo Motors
-elseif motors(movMotors(1)).type == 1
-    % Servor don't need to be stoped, since they will stop automatically at
-    % the last given position.        
 end
-

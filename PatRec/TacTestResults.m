@@ -20,7 +20,9 @@
 % ------------------------- Updates & Contributors ------------------------
 % [Contributors are welcome to add their email]
 % 2012-07-17 / Nichlas Sander / Created the file from MotionTest and
-% changed accordingly
+%                               changed accordingly
+% 2013-04-27 / Max Ortiz  / Addition of movements to tacTest for further
+%                           identification
 
 function tacTest = TacTestResults(tacTest)
 
@@ -92,12 +94,11 @@ pathEfficiency(:,end+1) = nanmean(pathEfficiency,2);
 
 %% Save results
 
-tacTest.compRate     = compRate;
-tacTest.selectionTime      = selectionTime;
-tacTest.compTime     = compTime;
-% tacTest.selTimeTW    = selTimeTW;
-% tacTest.compTimeTW   = compTimeTW;
-tacTest.pathEfficiency          = pathEfficiency;
+tacTest.compRate        = compRate;
+tacTest.selectionTime   = selectionTime;
+tacTest.compTime        = compTime;
+tacTest.pathEfficiency  = pathEfficiency;
+tacTest.movements       = movements;
 
 %% plot and save results
 % Completion rate

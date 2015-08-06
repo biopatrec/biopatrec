@@ -21,6 +21,12 @@
 % ------------------------- Updates & Contributors ------------------------
 % [Contributors are welcome to add their email]
 % 20xx-xx-xx / Max Ortiz  / Creation
+% 2013-08-23 / Morten Kristoffersen / Trimmed the interface down to one
+% popup menu, reorganised the GUI_AFESelection data. 
+% 2013-09-20 / Pontus Lövinger  / Added the option for ramp recording which
+                        % calls the ramp recording functions
+% 2014-11-10 / Enzo Mastinu / include the code for ADS1299 AFE, optimization of 
+                        % ramp functions and their callings
 % 20xx-xx-xx / Author  / Comment on update
 
 function varargout = GUI_AFEselection(varargin)
@@ -47,7 +53,7 @@ function varargout = GUI_AFEselection(varargin)
 
 % Edit the above text to modify the response to help GUI_AFEselection
 
-% Last Modified by GUIDE v2.5 25-Feb-2014 15:47:08
+% Last Modified by GUIDE v2.5 24-Feb-2015 11:25:48
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -118,6 +124,9 @@ function pb_record_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 % get(handles.cb_active0,'Value')
 
+global offsetDelete;
+offsetDelete = get(handles.cb_offset,'Value');
+
 % AFE_settings.active=[get(handles.cb_active0,'Value');get(handles.cb_active1,'Value');get(handles.cb_active2,'Value')];
 % AFE_settings.active
 
@@ -127,78 +136,69 @@ if not(isempty(instrfind('Status','open')))
     delete(instrfind)
 end
 
-% Which device is active
-AFE_settings.ADS.active=get(handles.cb_active0,'Value');
-% AFE_settings.ADS.active
-AFE_settings.RHA.active=get(handles.cb_active1,'Value');
-% AFE_settings.RHA.active
-AFE_settings.NI.active=get(handles.cb_active2,'Value'); 
-% AFE_settings.NI.active
+% % Which device is active
+% AFE_settings.ADS.active=get(handles.cb_active0,'Value');
+% % AFE_settings.ADS.active
+% AFE_settings.RHA.active=get(handles.cb_active1,'Value');
+% % AFE_settings.RHA.active
+% AFE_settings.NI.active=get(handles.cb_active2,'Value'); 
+% % AFE_settings.NI.active
 
 
 % Get devices name
 
-AFE_settings.ADS.name=get(handles.et_name0,'String');
-AFE_settings.RHA.name=get(handles.et_name1,'String');
+% AFE_settings.ADS.name=get(handles.et_name0,'String');
+% AFE_settings.RHA.name=get(handles.et_name1,'String');
 
-dev = get(handles.pm_name2,'String');
-selDev = get(handles.pm_name2,'Value');
-AFE_settings.NI.name= dev(selDev);
+dev = get(handles.pm_name,'String');
+selDev = get(handles.pm_name,'Value');
+AFE_settings.name = dev(selDev);
+deviceName = AFE_settings.name;
 
 
-%% Sampling frequencie 
-% SR must be change to sF
-contents = cellstr(get(handles.pm_sampleRate0,'String'));
-SR0=str2double(contents{get(handles.pm_sampleRate0,'Value')});
-
-contents = cellstr(get(handles.pm_sampleRate1,'String'));
-SR1=str2double(contents{get(handles.pm_sampleRate1,'Value')});
-
-contents = cellstr(get(handles.pm_sampleRate2,'String'));
-SR2=str2double(contents{get(handles.pm_sampleRate2,'Value')});
+%% Sampling frequency 
+contents = cellstr(get(handles.pm_sampleRate, 'String'));
+sF = str2double(contents{get(handles.pm_sampleRate,'Value')});
 
 % AFE_settings.sampleRate=[SR0;SR1;SR2];
 % AFE_settings.sampleRate
-AFE_settings.ADS.sampleRate=SR0;
-AFE_settings.RHA.sampleRate=SR1;
-AFE_settings.NI.sampleRate=SR2;
+
+AFE_settings.sampleRate=sF;
 
 %% Number of channels
-AFE_settings.ADS.channels = str2double(get(handles.et_chs0,'String'));
-AFE_settings.RHA.channels = str2double(get(handles.et_chs1,'String'));
-AFE_settings.NI.channels = str2double(get(handles.et_chs2,'String'));
-
+AFE_settings.channels = str2double(get(handles.et_chs,'String'));
+nCh = AFE_settings.channels;
 
 %%
 % Communication Port
 
-contents = cellstr(get(handles.ComPortType0,'String'));
-CPT0=contents{get(handles.ComPortType0,'Value')};
+contents = cellstr(get(handles.ComPortType,'String'));
+ComPortType=contents{get(handles.ComPortType,'Value')};
+AFE_settings.ComPortType=ComPortType;
 
-contents = cellstr(get(handles.ComPortType1,'String'));
-CPT1=contents{get(handles.ComPortType1,'Value')};
+if strcmp(AFE_settings.ComPortType,'COM')
+    ComPortName = get(handles.ComPortName,'String');
+%     AFE_settings.ComPortType=strcat(ComPortType,ComPortName);
+    AFE_settings.ComPortName=strcat(ComPortType,ComPortName);
+end
 
-contents = cellstr(get(handles.ComPortType2,'String'));
-CPT2=contents{get(handles.ComPortType2,'Value')};
-
-AFE_settings.ComPortType={CPT0;CPT1;CPT2};
 % AFE_settings.ComPortType
 
-AFE_settings.ADS.ComPortType=CPT0;
-AFE_settings.RHA.ComPortType=CPT1;
-% AFE_settings.NI.ComPortType=CPT2;
+% AFE_settings.ADS.ComPortType=CPT0;
+% AFE_settings.RHA.ComPortType=CPT1;
+% % AFE_settings.NI.ComPortType=CPT2;
 
 % AFE_settings.show=[get(handles.show0,'Value');get(handles.show1,'Value');get(handles.show2,'Value')];
 % AFE_settings.show
 
-AFE_settings.ADS.show=get(handles.show0,'Value');
-% AFE_settings.ADS.show
-AFE_settings.RHA.show=get(handles.show1,'Value');
-% AFE_settings.RHA.show
-AFE_settings.NI.show=get(handles.show2,'Value');
-% AFE_settings.NI.show
+% AFE_settings.ADS.show=get(handles.show0,'Value');
+% % AFE_settings.ADS.show
+% AFE_settings.RHA.show=get(handles.show1,'Value');
+% % AFE_settings.RHA.show
+% AFE_settings.NI.show=get(handles.show2,'Value');
+% % AFE_settings.NI.show
 
-AFE_settings.prepare=get(handles.prepare,'Value');
+AFE_settings.prepare      = get(handles.prepare,'Value');
 
 % GUI_AFEselection(Fs,Ne,Nr,Tc,Tr,Psr,msg,EMG_AQhandle)
 % cdata = recording_session(Fs,Ne,Nr,Tc,Tr,Psr,msg,EMG_AQhandle);
@@ -210,22 +210,43 @@ rT=handles.varargin{4};
 mov=handles.varargin{5};
 hGUI_Rec=handles.varargin{6};
 vreMovements = handles.varargin{7};
+rampStatus = handles.varargin{8};
+fast = handles.varargin{9};
 
-[cdata, sF] = RecordingSession(nM,nR,cT,rT,mov,hGUI_Rec,AFE_settings,get(handles.cb_trainVRE,'Value'),vreMovements,get(handles.cb_VRELeftHand,'Value'));%Fs,Ne,Nr,Tc,Tr,Psr,msg,EMG_AQhandle);
+if(fast)
+    
+    % Fast recording session
+    [cdata, sF, sT] = FastRecordingSession(hGUI_Rec,AFE_settings);
+    tempdata = cdata;                                                      % variable useful for offline data processing
+    save('cdata.mat','cdata','tempdata','sF','sT','nCh','ComPortType','deviceName');
+else
 
-% Fs=handles.varargin{1};
-% Nr=handles.varargin{3};
-% Tc=handles.varargin{4};
-% Tr=handles.varargin{5};
-%Moved from Recoding Session Fig
-sT = (cT+rT)*nR;
-save('cdata.mat','cdata','sF','sT');
-close(GUI_AFEselection);
-close(GUI_RecordingSession);
+    % If ramp training has been selected in GUI_RecordingSession the ramp
+    % parameters should be obtained and the rampRecordingSession file is run
+    if rampStatus
+        [rampMin, minData] = ObtainRampMin(hGUI_Rec,AFE_settings,get(handles.cb_trainVRE,'Value'));%Fs,Ne,Nr,Tc,Tr,Psr,msg,EMG_AQhandle
+        [rampMax, maxData] = ObtainRampMax(nM,mov,hGUI_Rec,AFE_settings,get(handles.cb_trainVRE,'Value'),vreMovements, get(handles.cb_VRELeftHand,'Value'));%Fs,Ne,Nr,Tc,Tr,Psr,msg,EMG_AQhandle
+        rampParams =  {rampMin rampMax minData maxData};
+        [cdata, sF] = RecordingSession(nM,nR,cT,rT,mov,hGUI_Rec,AFE_settings,get(handles.cb_trainVRE,'Value'),vreMovements,get(handles.cb_VRELeftHand,'Value'),rampStatus,rampParams);%Fs,Ne,Nr,Tc,Tr,Psr,msg,EMG_AQhandle,rampParams);
+    else
+        [cdata, sF] = RecordingSession(nM,nR,cT,rT,mov,hGUI_Rec,AFE_settings,get(handles.cb_trainVRE,'Value'),vreMovements,get(handles.cb_VRELeftHand,'Value'),rampStatus);%Fs,Ne,Nr,Tc,Tr,Psr,msg,EMG_AQhandle);
+    end
+    % Fs=handles.varargin{1};
+    % Nr=handles.varargin{3};
+    % Tc=handles.varargin{4};
+    % Tr=handles.varargin{5};
+    %Moved from Recoding Session Fig
+    sT = (cT+rT)*nR;
+    cdata = cdata(:,:,size(cdata,3));
+    tempdata = cdata;
+    save('cdata.mat','cdata','tempdata','sF','sT','nCh','ComPortType','deviceName');
+    close(GUI_AFEselection);
+    close(GUI_RecordingSession);
 
-% close(recording_session_fig);
+    % close(recording_session_fig);
 
-% close(get(hObject,'Parent'))
+    % close(get(hObject,'Parent'))
+end
 
 % --- Executes during object creation, after setting all properties.
 function pb_record_CreateFcn(hObject, eventdata, handles)
@@ -260,19 +281,19 @@ function default_CreateFcn(hObject, eventdata, handles)
 % handles    empty - handles not created until after all CreateFcns called
 
 
-% --- Executes on selection change in pm_sampleRate2.
-function pm_sampleRate2_Callback(hObject, eventdata, handles)
-% hObject    handle to pm_sampleRate2 (see GCBO)
+% --- Executes on selection change in pm_sampleRate.
+function pm_sampleRate_Callback(hObject, eventdata, handles)
+% hObject    handle to pm_sampleRate (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-% Hints: contents = cellstr(get(hObject,'String')) returns pm_sampleRate2 contents as cell array
-%        contents{get(hObject,'Value')} returns selected item from pm_sampleRate2
+% Hints: contents = cellstr(get(hObject,'String')) returns pm_sampleRate contents as cell array
+%        contents{get(hObject,'Value')} returns selected item from pm_sampleRate
 
 
 % --- Executes during object creation, after setting all properties.
-function pm_sampleRate2_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to pm_sampleRate2 (see GCBO)
+function pm_sampleRate_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to pm_sampleRate (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
 
@@ -282,57 +303,10 @@ if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgr
     set(hObject,'BackgroundColor','white');
 end
 
-
-% --- Executes on selection change in pm_sampleRate1.
-function pm_sampleRate1_Callback(hObject, eventdata, handles)
-% hObject    handle to pm_sampleRate1 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hints: contents = cellstr(get(hObject,'String')) returns pm_sampleRate1 contents as cell array
-%        contents{get(hObject,'Value')} returns selected item from pm_sampleRate1
-
-
-% --- Executes during object creation, after setting all properties.
-function pm_sampleRate1_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to pm_sampleRate1 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
-
-% Hint: popupmenu controls usually have a white background on Windows.
-%       See ISPC and COMPUTER.
-if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
-    set(hObject,'BackgroundColor','white');
-end
-
-
-% --- Executes on selection change in pm_sampleRate0.
-function pm_sampleRate0_Callback(hObject, eventdata, handles)
-% hObject    handle to pm_sampleRate0 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hints: contents = cellstr(get(hObject,'String')) returns pm_sampleRate0 contents as cell array
-%        contents{get(hObject,'Value')} returns selected item from pm_sampleRate0
-
-
-% --- Executes during object creation, after setting all properties.
-function pm_sampleRate0_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to pm_sampleRate0 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
-
-% Hint: popupmenu controls usually have a white background on Windows.
-%       See ISPC and COMPUTER.
-if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
-    set(hObject,'BackgroundColor','white');
-end
-
-
-
-
+%%The function below detects the available COM porst, I just leave it there
+%%for now in case that we need it. 
 % --- Executes on selection change in ComPortType0.
-function ComPortType0_Callback(hObject, eventdata, handles)
+%function ComPortType0_Callback(hObject, eventdata, handles)
 % hObject    handle to ComPortType0 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
@@ -341,90 +315,26 @@ function ComPortType0_Callback(hObject, eventdata, handles)
 %        contents{get(hObject,'Value')} returns selected item from ComPortType0
 
 
-% --- Executes during object creation, after setting all properties.
-function ComPortType0_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to ComPortType0 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
-
-% Hint: popupmenu controls usually have a white background on Windows.
-%       See ISPC and COMPUTER.
-if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
-    set(hObject,'BackgroundColor','white');
-end
-
-
-s=instrhwinfo('serial');
-if not(isfield(s,'SerialPorts'))
-    s.SerialPorts = {'Not Available'};
-elseif isempty(s.SerialPorts)
-    s.SerialPorts = {'Not Available'};
-end
-set(hObject,'String',[s.SerialPorts]);
-
-
-
-
-% --- Executes on selection change in ComPortType1.
-function ComPortType1_Callback(hObject, eventdata, handles)
-% hObject    handle to ComPortType1 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hints: contents = cellstr(get(hObject,'String')) returns ComPortType1 contents as cell array
-%        contents{get(hObject,'Value')} returns selected item from ComPortType1
-
-
-% --- Executes during object creation, after setting all properties.
-function ComPortType1_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to ComPortType1 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
-
-% Hint: popupmenu controls usually have a white background on Windows.
-%       See ISPC and COMPUTER.
-if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
-    set(hObject,'BackgroundColor','white');
-end
-s=instrhwinfo('serial');
-if not(isfield(s,'SerialPorts'))
-    s.SerialPorts = {'Not Available'};
-elseif isempty(s.SerialPorts)
-    s.SerialPorts = {'Not Available'};
-end
-set(hObject,'String',[s.SerialPorts]);
-
-
-% --- Executes on selection change in ComPortType2.
-function ComPortType2_Callback(hObject, eventdata, handles)
-% hObject    handle to ComPortType2 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hints: contents = cellstr(get(hObject,'String')) returns ComPortType2 contents as cell array
-%        contents{get(hObject,'Value')} returns selected item from ComPortType2
-
-
-% --- Executes during object creation, after setting all properties.
-function ComPortType2_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to ComPortType2 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
-
-% Hint: popupmenu controls usually have a white background on Windows.
-%       See ISPC and COMPUTER.
-if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
-    set(hObject,'BackgroundColor','white');
-end
+% % --- Executes during object creation, after setting all properties.
+% function ComPortType0_CreateFcn(hObject, eventdata, handles)
+% % hObject    handle to ComPortType0 (see GCBO)
+% % eventdata  reserved - to be defined in a future version of MATLAB
+% % handles    empty - handles not created until after all CreateFcns called
+% 
+% % Hint: popupmenu controls usually have a white background on Windows.
+% %       See ISPC and COMPUTER.
+% if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+%     set(hObject,'BackgroundColor','white');
+% end
+% 
+% 
 % s=instrhwinfo('serial');
 % if not(isfield(s,'SerialPorts'))
 %     s.SerialPorts = {'Not Available'};
+% elseif isempty(s.SerialPorts)
+%     s.SerialPorts = {'Not Available'};
 % end
-% set(hObject,'String',[s.SerialPorts;{'NI'}]);
-set(hObject,'String',{'NI'});
-set(hObject,'Value',1)
-% set(hObject,'Value',length(s.SerialPorts)+1)
-
+% set(hObject,'String',[s.SerialPorts]);
 
 
 function bytesSamples2_Callback(hObject, eventdata, handles)
@@ -495,19 +405,18 @@ if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgr
 end
 
 
-
-function et_name0_Callback(hObject, eventdata, handles)
-% hObject    handle to et_name0 (see GCBO)
+function pm_name_Callback(hObject, eventdata, handles)
+% hObject    handle to pm_name (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-% Hints: get(hObject,'String') returns contents of et_name0 as text
-%        str2double(get(hObject,'String')) returns contents of et_name0 as a double
+% Hints: get(hObject,'String') returns contents of pm_name as text
+%        str2double(get(hObject,'String')) returns contents of pm_name as a double
 
 
 % --- Executes during object creation, after setting all properties.
-function et_name0_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to et_name0 (see GCBO)
+function pm_name_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to pm_name (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
 
@@ -516,88 +425,6 @@ function et_name0_CreateFcn(hObject, eventdata, handles)
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
-
-
-
-function et_name1_Callback(hObject, eventdata, handles)
-% hObject    handle to et_name1 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hints: get(hObject,'String') returns contents of et_name1 as text
-%        str2double(get(hObject,'String')) returns contents of et_name1 as a double
-
-
-% --- Executes during object creation, after setting all properties.
-function et_name1_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to et_name1 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
-
-% Hint: edit controls usually have a white background on Windows.
-%       See ISPC and COMPUTER.
-if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
-    set(hObject,'BackgroundColor','white');
-end
-
-
-
-function pm_name2_Callback(hObject, eventdata, handles)
-% hObject    handle to pm_name2 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hints: get(hObject,'String') returns contents of pm_name2 as text
-%        str2double(get(hObject,'String')) returns contents of pm_name2 as a double
-
-
-% --- Executes during object creation, after setting all properties.
-function pm_name2_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to pm_name2 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
-
-% Hint: edit controls usually have a white background on Windows.
-%       See ISPC and COMPUTER.
-if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
-    set(hObject,'BackgroundColor','white');
-end
-
-
-% --- Executes on button press in cb_active0.
-function cb_active0_Callback(hObject, eventdata, handles)
-% hObject    handle to cb_active0 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hint: get(hObject,'Value') returns toggle state of cb_active0
-
-
-% --- Executes on button press in cb_active1.
-function cb_active1_Callback(hObject, eventdata, handles)
-% hObject    handle to cb_active1 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hint: get(hObject,'Value') returns toggle state of cb_active1
-
-
-% --- Executes on button press in cb_active2.
-function cb_active2_Callback(hObject, eventdata, handles)
-% hObject    handle to cb_active2 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hint: get(hObject,'Value') returns toggle state of cb_active2
-
-
-
-
-
-
-% 
-% set(hObject,'String',{'8000';'4000';'2000';'1000';'500'})
-
 
 % --- Executes during object creation, after setting all properties.
 function uipanel3_CreateFcn(hObject, eventdata, handles)
@@ -676,70 +503,22 @@ if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgr
     set(hObject,'BackgroundColor','white');
 end
 
-
-
-function et_chs0_Callback(hObject, eventdata, handles)
-% hObject    handle to et_chs0 (see GCBO)
+function et_chs_Callback(hObject, eventdata, handles)
+% hObject    handle to et_chs (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-% Hints: get(hObject,'String') returns contents of et_chs0 as text
-%        str2double(get(hObject,'String')) returns contents of et_chs0 as a double
-
-
-% --- Executes during object creation, after setting all properties.
-function et_chs0_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to et_chs0 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
-
-% Hint: edit controls usually have a white background on Windows.
-%       See ISPC and COMPUTER.
-if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
-    set(hObject,'BackgroundColor','white');
-end
-
-
-
-function et_chs1_Callback(hObject, eventdata, handles)
-% hObject    handle to et_chs1 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hints: get(hObject,'String') returns contents of et_chs1 as text
-%        str2double(get(hObject,'String')) returns contents of et_chs1 as a double
-
-
-% --- Executes during object creation, after setting all properties.
-function et_chs1_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to et_chs1 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
-
-% Hint: edit controls usually have a white background on Windows.
-%       See ISPC and COMPUTER.
-if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
-    set(hObject,'BackgroundColor','white');
-end
-
-
-
-function et_chs2_Callback(hObject, eventdata, handles)
-% hObject    handle to et_chs2 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hints: get(hObject,'String') returns contents of et_chs2 as text
-%        str2double(get(hObject,'String')) returns contents of et_chs2 as a double
+% Hints: get(hObject,'String') returns contents of et_chs as text
+%        str2double(get(hObject,'String')) returns contents of et_chs as a double
 if str2double(get(hObject,'String')) == 8
-    set(handles.pm_sampleRate2,'Value',2)
+    set(handles.pm_sampleRate,'Value',2)
 elseif str2double(get(hObject,'String')) == 6
-    set(handles.pm_sampleRate2,'Value',1)    
+    set(handles.pm_sampleRate,'Value',1)    
 end
 
 % --- Executes during object creation, after setting all properties.
-function et_chs2_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to et_chs2 (see GCBO)
+function et_chs_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to et_chs (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
 
@@ -760,6 +539,36 @@ function cb_trainVRE_Callback(hObject, eventdata, handles)
 
 set(handles.cb_VRELeftHand,'Enable', 'on');
 
+% --- Executes on selection change in ComPortType.
+function ComPortType_Callback(hObject, eventdata, handles)
+% hObject    handle to ComPortType (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: contents = cellstr(get(hObject,'String')) returns ComPortType contents as cell array
+%        contents{get(hObject,'Value')} returns selected item from ComPortType
+
+contents = cellstr(get(handles.ComPortType,'String'));
+ComPortType = contents{get(handles.ComPortType,'Value')};
+if strcmp(ComPortType,'COM')
+    set(handles.ComPortName,'Enable', 'on');
+else
+    set(handles.ComPortName,'Enable', 'off');
+end
+
+% --- Executes during object creation, after setting all properties.
+function ComPortType_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to ComPortType (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: popupmenu controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
 % --- Executes on button press in cb_VRELeftHand.
 function cb_VRELeftHand_Callback(hObject, eventdata, handles)
 % hObject    handle to cb_VRELeftHand (see GCBO)
@@ -767,3 +576,35 @@ function cb_VRELeftHand_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 % Hint: get(hObject,'Value') returns toggle state of cb_VRELeftHand
+
+
+
+function ComPortName_Callback(hObject, eventdata, handles)
+% hObject    handle to ComPortName (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of ComPortName as text
+%        str2double(get(hObject,'String')) returns contents of ComPortName as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function ComPortName_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to ComPortName (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+% --- Executes on button press in cb_offset.
+function cb_offset_Callback(hObject, eventdata, handles)
+% hObject    handle to cb_offset (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: get(hObject,'Value') returns toggle state of cb_offset

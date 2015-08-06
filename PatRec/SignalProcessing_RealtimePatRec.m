@@ -28,6 +28,11 @@ function tSet = SignalProcessing_RealtimePatRec(data, patRec)
     % Apply fliters
     data = ApplyFilters(patRec, data); 
     
+    % Apply Signal Separation algorithms if required
+    if isfield(patRec,'sigSeparation')
+        data=SignalSeparationRealtime(patRec,data);
+    end
+    
     % Get signal features
     tFeatures = GetSigFeatures(data,patRec.sF,patRec.selFeatures);    
     
@@ -39,6 +44,10 @@ function tSet = SignalProcessing_RealtimePatRec(data, patRec)
     
     % Normalize if required
     tSet = NormalizeSet(tSet,patRec);
+    
+    % Apply Feature Reduction (PCA) if required
+    tSet = ApplyFeatureReduction(tSet, patRec);
+    
     %if patRec.norm 
     %    tSet = ((tSet - patRec.nMean) ./ patRec.nVar);
     %end

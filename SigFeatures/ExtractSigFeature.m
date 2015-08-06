@@ -16,7 +16,7 @@
 % acknowledge contributions here and in the project web page (optional).
 %
 % -------------------------- Function Description -------------------------
-% The different with GetSigFeatures is that this routines extracts a single
+% The difference with GetSigFeatures is that this routines extracts a single
 % feature from a complete time series. GetSigFeatures can extract several
 % features for a single time window.
 %

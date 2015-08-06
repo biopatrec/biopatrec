@@ -1,3 +1,4 @@
+
 % ---------------------------- Copyright Notice ---------------------------
 % This file is part of BioPatRec © which is open and free software under 
 % the GNU Lesser General Public License (LGPL). See the file "LICENSE" for 
@@ -21,7 +22,22 @@
 % ------------------------- Updates & Contributors ------------------------
 % [Contributors are welcome to add their email]
 % 20xx-xx-xx / Max Ortiz / Creation
+% 20xx-09-19 / Pontus Lövinger / Added plot and text for ramp recording recording
+% 2015-01-23 / Pontus Lövinger / New recording session GUI: it has been added the 
+                            % possibility to plot more then 8 channels (for both time
+                            % and frequency plots)
+% 2015-01-26 / Enzo Mastinu / A new GUI_Recordings has been developed for the
+                            % BioPatRec_TRE release. Now it is possible to
+                            % plot more then 8 channels at the same moment for 
+                            % time and frequency plots both. It is faster and
+                            % perfectly compatible with the ramp recording 
+                            % session. At the end of the recording session it 
+                            % is possible to check all channels individually, 
+                            % apply offlinedata  process as feature extraction or filter etc.
+                            
 % 20xx-xx-xx / Author  / Comment on update
+
+
 
 function varargout = GUI_Recordings(varargin)
 % GUI_Recordings M-file for GUI_Recordings.fig
@@ -47,7 +63,7 @@ function varargout = GUI_Recordings(varargin)
 
 % Edit the above text to modify the response to help GUI_Recordings
 
-% Last Modified by GUIDE v2.5 03-Jun-2012 19:04:56
+% Last Modified by GUIDE v2.5 24-Feb-2015 16:47:40
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
 gui_State = struct('gui_Name',       mfilename, ...
@@ -94,6 +110,16 @@ handles.output = hObject;
 % Update handles structure
 guidata(hObject, handles);
 
+fast = varargin{1};
+if(fast)
+    set(handles.et_tW,'visible','on'); 
+    set(handles.et_sT,'visible','on');
+    set(handles.txt_tW,'visible','on');
+    set(handles.txt_sT,'visible','on');
+    set(handles.pb_Start,'visible','on');
+end
+    
+
 % UIWAIT makes GUI_Recordings wait for user response (see UIRESUME)
 % uiwait(handles.figure1);
 
@@ -109,206 +135,21 @@ function varargout = GUI_Recordings_OutputFcn(hObject, eventdata, handles)
 varargout{1} = handles.output;
 
 
-% --- Executes on button press in pb_StartRecording.
-function pb_StartRecording_Callback(hObject, eventdata, handles)
-
-    sF = str2double(get(handles.et_Fs,'String'));
-    sT = str2double(get(handles.et_Ts,'String'));
-    pT = str2double(get(handles.et_Tp,'String'));
-
-    % Get chAI (String identifying each channel
-    % the number of channels to record is selected automatically from the graphs
-    sCh(1) = get(handles.cb_ch0,'Value');
-    sCh(2) = get(handles.cb_ch1,'Value');
-    sCh(3) = get(handles.cb_ch2,'Value');
-    sCh(4) = get(handles.cb_ch3,'Value');
-    sCh(5) = get(handles.cb_ch4,'Value');
-    sCh(6) = get(handles.cb_ch5,'Value');
-    sCh(7) = get(handles.cb_ch6,'Value');
-    sCh(8) = get(handles.cb_ch7,'Value');
-
-    % Legacy routines
-    %[ai,chp] = Init_NI_AI(handles,sF,sT,8); & DAQ using legacy
-    %cdata = NI_DataShow(handles,ai,chp,sF,sT,pT);
-
-    cdata = DAQShow_SBI(handles,sCh,sF,sT,pT);
-
-    save('cdata.mat','cdata','sF','sT');
-
-
-function et_Fs_Callback(hObject, eventdata, handles)
-% hObject    handle to et_Fs (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-% Hints: get(hObject,'String') returns contents of et_Fs as text
-%        str2double(get(hObject,'String')) returns contents of et_Fs as a double
-
-input = str2double(get(hObject,'String'));
-if (isempty(input))
-     set(hObject,'String','0')
-end
-guidata(hObject, handles);
-
-
-% --- Executes during object creation, after setting all properties.
-function et_Fs_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to et_Fs (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
-
-% Hint: edit controls usually have a white background on Windows.
-%       See ISPC and COMPUTER.
-if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
-    set(hObject,'BackgroundColor','white');
-end
-
-
-
-function et_Ts_Callback(hObject, eventdata, handles)
-% hObject    handle to et_Ts (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hints: get(hObject,'String') returns contents of et_Ts as text
-%        str2double(get(hObject,'String')) returns contents of et_Ts as a double
-input = str2double(get(hObject,'String'));
-if (isempty(input))
-     set(hObject,'String','0')
-end
-guidata(hObject, handles);
-
-
-% --- Executes during object creation, after setting all properties.
-function et_Ts_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to et_Ts (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
-
-% Hint: edit controls usually have a white background on Windows.
-%       See ISPC and COMPUTER.
-if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
-    set(hObject,'BackgroundColor','white');
-end
-
-
-
-function et_Tp_Callback(hObject, eventdata, handles)
-% hObject    handle to et_Tp (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hints: get(hObject,'String') returns contents of et_Tp as text
-%        str2double(get(hObject,'String')) returns contents of et_Tp as a double
-input = str2double(get(hObject,'String'));
-if (isempty(input))
-     set(hObject,'String','0')
-end
-guidata(hObject, handles);
-
-
-% --- Executes during object creation, after setting all properties.
-function et_Tp_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to et_Tp (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
-
-% Hint: edit controls usually have a white background on Windows.
-%       See ISPC and COMPUTER.
-if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
-    set(hObject,'BackgroundColor','white');
-end
-
-
-% --- Executes on button press in pb_initai.
-function pb_initai_Callback(hObject, eventdata, handles)
-% hObject    handle to pb_initai (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-% Get user input from GUI
-
-
-% --- Executes on button press in cb_filter50hz.
-function cb_filter50hz_Callback(hObject, eventdata, handles)
-% hObject    handle to cb_filter50hz (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hint: get(hObject,'Value') returns toggle state of cb_filter50hz
-
-
-% --- Executes on button press in cb_filterBP.
-function cb_filterBP_Callback(hObject, eventdata, handles)
-% hObject    handle to cb_filterBP (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hint: get(hObject,'Value') returns toggle state of cb_filterBP
-
-
-% --- Executes on button press in cb_filter80Hz.
-function cb_filter80Hz_Callback(hObject, eventdata, handles)
-% hObject    handle to cb_filter80Hz (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hint: get(hObject,'Value') returns toggle state of cb_filter80Hz
-
-
-% --- Executes on button press in cb_ch0.
-function cb_ch0_Callback(hObject, eventdata, handles)
-% hObject    handle to cb_ch0 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hint: get(hObject,'Value') returns toggle state of cb_ch0
-
-
-% --- Executes on button press in cb_ch1.
-function cb_ch1_Callback(hObject, eventdata, handles)
-% hObject    handle to cb_ch1 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hint: get(hObject,'Value') returns toggle state of cb_ch1
-
-
-% --- Executes on button press in cb_ch2.
-function cb_ch2_Callback(hObject, eventdata, handles)
-% hObject    handle to cb_ch2 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hint: get(hObject,'Value') returns toggle state of cb_ch2
-
-
-% --- Executes on button press in cb_ch3.
-function cb_ch3_Callback(hObject, eventdata, handles)
-% hObject    handle to cb_ch3 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hint: get(hObject,'Value') returns toggle state of cb_ch3
-
-
-
-function et_if0_Callback(hObject, eventdata, handles)
+function et_if_Callback(hObject, eventdata, handles)
     input = str2double(get(hObject,'String'));
     if (isempty(input))
          set(hObject,'String','0')
     end
 
-    xmax = str2double(get(handles.et_ff0,'String'));
+    xmax = str2double(get(handles.et_ff,'String'));
     set(handles.a_f0,'XLim',[input xmax]);
-    set(handles.a_f1,'XLim',[input xmax]);
-    set(handles.a_f2,'XLim',[input xmax]);
-    set(handles.a_f3,'XLim',[input xmax]);
 
     guidata(hObject, handles);
 
 
 % --- Executes during object creation, after setting all properties.
-function et_if0_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to et_if0 (see GCBO)
+function et_if_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to et_if (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
 
@@ -319,25 +160,21 @@ if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgr
 end
 
 
-
-function et_ff0_Callback(hObject, eventdata, handles)
+function et_ff_Callback(hObject, eventdata, handles)
     input = str2double(get(hObject,'String'));
     if (isempty(input))
          set(hObject,'String','0')
     end
 
-    xmin = str2double(get(handles.et_if0,'String'));
+    xmin = str2double(get(handles.et_if,'String'));
     set(handles.a_f0,'XLim',[xmin input]);
-    set(handles.a_f1,'XLim',[xmin input]);
-    set(handles.a_f2,'XLim',[xmin input]);
-    set(handles.a_f3,'XLim',[xmin input]);
 
     guidata(hObject, handles);
 
 
 % --- Executes during object creation, after setting all properties.
-function et_ff0_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to et_ff0 (see GCBO)
+function et_ff_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to et_ff (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
 
@@ -346,7 +183,6 @@ function et_ff0_CreateFcn(hObject, eventdata, handles)
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
-
 
 
 function et_n_Callback(hObject, eventdata, handles)
@@ -390,8 +226,7 @@ function et_fc1_CreateFcn(hObject, eventdata, handles)
     if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
         set(hObject,'BackgroundColor','white');
     end
-
-
+    
 
 function et_fc2_Callback(hObject, eventdata, handles)
     input = str2double(get(hObject,'String'));
@@ -422,32 +257,28 @@ function pb_ApplyButter_Callback(hObject, eventdata, handles)
     cF2 = str2double(get(handles.et_fc2,'String'));
     % Load matrix
     load('cdata.mat');
-    cdata = ApplyButterFilter(sF, N, cF1, cF2, cdata);
-    DataShow(handles,cdata,sF,sT);
-    save('cdata.mat','cdata','sF','sT');
+    handles.nCh = size(tempdata,2);
+    handles.ComPortType = ComPortType;
+    handles.deviceName = deviceName;
+    tempdata = ApplyButterFilter(sF, N, cF1, cF2, tempdata);
+    DataShow(handles,tempdata,sF,sT);
+    save('cdata.mat','cdata','tempdata','sF','sT','nCh','ComPortType','deviceName');
 
 
-function et_it0_Callback(hObject, eventdata, handles)
+function et_it_Callback(hObject, eventdata, handles)
     input = str2double(get(hObject,'String'));
     if (isempty(input))
          set(hObject,'String','0')
     end
 
-    xmax = str2double(get(handles.et_ft0,'String'));
+    xmax = str2double(get(handles.et_ft,'String'));
     set(handles.a_t0,'XLim',[input xmax]);
-    set(handles.a_t1,'XLim',[input xmax]);
-    set(handles.a_t2,'XLim',[input xmax]);
-    set(handles.a_t3,'XLim',[input xmax]);
-    set(handles.a_t4,'XLim',[input xmax]);
-    set(handles.a_t5,'XLim',[input xmax]);
-    set(handles.a_t6,'XLim',[input xmax]);
-    set(handles.a_t7,'XLim',[input xmax]);
     guidata(hObject, handles);
 
 
 % --- Executes during object creation, after setting all properties.
-function et_it0_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to et_it0 (see GCBO)
+function et_it_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to et_it (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
 
@@ -458,28 +289,20 @@ if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgr
 end
 
 
-
-function et_ft0_Callback(hObject, eventdata, handles)
+function et_ft_Callback(hObject, eventdata, handles)
     input = str2double(get(hObject,'String'));
     if (isempty(input))
          set(hObject,'String','0')
     end
 
-    xmin = str2double(get(handles.et_it0,'String'));
+    xmin = str2double(get(handles.et_it,'String'));
     set(handles.a_t0,'XLim',[xmin input]);
-    set(handles.a_t1,'XLim',[xmin input]);
-    set(handles.a_t2,'XLim',[xmin input]);
-    set(handles.a_t3,'XLim',[xmin input]);
-    set(handles.a_t4,'XLim',[xmin input]);
-    set(handles.a_t5,'XLim',[xmin input]);
-    set(handles.a_t6,'XLim',[xmin input]);
-    set(handles.a_t7,'XLim',[xmin input]);
     guidata(hObject, handles);
 
 
 % --- Executes during object creation, after setting all properties.
-function et_ft0_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to et_ft0 (see GCBO)
+function et_ft_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to et_ft (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
 
@@ -503,43 +326,143 @@ function m_load_Callback(hObject, eventdata, handles)
 
 % --------------------------------------------------------------------
 function t_load_ClickedCallback(hObject, eventdata, handles)
-% Callback function run when the Open menu item is selected
-ss = [];
-[file, path] = uigetfile('*.mat');
-    if ~isequal(file, 0)
-        load([path,file]);
-        if(exist('sF','var')) == 1              % Load current data
-            DataShow(handles,cdata,sF,sT);
-            save('cdata.mat','cdata','sF','sT');
-        elseif exist('recSession','var') || ... % Load session
-               exist('ss','var')                  
-            df = GUI_RecordingSessionShow();
-            dfdata = guidata(df);
-            if ~isempty(ss)
-                recSession = Compatibility_recSession(ss);
-            end
-            set(dfdata.et_Fs,'String',num2str(recSession.sF));
-            set(dfdata.et_Ne,'String',num2str(recSession.nM));
-            set(dfdata.et_Nr,'String',num2str(recSession.nR));
-            set(dfdata.et_Tc,'String',num2str(recSession.cT));
-            set(dfdata.et_Tr,'String',num2str(recSession.rT));
-            set(dfdata.et_msg,'String',recSession.mov);
-            sNe = 1:recSession.nM;
-            set(dfdata.pm_nM,'String',num2str(sNe'));
-            set(dfdata.pm_data,'UserData',recSession); % Save Struct in user data
-            set(dfdata.t_mhandles,'UserData',handles); % Save this GUI handles
-            if isfield(recSession,'cmt')
-                set(dfdata.et_cmt,'String',recSession.cmt);
+    % Callback function run when the Open menu item is selected    
+    ss = [];
+    [file, path] = uigetfile({'*.mat';'*.csv'});
+        if ~isequal(file, 0)
+            [pathstr,name,ext] = fileparts(file);
+            if(strcmp(ext,'.mat'))
+                load([path,file]);
+                if(exist('sF','var')) == 1              % Load current data
+                    if(exist('cdata','var')) == 1              % Load current data (fix compatibility issues)
+                        DataShow(handles,cdata,sF,sT);
+                        tempdata = cdata;
+                        save('cdata.mat','cdata','tempdata','sF','sT','nCh','ComPortType','deviceName');
+                    elseif(exist('cData','var')) == 1              
+                        DataShow(handles,cData,sF,sT);
+                        tempdata = cdata;
+                        save('cdata.mat','cdata','tempdata','sF','sT','nCh','ComPortType','deviceName');
+                    end
+                elseif exist('recSession','var') || ... % Load session
+                       exist('ss','var')                  
+                    df = GUI_RecordingSessionShow();
+                    dfdata = guidata(df);
+                    if ~isempty(ss)
+                        recSession = Compatibility_recSession(ss);
+                    end
+                    set(dfdata.et_Fs,'String',num2str(recSession.sF));
+                    set(dfdata.et_Ne,'String',num2str(recSession.nM));
+                    set(dfdata.et_Nr,'String',num2str(recSession.nR));
+                    set(dfdata.et_Tc,'String',num2str(recSession.cT));
+                    set(dfdata.et_Tr,'String',num2str(recSession.rT));
+                    set(dfdata.et_msg,'String',recSession.mov);
+                    sNe = 1:recSession.nM;
+                    set(dfdata.pm_nM,'String',num2str(sNe'));
+                    set(dfdata.pm_data,'UserData',recSession); % Save Struct in user data
+                    set(dfdata.t_mhandles,'UserData',handles); % Save this GUI handles
+                    if isfield(recSession,'cmt')
+                        set(dfdata.et_cmt,'String',recSession.cmt);
+                    else
+                        set(dfdata.et_cmt,'String','No Comment');
+                    end
+                    if isfield(recSession,'dev')
+                        set(dfdata.t_dev,'String',recSession.dev);
+                    else
+                        set(dfdata.t_dev,'String','Unknown');
+                    end
+                end
             else
-                set(dfdata.et_cmt,'String','No Comment');
-            end
-            if isfield(recSession,'dev')
-                set(dfdata.t_dev,'String',recSession.dev);
-            else
-                set(dfdata.t_dev,'String','Unknown');
+            %CSV / MCARE
+                fid = fopen(file);
+                fullDir = strcat(path,name,ext); % We get the path of the selected file
+                fileDir = dir(fullDir); % We use this to get the size, which is a field of dir
+                movText = fgetl(fid); % We read the first line
+                movText = textscan(movText, '%s', 'Delimiter', ',', 'BufSize', fileDir.bytes); %Scans for objects seperated with commas
+                recSession.mov = movText{1}; %And load them into the recSession
+                fclose(fid); %We need to close the file, before we can textscan it with other parameters
+                fid = fopen(file);
+                C = textscan(fid, '%s', 'Delimiter', '\n', 'BufSize', fileDir.bytes); % Scans for objects seperated by line breaks         
+                recSession.date = C{1}{2};
+                recSession.comm = C{1}{3};
+                recSession.sF = csvread(file,3,0,[3, 0, 3, 0]);
+                recSession.nM = csvread(file,3,1,[3, 1, 3, 1]);
+                recSession.sT = csvread(file, 3,2,[3,2,3,2]);
+                recSession.cT = csvread(file, 3,3,[3,3,3,3]);
+                recSession.rT = csvread(file, 3,4,[3,4,3,4]);
+                recSession.nR = csvread(file, 3,5,[3,5,3,5]);
+                recSession.nCh = csvread(file, 3,6,[3,6,3,6]);
+                %Loading raw data
+                rawData = csvread(file,4,0)';
+                %Preallocate memory
+                recSession.tdata = zeros(recSession.sF*recSession.cT*recSession.nR*2,recSession.nCh,recSession.nM); 
+                %Sorts the data
+                for movements = 1 : recSession.nM
+                    for channels = 1 : recSession.nCh 
+                        % We iterate over the repititions, as data from MCARE is exported channel-wise (as a subset of each repitition) 
+                        % The system is like this (for 3 repititions and 4
+                        % channels)
+                        %iterator =
+                        % 1 5 9 -> First channel
+                        % 2 6 10 -> Second Channel
+                        % 3 7 11 -> Third Channel
+                        % 4 8 12 -> Fourth Channel
+                        % ^ "lines of data" E.g. "1" = first channel from first
+                        % repition. "5" = first channel from second repitition.
+                        % "2" = second channel from first repitition. 
+                        iterator = channels+((movements-1)*(recSession.nCh*recSession.nR)); 
+                        for repititions = 1 : recSession.nR
+                            recSession.tdata(1+((repititions-1)*(recSession.sF*(recSession.cT+recSession.rT))):repititions*(recSession.sF*(recSession.cT+recSession.rT)),channels,movements) = rawData(:,iterator);
+                            iterator = iterator + recSession.nCh;
+                        end
+                    end
+                end
+
+                df = GUI_RecordingSessionShow();
+                dfdata = guidata(df);
+                if ~isempty(ss)
+                    recSession = Compatibility_recSession(ss);
+                end
+                set(dfdata.et_Fs,'String',num2str(recSession.sF));
+                set(dfdata.et_Ne,'String',num2str(recSession.nM));
+                set(dfdata.et_Nr,'String',num2str(recSession.nR));
+                set(dfdata.et_Tc,'String',num2str(recSession.cT));
+                set(dfdata.et_Tr,'String',num2str(recSession.rT));
+                set(dfdata.et_msg,'String',recSession.mov);
+                sNe = 1:recSession.nM;
+                set(dfdata.pm_nM,'String',num2str(sNe'));
+                set(dfdata.pm_data,'UserData',recSession); % Save Struct in user data
+                set(dfdata.t_mhandles,'UserData',handles); % Save this GUI handles
+                if isfield(recSession,'cmt')
+                    set(dfdata.et_cmt,'String',recSession.cmt);
+                else
+                    set(dfdata.et_cmt,'String','No Comment');
+                end
+                if isfield(recSession,'dev')
+                    set(dfdata.t_dev,'String',recSession.dev);
+                else
+                    set(dfdata.t_dev,'String','Unknown');
+                end
             end
         end
+
+    % Set visible the offline plot and process panels
+    set(handles.uipanel9,'Visible','on');   
+    set(handles.uipanel7,'Visible','on');
+    set(handles.uipanel8,'Visible','on');
+    set(handles.txt_it,'visible','on');
+    set(handles.txt_ft,'visible','on');
+    set(handles.et_it,'visible','on');
+    set(handles.et_ft,'visible','on');
+    set(handles.txt_if,'visible','on');
+    set(handles.txt_ff,'visible','on');
+    set(handles.et_if,'visible','on');
+    set(handles.et_ff,'visible','on');
+    if exist('recSession','var')
+        chVector = 0:recSession.nCh-1;
+    else
+        chVector = 0:size(cdata,2)-1;
     end
+    set(handles.lb_channels, 'String', chVector);
 
 
 % --------------------------------------------------------------------
@@ -557,37 +480,11 @@ function m_record_Callback(hObject, eventdata, handles)
 
 
 % --------------------------------------------------------------------
-function m_Rstandardsession_Callback(hObject, eventdata, handles)
-%Function that calls the standard recording session
-    Fs = 10000; % Sampling Frequency
-    Ne = 4;     % number of excersices or movements
-    Nr = 10;    % number of excersice repetition
-    Tc = 2;     % time that the contractions should last
-    Tr = 3;     % relaxing time
-    Psr = .5;   % Percentage of the escersice time to be consider for training
-    msg = {'Open   Hand';
-           'Close  Hand';
-           'Flex   Hand';
-           'Extend Hand'};
-           %'Pronation  ';
-           %'Supination '};
-
-    cdata = recording_session(Fs,Ne,Nr,Tc,Tr,Psr,msg,handles);
-    Ts = (Tc+Tr)*Nr;
-    save('cdata.mat','cdata','Fs','Ts');
-
-
-% --------------------------------------------------------------------
-function m_Recordoneshot_Callback(hObject, eventdata, handles)
-    pb_StartRecording_Callback(hObject, eventdata, handles)
-
-
-% --------------------------------------------------------------------
 function m_Rcustomizedsession_Callback(hObject, eventdata, handles)
     %Call the figure recording_Session_fig and pass this figure handles
     GUI_RecordingSession;
 
-
+    
 % --------------------------------------------------------------------
 function m_filters_Callback(hObject, eventdata, handles)
 % hObject    handle to m_filters (see GCBO)
@@ -596,25 +493,14 @@ function m_filters_Callback(hObject, eventdata, handles)
 
 
 % --------------------------------------------------------------------
-function m_Fcustomized_Callback(hObject, eventdata, handles)
-% hObject    handle to m_Fcustomized (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-
-% --------------------------------------------------------------------
-function m_Fbandstop_Callback(hObject, eventdata, handles)
-% hObject    handle to m_Fbandstop (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-
-% --------------------------------------------------------------------
 function m_Fplh_Callback(hObject, eventdata, handles)
     load('cdata.mat');
-    cdata = BSbutterPLHarmonics(sF,cdata);
-    data_show(handles,cdata,sF,sT);
-    save('cdata.mat','cdata','sF','sT');
+    handles.nCh = size(tempdata,2);
+    handles.ComPortType = ComPortType;
+    handles.deviceName = deviceName;
+    tempdata = BSbutterPLHarmonics(sF,tempdata);
+    DataShow(handles,tempdata,sF,sT);
+    save('cdata.mat','cdata','tempdata','sF','sT','nCh','ComPortType','deviceName');
 
 
 % --------------------------------------------------------------------
@@ -623,84 +509,19 @@ function m_FBSbutter_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-
-% --------------------------------------------------------------------
-function m_Pattern_Recognition_Callback(hObject, eventdata, handles)
-    pattern_recognition_fig();
-
-% --------------------------------------------------------------------
-function m_PR_train_ANN_Callback(hObject, eventdata, handles)
-% hObject    handle to m_PR_train_ANN (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-
-% --------------------------------------------------------------------
-function m_Control_Callback(hObject, eventdata, handles)
-
-
-% --------------------------------------------------------------------
-function m_signalanalysis_Callback(hObject, eventdata, handles)
-    signalchrs_fig();
-
-
-% --------------------------------------------------------------------
-function m_onemotorTP_Callback(hObject, eventdata, handles)
-    one_motro_test_panel_fig();
-
-
-% --- Executes on button press in cb_ch4.
-function cb_ch4_Callback(hObject, eventdata, handles)
-% hObject    handle to cb_ch4 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hint: get(hObject,'Value') returns toggle state of cb_ch4
-
-
-% --- Executes on button press in cb_ch5.
-function cb_ch5_Callback(hObject, eventdata, handles)
-% hObject    handle to cb_ch5 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hint: get(hObject,'Value') returns toggle state of cb_ch5
-
-
-% --- Executes on button press in cb_ch6.
-function cb_ch6_Callback(hObject, eventdata, handles)
-% hObject    handle to cb_ch6 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hint: get(hObject,'Value') returns toggle state of cb_ch6
-
-
-% --- Executes on button press in cb_ch7.
-function cb_ch7_Callback(hObject, eventdata, handles)
-% hObject    handle to cb_ch7 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hint: get(hObject,'Value') returns toggle state of cb_ch7
-
-
-% --------------------------------------------------------------------
-function Untitled_1_Callback(hObject, eventdata, handles)
-% hObject    handle to Untitled_1 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-
+    
 % --------------------------------------------------------------------
 function m_spatialFilterDDF_Callback(hObject, eventdata, handles)
 % hObject    handle to m_spatialFilterDDF (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
     load('cdata.mat');
-    cdata = SpatialFilterDDF(cdata);
-    data_show(handles,cdata,sF,sT);
-    save('cdata.mat','cdata','sF','sT');
+    handles.nCh = size(tempdata,2);
+    handles.ComPortType = ComPortType;
+    handles.deviceName = deviceName;
+    tempdata = SpatialFilterDDF(tempdata);
+    DataShow(handles,tempdata,sF,sT);
+    save('cdata.mat','cdata','tempdata','sF','sT','nCh','ComPortType','deviceName');
 
 
 % --------------------------------------------------------------------
@@ -709,9 +530,12 @@ function m_spatialFilterSDF_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
     load('cdata.mat');
-    cdata = SpatialFilterSDF(cdata);
-    data_show(handles,cdata,sF,sT);
-    save('cdata.mat','cdata','sF','sT');
+    handles.nCh = size(tempdata,2);
+    handles.ComPortType = ComPortType;
+    handles.deviceName = deviceName;
+    tempdata = SpatialFilterSDF(tempdata);
+    DataShow(handles,tempdata,sF,sT);
+    save('cdata.mat','cdata','tempdata','sF','sT','nCh','ComPortType','deviceName');
 
 
 % --------------------------------------------------------------------
@@ -720,9 +544,12 @@ function m_spatialFilterDDFAbs_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
     load('cdata.mat');
-    cdata = SpatialFilterDDFAbs(cdata);    
-    data_show(handles,cdata,sF,sT);
-    save('cdata.mat','cdata','sF','sT');
+    handles.nCh = size(tempdata,2);
+    handles.ComPortType = ComPortType;
+    handles.deviceName = deviceName;
+    tempdata = SpatialFilterDDFAbs(tempdata);    
+    DataShow(handles,tempdata,sF,sT);
+    save('cdata.mat','cdata','tempdata','sF','sT','nCh','ComPortType','deviceName');
 
 
 % --- Executes on selection change in pm_features.
@@ -756,8 +583,174 @@ function pb_extract_Callback(hObject, eventdata, handles)
 
     allF = get(handles.pm_features,'String');
     fID  = char(allF(get(handles.pm_features,'Value')));    
-
     load('cdata.mat');
-    cdata = ExtractSigFeature(cdata,sF,fID);
+    handles.nCh = size(tempdata,2);
+    handles.ComPortType = ComPortType;
+    handles.deviceName = deviceName;
+    fD  = 0.02*sF;  % considering an overlap of 20 ms
+    tempdata = ExtractSigFeature(tempdata,sF,fID);
+%     sF = sF/fD;     % Adjust the sample frequency by the overlap
+    DataShow(handles,tempdata,sF,sT);
+    save('cdata.mat','cdata','tempdata','sF','sT','nCh','ComPortType','deviceName');
+
+
+% --------------------------------------------------------------------
+function m_F50hz_Callback(hObject, eventdata, handles)
+% hObject    handle to m_F50hz (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+    load('cdata.mat');
+    handles.nCh = size(tempdata,2);
+    handles.ComPortType = ComPortType;
+    handles.deviceName = deviceName;
+    tempdata = Filter50hz(sF,tempdata);
+    DataShow(handles,tempdata,sF,sT);
+    save('cdata.mat','cdata','tempdata','sF','sT','nCh','ComPortType','deviceName');
+
+% --- Executes on selection change in lb_channels.
+function lb_channels_Callback(hObject, eventdata, handles)
+% hObject    handle to lb_channels (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: contents = cellstr(get(hObject,'String')) returns lb_channels contents as cell array
+%        contents{get(hObject,'Value')} returns selected item from lb_channels
+
+
+% --- Executes during object creation, after setting all properties.
+function lb_channels_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to lb_channels (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: listbox controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+% --- Executes on button press in pb_plotAll.
+function pb_plotAll_Callback(hObject, eventdata, handles)
+% hObject    handle to pb_plotAll (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+    load('cdata.mat');
+    handles.nCh = nCh;
+    handles.ComPortType = ComPortType;
+    handles.deviceName = deviceName;
     DataShow(handles,cdata,sF,sT);
-    save('cdata.mat','cdata','sF','sT');
+    tempdata = cdata;
+    save('cdata.mat','cdata','tempdata','sF','sT','nCh','ComPortType','deviceName');
+    set(handles.pb_plotSelected,'enable','on');
+
+    
+% --- Executes on button press in pb_plotSelected.
+function pb_plotSelected_Callback(hObject, eventdata, handles)
+% hObject    handle to pb_plotSelected (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+    % Load data
+    load('cdata.mat');
+    %Selected channels           
+    Ch = get(handles.lb_channels,'Value'); 
+    tempdata = tempdata(:,Ch);
+    tt = 0:1/sF:(length(tempdata)-1)/sF; 
+    axes(handles.a_t0);
+    plot(tt, tempdata);
+    %Fast Fourier Transform
+    nS  = length(tempdata);
+    NFFT = 2^nextpow2(nS);               
+    f = sF/2*linspace(0,1,NFFT/2);
+    dataf = fft(tempdata(1:nS,:),NFFT)/nS;    
+    m = 2*abs(dataf((1:NFFT/2),:));
+    axes(handles.a_f0);
+    plot(f,m);
+    save('cdata.mat','cdata','tempdata','sF','sT','nCh','ComPortType','deviceName');
+    set(handles.pb_plotSelected,'enable','off');
+    
+
+    
+% --- Executes when figure1 is resized.
+function figure1_ResizeFcn(hObject, eventdata, handles)
+% hObject    handle to figure1 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+
+% --- Executes on button press in pb_Start.
+function pb_Start_Callback(hObject, eventdata, handles)
+% hObject    handle to pb_Start (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+    fast = 1;
+    sT = str2double(get(handles.et_sT,'String'));
+    tW = str2double(get(handles.et_tW,'String'));
+    handles.sT = sT;
+    handles.tW = tW;
+    GUI_AFEselection(0,0,0,0,0,handles,0,0,fast);
+
+
+
+function et_sT_Callback(hObject, eventdata, handles)
+% hObject    handle to et_sT (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of et_sT as text
+%        str2double(get(hObject,'String')) returns contents of et_sT as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function et_sT_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to et_sT (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+function et_tW_Callback(hObject, eventdata, handles)
+% hObject    handle to et_tW (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of et_tW as text
+%        str2double(get(hObject,'String')) returns contents of et_tW as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function et_tW_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to et_tW (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+% --------------------------------------------------------------------
+function m_Spatial_Callback(hObject, eventdata, handles)
+% hObject    handle to m_Spatial (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+
+% --------------------------------------------------------------------
+function m_Recordings_Callback(hObject, eventdata, handles)
+% hObject    handle to m_Recordings (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+    set(handles.et_tW,'visible','on'); 
+    set(handles.et_sT,'visible','on');
+    set(handles.txt_tW,'visible','on');
+    set(handles.txt_sT,'visible','on');
+    set(handles.pb_Start,'visible','on');
+   

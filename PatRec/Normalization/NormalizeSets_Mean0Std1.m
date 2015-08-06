@@ -16,7 +16,7 @@
 % acknowledge contributions here and in the project web page (optional).
 %
 % ------------- Function Description -------------
-% Normalization to zero mean and unit variance
+% Normalization to zero mean and unit standard deviation
 % Requires test and validation set
 %
 % ------------- Updates -------------

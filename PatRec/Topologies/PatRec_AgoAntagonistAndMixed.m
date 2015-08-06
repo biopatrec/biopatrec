@@ -24,7 +24,11 @@
 %
 % ------------------------- Updates & Contributors ------------------------
 % 2011-12-04 / Max Ortiz  / Creation
+% 2012-01-26 / Max Ortiz  / Fixed bug on predictions outMovTemp = 0
+% 2013-03-03 / Max Ortiz  / Revision of the whole prediction chain and
+%                           simplification of the outMov computation
 % 20xx-xx-xx / Author / Comment on update
+
 function [outMov outVector] = PatRec_AgoAntagonistAndMixed(patRec, x)
 
     % Variables init
@@ -43,18 +47,40 @@ function [outMov outVector] = PatRec_AgoAntagonistAndMixed(patRec, x)
         % Run PatRec
         [outMovTemp outMatrix(:,j)] = OneShotPatRec(patRec.patRecTrained(j),x);
 
-        % Find the winner looking at the outVector
-        % If rest or the mixed class are the winners, outMov is not
-        % modified
-        [mMax mIdx] = max(outMatrix(:,j));
-        nPredMov = length(outMovTemp);
-        if nPredMov > 0 & outMovTemp ~= 0
-            if mIdx == 1
+        % Create the outMov vector using the winners from each classifier
+        if length(outMovTemp) == 1
+            if outMovTemp == 1
                 outMov(end+1) = movIdx;
-            elseif mIdx == 2;
+            elseif outMovTemp == 2;
                 outMov(end+1) = movIdx +1;                
-            end                            
+            end 
+            
+        % If there is more than 1 movement predicted, take the highest     
+        elseif length(outMovTemp) >= 1
+            [mMax mIdx] = max(outMatrix(:,j));
+             if mIdx == 1
+                 outMov(end+1) = movIdx;
+             elseif mIdx == 2;
+                 outMov(end+1) = movIdx +1;                
+             end            
         end
+        
+% Code prior 2013-03-03        
+%         % Find the winner looking at the outVector
+%         % This is done to handle cases where outMovTemp has more than 1 value 
+%         % If rest or the mixed class are the winners, outMov is not
+%         % modified
+%         [mMax mIdx] = max(outMatrix(:,j));
+%         nPredMov = length(outMovTemp);
+%         if nPredMov > 0 & outMovTemp ~= 0
+%             if mIdx == 1
+%                 outMov(end+1) = movIdx;
+%             elseif mIdx == 2;
+%                 outMov(end+1) = movIdx +1;                
+%             end
+%         end
+        
+        % Increase the Index number for the movements
         movIdx = movIdx + 2;
 
         % Create outVector
@@ -66,7 +92,8 @@ function [outMov outVector] = PatRec_AgoAntagonistAndMixed(patRec, x)
         
     end
     % If no movement was predicted and rest exist, then rest it is.
-    % Add the average of rest to the outVector
+    % Add the average of rest to the outVector (this is not the best
+    % computation of the strenght of the rest prediction)
     if restFlag
         outVector(end+1) = mean(tempRest);
         % Select rest if nothing else is selected

@@ -47,7 +47,7 @@ function varargout = GUI_SigTreatment(varargin)
 
 % Edit the above text to modify the response to help GUI_SigTreatment
 
-% Last Modified by GUIDE v2.5 26-Jul-2012 16:53:37
+% Last Modified by GUIDE v2.5 03-Jan-2015 18:23:03
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -120,7 +120,7 @@ function pb_treat_Callback(hObject, eventdata, handles)
     set(handles.t_msg,'String','Extracting signal features');
     drawnow;
     sigFeatures = GetAllSigFeatures(handles, sigTreated);
-    
+    sigFeatures.sigSeperation=sigTreated.sigSeperation;
     % Get back in the parent GUI ----------------------------------------
     phandles = get(handles.t_mhandles,'UserData'); % get parent GUI handles    
 
@@ -448,7 +448,31 @@ function pb_preProcessing_Callback(hObject, eventdata, handles)
     sigTreated = PreProcessing(handles);
 
     %Computer numer of sequencially avialable windows  --------------------
-    nw = fix(sigTreated.cT * sigTreated.cTp * sigTreated.nR / str2double(get(handles.et_tw,'String')));
+%     nw = fix(sigTreated.cT * sigTreated.cTp * sigTreated.nR / str2double(get(handles.et_tw,'String')));
+%     set(handles.et_nw,'String',num2str(nw));
+% 
+%     trP = str2double(get(handles.et_trP,'String'));
+%     trN = fix(trP * nw);
+%     set(handles.et_trN,'String',num2str(trN));
+% 
+%     vP = str2double(get(handles.et_vP,'String'));
+%     vN = fix( vP* nw);
+%     set(handles.et_vN,'String',num2str(vN));
+% 
+%     tP = str2double(get(handles.et_tP,'String'));
+%     tN = fix(tP * nw);
+%     set(handles.et_tN,'String',num2str(tN));
+%     set(handles.t_totN,'String',num2str(trN+vN+tN));
+%     set(handles.t_totP,'String',num2str(trP+vP+tP));
+
+    % Computer the number of windows using overlapping
+    set(handles.et_wOverlap,'Enable','on');
+    overlap = str2double(get(handles.et_wOverlap,'String'));
+
+    tT = sigTreated.cT * sigTreated.cTp * sigTreated.nR;
+    tw = str2double(get(handles.et_tw,'String'));
+    offset = ceil(tw/overlap);
+    nw = fix(tT / overlap) - offset;
     set(handles.et_nw,'String',num2str(nw));
 
     trP = str2double(get(handles.et_trP,'String'));
@@ -461,11 +485,24 @@ function pb_preProcessing_Callback(hObject, eventdata, handles)
 
     tP = str2double(get(handles.et_tP,'String'));
     tN = fix(tP * nw);
+    %add test time windows so that it matches the total amount of
+    %windows
+    while trN+vN+tN < nw
+        tN = tN + 1;
+    end
     set(handles.et_tN,'String',num2str(tN));
     set(handles.t_totN,'String',num2str(trN+vN+tN));
     set(handles.t_totP,'String',num2str(trP+vP+tP));
     
     %Disable and enable bottons -------------------------------------------
+    set(handles.lb_movements,'Enable','off');
+    set(handles.lb_nCh,'Enable','off');
+    set(handles.et_downsample,'Enable','off');
+    set(handles.et_noise,'Enable','off');
+    set(handles.et_nM,'Enable','off');
+    set(handles.et_cTp,'Enable','off');
+    set(handles.cb_rest,'Enable','off');
+    set(handles.pm_scaling,'Enable','off');
     set(handles.pb_preProcessing,'Enable','off');
     set(handles.pb_treat,'Enable','on');
     set(handles.pb_treatFolder,'Enable','on');
@@ -694,3 +731,95 @@ function et_cTp_Callback(hObject, eventdata, handles)
 
 % Hints: get(hObject,'String') returns contents of et_cTp as text
 %        str2double(get(hObject,'String')) returns contents of et_cTp as a double
+
+
+% --- Executes on selection change in pm_SignalSeparation.
+function pm_SignalSeparation_Callback(hObject, eventdata, handles)
+% hObject    handle to pm_SignalSeparation (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: contents = cellstr(get(hObject,'String')) returns pm_SignalSeparation contents as cell array
+%        contents{get(hObject,'Value')} returns selected item from pm_SignalSeparation
+
+
+% --- Executes during object creation, after setting all properties.
+function pm_SignalSeparation_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to pm_SignalSeparation (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: popupmenu controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function et_downsample_Callback(hObject, eventdata, handles)
+% hObject    handle to et_downsample (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of et_downsample as text
+%        str2double(get(hObject,'String')) returns contents of et_downsample as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function et_downsample_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to et_downsample (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+% --- Executes on selection change in pm_scaling.
+function pm_scaling_Callback(hObject, eventdata, handles)
+% hObject    handle to pm_scaling (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: contents = cellstr(get(hObject,'String')) returns pm_scaling contents as cell array
+%        contents{get(hObject,'Value')} returns selected item from pm_scaling
+
+
+% --- Executes during object creation, after setting all properties.
+function pm_scaling_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to pm_scaling (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: popupmenu controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function et_noise_Callback(hObject, eventdata, handles)
+% hObject    handle to et_noise (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of et_noise as text
+%        str2double(get(hObject,'String')) returns contents of et_noise as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function et_noise_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to et_noise (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end

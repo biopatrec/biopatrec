@@ -288,15 +288,26 @@ function pb_load_Callback(hObject, eventdata, handles)
     nM = get(handles.pm_nM,'Value');              % number of excersices or movements
     recSession = get(handles.pm_data,'UserData');
     sT = recSession.sT;
+    EMG_AQhandle.nCh = recSession.nCh;
+    EMG_AQhandle.deviceName = recSession.dev;
+    nCh = recSession.nCh;
+    deviceName = recSession.dev;
     cdata = recSession.tdata(:,:,nM);
+    if isfield(recSession,'comm')
+        EMG_AQhandle.ComPortType = recSession.comm;
+        ComPortType = recSession.comm;
+    else
+        EMG_AQhandle.ComPortType = 'NI';
+        ComPortType = 'NI';
+    end
     %if get(handles.pm_data,'Value') == 1
     %    cdata = recSession.tdata(:,:,nM);
     %else
     %    cdata = recSession.trdata(:,:,nM);
     %end
     DataShow(EMG_AQhandle,cdata,sF,sT);
-    save('cdata.mat','cdata','sF','sT');
-
+    tempdata = cdata;
+    save('cdata.mat','cdata','tempdata','sF','sT','nCh','ComPortType','deviceName');
 
 
 % --- Executes on button press in pb_cancel.

@@ -21,6 +21,7 @@
 % ------------------------- Updates & Contributors ------------------------
 % [Contributors are welcome to add their email]
 % 20xx-xx-xx / Max Ortiz  / Creation
+% 20xx-xx-xx / Pontus Lövinger  / Added an alternative for ramp recording
 % 20xx-xx-xx / Author  / Comment on update
 
 function varargout = GUI_RecordingSession(varargin)
@@ -47,7 +48,7 @@ function varargout = GUI_RecordingSession(varargin)
 
 % Edit the above text to modify the response to help GUI_RecordingSession
 
-% Last Modified by GUIDE v2.5 17-May-2012 09:47:59
+% Last Modified by GUIDE v2.5 19-Sep-2013 09:13:52
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -96,9 +97,6 @@ image(backgroundImage);
 %remove the axis tick marks
 axis off
 
-
-
-
 %clear value of msg
 set(handles.et_msg,'Value',1);
 
@@ -120,7 +118,6 @@ function varargout = GUI_RecordingSession_OutputFcn(hObject, eventdata, handles)
 
 % Get default command line output from handles structure
 varargout{1} = handles.output;
-
 
 
 function et_Fs_Callback(hObject, eventdata, handles)
@@ -360,8 +357,10 @@ function et_msg_Callback(hObject, eventdata, handles)
 % --- Executes on button press in pb_Record.
 function pb_Record_Callback(hObject, eventdata, handles)
     % get the EMG_AQ Handles
-    h1 = GUI_Recordings; 
-    hGUI_Rec = guidata(h1);       
+    fast = 0;
+    h1 = GUI_Recordings(fast); 
+    hGUI_Rec = guidata(h1);
+    rampStatus = get(handles.cb_ramp,'Value');
     
     %psr = str2double(get(handles.et_Psr,'String'));   % Percentage of the exercise time to be consider for training
     %sF = str2double(get(handles.et_Fs,'String'));     % Sampling Frequency
@@ -421,7 +420,8 @@ function pb_Record_Callback(hObject, eventdata, handles)
         end                  
     end
 
-    GUI_AFEselection(nM,nR,cT,rT,mov,hGUI_Rec,vreMovements)
+    fast = 0;
+    GUI_AFEselection(nM,nR,cT,rT,mov,hGUI_Rec,vreMovements,rampStatus,fast)
     %GUI_AFEselection(sF,nM,nR,cT,rT,psr,mov,hGUI_Rec)
     
 % Moved to AFE_select
@@ -444,3 +444,12 @@ function cb_simultaneous_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 % Hint: get(hObject,'Value') returns toggle state of cb_simultaneous
+
+
+% --- Executes on button press in cb_ramp.
+function cb_ramp_Callback(hObject, eventdata, handles)
+% hObject    handle to cb_ramp (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: get(hObject,'Value') returns toggle state of cb_ramp

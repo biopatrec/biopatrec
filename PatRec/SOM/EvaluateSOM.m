@@ -23,6 +23,7 @@
 % ------------------------- Updates & Contributors ------------------------
 % [Contributors are welcome to add their email]
 % 2012-06-01 / Ali Fouad  / Creation
+% 2014-01-14 / Ali Fouad  / Addition of "if statment" to reduce the training time 
 % 20xx-xx-xx / Author  / Comment on update
 
 function [tempSOM accV]=EvaluateSOM(trSet, trOut, vSet, vOut,tType,algConf)
@@ -52,7 +53,7 @@ if graph2d  % 2D Graph
 end
 
 
-while sim <= maxSim 
+while sim <= maxSim && passV == 0
     % Training
     sim = sim + 1;
     %Stochastic Training
@@ -80,7 +81,15 @@ while sim <= maxSim
     if SOM.apV >= tempSOM.apV && SOM.fV <= tempSOM.fV
         tempSOM = SOM;
     end
-    
+    % terminate the training if there is no further convergence in the RMSE
+    if SOM.fV < 0.1
+        if sim > 10
+            if mean(rmse(sim-fix(sim/3):sim)) <= mean(rmse(sim-fix(sim/5):sim))
+                
+                passV = 1;
+            end
+        end
+    end
     
     if graph2d  % 2D Graph
         plotvector = get(hbestplot,'YData');

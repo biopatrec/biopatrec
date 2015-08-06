@@ -45,7 +45,7 @@ function varargout = GUI_BioPatRec(varargin)
 
 % Edit the above text to modify the response to help GUI_BioPatRec
 
-% Last Modified by GUIDE v2.5 22-Jun-2011 14:55:52
+% Last Modified by GUIDE v2.5 27-Jan-2015 08:52:57
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -107,13 +107,14 @@ function varargout = GUI_BioPatRec_OutputFcn(hObject, eventdata, handles)
 varargout{1} = handles.output;
 
 
-% --- Executes on button press in pb_Recordings.
-function pb_Recordings_Callback(hObject, eventdata, handles)
-% hObject    handle to pb_Recordings (see GCBO)
+% --- Executes on button press in pb_FastRecording.
+function pb_FastRecording_Callback(hObject, eventdata, handles)
+% hObject    handle to pb_FastRecording (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+fast = 1;
+GUI_Recordings(fast);
 
-GUI_Recordings;
 
 
 % --- Executes on button press in pb_PatRec.
@@ -129,3 +130,19 @@ function pb_RecordingSession_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 GUI_RecordingSession;
+
+
+% --- Executes on button press in pb_PatRec_Default.
+function pb_PatRec_Default_Callback(hObject, eventdata, handles)
+% hObject    handle to pb_PatRec_Default (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+UseDefaults(handles.pb_PatRec_Default, 'false');
+
+
+% --- Executes on button press in pb_PatRec_DefaultSimul.
+function pb_PatRec_DefaultSimul_Callback(hObject, eventdata, handles)
+% hObject    handle to pb_PatRec_DefaultSimul (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+UseDefaults(handles.pb_PatRec_DefaultSimul, 'true');

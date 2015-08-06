@@ -48,14 +48,23 @@ function sigTreated = TreatData(handles, sigTreated)
     twSegMethods            = get(handles.pm_twSegMethod,'String');    
     twSegMethodsSel         = get(handles.pm_twSegMethod,'Value');    
     sigTreated.twSegMethod  = twSegMethods(twSegMethodsSel);
-
-
+     
+    allSigSeperaAlg             = get(handles.pm_SignalSeparation,'String');
+    selSigSeperaAlg             = allSigSeperaAlg(get(handles.pm_SignalSeparation,'Value'));
+    sigTreated.sigSeperation.Alg= selSigSeperaAlg;
+    
     %% Filters
     set(handles.t_msg,'String','Applying filters...');
     sigTreated.trData = ApplyFilters(sigTreated, sigTreated.trData);
     set(handles.t_msg,'String','Filters applied');
     
+    %% Signal Separation Alg - Compute
     
+    set(handles.t_msg,'String','Computing SP...');
+    sigTreated=ComputeSignalSeparation(sigTreated);
+    set(handles.t_msg,'String','SP Computed');
+     
+  
     %% Split the data into the time windows
     set(handles.t_msg,'String','Segmenting data...');
     disp('Segmenting data...');
@@ -65,6 +74,11 @@ function sigTreated = TreatData(handles, sigTreated)
     set(handles.t_msg,'String','Data segmented');
     disp('Data segmented');
 
+    %% Sig Separation Algortihms - Apply
+    
+    [trData vData tData]=ApplySignalSeparation(sigTreated,trData, vData, tData); 
+
+    
     % add the new sets of tw for tr, v and t
     sigTreated.trData = trData;
     sigTreated.vData = vData;
