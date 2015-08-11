@@ -1,0 +1,30 @@
+12:23:40: Creating resource group General
+12:23:40: Creating resource group Internal
+12:23:40: Creating resource group Autodetect
+12:23:40: SceneManagerFactory for type 'DefaultSceneManager' registered.
+12:23:40: Registering ResourceManager for type Material
+12:23:40: Registering ResourceManager for type Mesh
+12:23:40: Registering ResourceManager for type Skeleton
+12:23:40: MovableObjectFactory for type 'ParticleSystem' registered.
+12:23:40: OverlayElementFactory for type Panel registered.
+12:23:40: OverlayElementFactory for type BorderPanel registered.
+12:23:40: OverlayElementFactory for type TextArea registered.
+12:23:40: Registering ResourceManager for type Font
+12:23:40: ArchiveFactory for archive type FileSystem registered.
+12:23:40: ArchiveFactory for archive type Zip registered.
+12:23:40: ArchiveFactory for archive type EmbeddedZip registered.
+12:23:40: DDS codec registering
+12:23:40: FreeImage version: 3.15.3
+12:23:40: This program uses FreeImage, a free, open source image library supporting all common bitmap formats. See http://freeimage.sourceforge.net for details
+12:23:40: Supported formats: bmp,ico,jpg,jif,jpeg,jpe,jng,koa,iff,lbm,mng,pbm,pbm,pcd,pcx,pgm,pgm,png,ppm,ppm,ras,tga,targa,tif,tiff,wap,wbmp,wbm,psd,cut,xbm,xpm,gif,hdr,g3,sgi,exr,j2k,j2c,jp2,pfm,pct,pict,pic,3fr,arw,bay,bmq,cap,cine,cr2,crw,cs1,dc2,dcr,drf,dsc,dng,erf,fff,ia,iiq,k25,kc2,kdc,mdc,mef,mos,mrw,nef,nrw,orf,pef,ptx,pxn,qtk,raf,raw,rdc,rw2,rwl,rwz,sr2,srf,srw,sti
+12:23:40: Registering ResourceManager for type HighLevelGpuProgram
+12:23:40: Registering ResourceManager for type Compositor
+12:23:40: MovableObjectFactory for type 'Entity' registered.
+12:23:40: MovableObjectFactory for type 'Light' registered.
+12:23:40: MovableObjectFactory for type 'BillboardSet' registered.
+12:23:40: MovableObjectFactory for type 'ManualObject' registered.
+12:23:40: MovableObjectFactory for type 'BillboardChain' registered.
+12:23:40: MovableObjectFactory for type 'RibbonTrail' registered.
+12:23:40: Loading library .\RenderSystem_Direct3D9
+12:23:44: OGRE EXCEPTION(7:InternalErrorException): Could not load dynamic library .\RenderSystem_Direct3D9.  System Error: The specified module could not be found.
+ in DynLib::load at ..\..\..\..\OgreMain\src\OgreDynLib.cpp (line 93)
