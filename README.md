@@ -1,3 +1,1 @@
-BioPatRec's documentation and instruction for use at:
-
-https://github.com/biopatrec/biopatrec/wiki
+This branch contains full versions of BioPatRec with additional contributions which might, or might not, be implemented in the truck (latest) version of BioPatRec.
