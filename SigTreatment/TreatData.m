@@ -55,15 +55,17 @@ function sigTreated = TreatData(handles, sigTreated)
     
     %% Filters
     set(handles.t_msg,'String','Applying filters...');
+    disp('Applying filters...');
     sigTreated.trData = ApplyFilters(sigTreated, sigTreated.trData);
     set(handles.t_msg,'String','Filters applied');
-    
+   
+     
     %% Signal Separation Alg - Compute
     
     set(handles.t_msg,'String','Computing SP...');
+    disp('Compute signal separation...'); 
     sigTreated=ComputeSignalSeparation(sigTreated);
     set(handles.t_msg,'String','SP Computed');
-     
   
     %% Split the data into the time windows
     set(handles.t_msg,'String','Segmenting data...');
@@ -76,8 +78,9 @@ function sigTreated = TreatData(handles, sigTreated)
 
     %% Sig Separation Algortihms - Apply
     
-    [trData vData tData]=ApplySignalSeparation(sigTreated,trData, vData, tData); 
-
+    [trData vData tData]=ApplySignalSeparation(sigTreated,trData, vData, tData);
+    set(handles.t_msg,'String','Data segmented and separated');
+    disp('Signal separation applied');
     
     % add the new sets of tw for tr, v and t
     sigTreated.trData = trData;
