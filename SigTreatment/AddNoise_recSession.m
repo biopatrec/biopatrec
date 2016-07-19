@@ -4,11 +4,11 @@
 % the full license governing this code and copyrights.
 %
 % BioPatRec was initially developed by Max J. Ortiz C. at Integrum AB and 
-% Chalmers University of Technology. All authors’ contributions must be kept
+% Chalmers University of Technology. All authors? contributions must be kept
 % acknowledged below in the section "Updates % Contributors". 
 %
 % Would you like to contribute to science and sum efforts to improve 
-% amputees’ quality of life? Join this project! or, send your comments to:
+% amputees? quality of life? Join this project! or, send your comments to:
 % maxo@chalmers.se.
 %
 % The entire copyright notice must be kept in this or any source file 
@@ -27,6 +27,7 @@
 % ------------------------- Updates & Contributors ------------------------
 % [Contributors are welcome to add their email]
 % 2014-12-30 / Max Ortiz  / Creation 
+% 2016-04-29 / Julian Maier / Deleted meanNoise
 % 20xx-xx-xx / Author     / Comment on update
 
 function recSession = AddNoise_recSession(recSession, pStd)
@@ -54,13 +55,8 @@ for mov = 1 : recSession.nM
         is = fix((sF*cT*(1-cTp-eRed)) + (sF*cT*(rep-1)) + (sF*rT*(rep-1)) + 1);
         fs = fix((sF*cT*(cTp+eRed)) + (sF*cT*(rep-1)) + (sF*rT*(rep-1)));
         tempEMGData = [tempEMGData ; recSession.tdata(is:fs,:,mov)];
-        % floor noise
-        is = fix((sF*cT*rep) + (sF*rT*(1-cTp-eRed)) + (sF*rT*(rep-1)) + 1);
-        fs = fix((sF*cT*rep) + (sF*rT*(cTp+eRed)) + (sF*rT*(rep-1)));        
-        tempRestData = [tempRestData ; recSession.tdata(is:fs,:,mov)];        
     end
     emgData(:,:,mov) = tempEMGData;
-    restData(:,:,mov) = tempRestData;
 end
 
 %% Extract standard deviation (EMG, and mean (floor noise)
@@ -69,17 +65,13 @@ overlapS = tI*sF;           % Time increment samples
 for mov = 1 : recSession.nM
     emgDataMov         = emgData(:,:,mov);
     emgFeature(:,mov)  = mean(ExtractSigFeatureVar(emgDataMov,sF,'tstd',twS,overlapS));
-    restDataMov        = restData(:,:,mov);
-    restFeature(:,mov) = mean(ExtractSigFeatureVar(restDataMov,sF,'tmn',twS,overlapS));
 end
 % Get maximum variance for EMG and mean var for the rest/floor noise
 maxEmgStd = max(max(emgFeature));
-meanRest  = mean(mean(restFeature));
 
 %% Generate white noise matrix
-meanNoise = meanRest;
 stdNoise  = pStd * maxEmgStd;
-noiseMat = meanNoise + stdNoise .* randn(nS,size(recSession.nCh,2),recSession.nM);
+noiseMat = stdNoise .* randn(nS,size(recSession.nCh,2),recSession.nM);
 
 %% Add noise to the recSession
 recSession.tdata = recSession.tdata + noiseMat;

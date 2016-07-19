@@ -42,5 +42,9 @@ function StopAcquisition(deviceName, obj)
         fwrite(obj,'G','char');                                        % Stop the aquisition  ´
         fclose(obj);                                                   % Close connection
     end
+    if strcmp(deviceName, 'ADS_BP')
+        fwrite(obj,'T','char');                                        % Stop the aquisition  ´
+        fclose(obj);                                                   % Close connection
+    end
         
 end

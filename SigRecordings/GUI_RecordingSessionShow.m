@@ -46,7 +46,7 @@ function varargout = GUI_RecordingSessionShow(varargin)
 
 % Edit the above text to modify the response to help GUI_RecordingSessionShow
 
-% Last Modified by GUIDE v2.5 28-Aug-2012 09:35:22
+% Last Modified by GUIDE v2.5 11-May-2016 16:25:46
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -362,3 +362,11 @@ function pm_nM_CreateFcn(hObject, eventdata, handles)
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
+
+
+% --- Executes on button press in pb_analyze.
+function pb_analyze_Callback(hObject, eventdata, handles)
+% hObject    handle to pb_analyze (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+GUI_DataAnalysis(get(handles.pm_data,'UserData'));

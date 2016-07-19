@@ -19,20 +19,18 @@
 % Reads the file sensors.def and loads the data into sensor objects.
 % --------------------------Updates--------------------------
 % 2015-06-11 / Sebastian Karlsson  / Creation
+% 2016-05-19 / Enzo Mastinu        / The path of the folder must now be passed
+%                                    to the function. In case no file name is
+%                                    provided, it returns -1.
+% 20xx-xx-xx / Author  / Comment on update
 
-function obj = InitSensors
+function obj = InitSensors(path)
 
-global ctrl_dir
-
-sensorspath = 'sensors.def';
-if ctrl_dir
-    sensorspath = [ctrl_dir filesep 'sensors.def'];
-end
-
-fid = fopen(sensorspath);
-if fid == -1
-    obj = -1;
-else
+    if(nargin<1)
+        obj = -1;
+        return
+    end
+    fid = fopen(strcat(path,'\sensors.def'));
     tline = fgetl(fid);
     i = 1;
     while(ischar(tline))
@@ -43,4 +41,3 @@ else
         i = i + 1;
     end
     fclose(fid);
-end

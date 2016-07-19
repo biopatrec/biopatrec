@@ -22,6 +22,8 @@
 % ------------------------- Updates & Contributors ------------------------
 % [Contributors are welcome to add their email]
 % 2011-xx-xx / Max Ortiz  / Creation
+% 2015-05-29 / Olga Mikhaylova / Bugfixes
+                            %Add rest when only 2 movements now possible
 % 20xx-xx-xx / Author  / Comment on update
 
 
@@ -34,7 +36,7 @@ function sigTreated = AddRestAsMovement(sigTreated, recSession)
     nM      = recSession.nM;
     tdata   = recSession.tdata;
      
-    % Collect the 50% to 75% of rest in between each contraction per each
+    % Collect the 25% to 75% of rest in between each contraction per each
     % movement
     for ex = 1 : nM
     tempdata =[];   
@@ -42,7 +44,7 @@ function sigTreated = AddRestAsMovement(sigTreated, recSession)
             % Samples of the exersice to be consider for training
             % (sF*cT*rep) Number of samples that takes a contraction
             % (sF*rT*rep) Number of samples that takes a relaxation
-            is = fix((sF*cT*rep) + (sF*rT*.5) + (sF*rT*(rep-1)) + 1);
+            is = fix((sF*cT*rep) + (sF*rT*.25) + (sF*rT*(rep-1)) + 1);
             fs = fix((sF*cT*rep) + (sF*rT*.75) + (sF*rT*(rep-1)));
             tempdata = [tempdata ; tdata(is:fs,:,ex)];
         end

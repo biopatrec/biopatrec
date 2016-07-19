@@ -52,6 +52,7 @@ for i = 1 : noPIDs
     motor_index = cell2mat(motors(movement.motor(1,i)).id);
     % Extract movement direction (for speed control)
     mov_dir = movement.motor(2,i);
+
     
     % Send motor commands
     if ~SendMotorCommand(com, ctrl_type, motor_index, mov_dir, ctrl_val);

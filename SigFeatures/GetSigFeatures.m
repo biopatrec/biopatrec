@@ -32,9 +32,11 @@
 % 2012-11-23 / Max Ortyiz / Vectorized implementation of tzc and tslpch2
 %                           for speed improvement
 %                           
-% 20xx-xx-xx / Author     / Comment on update
+% 2016-03-01 / Eva Lendaro / Added the filter information in the
+%                            procFreature structure (needed for
+%                            cardinality)
 
-function xFeatures = GetSigFeatures(data,sF,fID)
+function xFeatures = GetSigFeatures(data,sF,fFilter, fID)
 
     % If not features ID were receved, then compute the following ones:
     if ~exist('fID','var')
@@ -49,6 +51,7 @@ function xFeatures = GetSigFeatures(data,sF,fID)
     procFeatures.data    = data;
     procFeatures.absdata = abs(data);
     procFeatures.f       = {};
+    procFeatures.filter       = fFilter;
     
     % Add data of the fast fourier transform if a frequency feature is
     % required

@@ -58,14 +58,13 @@ function Load_patRec(patRec, newGUI, loadMovements)
     if exist('loadMovements','var')
         if(loadMovements)
             
-        % Fill List of Movements
+            % Fill List of Movements
             % Setup variables
-            newHandles.motors = InitMotors;
-            mov = InitMovements;
+            newHandles.motors = InitMotors();            
+            mov = InitMovements();
             newHandles.mov = mov;
             movements = [];
             patRecMovements = [];
-            
             % Save Valid movements, that can be used with VRE/ARE and
             % motors
             i = 1;
@@ -77,9 +76,7 @@ function Load_patRec(patRec, newGUI, loadMovements)
             % Read movements trained in patRec structure
             i = 1;
             while length( patRec.movOutIdx{i} ) == 1 && i < size( patRec.movOutIdx,2 )
-                patMov = patRec.mov{i};
-                patMov = strrep(patMov,'Extend', 'Ext');
-                patMov = strrep(patMov,'Pointer', 'Point');
+                patMov = patRec.mov{i};  
                 patRecMovements = [patRecMovements; {patMov}];
                 i = i+1;
             end

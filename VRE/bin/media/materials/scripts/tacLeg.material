@@ -1,0 +1,18 @@
+material Green
+{
+	technique
+	{
+		pass
+		{
+			scene_blend alpha_blend
+			depth_bias 0
+			diffuse vertexcolour
+			specular 0.500000 0.500000 0.500000 12.500000
+			texture_unit
+			{
+				texture green_image.jpg
+				alpha_op_ex source1 src_manual src_current 0.5
+			}
+		}
+	}
+}

@@ -50,6 +50,7 @@
 %                                 details read RecordingSession.m log.
 % 2015-02-27 / Enzo Mastinu     / Fix some bugs with the custom devices TAC
 %                                 test.
+% 2015-12-04 / Francesco Clemente / Adding of SMC Test routines.
                             
 % 20xx-xx-xx / Author     / Comment on update                          
 
@@ -74,6 +75,8 @@ function success = TACTest(patRecX, handlesX)
     global nTW;
     global recordedMovements;
     global thresholdGUIData
+    
+    global distance %FIX
 
     patRec = patRecX;
     handles = handlesX;
@@ -106,7 +109,7 @@ function success = TACTest(patRecX, handlesX)
 
     % Get sampling time
     sT = tacTest.timeOut;
-    tW = sT/100;                                                           % Time window size
+    tW = patRec.tW;                                                            % Time window size
     tWs = tW*sF;                                                           % Time window samples
 
     % Is threshold (thOut) used?
@@ -143,8 +146,15 @@ function success = TACTest(patRecX, handlesX)
     com = handles.vre_Com;
 
     %Sends a value to set the TAC hand to ON.
-    fwrite(com,sprintf('%c%c%c%c','c',char(2),char(1),char(0)));
-    fread(com,1);
+    if (handles.SMCtestEnabled)
+        fwrite(com,sprintf('%c%c%c%c','c',char(8),char(1),char(0))); % run sTAC
+        fread(com,1);
+        fwrite(com,sprintf('%c%c%c%c','c',char(9),char(1),char(0))); % show green hand
+        fread(com,1);
+    else
+        fwrite(com,sprintf('%c%c%c%c','c',char(2),char(1),char(0))); % run normal TAC
+        fread(com,1);
+    end
 
     fwrite(com,sprintf('%c%c%c%c','c',char(3),char(allowance),char(0)));
     fread(com,1);
@@ -186,8 +196,16 @@ function success = TACTest(patRecX, handlesX)
                 set(handles.txt_status,'String','Wait!');
                 pause(2);
                 name = 'Wanted: ';
+                
                 %distance = randi(5,1) * 15 + 50;
-                distance = 40;
+                
+                if (handles.SMCtestEnabled) % if SMC test (-> ONLY ONE DOF)
+                    distance = randsample([20 30 40 50],1);
+                    handles.SMCposition = 0;
+                else
+                    distance = 40;
+                end
+                
                 for j = 1:length(index)
                     movementIndex = patRec.movOutIdx{index(j)};
                     listOfMovements = handles.movList;
@@ -196,7 +214,19 @@ function success = TACTest(patRecX, handlesX)
                     printName = strcat(printName,upper(movement.name{1}(regexp(movement.name{1}, '\<.'))),',');
                     for temp_index = 1:distance
                         VREActivation(com, 1, [], movement.idVRE, movement.vreDir, 1);
+                        if (handles.SMCtestEnabled) %&& (mod(temp_index,handles.SMCTargetStep) == 0)% if SMC test
+                                % SMCtestMapPosToVib(handles, [], [], movement.vreDir, [],temp_index);
+                                % pause(0.2);
+                                SMCtestMapPosToVib(handles, [], [], movement.vreDir, [],temp_index);
+                                pause(0.15);
+                        end
                     end
+                    if (handles.SMCtestEnabled)
+                        pause(0.5);
+                        fwrite(com,sprintf('%c%c%c%c','c',char(10),char(1),char(0))); % hide green hand
+                        fread(com,1);
+                    end
+                    
                     wantedMovementId = [wantedMovementId; movementIndex];
                 end
                 %Remove the last comma. Other way of solving it?
@@ -293,6 +323,12 @@ function success = TACTest(patRecX, handlesX)
                 tacTest.trialResult(t,r,i) = test;
 
                 tempData = [];
+                if (handles.SMCtestEnabled) % show green hand for confirmation
+                    fwrite(com,sprintf('%c%c%c%c','c',char(9),char(1),char(0)));
+                    fread(com,1);
+                    pause(1);
+                end
+                
             end
         end
     end
@@ -336,6 +372,8 @@ function TACTest_OneShot(src,event)
     global startTimer;
     global recordedMovements;
     global thresholdGUIData
+    
+    global distance %FIX
 
     tempData = [tempData; event.Data];
 
@@ -351,6 +389,7 @@ function TACTest_OneShot(src,event)
         TrackStateSpace('move',outMov, patRec.control.currentDegPerMov);
         CurrentPosition('move',outMov, patRec.control.currentDegPerMov);
 
+        
     %     %Signal processing
     %     tSet = SignalProcessing_RealtimePatRec(tData, patRec);
     % 
@@ -425,7 +464,11 @@ function TACTest_OneShot(src,event)
                 performedMovements = [performedMovements, {movement(i), speed(i)}];
                 dof = movement(i).idVRE;
                 dir = movement(i).vreDir;
-
+                
+                if (handles.SMCtestEnabled) % if SMC test
+                    handles.SMCposition = SMCtestMapPosToVib(handles, wantedMovementId(1), dof, dir, speed(i), []);
+                end
+                
                 if (VREActivation(handles.vre_Com,speed(i),[],dof,dir,0))
                     if (isempty(firstTacTime))
                        firstTacTime = tic; 
@@ -436,8 +479,9 @@ function TACTest_OneShot(src,event)
                             completionTime = toc(startTimer);
                             completionTime = completionTime - time;
                             tacComplete = 1;
+                            
                             %Stop the acquisition and move on to the next movement.
-                            if strcmp (handles.ComPortName, 'NI')
+                            if strcmp (patRec.comm, 'NI')
                                 src.stop(); 
                             else
                                 handles.success = 1;

@@ -4,11 +4,11 @@
 % the full license governing this code and copyrights.
 %
 % BioPatRec was initially developed by Max J. Ortiz C. at Integrum AB and 
-% Chalmers University of Technology. All authors’ contributions must be kept
+% Chalmers University of Technology. All authors? contributions must be kept
 % acknowledged below in the section "Updates % Contributors". 
 %
 % Would you like to contribute to science and sum efforts to improve 
-% amputees’ quality of life? Join this project! or, send your comments to:
+% amputees? quality of life? Join this project! or, send your comments to:
 % maxo@chalmers.se.
 %
 % The entire copyright notice must be kept in this or any source file 
@@ -24,8 +24,11 @@
 % [Contributors are welcome to add their email]
 % 2011-07-27 / Max Ortiz / Creation from EMG_AQ routines
 % 2014-12-01 / Enzo Mastinu  / Added the handling part for the COM port number
-                             % information into the parameters
-% 20xx-xx-xx / Author  / Comment on update
+%                              information into the parameters
+% 2015-10-01 / Max Ortiz / Fixed bug for treat folder where wOverlap was
+%                           left out
+% 2016-03-01 / Eva Lendaro  / Added sigTreated.fFilter among the arguments
+%                             of GetSigFeatures()
 
 function sigFeatures = GetAllSigFeatures(handles, sigTreated)
 
@@ -35,7 +38,27 @@ function sigFeatures = GetAllSigFeatures(handles, sigTreated)
     sigFeatures.mov     = sigTreated.mov;
     sigFeatures.scaled  = sigTreated.scaled;
     sigFeatures.noise   = sigTreated.noise;
+
+    % ALCD
+    sigFeatures.wOverlap= sigTreated.wOverlap;
+    sigFeatures.tW      = sigTreated.tW;
     
+	%sigDenoising
+    if isfield(sigTreated,'sigDenoising')
+        sigFeatures.sigDenoising = sigTreated.sigDenoising;
+    end
+    
+    %sigSeparation
+    if isfield(sigTreated,'sigSeparation')
+        sigFeatures.sigSeparation = sigTreated.sigSeparation;
+    end
+    
+    %Motion filter
+    if isfield(sigTreated,'mFilter')
+        sigFeatures.mFilter = sigTreated.mFilter;
+    end
+	
+	
     % temporal conditional to keep compatibility with olrder rec session
     if isfield(sigTreated,'dev')
         sigFeatures.dev     = sigTreated.dev;
@@ -64,7 +87,7 @@ function sigFeatures = GetAllSigFeatures(handles, sigTreated)
     drawnow;
     for m = 1: nM
         for i = 1 : sigTreated.trSets
-            trFeatures(i,m) = GetSigFeatures(sigTreated.trData(:,:,m,i),sigTreated.sF);
+            trFeatures(i,m) = GetSigFeatures(sigTreated.trData(:,:,m,i),sigTreated.sF,sigTreated.fFilter);
         end
     end
 
@@ -72,7 +95,7 @@ function sigFeatures = GetAllSigFeatures(handles, sigTreated)
     drawnow;
     for m = 1: nM
         for i = 1 : sigTreated.vSets
-            vFeatures(i,m) = GetSigFeatures(sigTreated.vData(:,:,m,i),sigTreated.sF);
+            vFeatures(i,m) = GetSigFeatures(sigTreated.vData(:,:,m,i),sigTreated.sF,sigTreated.fFilter);
         end
     end
     
@@ -81,7 +104,7 @@ function sigFeatures = GetAllSigFeatures(handles, sigTreated)
     for m = 1: nM
         for i = 1 : sigTreated.tSets
             %tFeatures(i,m) = analyze_signal(sigTreated.tData(:,:,m,i),sigTreated.sF);
-            tFeatures(i,m) = GetSigFeatures(sigTreated.tData(:,:,m,i),sigTreated.sF);
+            tFeatures(i,m) = GetSigFeatures(sigTreated.tData(:,:,m,i),sigTreated.sF, sigTreated.fFilter);
         end
     end
     

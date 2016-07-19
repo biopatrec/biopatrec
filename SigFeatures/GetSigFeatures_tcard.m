@@ -26,10 +26,31 @@
 % ------------------------- Updates & Contributors ------------------------
 % [Contributors are welcome to add their email]
 % 2012-05-01 / Max Ortiz  / Created 
+% 20016-03-01 / Eva Lendaro  / Added scaling of data to 14 bits in case a
+%                              frequency filter has been used
 % 20xx-xx-xx / Author  / Comment on update
 
 
 function pF = GetSigFeatures_tcard(pF)
+
+if strcmp(pF.filter,'None')
+        % Do nothing and exit if
+else
+   %scale to 14 bits
+    
+    a = 4096;   
+    b = a;
+    a = a * -1;
+    
+    % Range of the original aquisition
+    minX = -5;
+    maxX = 5;
+    
+    % Scale
+    pF.data = round((pF.data- minX) .* (b-a) ./ (maxX-minX) + a);
+end
+
+
     for ch = 1 : pF.ch
         % Get the number of different values and their number of repetitions
         v = unique(pF.data(:,ch));

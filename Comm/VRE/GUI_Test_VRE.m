@@ -22,7 +22,7 @@ function varargout = GUI_Test_VRE(varargin)
 
 % Edit the above text to modify the response to help GUI_Test_VRE
 
-% Last Modified by GUIDE v2.5 22-Oct-2013 11:25:20
+% Last Modified by GUIDE v2.5 01-Dec-2015 14:25:55
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -91,7 +91,10 @@ function pb_startVRE_Callback(hObject, eventdata, handles)
 % %     set(handles.t_msg,'String','Disconnected');
 % %     set(handles.pb_startVRE,'String','Connect');
 % % end
-handles = ConnectVRE(handles,'Virtual Reality.exe');
+if isfield(handles,'vre_leg')
+handles = rmfield(handles,'vre_leg');
+end
+handles = ConnectVRE(handles,'virtual reality.exe');
 guidata(hObject,handles);
 
 % --- Executes during object creation, after setting all properties.
@@ -308,4 +311,14 @@ function pb_startAREARM_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 handles = ConnectVRE(handles,'Augmented Reality ARM.exe');
+guidata(hObject,handles);
+
+
+% --- Executes on button press in pb_startVRELEG.
+function pb_startVRELEG_Callback(hObject, eventdata, handles)
+% hObject    handle to pb_startVRELEG (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+handles.vre_leg = 1;
+handles = ConnectVRE(handles,'virtual reality.exe');
 guidata(hObject,handles);

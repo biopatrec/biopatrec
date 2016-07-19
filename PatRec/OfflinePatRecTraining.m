@@ -28,6 +28,7 @@
 % 2012-05-20 / Max Ortiz  / Moved the GetSetLables inside
 %                           DiscrimiantAnalysis
 % 2012-10-10 / Max Ortiz  / Addition of algConf 
+% 2014-11-07 / Diep Khong    / Added SVM
 % 20xx-xx-xx / Author     / Comment on update
 
 function patRec = OfflinePatRecTraining(alg, tType, algConf, trSets, trOuts, vSets, vOuts, mov, movIdx)
@@ -79,6 +80,29 @@ function patRec = OfflinePatRecTraining(alg, tType, algConf, trSets, trOuts, vSe
         patRec.training = tType;
         patRec.SSOM=SSOM;
                 
+    % SVM
+    elseif strcmp(alg,'SVM')
+        [SVM accV] = SVMAnalysis(tType, trSets, trOuts, vSets, vOuts, mov, movIdx);
+        patRec.algorithm = 'SVM';
+        patRec.training = tType;
+        patRec.SVM = SVM;        
+
+    % NetLab MLP
+    elseif strcmp(alg,'NetLab MLP')
+               
+        [MLP accV] = NetLab_MLP_InitAndTrain(trSets, trOuts, vSets, vOuts, tType);
+        patRec.algorithm = 'NetLab MLP';
+        patRec.training = tType;
+        patRec.MLP = MLP;
+        
+    % NetLab GLM
+    elseif strcmp(alg,'NetLab GLM')
+               
+        [GLM accV] = NetLab_GLM_InitAndTrain(trSets, trOuts, vSets, vOuts, tType);
+        patRec.algorithm = 'NetLab GLM';
+        patRec.training = tType;
+        patRec.GLM = GLM;        
+        
     end
     
     % Save the accuracy of the validation set as part of patRec structure;

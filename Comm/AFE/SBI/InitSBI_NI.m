@@ -28,13 +28,16 @@
 %                           job
 % 2012-05-29 / Max Ortiz  / Removed the routine for sequentially adding
 %                           channels to a loop.
+% 2016-02-10 / Max Ortiz  / Modifed routine to use chAI directly as a
+%                           string of numbers identifying each channels
+%                           as in the GUI
 % 20xx-xx-xx / Author    / Comment on update
 
 function [s] = InitSBI_NI(sF, sT, chAI, chAO)
 
 % Auxiliar variables
-nChAI = size(chAI,2);
-chAIidx = find(chAI);
+% nChAI = size(chAI,2);
+% chAIidx = find(chAI);
 
 % Close possible daq objects running
 if (~isempty(daqfind))
@@ -50,8 +53,8 @@ s = daq.createSession('ni');
 
 % Add channels in a loop
 
-for i = 1 : size(chAIidx,2)
-    chID = ['ai' num2str(chAIidx(i)-1)];    
+for i = 1 : size(chAI,2)
+    chID = ['ai' num2str(chAI(i)-1)];    
     s.addAnalogInputChannel(dev.ID,chID,'Voltage');
     s.Channels(i).InputType ='SingleEnded';
     s.Channels(i).Range = [-5 5];    

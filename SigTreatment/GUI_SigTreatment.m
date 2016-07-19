@@ -1,14 +1,14 @@
 % ---------------------------- Copyright Notice ---------------------------
-% This file is part of BioPatRec © which is open and free software under 
+% This file is part of BioPatRec © which is open and free software under  
 % the GNU Lesser General Public License (LGPL). See the file "LICENSE" for 
 % the full license governing this code and copyrights.
 %
 % BioPatRec was initially developed by Max J. Ortiz C. at Integrum AB and 
-% Chalmers University of Technology. All authors’ contributions must be kept
+% Chalmers University of Technology. All authors contributions must be kept
 % acknowledged below in the section "Updates % Contributors". 
 %
 % Would you like to contribute to science and sum efforts to improve 
-% amputees’ quality of life? Join this project! or, send your comments to:
+% amputees quality of life? Join this project! or, send your comments to:
 % maxo@chalmers.se.
 %
 % The entire copyright notice must be kept in this or any source file 
@@ -47,7 +47,7 @@ function varargout = GUI_SigTreatment(varargin)
 
 % Edit the above text to modify the response to help GUI_SigTreatment
 
-% Last Modified by GUIDE v2.5 03-Jan-2015 18:23:03
+% Last Modified by GUIDE v2.5 29-Apr-2016 14:24:59
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -93,7 +93,7 @@ guidata(hObject, handles);
 
 % UIWAIT makes GUI_SigTreatment wait for user response (see UIRESUME)
 % uiwait(handles.GUI_SigTreatment);
-
+movegui(hObject,'center');
 
 % --- Outputs from this function are returned to the command line.
 function varargout = GUI_SigTreatment_OutputFcn(hObject, eventdata, handles) 
@@ -114,13 +114,20 @@ function pb_treat_Callback(hObject, eventdata, handles)
     sigTreated = get(handles.t_sigTreated,'UserData');
         
     % Treat the Data ----------------------------------------------------
+    if ~isempty(get(handles.t_denoiseParams,'UserData'))
+        sigTreated.plotFlag = true;
+    end
     sigTreated = TreatData(handles, sigTreated); % Treat Data
+    if isfield(sigTreated,'stopFlag')
+        return
+    end
     
     % get sigFeatures ---------------------------------------------------
     set(handles.t_msg,'String','Extracting signal features');
     drawnow;
     sigFeatures = GetAllSigFeatures(handles, sigTreated);
-    sigFeatures.sigSeperation=sigTreated.sigSeperation;
+
+    
     % Get back in the parent GUI ----------------------------------------
     phandles = get(handles.t_mhandles,'UserData'); % get parent GUI handles    
 
@@ -142,6 +149,7 @@ function pb_treat_Callback(hObject, eventdata, handles)
     %Completion message
     set(handles.t_msg,'String','Treating the data...');
     set(phandles.t_msg,'String','Data analyzed');
+    
     disp(sigFeatures);
     close(GUI_SigTreatment);
 
@@ -414,9 +422,9 @@ function pb_treatFolder_Callback(hObject, eventdata, handles)
 
     % Getting the rawdata and treating it
     for rn =1 : 100
-        if exist([lpath '\' num2str(rn) '.mat'], 'file')
+        if exist([lpath filesep num2str(rn) '.mat'], 'file')
             % Load recSession
-            load([lpath '\' num2str(rn) '.mat']);
+            load([lpath filesep num2str(rn) '.mat']);
             set(handles.t_recSession,'UserData',recSession);
             drawnow();
             % User message
@@ -819,6 +827,67 @@ function et_noise_CreateFcn(hObject, eventdata, handles)
 % handles    empty - handles not created until after all CreateFcns called
 
 % Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+% --- Executes on button press in cb_AddArtifact.
+function cb_AddArtifact_Callback(hObject, eventdata, handles)
+% hObject    handle to cb_AddArtifact (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: get(hObject,'Value') returns toggle state of cb_AddArtifact
+
+
+
+% --- Executes on button press in pb_LoadWaveletDenoise.
+function pb_LoadWaveletDenoise_Callback(hObject, eventdata, handles)
+% hObject    handle to pb_LoadWaveletDenoise (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+wd = GUI_Denoising(); %Open Wavelet GUI
+wddata = guidata(wd);
+set(wddata.t_sthandles,'UserData',handles); %transfer parent handles to child GUI
+
+denoiseParams = get(handles.t_denoiseParams,'UserData');
+denoiseParams = SetDenoiseParams(wddata,denoiseParams);
+
+
+% --- Executes on selection change in pm_motionFilt.
+function pm_motionFilt_Callback(hObject, eventdata, handles)
+% hObject    handle to pm_motionFilt (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: contents = cellstr(get(hObject,'String')) returns pm_motionFilt contents as cell array
+%        contents{get(hObject,'Value')} returns selected item from pm_motionFilt
+
+mType = get(handles.pm_motionFilt,'String');
+mSel = get(handles.pm_motionFilt,'Value');
+if ~isempty(strfind(mType{mSel},'SigSep'))
+    strAlg = {'PCA','FastICA','TDSEP','JADE'};
+    [selAlg,ok] = listdlg('PromptString','Select ICA method:',...
+        'SelectionMode','single','ListSize',[120 80],...
+        'ListString',strAlg); 
+    if ~ok
+         set(handles.pm_motionFilt,'Value',1)
+         return; 
+    end
+    alg = strAlg{selAlg};
+    set(handles.pm_motionFilt,'UserData',alg)
+end
+
+% --- Executes during object creation, after setting all properties.
+function pm_motionFilt_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to pm_motionFilt (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: popupmenu controls usually have a white background on Windows.
 %       See ISPC and COMPUTER.
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');

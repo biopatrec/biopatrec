@@ -29,6 +29,7 @@ function handles = DisconnectVRE(handles)
         handles = rmfield(handles,'vre_Com');
     end
     handles = EnableIfExists(handles,'pb_socketConnect');
+    handles = EnableIfExists(handles,'pb_VRleg');
     handles = EnableIfExists(handles,'pb_socketConnect2');
     handles = EnableIfExists(handles,'pb_ARarm');
     handles = DisableIfExists(handles,'pb_socketDisconnect');

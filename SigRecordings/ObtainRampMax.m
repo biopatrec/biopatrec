@@ -66,7 +66,8 @@
                             % session. At the end of the recording session it 
                             % is possible to check all channels individually, 
                             % apply offlinedata  process as feature extraction or filter etc.
-                            
+% 2015-10-28 / Martin Holder / >2014b plot interface fixes
+
 % 20xx-xx-xx / Author  / Comment
 
 
@@ -190,9 +191,11 @@ function [rampMax, maxData] = ObtainRampMax(varargin)
     % Initialization of progress bar
     xpatch = [0 0 0 0];
     ypatch = [0 0 1 1];
-    % set(handles.figure1,'CurrentAxes',handles.a_prog);
     axes(handles.a_prog);
-    handles.hPatch = patch(xpatch,ypatch,'b','EdgeColor','b','EraseMode','xor','visible','on');
+    axis(handles.a_prog,'off');
+    set(handles.a_prog,'XLimMode','manual');
+    handles.hPatch = patch(xpatch,ypatch,'b','EdgeColor','b','visible','on');
+    drawnow update
 
     % Allocation of resource to improve speed, total data 
     recSessionData = zeros(sF*sTall, nCh, nM);

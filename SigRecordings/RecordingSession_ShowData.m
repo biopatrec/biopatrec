@@ -36,7 +36,8 @@
 % 2015-02-24 / Enzo Mastinu / Now it is possible to choose if delete or not
                             % the offset introduced by the AFE from the time
                             % window plot
-                            
+% 2015-10-28 / Martin Holder / >2014b plot interface fixes
+
 % 20xx-xx-xx / Author  / Comment
 
 
@@ -109,7 +110,6 @@ function RecordingSession_ShowData(src, event)
         end
     end
     set(handles.hPatch,'Xdata',[0 x x 0]);
-    drawnow;
     
     
     if rampStatus
@@ -172,6 +172,6 @@ function RecordingSession_ShowData(src, event)
         set(p_t0(j),'YData',tempData(:,j)*plotGain + offVector(j));              % add offsets to plot channels in same graph
         set(p_f0(j),'YData',m(:,j)*Kf + offVector(j));
     end 
-    drawnow      
+    drawnow expose      
 
 end

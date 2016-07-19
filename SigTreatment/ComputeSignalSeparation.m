@@ -28,9 +28,9 @@
 function sigTreated=ComputeSignalSeparation(sigTreated)
 
 
-if strcmp(sigTreated.sigSeperation.Alg,'ICA')
+if strcmp(sigTreated.sigSeparation.Alg,'ICA')
     
     ICAUnmixMat=ICA(sigTreated.trData(1:size(sigTreated.trData,1)*.6,:,:));
     
-    sigTreated.sigSeperation.ICAUnmixMat=ICAUnmixMat;
+    sigTreated.sigSeparation.ICAUnmixMat=ICAUnmixMat;
 end

@@ -62,10 +62,13 @@ h = findobj('Tag','Gui1');
 if ~isempty(h)
     % get handles and other user-defined data associated to Gui1
     g1data = guidata(h);
-    
-    % handles.sensors = g1data.sensors
-    handles.sensors = InitSensors();
-    handles.com = g1data.Control_obj;
+    handles.sensors = g1data.sensors;
+    if isfield(g1data,'Control_obj')
+        handles.com = g1data.Control_obj;
+    else
+        errordlg('Communication object not found. Connect with the device!','Error');
+        return
+    end
 end
 
 % if InitSensors found the "sensors.def" file

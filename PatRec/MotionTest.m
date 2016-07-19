@@ -37,6 +37,8 @@
 %                                 to be compatible with the functions
 %                                 placed into COMM/AFE folder. For more
 %                                 details read RecordingSession.m log.
+% 2016-05-03 / Julian Maier     / Artifact inseration added to tempdata if
+%                                 required
                             
 % 20xx-xx-xx / Author     / Comment on update
 
@@ -143,8 +145,8 @@ deviceName          = patRec.dev;
 
 % Get sampling time
 sT = motionTest.timeOut;
-tW = sT/100;                                                           % Time window size
-tWs = tW*sF;                                                           % Time window samples
+tW = patRec.tW;                                                           % Time window size
+tWs = tW*sF;                                                              % Time window samples
 
 
 %% Motion Test
@@ -421,7 +423,17 @@ function MotionTest_OneShot(src,event)
     if size(tempData,1) >= (patRec.sF*patRec.tW) 
         
         % Save the TW data, maybe useful for further analysis
-        tData = tempData(end-patRec.sF*patRec.tW+1:end,:);  %Copy the temporal data to the test data
+        %tData = tempData(end-patRec.sF*patRec.tW+1:end,:);  %Copy the temporal data to the test data
+       
+        % Add artifact if required
+        if isfield(patRec,'addArtifact')
+            timeLength=str2double(handles.et_timeOut.String);
+            tempDataArt = AddArtifactRealtime(tempData,timeLength);
+            tData = tempDataArt(end-patRec.sF*patRec.tW+1:end,:);
+        else % Copy the temporal data to the test data
+            tData = tempData(end-patRec.sF*patRec.tW+1:end,:);   
+        end
+
         dataTW(:,:,nTW) = tData;                            % Save data for future analisys
 
         % Start of processing time

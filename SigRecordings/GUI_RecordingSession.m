@@ -22,6 +22,7 @@
 % [Contributors are welcome to add their email]
 % 20xx-xx-xx / Max Ortiz  / Creation
 % 20xx-xx-xx / Pontus Lövinger  / Added an alternative for ramp recording
+% 2015-12-04 / Morten Bak Kristoffersen  / Added Arm/Leg toggle. 
 % 20xx-xx-xx / Author  / Comment on update
 
 function varargout = GUI_RecordingSession(varargin)
@@ -48,7 +49,7 @@ function varargout = GUI_RecordingSession(varargin)
 
 % Edit the above text to modify the response to help GUI_RecordingSession
 
-% Last Modified by GUIDE v2.5 19-Sep-2013 09:13:52
+% Last Modified by GUIDE v2.5 04-Dec-2015 14:27:50
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -96,6 +97,10 @@ axes(handles.axes1);
 image(backgroundImage);
 %remove the axis tick marks
 axis off
+
+armMovements = {
+    'Open Hand'; 'Close Hand'; 'Flex Hand'; 'Extend Hand'; 'Pronation'; 'Supination'; 'Side Grip'; 'Fine Grip'; 'Agree'; 'Pointer'; 'Thumb Extend'; 'Thumb Flex'; 'Thumb Abduc'; 'Thumb Adduc'; 'Flex Elbow'; 'Extend Elbow'; 'Index Extend'; 'Index Flex'; 'Middle Extend'; 'Middle Flex'; 'Ring Extend'; 'Ring Flex'; 'Little Extend'; 'Little Flex';};
+set(handles.et_msg,'String',armMovements);
 
 %clear value of msg
 set(handles.et_msg,'Value',1);
@@ -204,7 +209,7 @@ function et_Ne_Callback(hObject, eventdata, handles)
                'Fine Grip  ';
                'Agree      ';
                'Pointer    ';
-               'Thumb Ext  ';
+               'Thumb Extend  ';
                'Thumb Flex '};
           set(handles.et_msg,'String',msg);
     end
@@ -219,7 +224,7 @@ function et_Ne_Callback(hObject, eventdata, handles)
                'Fine Grip  ';
                'Agree      ';
                'Pointer    ';
-               'Thumb Ext  ';
+               'Thumb Extend  ';
                'Thumb Flex ';
                'Thumb Abduc';
                'Thumb Adduc'};
@@ -349,7 +354,12 @@ function et_msg_Callback(hObject, eventdata, handles)
     mov = movS(movN(1));
     
     %backgroundImage = importdata(['/../Img/mov' num2str(num) '.JPG']);
-    backgroundImage = importdata(['/../Img/' char(mov) '.JPG']);
+    % If the image does not exist, we display a dummy image. 
+    if(exist(['/../Img/' char(mov) '.JPG'], 'file'))
+        backgroundImage = importdata(['/../Img/' char(mov) '.JPG']);
+    else
+        backgroundImage = importdata(['/../Img/' 'noImage' '.png']); 
+    end
     image(backgroundImage);
     axis off
 
@@ -361,6 +371,8 @@ function pb_Record_Callback(hObject, eventdata, handles)
     h1 = GUI_Recordings(fast); 
     hGUI_Rec = guidata(h1);
     rampStatus = get(handles.cb_ramp,'Value');
+    movRepeatDlg = get(handles.cb_movRepeatDlg,'Value');
+    useLeg = get(handles.tb_armLeg, 'Value');
     
     %psr = str2double(get(handles.et_Psr,'String'));   % Percentage of the exercise time to be consider for training
     %sF = str2double(get(handles.et_Fs,'String'));     % Sampling Frequency
@@ -375,7 +387,11 @@ function pb_Record_Callback(hObject, eventdata, handles)
     nM = length(movN);
     mov = movS(movN);
     allMovements = InitMovements();
+    if(useLeg == 1)        
+    tempMovements = num2cell(allMovements(movN+25));   
+    else
     tempMovements = num2cell(allMovements(movN+1));
+    end
     vreMovements = num2cell(tempMovements);
     
     % Simultaneous movements
@@ -421,7 +437,7 @@ function pb_Record_Callback(hObject, eventdata, handles)
     end
 
     fast = 0;
-    GUI_AFEselection(nM,nR,cT,rT,mov,hGUI_Rec,vreMovements,rampStatus,fast)
+    GUI_AFEselection(nM,nR,cT,rT,mov,hGUI_Rec,vreMovements,rampStatus,fast,movRepeatDlg, useLeg)
     %GUI_AFEselection(sF,nM,nR,cT,rT,psr,mov,hGUI_Rec)
     
 % Moved to AFE_select
@@ -453,3 +469,34 @@ function cb_ramp_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 % Hint: get(hObject,'Value') returns toggle state of cb_ramp
+
+
+% --- Executes on button press in cb_movRepeatDlg.
+function cb_movRepeatDlg_Callback(hObject, eventdata, handles)
+% hObject    handle to cb_movRepeatDlg (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: get(hObject,'Value') returns toggle state of cb_movRepeatDlg
+
+
+% --- Executes on button press in tb_armLeg.
+function tb_armLeg_Callback(hObject, eventdata, handles)
+% hObject    handle to tb_armLeg (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+% Hint: get(hObject,'Value') returns toggle state of tb_armLeg
+    button_state = get(hObject,'Value');
+    if button_state == get(hObject,'Min')
+        % We set the value (= selected field) to the top one, to avoid that
+        % a non-existing field is selected. 
+        set(handles.et_msg,'Value', 1.0);
+        armMovements = {'Open Hand'; 'Close Hand'; 'Flex Hand'; 'Extend Hand'; 'Pronation'; 'Supination'; 'Side Grip'; 'Fine Grip'; 'Agree'; 'Pointer'; 'Thumb Extend'; 'Thumb Flex'; 'Thumb Abduc'; 'Thumb Adduc'; 'Flex Elbow'; 'Extend Elbow'; 'Index Extend'; 'Index Flex'; 'Middle Extend'; 'Middle Flex'; 'Ring Extend'; 'Ring Flex'; 'Little Extend'; 'Little Flex';};
+        set(handles.et_msg,'String',armMovements);
+        set(hObject, 'String', 'Arm');
+    elseif button_state == get(hObject,'Max')
+        set(handles.et_msg,'Value', 1.0);
+        legMovements = {'Flex Knee'; 'Extend Knee'; 'Ankle Dorsiflexion'; 'Ankle Plantarflexion'; 'Tibial Rotation in'; 'Tibial Rotation out'; 'Femoral Rotation in'; 'Femoral Rotation out'; 'Ankle Inversion'; 'Ankle Eversion'; 'Curl Toes'; 'Stretch Toes'; 'Index Flex'; 'Index Extend'; 'Middle Flex'; 'Middle Extend'; 'Ring Flex'; 'Ring Extend'; 'Little Flex'; 'Little Extend'; 'Big Flex'; 'Big Extend'};
+        set(handles.et_msg,'String',legMovements);   
+        set(hObject, 'String', 'Leg');
+    end

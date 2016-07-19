@@ -55,7 +55,19 @@ function [outMov outVector] = OneShotPatRec(patRecTrained,tSet)
      elseif strcmp(patRecTrained.algorithm,'SSOM')
 
         [outMov outVector] = SSOMTest(patRecTrained,tSet);   
-                        
+                
+    elseif strcmp(patRecTrained.algorithm,'SVM')
+        
+        [outMov outVector] = SVMTest(patRecTrained, tSet);
+
+    elseif strcmp(patRecTrained.algorithm,'NetLab MLP')
+            
+        [outMov outVector] = NetLab_MLPTest(patRecTrained, tSet);
+
+    elseif strcmp(patRecTrained.algorithm,'NetLab GLM')
+            
+        [outMov outVector] = NetLab_GLMTest(patRecTrained, tSet);
+                
     end
 
     % Validation to prevent outMov to be empty which cause problems on the

@@ -1,0 +1,47 @@
+0,Rest,0,0,0 0
+1,Open Hand,9,1,0 0
+2,Close Hand,9,0,0 0
+3,Flex Hand,7,0,0 0
+4,Extend Hand,7,1,0 0
+5,Pronation,8,0,0 0
+6,Supination,8,1,0 0
+7,Thumb Extend,5,1,0 0
+8,Thumb Flex,5,0,0 0
+9,Index Extend,4,1,0 0
+10,Index Flex,4,0,0 0
+11,Middle Extend,3,1,0 0
+12,Middle Flex,3,0,0 0
+13,Ring Extend,2,1,0 0
+14,Ring Flex,2,0,0 0
+15,Little Extend,1,1,0 0
+16,Little Flex,1,0,0 0
+17,Point,10,1,0 0
+18,Thumb Yaw Flex,6,1,0 0
+19,Thumb Yaw Extend,6,0,0 0
+20,Flex Elbow,15,1,0 0
+21,Extend Elbow,15,0,0 0
+22,Agree,11,1,0 0
+23,Fine Grip,12,1,0 0
+24,Side Grip,13,1,0 0
+1,Ankle Plantarflexion,6,0,0 0
+2,Ankle Dorsiflexion,6,1,0 0
+3,Ankle Inversion,7,0,0 0
+4,Ankle Eversion,7,1,0 0
+5,Flex Knee,8,1,0 0
+6,Extend Knee,8,0,0 0
+7,Tibial Rotation in,9,0,0 0 
+8,Tibial Rotation out,9,1,0 0
+9,Femoral Rotation in,10,1,0 0
+10,Femoral Rotation out,10,0,0 0
+11,Curl Toes,11,0,0 0
+12,Stretch Toes,11,1,0 0
+13,Big Extend,5,1,0 0
+14,Big Flex,5,0,0 0
+15,Index Extend,4,1,0 0
+16,Index Flex,4,0,0 0
+17,Middle Extend,3,1,0 0
+18,Middle Flex,3,0,0 0
+19,Ring Extend,2,1,0 0
+20,Ring Flex,2,0,0 0
+21,Little Extend,1,1,0 0
+22,Little Flex,1,0,0 0

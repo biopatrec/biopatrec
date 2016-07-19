@@ -4,11 +4,11 @@
 % the full license governing this code and copyrights.
 %
 % BioPatRec was initially developed by Max J. Ortiz C. at Integrum AB and 
-% Chalmers University of Technology. All authors’ contributions must be kept
+% Chalmers University of Technology. All authors? contributions must be kept
 % acknowledged below in the section "Updates % Contributors". 
 %
 % Would you like to contribute to science and sum efforts to improve 
-% amputees’ quality of life? Join this project! or, send your comments to:
+% amputees? quality of life? Join this project! or, send your comments to:
 % maxo@chalmers.se.
 %
 % The entire copyright notice must be kept in this or any source file 
@@ -24,6 +24,9 @@
 % 2012-07-07 / Max Ortiz  / Moved out from the preProcessing botton 
 % 2014-12-06 / Max Ortiz  / Added downsampling option
 % 2014-12-28 / Max Ortiz  / Added scaling option 
+% 2015-12-08 / Eva Lendaro / Fixed problem on "Remove channels" whne used 
+                          % with more then 9 channels
+% 20xx-xx-xx / Author     / Comment on update
 % 20xx-xx-xx / Author     / Comment on update
 
 function sigTreated = PreProcessing(handles)
@@ -46,7 +49,7 @@ function sigTreated = PreProcessing(handles)
     if length(recSession.nCh) ~= length(chSel)
         allCh = get(handles.lb_nCh,'String');    
         for i = 1 : length(chSel)
-            channels(i) = str2double(allCh(chSel(i)));
+            channels(i) = str2double(allCh(chSel(i),:));
         end
         
         recSession = Split_recSession_Ch(channels, recSession);

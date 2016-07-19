@@ -53,7 +53,7 @@ function varargout = GUI_TacTest(varargin)
 
 % Edit the above text to modify the response to help GUI_TacTest
 
-% Last Modified by GUIDE v2.5 18-Jul-2012 14:18:17
+% Last Modified by GUIDE v2.5 03-Dec-2015 15:21:04
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -85,6 +85,17 @@ function GUI_TacTest_OpeningFcn(hObject, eventdata, handles, varargin)
 
 % Choose default command line output for GUI_TacTest
 handles.output = hObject;
+
+% SMC test support variables
+handles.SMCtestEnabled = 0;
+if isfield(handles,'cb_enableSMCtest')
+    handles.SMCtestSerial  = [];
+    handles.SMCTargetStep  = 10; % step between targets
+    handles.SMCMaxVibIdx   = 13;
+    handles.SMCMaxVibInt   = 15;
+    handles.SMCVibduration = 20; % ms/10
+    handles.SMCposition    = 0;
+end
 
 % Update handles structure
 guidata(hObject, handles);
@@ -258,14 +269,28 @@ if ~isfield(handles,'dofs')
     handles.dofs = 1; 
 end
 
+% patRec = handles.patRecHandles.patRec;
+% handles.vre_Com = handles.patRecHandles.vre_Com;
+% handles.movList = handles.patRecHandles.movList;
+% set(handles.txt_status,'String','Starting TAC');
+% TACTest(patRec,handles);
+% set(handles.txt_status,'String','Finished TAC');
+
+% TEST ALCD
 patRec = handles.patRecHandles.patRec;
 handles.vre_Com = handles.patRecHandles.vre_Com;
 handles.movList = handles.patRecHandles.movList;
 set(handles.txt_status,'String','Starting TAC');
-TACTest(patRec,handles);
+if isfield(handles.patRecHandles,'cb_ALCD')
+    if get(handles.patRecHandles.cb_ALCD,'Value') == 1
+        TACTestALCD(patRec, handles);
+    else
+        TACTest(patRec,handles);
+    end
+else
+    TACTest(patRec,handles);
+end
 set(handles.txt_status,'String','Finished TAC');
-
-
 
 function tb_allowance_Callback(hObject, eventdata, handles)
 % hObject    handle to tb_allowance (see GCBO)
@@ -309,3 +334,117 @@ function tb_time_CreateFcn(hObject, eventdata, handles)
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
+
+% --- Executes on selection change in pm_serialsel.
+function pm_SMCselectserial_Callback(hObject, eventdata, handles)
+% hObject    handle to pm_serialsel (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: contents = cellstr(get(hObject,'String')) returns pm_serialsel contents as cell array
+%        contents{get(hObject,'Value')} returns selected item from pm_serialsel
+COMportIdx = get(hObject,'Value');
+COMport  = get(hObject,'String');
+COMport  = COMport{COMportIdx};
+BitsN    = 8;
+SBits    = 1;
+Parity   = 'none';
+TimeOut  = 0.5;
+BaudRate = 19200;
+InputBufferSize  = 1000;
+OutputBufferSize = 500;
+
+% Open serial port
+if ~isempty(handles.SMCtestSerial) % if already opened, close it
+    fclose(handles.SMCtestSerial);
+    delete(handles.SMCtestSerial);
+    handles.SMCtestSerial = [];
+end
+handles.SMCtestSerial = serial(COMport,'BaudRate', BaudRate,...
+                                 'DataBits', BitsN, 'StopBits', SBits, 'Parity', Parity,...
+                                 'Timeout', TimeOut, 'InputBufferSize', InputBufferSize,...
+                                 'OutputBufferSize', OutputBufferSize);
+
+fopen(handles.SMCtestSerial);
+set(handles.pb_start,'Enable','on');
+
+guidata(hObject,handles);
+
+
+% --- Executes during object creation, after setting all properties.
+function cb_enableSMCtest_CreateFcn(hObject, eventdata, handles) %#ok<*INUSD>
+% hObject    handle to pm_serialsel (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: popupmenu controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+% --- Executes on selection change in pm_serialsel.
+function cb_enableSMCtest_Callback(hObject, eventdata, handles)
+% hObject    handle to pm_serialsel (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: contents = cellstr(get(hObject,'String')) returns pm_serialsel contents as cell array
+%        contents{get(hObject,'Value')} returns selected item from pm_serialsel
+
+if(get(hObject,'Value'))
+    set(handles.pm_SMCselectserial,'Enable','on');
+    handles.SMCtestEnabled = 1;
+    if isempty(handles.SMCtestSerial)
+        set(handles.pb_start,'Enable','off');
+    else
+        set(handles.pb_start,'Enable','on');
+    end
+else
+    set(handles.pm_SMCselectserial,'Enable','off');
+    set(handles.pb_start,'Enable','on');
+    handles.SMCtestEnabled = 0;
+end
+
+guidata(hObject,handles);
+
+
+% --- Executes during object creation, after setting all properties.
+function pm_SMCselectserial_CreateFcn(hObject, eventdata, handles) %#ok<*INUSD>
+% hObject    handle to pm_serialsel (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: popupmenu controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+% list all serial ports available
+Serial = instrhwinfo('serial');
+if ~isempty(Serial.AvailableSerialPorts)
+    serialportlist = Serial.SerialPorts;
+    set(hObject,'String',serialportlist);
+else
+    set(hObject,'String','None Available');
+end
+
+
+% --- Executes when user attempts to close figure1.
+function figure1_CloseRequestFcn(hObject, eventdata, handles)
+% hObject    handle to figure1 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+if ~isempty(handles.SMCtestSerial)
+    fclose(handles.SMCtestSerial);
+    delete(handles.SMCtestSerial);
+    handles.SMCtestSerial = [];
+end
+
+% Hint: delete(hObject) closes the figure
+delete(hObject);
+
+function figure1_DeleteFcn(hObject, eventdata, handles)

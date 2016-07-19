@@ -25,6 +25,7 @@
 % 2011-10-02 / Max Ortiz  / Creation of the function DiscriminantAccuracy
 % 2012-05-20 / Max Ortiz  / Move the Get_SetsLabels funtion inside this
 %                           routne and deleted old commented code
+% 2015-06-26 / Olga Mikhaylova / Error handling of "classify"
 % 20xx-xx-xx / Author     / Comment on update
 
 %function [coeff accVset] = DiscriminantAnalysis(trSet, trLables, vSet, vLables, mov, dType)
@@ -40,7 +41,14 @@ function [coeff accVset] = DiscriminantAnalysis(dType, trSets, trOuts, vSets, vO
  end    
 
 %Apply discriminat to vset
-[class,err,POSTERIOR,logp,coeff] = classify(vSets,trSets,trLables,dType);
+try
+    [class,err,POSTERIOR,logp,coeff] = classify(vSets,trSets,trLables,dType);
+catch
+    errordlg('Too many features selected. Please try with a smaller set.','Matrix mismatch');
+    accVset = [];
+    coeff = [];
+    return;
+end
 
 nM   = size(mov,1);
 good = zeros(size(vSets,1),1);

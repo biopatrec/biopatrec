@@ -23,7 +23,8 @@
 % 2014-11-07 / Diep Khong    / Added SVM
 % 2014-12-01 / Enzo Mastinu  / Added the handling part for the COM port number
                              % information into the parameters
-% 20xx-xx-xx / Author  / Comment on update
+% 2015-04-29 / Cosima P.     / Addition of NetLab
+% 20xx-xx-xx / Author       / Comment on update
 
 function varargout = GUI_PatRec(varargin)
 % GUI_PATREC M-file for GUI_PatRec.fig
@@ -49,7 +50,7 @@ function varargout = GUI_PatRec(varargin)
 
 % Edit the above text to modify the response to help GUI_PatRec
 
-% Last Modified by GUIDE v2.5 30-Oct-2013 10:35:30
+% Last Modified by GUIDE v2.5 24-Jun-2015 15:57:15
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -138,6 +139,12 @@ function pb_GetFeatures_Callback(hObject, eventdata, handles)
                 set(handles.rb_top2,'Enable','on');
                 set(handles.rb_top3,'Enable','on');
                 set(handles.rb_top4,'Enable','on'); 
+                
+            elseif (exist('recSessionFeatures','var'))         % Get sig_Features
+                Load_recSessionFeatures(recSessionFeatures, handles);            
+                %Enable algorithm selection
+                set(handles.pm_SelectAlgorithm,'Enable','on');
+                set(handles.pb_RunOfflineTraining,'Enable','on');
 
             elseif (exist('sigFeatures','var'))         % Get sig_Features
                 Load_sigFeatures(sigFeatures, handles);            
@@ -373,7 +380,6 @@ function pb_RunOfflineTraining_Callback(hObject, eventdata, handles)
     
     set(handles.et_trTime,'String',num2str(patRec.trTime));
     set(handles.et_tTime,'String',num2str(patRec.tTime));
-    set(handles.pb_RealtimePatRecGUI,'Enable','on');   
     set(handles.pb_RealtimePatRecMov2Mov,'Enable','on');   
     set(handles.t_msg,'String','Off-line Training Completed');  
     disp(patRec);
@@ -448,6 +454,15 @@ function pm_SelectAlgorithm_Callback(hObject, eventdata, handles)
         set(handles.pm_SelectTraining,'Value',1);
         set(handles.pb_RunOfflineTraining,'Enable','on');
         set(handles.pm_normSets,'Value',4);         
+
+    elseif strcmp(alg,'NetLab MLP') || ...    % for NetLab MLP       
+           strcmp(alg,'NetLab GLM')           % for NetLab GLM
+        set(handles.pm_SelectTraining,'Enable','on');
+        tA = {'Select Out Func','softmax','linear','logistic','proportional','proportional logistic'};
+        set(handles.pm_SelectTraining,'String',tA);
+        set(handles.pb_RunOfflineTraining,'Enable','off');   
+        set(handles.pm_normSets,'Value',4);    
+    
     end
         
 
@@ -2172,4 +2187,28 @@ function et_accTrue_CreateFcn(hObject, eventdata, handles)
 %       See ISPC and COMPUTER.
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
+end
+
+
+% --------------------------------------------------------------------
+function m_ALC_Callback(hObject, eventdata, handles)
+% hObject    handle to m_ALC (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+
+% --------------------------------------------------------------------
+function m_ALC_upload_Callback(hObject, eventdata, handles)
+% hObject    handle to m_ALC_upload (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+if isfield(handles,'patRec')
+    if strcmp(handles.patRec.patRecTrained.algorithm, 'DA')
+        UpdateCoefficientsALCD(handles);
+    else
+        set(handles.t_msg,'String','No DA found. No data uploaded');
+    end
+else
+    set(handles.t_msg,'String','No patRec found. No data uploaded');   
 end

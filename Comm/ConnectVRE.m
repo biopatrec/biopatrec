@@ -22,14 +22,23 @@
 % ------------------------- Updates & Contributors ------------------------
 % [Contributors are welcome to add their email]
 % 2013-01-29 / Nichlas Sander  / Creation
+% 2015-12-01 / Morten Bak Kristoffersen / Added arm/leg selection.
 
 function handles = ConnectVRE(handles, program)
     if ~isfield(handles,'vre_Com')
         open(program);
         handles.vre_Com = tcpip('127.0.0.1',23068,'NetworkRole','server');
         fopen(handles.vre_Com);
+    if ~isfield(handles, 'vre_leg') % Default is not using the leg
+        fwrite(handles.vre_Com,sprintf('%c%c%c%c','c',char(1),char(1),char(1)));
+        fread(handles.vre_Com,1);
+    else
+        fwrite(handles.vre_Com,sprintf('%c%c%c%c','c',char(1),char(2),char(1)));
+        fread(handles.vre_Com,1);
+    end
     end
     handles = DisableIfExists(handles,'pb_socketConnect');
+    handles = DisableIfExists(handles,'pb_VRleg');
     handles = DisableIfExists(handles,'pb_socketConnect2');
     handles = DisableIfExists(handles,'pb_ARarm');
     handles = EnableIfExists(handles,'pb_socketDisconnect');

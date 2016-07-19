@@ -1,15 +1,14 @@
-
 % ---------------------------- Copyright Notice ---------------------------
 % This file is part of BioPatRec © which is open and free software under 
 % the GNU Lesser General Public License (LGPL). See the file "LICENSE" for 
 % the full license governing this code and copyrights.
 %
 % BioPatRec was initially developed by Max J. Ortiz C. at Integrum AB and 
-% Chalmers University of Technology. All authors’ contributions must be kept
+% Chalmers University of Technology. All authors contributions must be kept
 % acknowledged below in the section "Updates % Contributors". 
 %
 % Would you like to contribute to science and sum efforts to improve 
-% amputees’ quality of life? Join this project! or, send your comments to:
+% amputees quality of life? Join this project! or, send your comments to:
 % maxo@chalmers.se.
 %
 % The entire copyright notice must be kept in this or any source file 
@@ -22,8 +21,8 @@
 % ------------------------- Updates & Contributors ------------------------
 % [Contributors are welcome to add their email]
 % 20xx-xx-xx / Max Ortiz / Creation
-% 20xx-09-19 / Pontus Lövinger / Added plot and text for ramp recording recording
-% 2015-01-23 / Pontus Lövinger / New recording session GUI: it has been added the 
+% 20xx-09-19 / Pontus Lvinger / Added plot and text for ramp recording recording
+% 2015-01-23 / Pontus Lvinger / New recording session GUI: it has been added the 
                             % possibility to plot more then 8 channels (for both time
                             % and frequency plots)
 % 2015-01-26 / Enzo Mastinu / A new GUI_Recordings has been developed for the
@@ -34,7 +33,8 @@
                             % session. At the end of the recording session it 
                             % is possible to check all channels individually, 
                             % apply offlinedata  process as feature extraction or filter etc.
-                            
+% 2016-04-01 / Julian Maier / Added Crop option, signal separation, noise
+                            % adding, motion filtering, wavelet filering
 % 20xx-xx-xx / Author  / Comment on update
 
 
@@ -63,7 +63,7 @@ function varargout = GUI_Recordings(varargin)
 
 % Edit the above text to modify the response to help GUI_Recordings
 
-% Last Modified by GUIDE v2.5 24-Feb-2015 16:47:40
+% Last Modified by GUIDE v2.5 29-Apr-2016 16:16:47
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
 gui_State = struct('gui_Name',       mfilename, ...
@@ -122,7 +122,7 @@ end
 
 % UIWAIT makes GUI_Recordings wait for user response (see UIRESUME)
 % uiwait(handles.figure1);
-
+movegui(hObject,'center');
 
 % --- Outputs from this function are returned to the command line.
 function varargout = GUI_Recordings_OutputFcn(hObject, eventdata, handles) 
@@ -328,6 +328,12 @@ function m_load_Callback(hObject, eventdata, handles)
 function t_load_ClickedCallback(hObject, eventdata, handles)
     % Callback function run when the Open menu item is selected    
     ss = [];
+    
+    % for compatibility, delete previous temporary data
+    if(exist('cdata','var')) == 1
+        delete(cdata);
+    end
+    
     [file, path] = uigetfile({'*.mat';'*.csv'});
         if ~isequal(file, 0)
             [pathstr,name,ext] = fileparts(file);
@@ -343,6 +349,16 @@ function t_load_ClickedCallback(hObject, eventdata, handles)
                         tempdata = cdata;
                         save('cdata.mat','cdata','tempdata','sF','sT','nCh','ComPortType','deviceName');
                     end
+                elseif(exist('sData','var')) == 1              % fix compatibility with sData old recordings
+                        sF = 2000;                             % We are assuming old recordings to be acquired at 2 KHz
+                        nCh = size(sData,2);
+                        sT = size(sData,1)/sF;
+                        cdata = sData;
+                        ComPortType = 'unknown';
+                        deviceName = 'unknown';
+                        DataShow(handles,cdata,sF,sT);
+                        tempdata = cdata;
+                        save('cdata.mat','cdata','tempdata','sF','sT','nCh','ComPortType','deviceName');      
                 elseif exist('recSession','var') || ... % Load session
                        exist('ss','var')                  
                     df = GUI_RecordingSessionShow();
@@ -446,7 +462,9 @@ function t_load_ClickedCallback(hObject, eventdata, handles)
         end
 
     % Set visible the offline plot and process panels
-    set(handles.uipanel9,'Visible','on');   
+    set(handles.uipanel9,'Visible','on'); 
+    set(handles.uipanel10,'Visible','on');
+    set(handles.uibuttongroup1,'Visible','on');
     set(handles.uipanel7,'Visible','on');
     set(handles.uipanel8,'Visible','on');
     set(handles.txt_it,'visible','on');
@@ -457,6 +475,7 @@ function t_load_ClickedCallback(hObject, eventdata, handles)
     set(handles.txt_ff,'visible','on');
     set(handles.et_if,'visible','on');
     set(handles.et_ff,'visible','on');
+    
     if exist('recSession','var')
         chVector = 0:recSession.nCh-1;
     else
@@ -468,9 +487,12 @@ function t_load_ClickedCallback(hObject, eventdata, handles)
 % --------------------------------------------------------------------
 function t_save_ClickedCallback(hObject, eventdata, handles)    
 % Callback function run when the Save menu item is selected
+    load('cdata.mat');
     [filename, pathname] = uiputfile({'*.mat','MAT-files (*.mat)'},'Save as', 'Untitled.mat');
-    copyfile('cdata.mat',[pathname,filename],'f');
-
+%     copyfile('cdata.mat',[pathname,filename],'f');
+    cdata = tempdata;
+   nCh = size(cdata,2);
+    save([pathname filename],'cdata','sF','sT','nCh','ComPortType','deviceName');
 
 % --------------------------------------------------------------------
 function m_record_Callback(hObject, eventdata, handles)
@@ -587,10 +609,9 @@ function pb_extract_Callback(hObject, eventdata, handles)
     handles.nCh = size(tempdata,2);
     handles.ComPortType = ComPortType;
     handles.deviceName = deviceName;
-    fD  = 0.02*sF;  % considering an overlap of 20 ms
     tempdata = ExtractSigFeature(tempdata,sF,fID);
-%     sF = sF/fD;     % Adjust the sample frequency by the overlap
-    DataShow(handles,tempdata,sF,sT);
+    fD  = 1/0.02;  % considering an overlap of 20 ms
+    DataShow(handles,tempdata,fD,sT);
     save('cdata.mat','cdata','tempdata','sF','sT','nCh','ComPortType','deviceName');
 
 
@@ -639,10 +660,11 @@ function pb_plotAll_Callback(hObject, eventdata, handles)
     handles.nCh = nCh;
     handles.ComPortType = ComPortType;
     handles.deviceName = deviceName;
-    DataShow(handles,cdata,sF,sT);
     tempdata = cdata;
+    DataShow(handles,cdata,sF,sT);
     save('cdata.mat','cdata','tempdata','sF','sT','nCh','ComPortType','deviceName');
     set(handles.pb_plotSelected,'enable','on');
+    set(handles.pb_ApplySepAlg,'enable','on');
 
     
 % --- Executes on button press in pb_plotSelected.
@@ -668,6 +690,7 @@ function pb_plotSelected_Callback(hObject, eventdata, handles)
     plot(f,m);
     save('cdata.mat','cdata','tempdata','sF','sT','nCh','ComPortType','deviceName');
     set(handles.pb_plotSelected,'enable','off');
+    set(handles.pb_ApplySepAlg,'enable','off');
     
 
     
@@ -754,3 +777,335 @@ function m_Recordings_Callback(hObject, eventdata, handles)
     set(handles.txt_sT,'visible','on');
     set(handles.pb_Start,'visible','on');
    
+
+
+% --- Executes on selection change in pm_icaAlg.
+function pm_icaAlg_Callback(hObject, eventdata, handles)
+% hObject    handle to pm_icaAlg (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: contents = cellstr(get(hObject,'String')) returns pm_icaAlg contents as cell array
+%        contents{get(hObject,'Value')} returns selected item from pm_icaAlg
+
+
+% --- Executes during object creation, after setting all properties.
+function pm_icaAlg_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to pm_icaAlg (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: popupmenu controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+% --- Executes on button press in pb_ApplySepAlg.
+function pb_ApplySepAlg_Callback(hObject, eventdata, handles)
+% hObject    handle to pb_ApplySepAlg (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+load('cdata.mat');
+handles.nCh = size(tempdata,2);
+if handles.nCh == 1
+    error('Multichannel data required!')
+end
+handles.ComPortType = ComPortType;
+handles.deviceName = deviceName;
+alg = get(handles.pm_icaAlg,'String');
+algSel = get(handles.pm_icaAlg,'Value');
+tempdata = ComputeSigSep(tempdata',cell2mat(alg(algSel)),sF)';
+DataShow(handles,tempdata,sF,sT);
+save('cdata.mat','cdata','tempdata','sF','sT','nCh','ComPortType','deviceName');
+disp('Signal separation algorithm applied.')
+
+
+function ed_cropSigEnd_Callback(hObject, eventdata, handles)
+% hObject    handle to ed_cropSigEnd (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of ed_cropSigEnd as text
+%        str2double(get(hObject,'String')) returns contents of ed_cropSigEnd as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function ed_cropSigEnd_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to ed_cropSigEnd (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function ed_cropSigStart_Callback(hObject, eventdata, handles)
+% hObject    handle to ed_cropSigStart (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of ed_cropSigStart as text
+%        str2double(get(hObject,'String')) returns contents of ed_cropSigStart as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function ed_cropSigStart_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to ed_cropSigStart (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+% --- Executes on button press in pb_cropSig.
+function pb_cropSig_Callback(hObject, eventdata, handles)
+% hObject    handle to pb_cropSig (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+load('cdata.mat');
+handles.ComPortType = ComPortType;
+handles.deviceName = deviceName;
+cropStart = (str2double(get(handles.ed_cropSigStart,'String')) * sF +1);
+cropEnd = str2double(get(handles.ed_cropSigEnd,'String')) * sF;
+cdata = cdata(cropStart:cropEnd,:);
+tempdata = tempdata(cropStart:cropEnd,:);
+DataShow(handles,tempdata,sF,sT);
+save('cdata.mat','cdata','tempdata','sF','sT','nCh','ComPortType','deviceName');
+disp('Signal croped.')
+
+% --------------------------------------------------------------------
+function m_advFilters_Callback(hObject, eventdata, handles)
+% hObject    handle to m_advFilters (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+
+% --------------------------------------------------------------------
+function m_Tools_Callback(hObject, eventdata, handles)
+% hObject    handle to m_Tools (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+
+% --------------------------------------------------------------------
+function m_artifactSelect_Callback(hObject, eventdata, handles)
+% hObject    handle to m_artifactSelect (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+brushobj = brush(handles.figure1);
+set(handles.m_artifactSelect,'visible','off')
+set(handles.m_artifactStop,'visible','on')
+set(brushobj,'Enable','on','ActionPostCallback', @saveBrushData);
+
+function saveBrushData(~, eventdata)
+load('cdata.mat')
+clear artData
+nCh = size(tempdata,2);
+count = 0;
+for i = 1:nCh
+    tData = eventdata.Axes.Children(i).BrushHandles.Children(1).VertexData(1,:);
+    if ~isempty(tData)
+        endSeg = find(diff(tData)>2*(1/sF));
+        segIdx = [0, endSeg, numel(tData)];
+        for i = 1:numel(segIdx)-1
+            currTData = tData(1,segIdx(i)+1:segIdx(i+1));
+            count = count +1;
+            iCh = nCh+1-i;
+            artDataNew = tempdata(round(sort(currTData)*sF),iCh);
+            % Normalize artifact
+            artDataNew = artDataNew - repmat(mean(artDataNew),size(artDataNew,1),1);
+            artDataNew = artDataNew ./ max(max(abs(artDataNew)));
+            % Set border of artifact to zero
+            pts = 1:size(artDataNew,1);
+            pts = [1,pts+8,pts(end)+16];
+            grid = 1:pts(end);
+            artDataNew = interp1(pts,[0;artDataNew;0],grid,'pchip')';
+
+            if ~exist('artData','var'),
+                artData{1}=artDataNew;
+            else
+                artData = cat(1,artData,artDataNew);
+            end
+        end
+    end
+end
+save('cdata.mat','artData','cdata','tempdata','sF','sT','nCh','ComPortType','deviceName');
+
+
+% --------------------------------------------------------------------
+function m_artifactStop_Callback(hObject, eventdata, handles)
+% hObject    handle to m_artifactStop (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+brushobj = brush(handles.figure1);
+set(brushobj,'Enable','off')
+
+load('cdata.mat')
+if exist('artData','var')
+
+    choice = questdlg('Add selected artifact(s) to Database?', 'Database','Yes','No','No');
+    switch choice
+        case 'Yes'
+            fName = get(handles.m_artifactStop,'UserData');
+            if isempty(fName)
+                fName = inputdlg('Enter name of artifact DB:',...
+                    'Input', [1 30]);
+                fName = ([fName{1} '_artDB']);
+                set(handles.m_artifactStop,'UserData',fName);
+            end
+            
+            srtArt = {'Rapid movement','Cable movement','Contact artifact'};
+            [selArt,ok] = listdlg('PromptString','Select artifact type:','SelectionMode','single',...
+                'ListSize',[160 120],'ListString',srtArt); 
+            if ~ok, 
+                return; 
+            end
+            
+            if ~exist([fName '.mat'],'file')
+                artDB.typeNames = srtArt';
+                artDB.data = cell(numel(srtArt),1);
+                artDB.data{selArt} = artData;
+            else
+                load(fName);
+                artDB.data{selArt} = cat(1,artDB.data{selArt},artData);
+                
+            end
+            
+            save(fName,'artDB')
+            disp([num2str(numel(artData)) ' Artifacts added to Database.'])
+            set(handles.m_showArt,'visible','on')
+        case 'No'
+            disp('Artifacts discarded.')
+            save('cdata.mat','cdata','tempdata','sF','sT','nCh','ComPortType','deviceName');
+    end
+end
+
+set(handles.m_artifactSelect,'visible','on')
+set(handles.m_artifactStop,'visible','off')
+
+
+% --------------------------------------------------------------------
+function m_showArt_Callback(hObject, eventdata, handles)
+% hObject    handle to m_showArt (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+load('cdata.mat')
+if exist('artData','var')
+    fName = get(handles.m_artifactStop,'UserData');
+    if ~isempty(fName)
+    load(fName);
+    else
+        disp('DB not found.')
+        return
+    end
+    srtArt = {'Rapid movement','Cable movement','Contact artifact'};
+    [selArt,ok] = listdlg('PromptString','Select artifact type:','SelectionMode','single',...
+        'ListSize',[160 120],'ListString',srtArt);
+    if ~ok || isempty(artDB.data{selArt})
+        disp('No artifacts found.')
+        return; 
+    end
+    N = numel(artDB.data{selArt});
+    nCol = ceil(sqrt(N));
+    nRow = ceil(N/nCol);
+    figure('name',[srtArt{selArt} ' Artifacts'],'color',[1 1 1]);
+    nPlot = 1;
+    for i = 1:N
+        subplot(nRow,nCol,i)
+        numArt = numel(artDB.data{selArt}{i});
+        x = linspace(0,numArt*(1e3/sF),numArt);
+        plot(x,artDB.data{selArt}{i})
+        title(['#' num2str(i)])
+        xlim([0, floor(x(end))])
+        ax = gca;
+        ax.YTick = [-1,0,1];
+        xlabel('time [ms]');
+    end
+else
+    disp('No artifact DB found.')
+end
+
+% --------------------------------------------------------------------
+function m_addNoise_Callback(hObject, eventdata, handles)
+% hObject    handle to m_addNoise (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+load('cdata.mat');
+snr = inputdlg('Enter noise power (SNR in dB):',...
+    'Add white gaussian noise', [1 60]);
+snr = str2double(snr{:});
+handles.ComPortType = ComPortType;
+handles.deviceName = deviceName;
+for iCh = 1:size(tempdata,2)
+    tempdata(:,iCh) = awgn(tempdata(:,iCh),snr,'measured');
+end
+DataShow(handles,tempdata,sF,sT);
+save('cdata.mat','cdata','tempdata','sF','sT','nCh','ComPortType','deviceName');
+disp('Added white gaussian noise.')
+
+% --------------------------------------------------------------------
+function m_plotExtern_Callback(hObject, eventdata, handles)
+% hObject    handle to m_plotExtern (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+PlotTimeFreq
+
+% --------------------------------------------------------------------
+function m_wden_Callback(hObject, eventdata, handles)
+% hObject    handle to m_wden (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+wd = GUI_Denoising(); %Open Wavelet GUI
+wddata = guidata(wd);
+set(wddata.t_sthandles,'UserData',handles); %transfer parent handles to child GUI
+denoiseParams = get(handles.t_denoiseParams,'UserData');
+denoiseParams = SetDenoiseParams(wddata,denoiseParams);
+uiwait(wd);
+denoiseParams = get(handles.t_denoiseParams,'UserData');
+if ~isempty(denoiseParams)
+    load('cdata.mat');
+    handles.nCh = size(tempdata,2);
+    handles.ComPortType = ComPortType;
+    handles.deviceName = deviceName;
+    tempdata = WaveletSignalDenoising(tempdata,denoiseParams);    
+    DataShow(handles,tempdata,sF,sT);
+    save('cdata.mat','cdata','tempdata','sF','sT','nCh','ComPortType','deviceName');
+    disp('Wavelet Denoising applied.')
+end
+
+% --------------------------------------------------------------------
+function m_mFilter_Callback(hObject, eventdata, handles)
+% hObject    handle to m_mFilter (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+strMeth = {'SWT','SWT + SigSep','DWT','DWT + SigSep'};
+[selMeth,ok] = listdlg('PromptString','Select artifact removal method:',...
+    'SelectionMode','single','ListSize',[160 120],...
+    'ListString',strMeth); 
+if ~ok, return; end
+meth= strMeth{selMeth};
+
+load('cdata.mat');
+handles.nCh = size(tempdata,2);
+handles.ComPortType = ComPortType;
+handles.deviceName = deviceName;
+tempdata = MotionFilt(tempdata',sF,meth);
+DataShow(handles,tempdata,sF,sT);
+save('cdata.mat','cdata','tempdata','sF','sT','nCh','ComPortType','deviceName');
+disp(['Applied mFilter.'])

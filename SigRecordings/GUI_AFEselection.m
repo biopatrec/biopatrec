@@ -27,6 +27,9 @@
                         % calls the ramp recording functions
 % 2014-11-10 / Enzo Mastinu / include the code for ADS1299 AFE, optimization of 
                         % ramp functions and their callings
+% 2015-11-27 / Enzo Mastinu / It has been added the possibility to repeat 
+                            % the same movement recording if you are not 
+                            % happy with it.
 % 20xx-xx-xx / Author  / Comment on update
 
 function varargout = GUI_AFEselection(varargin)
@@ -53,7 +56,7 @@ function varargout = GUI_AFEselection(varargin)
 
 % Edit the above text to modify the response to help GUI_AFEselection
 
-% Last Modified by GUIDE v2.5 24-Feb-2015 11:25:48
+% Last Modified by GUIDE v2.5 22-Apr-2015 15:16:20
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -212,6 +215,24 @@ hGUI_Rec=handles.varargin{6};
 vreMovements = handles.varargin{7};
 rampStatus = handles.varargin{8};
 fast = handles.varargin{9};
+if fast == 0
+    movRepeatDlg = handles.varargin{10};
+    useLeg = handles.varargin{11};
+end
+%useLeg = handles.varargin{11};
+
+AFE_settings.recFeatures   = get(handles.cb_recFeatures,'Value');
+if(AFE_settings.recFeatures)
+    FeaturesRecordingSession(nM,nR,cT,rT,mov,hGUI_Rec,AFE_settings,get(handles.cb_trainVRE,'Value'),vreMovements,get(handles.cb_VRELeftHand,'Value'),rampStatus);
+    close(GUI_AFEselection);
+    close(GUI_RecordingSession);
+    return
+end
+
+% for compatibility, delete previous temporary data
+if(exist('cdata','var')) == 1
+    delete(cdata);
+end
 
 if(fast)
     
@@ -227,20 +248,21 @@ else
         [rampMin, minData] = ObtainRampMin(hGUI_Rec,AFE_settings,get(handles.cb_trainVRE,'Value'));%Fs,Ne,Nr,Tc,Tr,Psr,msg,EMG_AQhandle
         [rampMax, maxData] = ObtainRampMax(nM,mov,hGUI_Rec,AFE_settings,get(handles.cb_trainVRE,'Value'),vreMovements, get(handles.cb_VRELeftHand,'Value'));%Fs,Ne,Nr,Tc,Tr,Psr,msg,EMG_AQhandle
         rampParams =  {rampMin rampMax minData maxData};
-        [cdata, sF] = RecordingSession(nM,nR,cT,rT,mov,hGUI_Rec,AFE_settings,get(handles.cb_trainVRE,'Value'),vreMovements,get(handles.cb_VRELeftHand,'Value'),rampStatus,rampParams);%Fs,Ne,Nr,Tc,Tr,Psr,msg,EMG_AQhandle,rampParams);
+        [cdata, sF] = RecordingSession(nM,nR,cT,rT,mov,hGUI_Rec,AFE_settings,get(handles.cb_trainVRE,'Value'),vreMovements,get(handles.cb_VRELeftHand,'Value'),movRepeatDlg,useLeg,rampStatus,rampParams);%Fs,Ne,Nr,Tc,Tr,Psr,msg,EMG_AQhandle,rampParams);
     else
-        [cdata, sF] = RecordingSession(nM,nR,cT,rT,mov,hGUI_Rec,AFE_settings,get(handles.cb_trainVRE,'Value'),vreMovements,get(handles.cb_VRELeftHand,'Value'),rampStatus);%Fs,Ne,Nr,Tc,Tr,Psr,msg,EMG_AQhandle);
+        [cdata, sF] = RecordingSession(nM,nR,cT,rT,mov,hGUI_Rec,AFE_settings,get(handles.cb_trainVRE,'Value'),vreMovements,get(handles.cb_VRELeftHand,'Value'),movRepeatDlg,useLeg,rampStatus);%Fs,Ne,Nr,Tc,Tr,Psr,msg,EMG_AQhandle);
     end
     % Fs=handles.varargin{1};
     % Nr=handles.varargin{3};
     % Tc=handles.varargin{4};
     % Tr=handles.varargin{5};
     %Moved from Recoding Session Fig
+    
     sT = (cT+rT)*nR;
     cdata = cdata(:,:,size(cdata,3));
     tempdata = cdata;
     save('cdata.mat','cdata','tempdata','sF','sT','nCh','ComPortType','deviceName');
-    close(GUI_AFEselection);
+    %close(GUI_AFEselection);
     close(GUI_RecordingSession);
 
     % close(recording_session_fig);
@@ -412,7 +434,13 @@ function pm_name_Callback(hObject, eventdata, handles)
 
 % Hints: get(hObject,'String') returns contents of pm_name as text
 %        str2double(get(hObject,'String')) returns contents of pm_name as a double
-
+contents = cellstr(get(handles.pm_name,'String'));
+deviceName = contents{get(handles.pm_name,'Value')};
+if strcmp(deviceName,'ADS1299_DSP')
+    set(handles.cb_recFeatures,'Visible', 'on');
+else
+    set(handles.cb_recFeatures,'Visible', 'off');
+end
 
 % --- Executes during object creation, after setting all properties.
 function pm_name_CreateFcn(hObject, eventdata, handles)
@@ -510,11 +538,6 @@ function et_chs_Callback(hObject, eventdata, handles)
 
 % Hints: get(hObject,'String') returns contents of et_chs as text
 %        str2double(get(hObject,'String')) returns contents of et_chs as a double
-if str2double(get(hObject,'String')) == 8
-    set(handles.pm_sampleRate,'Value',2)
-elseif str2double(get(hObject,'String')) == 6
-    set(handles.pm_sampleRate,'Value',1)    
-end
 
 % --- Executes during object creation, after setting all properties.
 function et_chs_CreateFcn(hObject, eventdata, handles)
@@ -608,3 +631,12 @@ function cb_offset_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 % Hint: get(hObject,'Value') returns toggle state of cb_offset
+
+
+% --- Executes on button press in cb_recFeatures.
+function cb_recFeatures_Callback(hObject, eventdata, handles)
+% hObject    handle to cb_recFeatures (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: get(hObject,'Value') returns toggle state of cb_recFeatures

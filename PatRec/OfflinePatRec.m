@@ -32,6 +32,7 @@
 %                          feature
 % 2014-12-01 / Enzo Mastinu  / Added the handling part for the COM port number
                              % information into the parameters
+% 2016-04-29 / Julian Maier / Added new fields sigDenoising, sigSeparation, mFilter, addArtifact to copy to patRec
 % 20xx-xx-xx / Author  / Comment on update
 
 function patRec = OfflinePatRec(sigFeatures, selFeatures, randFeatures, normSetsType, alg, tType, algConf, movMix, topology, confMatFlag, featReducAlg)
@@ -42,6 +43,7 @@ function patRec = OfflinePatRec(sigFeatures, selFeatures, randFeatures, normSets
     patRec.mov          = sigFeatures.mov;
     patRec.sF           = sigFeatures.sF;
     patRec.tW           = sigFeatures.tW;
+    patRec.wOverlap     = sigFeatures.wOverlap;
     patRec.nCh          = sigFeatures.nCh;
     patRec.dev          = sigFeatures.dev;
     patRec.fFilter      = sigFeatures.fFilter;    
@@ -49,6 +51,23 @@ function patRec = OfflinePatRec(sigFeatures, selFeatures, randFeatures, normSets
     patRec.selFeatures  = selFeatures;     
     patRec.topology     = topology;
     patRec.featureReduction.Alg = featReducAlg;
+	
+	if isfield(sigFeatures,'sigDenoising')
+        patRec.sigDenoising = sigFeatures.sigDenoising;
+    end
+    
+    if isfield(sigFeatures,'sigSeparation')
+        patRec.sigSeparation = sigFeatures.sigSeparation;
+    end
+    
+    if isfield(sigFeatures,'mFilter')
+        patRec.mFilter = sigFeatures.mFilter;
+    end
+    
+    if isfield(sigFeatures,'addArtifact')
+        patRec.addArtifact = sigFeatures.addArtifact;
+        patRec.addArtifact.mFilter = sigFeatures.mFilter;
+    end
     
     if isfield(sigFeatures, 'comm') 
         patRec.comm = sigFeatures.comm;

@@ -29,8 +29,7 @@
 
 function [trData vData tData]=ApplySignalSeparation(sigTreated,trData, vData, tData) 
 
-    if strcmp(sigTreated.sigSeperation.Alg,'ICA')
-    [trData vData tData]=ICAPreprocess(sigTreated,trData,vData,tData);
-    
+    if strcmp(sigTreated.sigSeparation.Alg,'ICA')
+        [trData vData tData]=ICAPreprocess(sigTreated,trData,vData,tData);
     end
     

@@ -22,6 +22,9 @@
 % [Contributors are welcome to add their email]
 % 2011-07-27 / Max Ortiz  / Creation
 % 2012-03-11 / Max Ortiz  / Added DDF Abs
+% 2014-04-11 / Julian Maier  / Added EMG filter (zero-phase BP + 50 Hz Notch, faster than FilterBP)
+% 2016-01-23 / Eva Lendaro / Changed high cut-off frequency of butterworth filter from 1000 to
+% 800
 
 function data = ApplyFilters(sigTreated, data)
 
@@ -35,10 +38,18 @@ function data = ApplyFilters(sigTreated, data)
         % Do nothing and exit if
     elseif strcmp(sigTreated.fFilter,'PLH')
         data  = BSbutterPLHarmonics(sF, data);
-    elseif strcmp(sigTreated.fFilter,'BP 20-1k')
-        data  = FilterBP(sF, data,20,1000);
-    elseif strcmp(sigTreated.fFilter,'BP 70-1k')
-        data  = FilterBP(sF, data,70,1000);
+    elseif strcmp(sigTreated.fFilter,'BP 20-800')
+        data  = FilterBP(sF, data,20,800);
+    elseif strcmp(sigTreated.fFilter,'BP 70-800')
+        data  = FilterBP(sF, data,70,800);
+	elseif strcmp(sigTreated.fFilter,'EMG 10-500')
+        data  = FilterEMG(sF, data, 8, 10 ,500);
+    elseif strcmp(sigTreated.fFilter,'EMG 20-500')
+        data  = FilterEMG(sF, data, 8, 20 ,500);
+    elseif strcmp(sigTreated.fFilter,'EMG 70-500')
+        data  = FilterEMG(sF, data, 8 ,70 ,500);
+    elseif strcmp(sigTreated.fFilter,'EMG 100-500')
+        data  = FilterEMG(sF, data, 8 ,100 ,500);
     end
     
 %    disp('Frequency Filtering Done');

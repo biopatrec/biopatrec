@@ -4,11 +4,11 @@
 % the full license governing this code and copyrights.
 %
 % BioPatRec was initially developed by Max J. Ortiz C. at Integrum AB and 
-% Chalmers University of Technology. All authors’ contributions must be kept
+% Chalmers University of Technology. All authors? contributions must be kept
 % acknowledged below in the section "Updates % Contributors". 
 %
 % Would you like to contribute to science and sum efforts to improve 
-% amputees’ quality of life? Join this project! or, send your comments to:
+% amputees? quality of life? Join this project! or, send your comments to:
 % maxo@chalmers.se.
 %
 % The entire copyright notice must be kept in this or any source file 
@@ -48,7 +48,8 @@
 %                                 placed into COMM/AFE folder. For more
 %                                 details read about RecordingSession.m with 
 %                                 other custom devices for BioPatRec_TRE.
-                                
+% 2016-02-10 / Max Ortiz        / change the initialization of the NI card
+%                                 to use the vector of channels rather than only the number
 % 20xx-xx-xx / Author  / Comment on update
 
 function handlesX = RealtimePatRec(patRecX, handlesX)
@@ -86,7 +87,7 @@ function handlesX = RealtimePatRec(patRecX, handlesX)
                          
     % Get sampling time
     sT = str2double(get(handles.et_testingT,'String'));
-    tW = sT/100;                                                           % Time window size
+    tW = patRec.tW;                                                        % Time window size
     tWs = tW*sF;                                                           % Time window samples
    
 
@@ -158,7 +159,7 @@ function handlesX = RealtimePatRec(patRecX, handlesX)
     if strcmp (ComPortType, 'NI')
 
         % Init SBI
-        sCh = 1:nCh;
+        sCh = patRec.nCh;                                                  % Vector of channels
         s = InitSBI_NI(sF,sT,sCh); 
         s.NotifyWhenDataAvailableExceeds = tWs;                            % PEEK time
         lh = s.addlistener('DataAvailable', @RealtimePatRec_OneShot); 
@@ -265,11 +266,11 @@ function RealtimePatRec_OneShot(src,event)
     %Output vector
     outVectorMotor = zeros(patRec.nOuts,1);
     
+    tData = tempData(end-patRec.sF*patRec.tW+1:end,:);
+    
     %Only considered the data once it has at least the size of time window
     if size(tempData,1) >= (patRec.sF*patRec.tW) 
 
-        tData = tempData(end-patRec.sF*patRec.tW+1:end,:);   %Copy the temporal data to the test data
-        
         % Start of processing time
         procTimeS = tic;
 

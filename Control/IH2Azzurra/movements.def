@@ -1,0 +1,25 @@
+0,Rest,0,0,0 0
+1,Open Hand,9,1,1 0 2 0 3 0 4 0 5 0
+2,Close Hand,9,0,1 1 2 1 3 1 4 1 5 1
+3,Flex Hand,7,0,2 0
+4,Extend Hand,7,1,2 1
+5,Pronation,8,0,2 0
+6,Supination,8,1,2 1
+7,Thumb Extend,5,1,0 0
+8,Thumb Flex,5,0,0 0
+9,Index Extend,4,1,0 0
+10,Index Flex,4,0,0 0
+11,Middle Extend,3,1,0 0
+12,Middle Flex,3,0,0 0
+13,Ring Extend,2,1,0 0
+14,Ring Flex,2,0,0 0
+15,Little Extend,1,1,0 0
+16,Little Flex,1,0,0 0
+17,Pointer,10,1,1 1 2 1 3 0 4 1 5 1
+18,Thumb Yaw Flex,6,0,0 0
+19,Thumb Yaw Extend,6,1,0 0
+20,Flex Elbow,15,1,3 0
+21,Extend Elbow,15,0,3 1
+22,Agree,11,1,1 0 2 0 3 1 4 1 5 1
+23,Fine Grip,12,1,1 1 2 1 3 1 4 0 5 0
+24,Side Grip,13,1,1 0 2 1 3 1 4 1 5 1

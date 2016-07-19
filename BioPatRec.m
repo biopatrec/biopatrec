@@ -24,6 +24,7 @@
 % ------------------------- Updates & Contributors ------------------------
 % 2009-04-02 / Max Ortiz  / Creation of EMG_AQ
 % 2011-22-06 / Max Ortiz  / Software name changed from EMG_AQ to BioPatRec
+% 20XX-XX-XX / Author     / Comments
 
 close all;
 clear all;

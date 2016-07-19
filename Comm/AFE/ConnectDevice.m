@@ -23,6 +23,8 @@
                             % SetDeviceStartAcquisition(),
                             % Acquire_tWs(), StopAcquisition(). This functions 
                             % has been moved to COMM/AFE folder, into this new script.
+% 2015-1-19 / Enzo Mastinu / The ADS1299 part has been modified in way to be 
+                            % compatible with the new ADS1299 acquisition mode (DSP + FPU)
                             
 
 % 20xx-xx-xx / Author  / Comment
@@ -41,23 +43,17 @@ function obj = ConnectDevice(handles)
     sT          = handles.sT;
     nCh         = handles.nCh;
     sTall       = handles.sTall;
-    
-    % Delete previous connection objects
-    if exist('obj')
-        fclose(obj);
-        delete(obj);
-    end
 
     %%%%% WiFi %%%%%
     if strcmp(ComPortType, 'WiFi')
         %%%%% TI ADS1299 %%%%%
-        if strcmp(deviceName, 'ADS1299')
-           obj = tcpip('192.168.100.10',65100,'NetworkRole','client');     % WIICOM                       
-           obj.InputBufferSize = sTall*sF*27;                              % 27bytes data package
+        if strcmp(deviceName, 'ADS_BP')
+            obj = tcpip('192.168.100.10',65100,'NetworkRole','client');        % ADS1299
+            obj.InputBufferSize = sTall*sF*nCh*4;  
         end
         %%%%% INTAN RHA2216 %%%%%
         if strcmp(deviceName, 'RHA2216')
-            obj = tcpip('192.168.100.10',65100,'NetworkRole','client');    % WIICOM
+            obj = tcpip('192.168.100.10',65100,'NetworkRole','client');        % WIICOM
             obj.InputBufferSize = sT*sF*nCh*2;  
         end
     end
@@ -66,8 +62,12 @@ function obj = ConnectDevice(handles)
     if strcmp(ComPortType, 'COM')
         %%%%% TI ADS1299 %%%%%
         if strcmp(deviceName, 'ADS1299')
-           obj = serial (ComPortName, 'baudrate', 2500000, 'databits', 8, 'byteorder', 'bigEndian');                       
-           obj.InputBufferSize = sTall*sF*27;                              % 27bytes data package
+           obj = serial (ComPortName, 'baudrate', 2000000, 'databits', 8, 'byteorder', 'bigEndian');                       
+           obj.InputBufferSize = sTall*sF*27;                                 % 27bytes data package
+        end
+        if strcmp(deviceName, 'ADS_BP')
+           obj = serial (ComPortName, 'baudrate', 460800, 'databits', 8, 'byteorder', 'bigEndian');
+           obj.InputBufferSize = sTall*sF*nCh*4;     
         end
         %%%%% INTAN RHA2216 %%%%%
         if strcmp(deviceName, 'RHA2216')

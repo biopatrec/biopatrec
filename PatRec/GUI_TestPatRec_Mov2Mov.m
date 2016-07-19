@@ -4,11 +4,11 @@
 % the full license governing this code and copyrights.
 %
 % BioPatRec was initially developed by Max J. Ortiz C. at Integrum AB and 
-% Chalmers University of Technology. All authors’ contributions must be kept
+% Chalmers University of Technology. All authors contributions must be kept
 % acknowledged below in the section "Updates % Contributors". 
 %
 % Would you like to contribute to science and sum efforts to improve 
-% amputees’ quality of life? Join this project! or, send your comments to:
+% amputees quality of life? Join this project! or, send your comments to:
 % maxo@chalmers.se.
 %
 % The entire copyright notice must be kept in this or any source file 
@@ -51,9 +51,6 @@
 %                             implemented, the SPC control does not need
 %                             anymore the MoveMotorWifi or any dedicated
 %                             SPC functions
-% 2015-07-21 / Francesco Clemente / Folder select routines for the Control 
-%                                   Framework. Connection to the robotic 
-%                                   devices has been improved with WiFi fields 
 %
 % 20xx-xx-xx / Author  / Comment on update
 
@@ -81,7 +78,7 @@ function varargout = GUI_TestPatRec_Mov2Mov(varargin)
 
 % Edit the above text to modify the response to help GUI_TestPatRec_Mov2Mov
 
-% Last Modified by GUIDE v2.5 21-Jul-2015 13:39:26
+% Last Modified by GUIDE v2.5 19-May-2016 13:42:13
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -116,7 +113,6 @@ function GUI_TestPatRec_Mov2Mov_OpeningFcn(hObject, eventdata, handles, varargin
 % Choose default command line output for GUI_TestPatRec_Mov2Mov
 handles.output = hObject;
 global TAC
-global ctrl_dir
 
 TAC.running = 0;
 TAC.ackTimes = 0;
@@ -308,14 +304,14 @@ function pb_RealtimePatRec_Callback(hObject, eventdata, handles)
 % hObject    handle to pb_RealtimePatRec (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+    
 set(hObject, 'Enable', 'off');    
-%set(hObject,'Enable','off');
-    % validation of patRec loaded
-    if ~isfield(handles,'patRec')
-        set(handles.t_msg,'String','No patRec to test');        
-        set(hObject,'Enable','on');
-        return
-    end
+% validation of patRec loaded
+if ~isfield(handles,'patRec')
+    set(handles.t_msg,'String','No patRec to test');        
+    set(hObject,'Enable','on');
+    return
+end
     
 %     if isfield(handles,'pm_controlAlg')
 %         allControlAlg = get(handles.pm_controlAlg,'String');
@@ -325,17 +321,25 @@ set(hObject, 'Enable', 'off');
 %     end
 %     handles.patRec.controlAlg = controlAlg;
 
-    % Run realtime patrec
-    set(handles.t_msg,'String','Real time PatRec started...');      
-    drawnow;
-    
+% Run realtime patrec
+set(handles.t_msg,'String','Real time PatRec started...');      
+drawnow;
+
+% TEST ALCD
+if isfield(handles,'cb_ALCD')
+    if get(handles.cb_ALCD,'Value') == 1
+        handles = ControlTestALCD(handles.patRec, handles);
+    else
+        handles = RealtimePatRec(handles.patRec, handles);  
+    end
+else
     handles = RealtimePatRec(handles.patRec, handles);
-    set(handles.t_msg,'String','Real time PatRec finished');    
+end
+set(handles.t_msg,'String','Real time PatRec finished');    
 
-    % Save the handles back
-    guidata(hObject,handles);
+% Save the handles back
+guidata(hObject,handles);
 
-    
 set(hObject,'Enable','on');
 
 
@@ -1628,7 +1632,9 @@ guidata(hObject,handles);
 
 set(handles.pb_testConnection,'Enable','on');
 set(handles.pb_disconnect,'Enable','on');
-set(handles.pb_sensors,'Enable','on');
+if isobject(handles.sensors)
+    set(handles.pb_sensors,'Enable','on');
+end
 
 
 function et_connect_Callback(hObject, eventdata, handles)
@@ -1980,6 +1986,9 @@ function pb_socketDisconnect_Callback(hObject, eventdata, handles)
 % hObject    handle to pb_socketDisconnect (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+if isfield(handles,'vre_leg')
+handles = rmfield(handles,'vre_leg');
+end
 handles = DisconnectVRE(handles);
 guidata(hObject,handles);
 
@@ -2305,6 +2314,14 @@ function pb_sensors_Callback(hObject, eventdata, handles)
 GUI_Sensors(hObject, eventdata, handles);
 
 
+% --- Executes on button press in cb_ALCD.
+function cb_ALCD_Callback(hObject, eventdata, handles)
+% hObject    handle to cb_ALCD (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: get(hObject,'Value') returns toggle state of cb_ALCD
+
 function et_COM_Callback(hObject, eventdata, handles)
 % hObject    handle to et_COM (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
@@ -2454,8 +2471,8 @@ function rb_wifi_Callback(hObject, eventdata, handles)
 % Hint: get(hObject,'Value') returns toggle state of rb_wifi
 set(handles.rb_serial,'Value',0);
 set(handles.pm_serialportipaddress,'Style','edit');
-set(handles.pm_serialportipaddress,'String','IP');
-set(handles.et_baudrateport,'String','Port');
+set(handles.pm_serialportipaddress,'String','192.168.100.10'); % IP
+set(handles.et_baudrateport,'String','65100');                 % Port
 
 
 % --- Executes on button press in pb_selectctrlfolder.
@@ -2464,25 +2481,60 @@ function pb_selectctrlfolder_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-global ctrl_dir
-
-% check if another folder was added to the path before and, if yes, remove
-% it from the path
-if ctrl_dir
-    rmpath(ctrl_dir);
-end
-
-% add the folder selected by the user to the Matlab path
 ctrl_dir = uigetdir;
 if ctrl_dir
-    addpath(ctrl_dir);
+    [~,handles.prostheticDeviceName,~] = fileparts(ctrl_dir);
+    handles.motors = InitMotors(ctrl_dir);
+    handles.mov = InitMovements(ctrl_dir);
+    listOfFile = dir(ctrl_dir);
+    for i=1:size(listOfFile,1)
+        if strcmp(listOfFile(i).name,'sensors.def')
+            handles.sensors = InitSensors(ctrl_dir);
+            set(handles.pb_sensors,'Enable','on');
+        end
+    end
+    % Update list of possible movements accordingly to the new loaded
+    % definition files. It compares the recorded list of movement with the
+    % movement available for the particular robotic device selected. Only the
+    % matching movements will be available in the list. 
+    recordedMovs = handles.patRec.mov;
+    k = 1;
+    for i = 2:length(handles.mov)   % Avoid Rest from the list, so start from 2 
+        if(~isempty(intersect(recordedMovs,handles.mov(i).name)))
+            availableMovs(k,1) = handles.mov(i);
+            k = k+1;
+        end   
+    end   
+    for i = 1:10
+        set(eval(strcat('handles.pm_m',num2str(i))),'Value',1);
+        set(eval(strcat('handles.et_speed',num2str(i))),'String',num2str(1));
+    end
+    for i = 1:length(availableMovs)
+        set(eval(strcat('handles.pm_m',num2str(i))),'Value',availableMovs(i).id+1);
+        speed = handles.motors(availableMovs(i).motor(1)).pct;
+        set(eval(strcat('handles.et_speed',num2str(i))),'String',num2str(speed));
+    end
+else
+    handles.motors = InitMotors();
+    handles.mov = InitMovements();
+    handles.prostheticDeviceName = 'VRE';
+    % Update list of possible movements accordingly to the standard VRE
+    % definition file.
+    for i = 1:10
+        set(eval(strcat('handles.pm_m',num2str(i))),'Value',i);
+        set(eval(strcat('handles.et_speed',num2str(i))),'String',num2str(1));
+    end
 end
 
-% Re-Initialize control variables
-% newHandles.motors = InitMotors;
-% mov = InitMovements;
-
-handles.mov    = InitMovements();
-handles.motors = InitMotors();
 % Update handles structure
 guidata(hObject, handles);
+
+
+% --- Executes on button press in pb_VRleg.
+function pb_VRleg_Callback(hObject, eventdata, handles)
+% hObject    handle to pb_VRleg (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+handles.vre_leg = 1;
+handles = ConnectVRE(handles,'Virtual Reality.exe');
+guidata(hObject,handles);

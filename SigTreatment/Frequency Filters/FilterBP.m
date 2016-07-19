@@ -21,6 +21,9 @@
 % [Contributors are welcome to add their email]
 % 2011-07-18 / Max Ortiz  / Creation
 % 20xx-xx-xx / Author  / Comment on update
+% 2016-03-01 /Eva Lendaro / Changed filter() to filtfilt() which is
+%                           zero-phase and does not give trainsient in case
+%                           of offset
 
 function [dataf] = FilterBP (Fs, data, cF1, cF2)
 
@@ -30,7 +33,9 @@ N   = 4;     % Order
 [z,p,k] = butter(N/2, [cF1 cF2]/(Fs/2));
 
 [sos_var,g] = zp2sos(z, p, k);
-Hd          = dfilt.df2sos(sos_var, g);
+%Hd          = dfilt.df2sos(sos_var, g);
 
-dataf = filter(Hd,data);
+dataf       = filtfilt(sos_var,g,data);
+
+
 

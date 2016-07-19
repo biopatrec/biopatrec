@@ -26,6 +26,7 @@
                             % session. At the end of the recording session it 
                             % is possible to check all channels individually, 
                             % apply offline data process as feature extraction or filter etc.
+% 2015-10-28 / Martin Holder / >2014b plot interface fixes
 
 % 20xx-xx-xx / Author  / Comment
 
@@ -110,7 +111,10 @@ function [cdata, sF, sT] = FastRecordingSession(varargin)
     xpatch = [0 0 0 0];
     ypatch = [0 0 1 1];
     axes(handles.a_prog);
-    handles.hPatch = patch(xpatch,ypatch,'b','EdgeColor','b','EraseMode','xor','visible','on');
+    axis(handles.a_prog,'off');
+    set(handles.a_prog,'XLimMode','manual');
+    handles.hPatch = patch(xpatch,ypatch,'b','EdgeColor','b','visible','on');
+    drawnow update % 2014b figure updates
 
     % Allocation of resource to improve speed, total data 
     recSessionData = zeros(sF*sT, nCh);

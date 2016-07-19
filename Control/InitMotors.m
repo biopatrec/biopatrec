@@ -19,20 +19,31 @@
 % Reads the file motors.def and loads the data into motor objects.
 % --------------------------Updates--------------------------
 % 2012-05-29 / Nichlas Sander  / Creation
-% 2012-07-19 / Max Ortiz  / Added fclose which is necessary to prevent
-%                           matlab crashes due to many files open.
+% 2012-07-19 / Max Ortiz       / Added fclose which is necessary to prevent
+%                                matlab crashes due to many files open.
+% 2016-05-19 / Enzo Mastinu    / The path of the folder is now passed to the
+%                                function. In case any file name is
+%                                provided, it loads the default def file.
 % 20xx-xx-xx / Author  / Comment on update
 
-function obj = InitMotors
-fid = fopen('motors.def');
-tline = fgetl(fid);
-i = 1;
-while(ischar(tline))
-    t = textscan(tline,'%s','delimiter',',');
-    t = t{1};
-    obj(i) = motor(t(1),str2double(t(2)),str2double(t(3)));
-    tline = fgetl(fid);
-    i = i + 1;
-end
+function obj = InitMotors(path)
 
-fclose(fid);
+    if(nargin)
+        fid = fopen(strcat(path,'\motors.def'));
+        if(fid==-1)
+            errordlg('motors.def file not found in the given folder','Definition File Error');
+            return
+        end
+    else
+        fid = fopen('motors_VRE.def');
+    end
+    tline = fgetl(fid);
+    i = 1;
+    while(ischar(tline))
+        t = textscan(tline,'%s','delimiter',',');
+        t = t{1};
+        obj(i) = motor(t(1),str2double(t(2)),str2double(t(3)));
+        tline = fgetl(fid);
+        i = i + 1;
+    end
+    fclose(fid);
