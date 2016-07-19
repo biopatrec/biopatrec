@@ -474,6 +474,7 @@ while ex <= nM
     
     % NI DAQ card: "You must delete the listener once the operation is complete"
     if strcmp(ComPortType,'NI');
+        error=0;
         if ~s.IsDone                                                   % check if is done
             s.wait();
         end
