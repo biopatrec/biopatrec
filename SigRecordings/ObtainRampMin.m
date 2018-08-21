@@ -67,6 +67,9 @@
                             % is possible to check all channels individually, 
                             % apply offlinedata  process as feature extraction or filter etc.
 % 2015-10-28 / Martin Holder / >2014b plot interface fixes
+% 2017-02-28 / Simon Nilsson / Changed time window size to 200 samples
+                            % when acquiring data using the RHA2132 for
+                            % the buffered acquisition mode to work well.
 
 % 20xx-xx-xx / Author  / Comment
 
@@ -117,7 +120,13 @@ function [rampMin, minData] = ObtainRampMin(varargin)
     handles.sT    = sT;
     
     % Setting for data peeking
-    tW            = sT/100;                                                % Time window size
+    % Time window size
+    % Window of 200 samples works well with buffered sending mode of RHA2132
+    if strcmp(deviceName,'RHA2132')
+        tW = 200/sF;
+    else
+        tW = sT/100;
+    end
     tWs           = tW*sF;                                                 % Time window samples
     handles.tWs   = tWs;
     timeStamps    = 0:1/sF:tW-1/sF;                                        % Create vector of time

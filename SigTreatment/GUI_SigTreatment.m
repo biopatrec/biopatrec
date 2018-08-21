@@ -47,7 +47,7 @@ function varargout = GUI_SigTreatment(varargin)
 
 % Edit the above text to modify the response to help GUI_SigTreatment
 
-% Last Modified by GUIDE v2.5 29-Apr-2016 14:24:59
+% Last Modified by GUIDE v2.5 26-Oct-2016 01:37:12
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -77,7 +77,7 @@ function GUI_SigTreatment_OpeningFcn(hObject, eventdata, handles, varargin)
 % handles    structure with handles and user data (see GUIDATA)
 % varargin   command line arguments to GUI_SigTreatment (see VARARGIN)
 
-backgroundImage2 = importdata('/../Img/BioPatRec.png');
+backgroundImage2 = importdata('Img/BioPatRec.png');
 %select the axes
 axes(handles.axes1);
 %place image onto the axes
@@ -114,9 +114,6 @@ function pb_treat_Callback(hObject, eventdata, handles)
     sigTreated = get(handles.t_sigTreated,'UserData');
         
     % Treat the Data ----------------------------------------------------
-    if ~isempty(get(handles.t_denoiseParams,'UserData'))
-        sigTreated.plotFlag = true;
-    end
     sigTreated = TreatData(handles, sigTreated); % Treat Data
     if isfield(sigTreated,'stopFlag')
         return
@@ -142,7 +139,10 @@ function pb_treat_Callback(hObject, eventdata, handles)
     allFeatures = fieldnames(sigFeatures.trFeatures);       
     set(phandles.lb_features,'String',allFeatures); 
     set(phandles.lb_features,'Value',1:length(allFeatures));
-    
+    if isfield(phandles,'rb_all')
+        set(phandles.rb_all,'Value',1);
+    end
+
     % Fill the movements lb
     set(phandles.lb_movements,'String',sigFeatures.mov);
         
@@ -169,7 +169,7 @@ function et_trP_Callback(hObject, eventdata, handles)
     vN = fix(vP * nw);
     set(handles.et_vN,'String',num2str(vN));
     tP = str2double(get(handles.et_tP,'String'));
-    tN = fix(tP * nw);
+    tN = nw-(trN+vN);
     set(handles.et_tN,'String',num2str(tN));
 
     set(handles.t_totN,'String',num2str(trN+vN+tN));
@@ -199,7 +199,7 @@ function et_vP_Callback(hObject, eventdata, handles)
     vN = fix(vP * nw);
     set(handles.et_vN,'String',num2str(vN));
     tP = str2double(get(handles.et_tP,'String'));
-    tN = fix(tP * nw);
+    tN = nw-(trN+pN);
     set(handles.et_tN,'String',num2str(tN));
 
     set(handles.t_totN,'String',num2str(trN+vN+tN));
@@ -230,7 +230,7 @@ function et_tP_Callback(hObject, eventdata, handles)
     vN = fix(vP * nw);
     set(handles.et_vN,'String',num2str(vN));
     tP = str2double(get(handles.et_tP,'String'));
-    tN = fix(tP * nw);
+    tN = nw-(trN+pN);
     set(handles.et_tN,'String',num2str(tN));
 
     set(handles.t_totN,'String',num2str(trN+vN+tN));
@@ -349,7 +349,14 @@ function et_tw_Callback(hObject, eventdata, handles)
     Tc = str2double(get(handles.et_cT,'String'));
     Psr = str2double(get(handles.et_cTp,'String'));
     Nr = str2double(get(handles.et_nR,'String'));
-    nw = fix(Tc * Psr * Nr / str2double(get(handles.et_tw,'String')));
+    if get(handles.pm_twSegMethod,'Value') == 1
+        nw = fix(Tc * Psr * Nr / str2double(get(handles.et_tw,'String')));
+    else
+        tw = str2double(get(handles.et_tw,'String'));
+        to = str2double(get(handles.et_wOverlap,'String'));
+        offset = ceil((tw-to)/to);
+        nw = fix(Tc * Psr * Nr / to) - offset;
+    end
     set(handles.et_nw,'String',num2str(nw));
     et_nw_Callback(hObject, eventdata, handles);
 
@@ -373,7 +380,7 @@ function et_nw_Callback(hObject, eventdata, handles)
     set(handles.et_trN,'String',num2str(trN));
     vN = fix(str2double(get(handles.et_vP,'String')) * nw);
     set(handles.et_vN,'String',num2str(vN));
-    tN = fix(str2double(get(handles.et_tP,'String')) * nw);
+    tN = nw-(trN+vN);
     set(handles.et_tN,'String',num2str(tN));
 
     set(handles.t_totN,'String',num2str(trN+vN+tN));
@@ -479,8 +486,14 @@ function pb_preProcessing_Callback(hObject, eventdata, handles)
 
     tT = sigTreated.cT * sigTreated.cTp * sigTreated.nR;
     tw = str2double(get(handles.et_tw,'String'));
-    offset = ceil(tw/overlap);
-    nw = fix(tT / overlap) - offset;
+    if get(handles.pm_twSegMethod,'Value') == 1
+        % Adjacent windows
+        nw = fix(tT / tw);
+    else
+        % Overlapped windows
+        offset = ceil((tw-overlap)/overlap);
+        nw = fix(tT / overlap) - offset;
+    end
     set(handles.et_nw,'String',num2str(nw));
 
     trP = str2double(get(handles.et_trP,'String'));
@@ -492,17 +505,12 @@ function pb_preProcessing_Callback(hObject, eventdata, handles)
     set(handles.et_vN,'String',num2str(vN));
 
     tP = str2double(get(handles.et_tP,'String'));
-    tN = fix(tP * nw);
-    %add test time windows so that it matches the total amount of
-    %windows
-    while trN+vN+tN < nw
-        tN = tN + 1;
-    end
+    tN = nw-(trN+vN);
     set(handles.et_tN,'String',num2str(tN));
     set(handles.t_totN,'String',num2str(trN+vN+tN));
     set(handles.t_totP,'String',num2str(trP+vP+tP));
     
-    %Disable and enable bottons -------------------------------------------
+    %Disable and enable buttons -------------------------------------------
     set(handles.lb_movements,'Enable','off');
     set(handles.lb_nCh,'Enable','off');
     set(handles.et_downsample,'Enable','off');
@@ -514,7 +522,7 @@ function pb_preProcessing_Callback(hObject, eventdata, handles)
     set(handles.pb_preProcessing,'Enable','off');
     set(handles.pb_treat,'Enable','on');
     set(handles.pb_treatFolder,'Enable','on');
-    
+    set(handles.pb_preview,'Enable','on');
     disp(sigTreated);
 
 
@@ -607,7 +615,9 @@ function pm_twSegMethod_Callback(hObject, eventdata, handles)
     sigTreated.eCt      = sigTreated.cT*sigTreated.cTp;      % Effective contraction time
 
     if get(hObject,'Value') == 1
-        %Computer numer of sequencially avialable windows  --------------------
+        %Computer numer of sequentially avialable windows  --------------------
+        set(handles.et_wOverlap,'Enable','off');
+        
         nw = fix(sigTreated.cT * sigTreated.cTp * sigTreated.nR / str2double(get(handles.et_tw,'String')));
         set(handles.et_nw,'String',num2str(nw));
 
@@ -620,7 +630,7 @@ function pm_twSegMethod_Callback(hObject, eventdata, handles)
         set(handles.et_vN,'String',num2str(vN));
 
         tP = str2double(get(handles.et_tP,'String'));
-        tN = fix(tP * nw);
+        tN = nw-(trN+vN);
         set(handles.et_tN,'String',num2str(tN));
         set(handles.t_totN,'String',num2str(trN+vN+tN));
         set(handles.t_totP,'String',num2str(trP+vP+tP));
@@ -632,7 +642,7 @@ function pm_twSegMethod_Callback(hObject, eventdata, handles)
         
         tT = sigTreated.cT * sigTreated.cTp * sigTreated.nR;
         tw = str2double(get(handles.et_tw,'String'));
-        offset = ceil(tw/overlap);
+        offset = ceil((tw-overlap)/overlap);
         nw = fix(tT / overlap) - offset;
         set(handles.et_nw,'String',num2str(nw));
 
@@ -645,12 +655,7 @@ function pm_twSegMethod_Callback(hObject, eventdata, handles)
         set(handles.et_vN,'String',num2str(vN));
 
         tP = str2double(get(handles.et_tP,'String'));
-        tN = fix(tP * nw);
-        %add test time windows so that it matches the total amount of
-        %windows
-        while trN+vN+tN < nw
-            tN = tN + 1;
-        end
+        tN = nw-(trN+vN);
         set(handles.et_tN,'String',num2str(tN));
         set(handles.t_totN,'String',num2str(trN+vN+tN));
         set(handles.t_totP,'String',num2str(trP+vP+tP));
@@ -842,53 +847,40 @@ function cb_AddArtifact_Callback(hObject, eventdata, handles)
 % Hint: get(hObject,'Value') returns toggle state of cb_AddArtifact
 
 
-
-% --- Executes on button press in pb_LoadWaveletDenoise.
-function pb_LoadWaveletDenoise_Callback(hObject, eventdata, handles)
-% hObject    handle to pb_LoadWaveletDenoise (see GCBO)
+% --- Executes on button press in pb_preview.
+function pb_preview_Callback(hObject, eventdata, handles)
+% hObject    handle to pb_preview (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-wd = GUI_Denoising(); %Open Wavelet GUI
-wddata = guidata(wd);
-set(wddata.t_sthandles,'UserData',handles); %transfer parent handles to child GUI
+set(handles.pb_preview,'Enable','off'); 
+    set(handles.pb_treat,'Enable','off');
+    set(handles.pb_treatFolder,'Enable','off');
+% TreatData and update sigTreated
+set(handles.t_msg,'String','Treating the data...');
 
-denoiseParams = get(handles.t_denoiseParams,'UserData');
-denoiseParams = SetDenoiseParams(wddata,denoiseParams);
-
-
-% --- Executes on selection change in pm_motionFilt.
-function pm_motionFilt_Callback(hObject, eventdata, handles)
-% hObject    handle to pm_motionFilt (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hints: contents = cellstr(get(hObject,'String')) returns pm_motionFilt contents as cell array
-%        contents{get(hObject,'Value')} returns selected item from pm_motionFilt
-
-mType = get(handles.pm_motionFilt,'String');
-mSel = get(handles.pm_motionFilt,'Value');
-if ~isempty(strfind(mType{mSel},'SigSep'))
-    strAlg = {'PCA','FastICA','TDSEP','JADE'};
-    [selAlg,ok] = listdlg('PromptString','Select ICA method:',...
-        'SelectionMode','single','ListSize',[120 80],...
-        'ListString',strAlg); 
-    if ~ok
-         set(handles.pm_motionFilt,'Value',1)
-         return; 
+    sigTreated = get(handles.t_sigTreated,'UserData');
+        
+    % Treat the Data ----------------------------------------------------
+    sigPreview = TreatData(handles, sigTreated); % Treat Data
+    if isfield(sigTreated,'stopFlag')
+        return
     end
-    alg = strAlg{selAlg};
-    set(handles.pm_motionFilt,'UserData',alg)
-end
+ 
+set(handles.t_msg,'String','Real time post-processing with selected settings...');
 
-% --- Executes during object creation, after setting all properties.
-function pm_motionFilt_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to pm_motionFilt (see GCBO)
+pp_plot= GUI_PostProcessing(handles,sigPreview); 
+pp_plotdata = guidata(pp_plot);
+% postProcessing_Rec(handles,sigTreated);
+% handles.post_plot=pp_plotdata.post_plot; %probably is to change if number of argument is otherwise needed in any other part
+
+%instead of using number of time windos I will give a random number
+
+guidata(hObject,handles)
+
+
+% --- Executes during object deletion, before destroying properties.
+function GUI_SigTreatment_DeleteFcn(hObject, eventdata, handles)
+% hObject    handle to GUI_SigTreatment (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
-
-% Hint: popupmenu controls usually have a white background on Windows.
-%       See ISPC and COMPUTER.
-if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
-    set(hObject,'BackgroundColor','white');
-end
+% handles    structure with handles and user data (see GUIDATA)

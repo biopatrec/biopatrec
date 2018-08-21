@@ -48,6 +48,10 @@ function [outMov outVector] = OneShotPatRec(patRecTrained,tSet)
 
         [outMov outVector] = RegulationFeedbackTest(patRecTrained.connMat, tSet');
 
+    elseif strcmp(patRecTrained.algorithm,'RFN thOut')     
+        % NOTE: This is under development Max O
+        [outMov outVector] = RegulationFeedbackTest(patRecTrained.connMat, tSet',[], patRecTrained.thOut);
+
      elseif strcmp(patRecTrained.algorithm,'SOM')
 
         [outMov outVector] = SOMTest(patRecTrained,tSet);   
@@ -55,7 +59,11 @@ function [outMov outVector] = OneShotPatRec(patRecTrained,tSet)
      elseif strcmp(patRecTrained.algorithm,'SSOM')
 
         [outMov outVector] = SSOMTest(patRecTrained,tSet);   
-                
+        
+    elseif strcmp(patRecTrained.algorithm,'KNN')
+
+       [outMov outVector] = KNNTest(patRecTrained,tSet);        
+        
     elseif strcmp(patRecTrained.algorithm,'SVM')
         
         [outMov outVector] = SVMTest(patRecTrained, tSet);
@@ -67,7 +75,55 @@ function [outMov outVector] = OneShotPatRec(patRecTrained,tSet)
     elseif strcmp(patRecTrained.algorithm,'NetLab GLM')
             
         [outMov outVector] = NetLab_GLMTest(patRecTrained, tSet);
-                
+        
+    elseif strcmp(patRecTrained.algorithm,'DA + RFN')
+        % NOTE: This is under development Max O
+        % Get result from DA
+        [outMovDA outVector] = DiscriminantTest(patRecTrained.coeff,tSet,patRecTrained.training);
+        % Normalize from 0 to 1
+        minV = min(outVector);
+        rangeV = range(outVector);
+        newVector = (outVector - minV)./ rangeV;
+        % Compute RFN
+        [outMovRFN outVector unstable] = RegulationFeedbackTest(patRecTrained.connMat, tSet', newVector);
+
+        %Output Option 1 (seems to work better than option 2)
+         outMov = outMovRFN;            
+         
+        %Output Option 2
+%         % Only use RFN if it converged
+%         if unstable
+%             outMov = outMovDA;
+%         else
+%             outMov = outMovRFN;            
+%         end
+
+    elseif strcmp(patRecTrained.algorithm,'MLP + RFN')
+        % NOTE: This is under development Max O
+        % Get result from MLP
+        [outMovMLP outVectorMLP] = MLPTest(patRecTrained, tSet);
+        % Compute RFN
+        [outMovRFN outVectorRFN unstable] = RegulationFeedbackTest(patRecTrained.connMat, tSet', outVectorMLP);
+        
+        % Possibility of combination 1
+%         % Scale outputs to their validation accuracy
+%         outVectorMLP = outVectorMLP .* patRecTrained.accMLP(1:end-1);
+%         outVectorRFN = outVectorRFN .* patRecTrained.accRFN(1:end-1);
+%         % average the output vector
+%         outVector = mean([outVectorMLP outVectorRFN],2);
+%         % get the final output
+%         outMov = find(round(outVector));
+
+        % Possibility of combination 2 (seems to be better than poss 1)
+        % Only use RFN if it converged
+        if unstable
+            outMov = outMovMLP;
+            outVector = outVectorMLP;
+        else
+            outMov = outMovRFN;            
+            outVector = outVectorRFN;
+        end
+        
     end
 
     % Validation to prevent outMov to be empty which cause problems on the

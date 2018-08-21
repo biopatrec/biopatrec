@@ -16,73 +16,28 @@
 % acknowledge contributions here and in the project web page (optional).
 %
 % -------------------------- Function Description -------------------------
-% Returns a data package of feature vectors ready for GUI_DataAnalysis given a 
-% recSession, contraction time presentage (cTp) and a cell array of feature
-% names.
+% Returns a data package of feature vectors ready for GUI_DataAnalysis given a
+% recSession, contraction time presentage (cTp), a cell array of feature
+% names and a filter configuration.
 % ------------------------- Updates & Contributors ------------------------
 % [Contributors are welcome to add their email]
 % 2016-02-18 / Niclas Nilsson / Creation nilsson007@gmail.com
 % 20xx-xx-xx / Author    / Comment on update
 
-function anDataM = GetAnalysisFeatures(recSession,fID,cTp)
+function anDataM = GetAnalysisFeatures(handles)
 % Setting parameters
-
-sF       = recSession.sF;
-cT       = recSession.cT;
-rT       = recSession.rT;
-nR       = recSession.nR;
-nCh      = recSession.nCh;
-mov      = recSession.mov;
-allData  = recSession.tdata;
-nM       = recSession.nM;
-
-nS = size(allData,1);                                   % number of samples
-tWS = round(0.2 * sF);                                  % Time window samples, considering tw of 200 ms
-overlapS = round(0.05 * sF);                            % Overlap samples considering 50 ms
-randTW = false;                                         % Random time windows
-rSR = 0.3;                                              % Random samples ratio
-%% Extracting contraction data
-margin = 1 + round((1-cTp)/2*cT*sF);
-nonRest = [];
-for r = 1:nR
-    nonRest = [nonRest round(((r-1)*(cT+rT)*sF+margin)):round(((r-1)*(cT+rT)*sF+(cT*sF-margin)))];
-end
-trData = allData(nonRest,:,:);
-%% Adding rest
-tmpTreated.trData = trData;
-tmpTreated.nM = nM-1;
-tmpSession = recSession;
-tmpSession.nM = nM-1;
-tmpTreated.mov = mov(1:end-1);
-tmpTreated = AddRestAsMovement(tmpTreated, tmpSession);
-trData = tmpTreated.trData;
-%% Extracting Features
-tWStarts  = 1 : overlapS : size(trData,1)-tWS; 
-if randTW
-    % random windows are selected
-    nRS = floor(length(tWStarts)*rSR);
-    rS = randi(length(tWStarts),nRS);
-    tWStarts = tWStarts(rS);
-end
-tS = length(tWStarts);
-% Starting waitbar -------------------------------------%
-h=waitbar(0,'Extracting Features');
-w = 1;
-maxW = nM * tS * length(fID) + nCh;
+sigFeatures = get(handles.t_sigFeatures,'UserData');
+allFeatures  = GetAllFeaturesStruct(sigFeatures);
+features = get(handles.lb_features,'String');
+fID = features(get(handles.lb_features,'Value'));
+sCh = get(handles.lb_channels,'Value');
+[~,sM] = ismember(get(handles.lb_movements,'String'),sigFeatures.mov);
+%% Selecting Features
 % Movement Analysis Data--------------------------------%
-anDataM = zeros(tS,length(fID)*nCh,nM);
+nCh = length(sCh);
+anDataM = zeros(size(allFeatures.(fID{1}),1),length(fID)*nCh,length(sM));
 %-------------------------------------------------------%
-for m = 1:nM
-    ind = 1;
-    for i = tWStarts
-        tmpTreated = GetSigFeatures(trData(i:i+tWS-1,:,m), sF, fID);
-        for f = 1:length(fID)
-            tmpF = tmpTreated.(fID{f});
-            anDataM(ind,(f-1)*nCh+1:(f-1)*nCh+nCh,m) = tmpF;
-            waitbar(w/maxW);
-            w = w + 1;
-        end
-        ind = ind + 1;
-    end
+for f = 1:length(fID)
+    tAF = allFeatures.(fID{f});
+    anDataM(:,(f-1)*nCh+1:(f-1)*nCh+nCh,:) = tAF(:,sCh,sM);
 end
-close(h);

@@ -29,6 +29,8 @@
 %                           left out
 % 2016-03-01 / Eva Lendaro  / Added sigTreated.fFilter among the arguments
 %                             of GetSigFeatures()
+% 2017-04-04 / Jake Gusman  / Added 'ramp' term to sigFeatures structure from
+%                             sigTreated
 
 function sigFeatures = GetAllSigFeatures(handles, sigTreated)
 
@@ -112,6 +114,11 @@ function sigFeatures = GetAllSigFeatures(handles, sigTreated)
     sigFeatures.vFeatures  = vFeatures;    
     sigFeatures.tFeatures  = tFeatures;    
 
+    % Ramp training data
+    if isfield(sigTreated,'ramp')
+        sigFeatures.ramp = sigTreated.ramp;
+    end
+    
 end
 %     for e = 1: Ne
 %         for i = 1 : sigTreated.nw

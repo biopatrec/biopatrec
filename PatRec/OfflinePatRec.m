@@ -33,6 +33,8 @@
 % 2014-12-01 / Enzo Mastinu  / Added the handling part for the COM port number
                              % information into the parameters
 % 2016-04-29 / Julian Maier / Added new fields sigDenoising, sigSeparation, mFilter, addArtifact to copy to patRec
+% 2017-04-04 / Jake Gusman  / Added data from ramp training to patRec.control.propControl
+
 % 20xx-xx-xx / Author  / Comment on update
 
 function patRec = OfflinePatRec(sigFeatures, selFeatures, randFeatures, normSetsType, alg, tType, algConf, movMix, topology, confMatFlag, featReducAlg)
@@ -77,7 +79,12 @@ function patRec = OfflinePatRec(sigFeatures, selFeatures, randFeatures, normSets
     else
         patRec.comm = 'N/A';
     end
-
+    
+    % Ramp training data
+    if isfield(sigFeatures,'ramp')
+        patRec.control.rampTrainingData.ramp = sigFeatures.ramp;
+    end
+    
     %% Start counting the training time
     trStart = tic;
     
@@ -89,9 +96,9 @@ function patRec = OfflinePatRec(sigFeatures, selFeatures, randFeatures, normSets
      %% Get data sets
 
      if strcmp(movMix, 'All Mov')
-        [trSets, trOuts, vSets, vOuts, tSets, tOuts] = GetSets_Stack(sigFeatures, selFeatures);      
-        movIdx = 1:patRec.nM;
-        movOutIdx = num2cell(movIdx);
+
+        [trSets, trOuts, vSets, vOuts, tSets, tOuts, movIdx, movOutIdx] = GetSets_Stack(sigFeatures, selFeatures);      
+     
      elseif strcmp(movMix, 'Individual Mov')
          
         [trSets, trOuts, vSets, vOuts, tSets, tOuts, movIdx, movOutIdx] = GetSets_Stack_IndvMov(sigFeatures, selFeatures);
@@ -245,5 +252,6 @@ function patRec = OfflinePatRec(sigFeatures, selFeatures, randFeatures, normSets
     patRec.indMovIdx    = movIdx;
     patRec.nOuts        = size(movIdx,2);
     patRec.control.maxDegPerMov = ones(1,patRec.nOuts);
+    
 end
 

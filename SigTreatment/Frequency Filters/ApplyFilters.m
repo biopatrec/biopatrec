@@ -39,17 +39,17 @@ function data = ApplyFilters(sigTreated, data)
     elseif strcmp(sigTreated.fFilter,'PLH')
         data  = BSbutterPLHarmonics(sF, data);
     elseif strcmp(sigTreated.fFilter,'BP 20-800')
-        data  = FilterBP(sF, data,20,800);
+        data  = FilterBP(sF, data,20,min(800,sF/2-1));
     elseif strcmp(sigTreated.fFilter,'BP 70-800')
-        data  = FilterBP(sF, data,70,800);
+        data  = FilterBP(sF, data,70,min(800,sF/2-1));
 	elseif strcmp(sigTreated.fFilter,'EMG 10-500')
-        data  = FilterEMG(sF, data, 8, 10 ,500);
+        data  = FilterEMG(sF, data, 8, 10 ,min(500,sF/2-1));
     elseif strcmp(sigTreated.fFilter,'EMG 20-500')
-        data  = FilterEMG(sF, data, 8, 20 ,500);
+        data  = FilterEMG(sF, data, 8, 20 ,min(500,sF/2-1));
     elseif strcmp(sigTreated.fFilter,'EMG 70-500')
-        data  = FilterEMG(sF, data, 8 ,70 ,500);
+        data  = FilterEMG(sF, data, 8 ,70 ,min(500,sF/2-1));
     elseif strcmp(sigTreated.fFilter,'EMG 100-500')
-        data  = FilterEMG(sF, data, 8 ,100 ,500);
+        data  = FilterEMG(sF, data, 8 ,100 ,min(500,sF/2-1));
     end
     
 %    disp('Frequency Filtering Done');

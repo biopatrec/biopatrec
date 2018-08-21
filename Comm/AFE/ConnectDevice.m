@@ -25,7 +25,10 @@
                             % has been moved to COMM/AFE folder, into this new script.
 % 2015-1-19 / Enzo Mastinu / The ADS1299 part has been modified in way to be 
                             % compatible with the new ADS1299 acquisition mode (DSP + FPU)
-                            
+% 2017-02-28 / Simon Nilsson / Separated the acquisition modes for RHA2216
+                            % and RHA2132. The RHA2132 now uses a higher
+                            % baudrate and a buffered acquisition mode to
+                            % handle the higher data flow of HD-EMG.                            
 
 % 20xx-xx-xx / Author  / Comment
 
@@ -67,12 +70,17 @@ function obj = ConnectDevice(handles)
         end
         if strcmp(deviceName, 'ADS_BP')
            obj = serial (ComPortName, 'baudrate', 460800, 'databits', 8, 'byteorder', 'bigEndian');
-           obj.InputBufferSize = sTall*sF*nCh*4;     
+           obj.InputBufferSize = sTall*sF*nCh*4;  
         end
         %%%%% INTAN RHA2216 %%%%%
         if strcmp(deviceName, 'RHA2216')
             obj = serial (ComPortName, 'baudrate', 1250000, 'databits', 8, 'byteorder', 'bigEndian');
-            obj.InputBufferSize = sT*sF*nCh*2;
+            obj.InputBufferSize = sTall*sF*nCh*2;
+        end
+        %%%%% INTAN RHA2132 %%%%%
+        if strcmp(deviceName, 'RHA2132')
+            obj = serial (ComPortName, 'baudrate', 1500000, 'databits', 8, 'byteorder', 'bigEndian');
+            obj.InputBufferSize = sTall*sF*nCh*2;
         end
     end     
 

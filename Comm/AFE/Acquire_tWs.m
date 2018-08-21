@@ -30,6 +30,11 @@
 % 2016-7-08 / Enzo Mastinu / The ADS_DSP/Neuromotus acquisition has been
                             % optimized introducing the re-synchronization
                             % in case the signal got lost
+% 2017-02-28 / Simon Nilsson / Separated the acquisition modes for RHA2216
+                            % and RHA2132. The RHA2132 now uses a higher
+                            % baudrate and a buffered acquisition mode to
+                            % handle the higher data flow of HD-EMG.
+                            
 % 20xx-xx-xx / Author  / Comment
 
 
@@ -59,13 +64,13 @@ function [cData, error] = Acquire_tWs(deviceName, obj, nCh, tWs)
                 end 
             end
         end
-        if strcmp(deviceName, 'ADS_BP')   
+        if strcmp(deviceName, 'ADS_BP')
             for sampleNr = 1:tWs
                 go = 0;
                 while go == 0
                     % nCh*4 bytes (float) mode
                     byteData = fread(obj,nCh,'float32');                             % float data mode (4bytes X nCh channels)
-                    if byteData < 10
+                    if byteData < 5
                         go = 1;
                     else
                         % Synchronize the device again
@@ -77,6 +82,7 @@ function [cData, error] = Acquire_tWs(deviceName, obj, nCh, tWs)
                         fwrite(obj,'G','char');
                         fwrite(obj,nCh,'char');
                         fread(obj,1,'char');
+                        disp('Communication issue: automatic resynchronization')
                         go = 0;
                     end
                 end
@@ -95,6 +101,12 @@ function [cData, error] = Acquire_tWs(deviceName, obj, nCh, tWs)
                     cData(sampleNr,k) = value16(k)*LSBweight;                  % Convert data into volt
                 end
             end 
+       end
+       
+       %%%%% INTAN RHA2132 %%%%%
+       if strcmp(deviceName, 'RHA2132')   
+            RequestSamplesRHA32(obj, tWs);
+            cData = AcquireSamplesRHA32(obj, nCh, tWs);
        end
    
     catch exception

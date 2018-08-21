@@ -51,7 +51,14 @@
 % 2015-02-27 / Enzo Mastinu     / Fix some bugs with the custom devices TAC
 %                                 test.
 % 2015-12-04 / Francesco Clemente / Adding of SMC Test routines.
-                            
+% 2016-12-09 / Jake Gusman      / Addition of overshoot metric 
+% 2016-12-16 / Jake Gusman      / Addition of Distance input
+%                                 Modifications to allow for randomization
+%                                 of distance (D) and allowance (A).
+%                                 Distance and allowance inputs can also
+%                                 now be vectors.
+% 2018-08-01 / Andreas Eiler        Adapted code to new function 'count' by
+%                                   replacing variable count by count_rep
 % 20xx-xx-xx / Author     / Comment on update                          
 
 
@@ -77,15 +84,19 @@ function success = TACTest(patRecX, handlesX)
     global thresholdGUIData
     
     global distance %FIX
-
+    global overshoot
+    global nOvershoot
+    
     patRec = patRecX;
     handles = handlesX;
     
-    pDiv = 2; %Event is fired every TW/value milliseconds, ie 100ms if TW = 200ms & pDiv = 2.
+    % pDiv = 2; %Event is fired every TW/value milliseconds, ie 100ms if TW = 200ms & pDiv = 2.
     trials = str2double(get(handles.tb_trials,'String'));
     reps = str2double(get(handles.tb_repetitions,'String'));
     timeOut = str2double(get(handles.tb_executeTime,'String'));
-    allowance = str2double(get(handles.tb_allowance,'String'));
+    % allowance = str2double(get(handles.tb_allowance,'String'));
+    A = str2num(get(handles.tb_allowance,'String'));
+    D = str2num(get(handles.tb_distance,'String'));
     %speed = str2double(get(handles.tb_speed,'String'));
     time = str2double(get(handles.tb_time,'String'));
 
@@ -110,10 +121,13 @@ function success = TACTest(patRecX, handlesX)
     % Get sampling time
     sT = tacTest.timeOut;
     tW = patRec.tW;                                                            % Time window size
+    iW = patRec.wOverlap;                                           % Increment window size
+    pDiv    = tW/iW;                                     % Peeking devider
     tWs = tW*sF;                                                           % Time window samples
-
+    iWs = iW*sF;
+    
     % Is threshold (thOut) used?
-    if(isfield(patRec.patRecTrained,'thOut'));
+    if(isfield(patRec.patRecTrained,'thOut'))
         %Threshold GUI init
         thresholdGUI = GUI_Threshold; 
         thresholdGUIData = guidata(thresholdGUI);
@@ -156,20 +170,26 @@ function success = TACTest(patRecX, handlesX)
         fread(com,1);
     end
 
-    fwrite(com,sprintf('%c%c%c%c','c',char(3),char(allowance),char(0)));
-    fread(com,1);
-
-    CurrentPosition('init',patRec,allowance, handles.movList);
-    TrackStateSpace('initialize',patRec,allowance);
-
+%     fwrite(com,sprintf('%c%c%c%c','c',char(3),char(allowance),char(0)));
+%     fread(com,1);
+% 
+%     CurrentPosition('init',patRec,allowance, handles.movList);
+%     TrackStateSpace('initialize',patRec,allowance); 
+    
     %Run through all the trials
     for t = 1 : trials
         %Create a random order for the wanted movements.
         indexOrder = GetMovementCombination(handles.dofs,patRec.nOuts-1);
         tacTest.combinations = size(indexOrder,1);
-        for r = 1 : reps
-            set(handles.txt_status,'String',sprintf('Trial: %d , Rep: %d.',t,r));
 
+        % randomize use of D and A
+        rp = randperm(length(D));
+        D = D(rp);
+        A = A(rp);
+            
+        for r = 1 : reps
+            
+            
             %Loop through all of the movements
             for i = 1 : size(indexOrder,1)
                 completionTime = NaN;
@@ -181,8 +201,42 @@ function success = TACTest(patRecX, handlesX)
                 nTW = 1;
                 wantedMovementId = [];
                 printName = '';
+                nOvershoot = 0;
 
+                if length(D) > 1
+                    if ~exist('count_rep','var') || count_rep == reps
+                        count_rep = 0;               % Reset count_rep when it reaches num of reps (end of the list of combos)
+                    end                          % E.g. 3-DOFs --> 8 reps. 6 IDs. For each rep, loop runs through 6 IDs.
+                                                 % Each subsequent task will
+                                                 % have a new ID and new target
+                                                 % location. Method ensures
+                                                 % each combination of target
+                                                 % and ID are presented.
 
+                    count_rep = count_rep +1;
+
+                    if i == 1                   % target location index (count_rep) is set to                                 
+                        count_rep = r;             % the repetition number. That way, each target
+                    end                          % direction will be presented at each ID.
+                else
+                    count_rep = 1;
+                end
+                distance = D(count_rep);
+                allowance = A(count_rep);
+              
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+            % The following was moved down in order to allow for
+            % randomization of movement and allowance/distance within each
+            % repetition (Gusman 16/12/2016)
+            fwrite(com,sprintf('%c%c%c%c','c',char(3),char(allowance),char(0)));   % moved down here to allow for new allowance per rep
+            fread(com,1);
+            
+            CurrentPosition('init',patRec,allowance, handles.movList);
+            TrackStateSpace('initialize',patRec,allowance);
+            set(handles.txt_status,'String',sprintf('Trial: %d , Rep: %d.',t,r));
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%                
+                
+                
                 %Reset the TAC hand. Own function?
                 fwrite(com,sprintf('%c%c%c%c','r','t',char(0),char(0)));
                 fread(com,1);
@@ -203,7 +257,8 @@ function success = TACTest(patRecX, handlesX)
                     distance = randsample([20 30 40 50],1);
                     handles.SMCposition = 0;
                 else
-                    distance = 40;
+%                     distance = 40;
+%                     distance = str2double(get(handles.tb_distance,'String'));
                 end
                 
                 for j = 1:length(index)
@@ -246,21 +301,34 @@ function success = TACTest(patRecX, handlesX)
 
                     % Init SBI
                     sCh = 1:nCh;
-                    s = InitSBI_NI(sF,sT,sCh); 
+%                     s = InitSBI_NI(sF,sT,sCh);
+                    if strcmp(deviceName, 'Thalmic MyoBand')
+                        %CK: init MyoBand
+                        s = MyoBandSession(sF, sT, sCh);
+                    else
+                        s = InitSBI_NI(sF,sT,sCh);
+                    end
                     s.NotifyWhenDataAvailableExceeds = tWs;                            % PEEK time
-                    lh = s.addlistener('DataAvailable', @TACTest_OneShot); 
-
+                    lh = s.addlistener('DataAvailable', @TACTest_OneShot);
+                    
                     % Start DAQ
                     s.startBackground();                                               % Run in the backgroud
 
                     if ~s.IsDone                                                       % check if is done
                         s.wait();
                     end
-                    delete(lh);
-
-                %%%%% Real Time PatRec with other custom device %%%%%   
+%                     delete(lh);
+                    if ~strcmp(deviceName, 'Thalmic MyoBand')
+                        delete(lh);
+                    end
+                    %CK: Stop sampling from MyoBand
+                    if strcmp(deviceName, 'Thalmic MyoBand')
+                        MyoClient('StopSampling');
+                    end
+                    
+                    %%%%% Real Time PatRec with other custom device %%%%%
                 else
-
+                    
                     % Prepare handles for next function calls
                     handles.deviceName  = deviceName;
                     handles.ComPortType = ComPortType;
@@ -281,8 +349,15 @@ function success = TACTest(patRecX, handlesX)
                     handles.CommObj = obj;
                     handles.success = 0;
                     
-                    for timeWindowNr = 1:sT/tW
-                        cData = Acquire_tWs(deviceName, obj, nCh, tWs);            % acquire a new time window of samples
+                    for timeWindowNr = 1:sT/(tW/pDiv)
+%                     if timeWindowNr == 10
+%                         btwnpredtic = tic;
+%                     end
+%                     if timeWindowNr == 11
+%                         btwnpredtic = toc(btwnpredtic)
+%                     end
+
+                        cData = Acquire_tWs(deviceName, obj, nCh, tWs/pDiv);            % acquire a new time window of samples
                         acquireEvent.Data = cData;
                         TACTest_OneShot(0, acquireEvent);   
                         if handles.success
@@ -306,6 +381,7 @@ function success = TACTest(patRecX, handlesX)
 
                 test.allowance = allowance;
                 test.distance = distance;
+                test.nOvershoot = nOvershoot;
 
                 if(test.fail)
                     test.pathEfficiency = NaN;
@@ -374,6 +450,8 @@ function TACTest_OneShot(src,event)
     global thresholdGUIData
     
     global distance %FIX
+    global overshoot
+    global nOvershoot
 
     tempData = [tempData; event.Data];
 
@@ -381,7 +459,7 @@ function TACTest_OneShot(src,event)
         tData = tempData(end-patRec.sF*patRec.tW+1:end,:);  %Copy the temporal data to the test data
         dataTW(:,:,nTW) = tData;                            % Save data for future analisys
 
-        %Start counting processing time
+        %Start count_reping processing time
         processingTimeTic = tic;
 
         % General routine for RealtimePatRec
@@ -444,7 +522,8 @@ function TACTest_OneShot(src,event)
                 if isnan(selectionTimeA) && sum(ismember(wantedMovementId, outMov))
                     selectionTimeA = tempTime+patRec.tW+processingTime(fpTW);
                 end
-
+                
+                
             end
             %Only add the recorded movement if we are not yet done.
 
@@ -471,7 +550,8 @@ function TACTest_OneShot(src,event)
                 
                 if (VREActivation(handles.vre_Com,speed(i),[],dof,dir,0))
                     if (isempty(firstTacTime))
-                       firstTacTime = tic; 
+                       firstTacTime = tic;
+                       overshoot = 1;
                     else
                         heldTime = toc(firstTacTime);
                         if(heldTime > time)
@@ -496,6 +576,11 @@ function TACTest_OneShot(src,event)
                     end
                 else
                     firstTacTime = [];
+                    % overshoot count_reper
+                    if overshoot == 1
+                        nOvershoot = nOvershoot + 1;
+                    end
+                    overshoot = 0;
                 end
             end
             recordedMovements = [recordedMovements; {performedMovements}];

@@ -30,6 +30,8 @@
 %                                changed in the GUI compared to before
 %                                where these had to be loaded in
 %                                TacTest and RealTimePatRec
+% 2018-02-24 / Adam Naber      / Fixed bugs in loading PatRec, 
+                               % SigFeatures, and SigRecordings
 
 function Load_patRec(patRec, newGUI, loadMovements)
 
@@ -51,9 +53,20 @@ function Load_patRec(patRec, newGUI, loadMovements)
     set(newHandles.lb_features,'Value',1:length(patRec.selFeatures));
     set(newHandles.lb_features,'String',patRec.selFeatures);
     set(newHandles.lb_movements,'String',patRec.mov(patRec.indMovIdx));
-    set(newHandles.pm_SelectAlgorithm,'String',patRec.patRecTrained(1).algorithm);
-    set(newHandles.pm_SelectTraining,'String',patRec.patRecTrained(1).training);
-    set(newHandles.pm_normSets,'String',patRec.normSets.type);
+    index = find(strcmp(get(newHandles.pm_SelectAlgorithm,'String'), patRec.patRecTrained(1).algorithm),1);
+    if isempty(index) && strcmp(patRec.patRecTrained(1).algorithm,'DA')
+        % Discriminant Analysis is saved as the string "DA" for some reason
+        index = find(strcmp(get(newHandles.pm_SelectAlgorithm,'String'), 'Discriminant A.'),1);
+    end
+    set(newHandles.pm_SelectAlgorithm,'Value',index);
+    set(newHandles.pm_SelectTraining,'String',{patRec.patRecTrained(1).training});
+    set(newHandles.pm_SelectTraining,'Value',1);
+    if ~isfield(patRec.patRecTrained(1), 'normSets')
+        index = 1; % Default value is 'none'
+    else
+        index = find(strcmp(get(newHandles.pm_normSets,'String'), patRec.patRecTrained(1).normSets.type),1);
+    end
+    set(newHandles.pm_normSets,'Value',index);
 
     if exist('loadMovements','var')
         if(loadMovements)

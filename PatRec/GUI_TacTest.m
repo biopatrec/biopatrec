@@ -19,6 +19,7 @@
 % A Graphical User Interface (GUI) used to initialise and control the TAC
 % test. All necessary data is loaded into the handles upon creation of the
 % GUI.
+% 
 % --------------------------Updates--------------------------
 % 2012-05-25 / Nichlas Sander  / Creation
 % 2012-10-12 / Joel Falk-Dahlin  / Changed from using "patRecHandles" to
@@ -27,6 +28,26 @@
                                 % patRecHandles are always updated when
                                 % pressing the start button.
 % 2012-11-13 / Joel Falk-Dahlin / Removed speed from handles because it is now stored inside the patRec struct 
+% 2016-12-16 / Jake Gusman      / Modifications for greater target
+                                % randomization. Ability to input multiple
+                                % allowance values and distance values.
+                                % This GUI now allows for the use of multiple allowance and distance combinations.
+                                % Values should be input into the appropriate text boxes separated
+                                % by commas. E.g. to initiate a test with four different allowance/distance
+                                % combinations, one can put the following in the Allowance text box:
+                                % 5,5,10,10. And the following in the Distance text box: 25,50,25,50. This 
+                                % results in the following 4 difficulty combinations which will be randomized
+                                % along with the movement presention. Note that this also results in 4
+                                % times the number of tasks presented.
+                                % Also, if multiple difficulties are used,
+                                % the number of Repetitions must match the
+                                % number of difficulties (e.g. in the above
+                                % example the number 4 must be input in the
+                                % "Repetitions" box or else an error will
+                                % result. The Distance and Allowance box
+                                % must contain the same number of elements
+                                % or else error will result.
+                                % 
 % 20xx-xx-xx / Author  / Comment on update
 
 function varargout = GUI_TacTest(varargin)
@@ -53,7 +74,7 @@ function varargout = GUI_TacTest(varargin)
 
 % Edit the above text to modify the response to help GUI_TacTest
 
-% Last Modified by GUIDE v2.5 03-Dec-2015 15:21:04
+% Last Modified by GUIDE v2.5 23-Feb-2017 16:35:02
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -269,14 +290,6 @@ if ~isfield(handles,'dofs')
     handles.dofs = 1; 
 end
 
-% patRec = handles.patRecHandles.patRec;
-% handles.vre_Com = handles.patRecHandles.vre_Com;
-% handles.movList = handles.patRecHandles.movList;
-% set(handles.txt_status,'String','Starting TAC');
-% TACTest(patRec,handles);
-% set(handles.txt_status,'String','Finished TAC');
-
-% TEST ALCD
 patRec = handles.patRecHandles.patRec;
 handles.vre_Com = handles.patRecHandles.vre_Com;
 handles.movList = handles.patRecHandles.movList;
@@ -438,6 +451,7 @@ function figure1_CloseRequestFcn(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
+
 if ~isempty(handles.SMCtestSerial)
     fclose(handles.SMCtestSerial);
     delete(handles.SMCtestSerial);
@@ -446,5 +460,26 @@ end
 
 % Hint: delete(hObject) closes the figure
 delete(hObject);
+
+function tb_distance_Callback(hObject, eventdata, handles)
+% hObject    handle to tb_distance (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of tb_distance as text
+%        str2double(get(hObject,'String')) returns contents of tb_distance as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function tb_distance_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to tb_distance (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
 
 function figure1_DeleteFcn(hObject, eventdata, handles)

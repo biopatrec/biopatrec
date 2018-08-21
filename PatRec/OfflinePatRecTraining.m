@@ -65,7 +65,17 @@ function patRec = OfflinePatRecTraining(alg, tType, algConf, trSets, trOuts, vSe
         patRec.algorithm = 'RFN';
         patRec.training = tType;
         patRec.connMat = connMat;            
-            
+        
+    % RFN threshold output   
+    elseif strcmp(alg,'RFN thOut')
+        [connMat accV thOut] = RegulationFeedback_thOut(tType, trSets, trOuts, vSets, vOuts);
+        patRec.algorithm = 'RFN thOut';
+        patRec.training = tType;
+        patRec.connMat = connMat;
+        % temp fix
+        thOut(1:size(connMat,1)) = thOut;
+        patRec.thOut = thOut;            
+    
     % SOM
     elseif strcmp(alg,'SOM')
         [SOM accV] = SOM_Mapping(trSets, trOuts, vSets, vOuts, tType, algConf);
@@ -79,7 +89,14 @@ function patRec = OfflinePatRecTraining(alg, tType, algConf, trSets, trOuts, vSe
         patRec.algorithm = 'SSOM';
         patRec.training = tType;
         patRec.SSOM=SSOM;
-                
+        
+    % KNN
+    elseif strcmp(alg,'KNN')
+        [KNN accV] = EvaluateKNN(trSets, trOuts, vSets, vOuts, tType);
+        patRec.algorithm = 'KNN';
+        patRec.training = tType;
+        patRec.KNN=KNN;
+        
     % SVM
     elseif strcmp(alg,'SVM')
         [SVM accV] = SVMAnalysis(tType, trSets, trOuts, vSets, vOuts, mov, movIdx);
@@ -101,7 +118,42 @@ function patRec = OfflinePatRecTraining(alg, tType, algConf, trSets, trOuts, vSe
         [GLM accV] = NetLab_GLM_InitAndTrain(trSets, trOuts, vSets, vOuts, tType);
         patRec.algorithm = 'NetLab GLM';
         patRec.training = tType;
-        patRec.GLM = GLM;        
+        patRec.GLM = GLM;
+        
+    %% Mixes    
+    % DA + RFN    
+    elseif strcmp(alg,'DA + RFN')
+        
+        % Run DA
+        [coeff accVDA] = DiscriminantAnalysis(tType, trSets, trOuts, vSets, vOuts, mov, movIdx);
+        % Run RFN
+        [connMat accVRFN] = RegulationFeedback('Mean', trSets, trOuts, vSets, vOuts);
+        
+        accV = mean([accVDA accVRFN],2);
+        patRec.algorithm = 'DA + RFN';
+        patRec.training = tType;
+        patRec.coeff = coeff;        
+        patRec.connMat = connMat;                    
+        
+        
+    % MLP + RFN    
+    elseif strcmp(alg,'MLP + RFN')
+
+        % Run MLP
+        [MLP accVmlp] = ANN_Perceptron(trSets, trOuts, vSets, vOuts, tType);
+        patRec.ANN = MLP;
+        patRec.accMLP = accVmlp;
+
+        % Run RFN
+        [connMat accVrfn] = RegulationFeedback('Mean', trSets, trOuts, vSets, vOuts);
+        patRec.connMat = connMat;                    
+        patRec.accRFN = accVrfn;
+ 
+        % Save general info
+        patRec.algorithm = 'MLP + RFN';
+        patRec.training = tType;
+        
+        accV = mean([accVmlp accVrfn],2);
         
     end
     

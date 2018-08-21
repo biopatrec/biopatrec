@@ -26,6 +26,7 @@
 % 2014-12-28 / Max Ortiz  / Added scaling option 
 % 2015-12-08 / Eva Lendaro / Fixed problem on "Remove channels" whne used 
                           % with more then 9 channels
+% 2014-04-01 / Julian Maier / Add artifacts option
 % 20xx-xx-xx / Author     / Comment on update
 % 20xx-xx-xx / Author     / Comment on update
 
@@ -103,6 +104,29 @@ function sigTreated = PreProcessing(handles)
 %         movSel = [movSel sigTreated.nM];
 %         set(handles.lb_movements,'Value',movSel);
     end
+	
+	%Add motion if required %---------------------------------------------
+    if get(handles.cb_AddArtifact,'Value')
+        if isempty(get(handles.cb_AddArtifact,'UserData'))
+            % Set addArtifact params
+            addArtifact = ChoiceArtifact(sigTreated);
+            if isempty(addArtifact)
+                set(handles.cb_AddArtifact,'Value',0);
+                disp('No artifacts added.')
+            else
+                set(handles.cb_AddArtifact,'UserData',addArtifact)
+            end
+        end
+        if ~isempty(get(handles.cb_AddArtifact,'UserData'))
+            % Get addArtifact params
+            sigTreated.addArtifact = get(handles.cb_AddArtifact,'UserData');
+            % Insert artifacts in sigTreated.trData
+            set(handles.t_msg,'String','Artifacts added.');
+            sigTreated = AddArtifactOffline(sigTreated);
+            disp('Artifacts added.')
+        end
+    end
+    set(handles.cb_AddArtifact,'Enable','off');
     
     % Upload sigtreated to the GUI----------------------------------------
     set(handles.t_sigTreated,'UserData',sigTreated);

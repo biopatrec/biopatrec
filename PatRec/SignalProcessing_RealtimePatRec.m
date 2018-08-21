@@ -28,23 +28,13 @@ function tSet = SignalProcessing_RealtimePatRec(data, patRec)
 	% Apply conventionalfilters
     data = ApplyFilters(patRec, data); 
     
-    % Apply motion reduction
-    if isfield(patRec,'mFilter')
-         data = MotionFilt(data',patRec.sF,patRec.mFilter.type,patRec.mFilter.alg);
-    end
-    
     % Apply Signal Separation algorithms
     if isfield(patRec,'sigSeparation')
         data = data * patRec.sigSeparation.W;
     end
     
-    % Apply Wavelet Denoising
-    if isfield(patRec,'sigDenoising')
-       data = WaveletSignalDenoising(data,patRec.sigDenoising);
-    end
-    
     % Get signal features
-    tFeatures = GetSigFeatures(data,patRec.sF,patRec.selFeatures);    
+    tFeatures = GetSigFeatures(data,patRec.sF,'None',patRec.selFeatures);    
     
     % Create a vector with the signal features
     tSet = [];

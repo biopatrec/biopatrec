@@ -21,14 +21,23 @@
 % ------------------------- Updates & Contributors ------------------------
 % [Contributors are welcome to add their email]
 % 20xx-xx-xx / Max Ortiz  / Creation
+% 2017-03-06 / Simon Nilsson / Updated to work with lower Fs
 % 20xx-xx-xx / Author  / Comment on update
 
 function [data] = BSbutterPLHarmonics(Fs, data)
 
 N   = 20;  % Order
-for i = 0 : 11
-    Fc1 = 49 + 50*i;  % First Cutoff Frequency
-    Fc2 = 51 + 50*i;  % Second Cutoff Frequency
+
+fPl = 50;  % Power line frequency [Hz]
+dF  = 1;   % Frequency delta for filtering
+Nh  = 11;  % Number of harmonics to filter
+
+% Maximum central frequency, limited by sampling frequency
+Fmax = min(Fs/2 - dF,(Nh+1)*fPl);
+
+for F = fPl : fPl : Fmax
+    Fc1 = F - dF;  % First Cutoff Frequency
+    Fc2 = F + dF;  % Second Cutoff Frequency
 
     [z,p,k] = butter(N/2, [Fc1 Fc2]/(Fs/2), 'stop');
     [sos_var,g] = zp2sos(z, p, k);

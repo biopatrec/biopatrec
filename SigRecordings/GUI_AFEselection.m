@@ -1,14 +1,14 @@
 % ---------------------------- Copyright Notice ---------------------------
-% This file is part of BioPatRec © which is open and free software under 
+% This file is part of BioPatRec ï¿½ which is open and free software under 
 % the GNU Lesser General Public License (LGPL). See the file "LICENSE" for 
 % the full license governing this code and copyrights.
 %
 % BioPatRec was initially developed by Max J. Ortiz C. at Integrum AB and 
-% Chalmers University of Technology. All authors’ contributions must be kept
+% Chalmers University of Technology. All authorsï¿½ contributions must be kept
 % acknowledged below in the section "Updates % Contributors". 
 %
 % Would you like to contribute to science and sum efforts to improve 
-% amputees’ quality of life? Join this project! or, send your comments to:
+% amputeesï¿½ quality of life? Join this project! or, send your comments to:
 % maxo@chalmers.se.
 %
 % The entire copyright notice must be kept in this or any source file 
@@ -23,14 +23,19 @@
 % 20xx-xx-xx / Max Ortiz  / Creation
 % 2013-08-23 / Morten Kristoffersen / Trimmed the interface down to one
 % popup menu, reorganised the GUI_AFESelection data. 
-% 2013-09-20 / Pontus Lövinger  / Added the option for ramp recording which
+% 2013-09-20 / Pontus Lï¿½vinger  / Added the option for ramp recording which
                         % calls the ramp recording functions
 % 2014-11-10 / Enzo Mastinu / include the code for ADS1299 AFE, optimization of 
                         % ramp functions and their callings
 % 2015-11-27 / Enzo Mastinu / It has been added the possibility to repeat 
                             % the same movement recording if you are not 
                             % happy with it.
-% 20xx-xx-xx / Author  / Comment on update
+% 2017-09-25 / Simon Nilsson  / Added AFE selection modes for HD-EMG and
+                              % Biofeedback GUI. These modes return the
+                              % AFE parameters to the caller and lets
+                              % the caller perform the recording.
+% 2018-02-24 / Adam Naber / Device name list is now set in this file,
+                          % rather than being saved in the .fig. 
 
 function varargout = GUI_AFEselection(varargin)
 % GUI_AFESELECTION MATLAB code for GUI_AFEselection.fig
@@ -88,7 +93,7 @@ function GUI_AFEselection_OpeningFcn(hObject, eventdata, handles, varargin)
 % handles
 
 %load the background image into Matlab
-backgroundImage2 = importdata('/../Img/BioPatRec.png');
+backgroundImage2 = importdata('Img/BioPatRec.png');
 %select the axes
 axes(handles.axes1);
 %place image onto the axes
@@ -169,8 +174,15 @@ sF = str2double(contents{get(handles.pm_sampleRate,'Value')});
 AFE_settings.sampleRate=sF;
 
 %% Number of channels
-AFE_settings.channels = str2double(get(handles.et_chs,'String'));
-nCh = AFE_settings.channels;
+if isfield(handles,'vCh')
+    AFE_settings.channels = handles.nCh;
+    AFE_settings.vChannels = handles.vCh;
+    hGUI_Rec.vCh = handles.vCh;
+    nCh = handles.nCh;
+else
+    AFE_settings.channels = str2double(get(handles.et_chs,'String'));
+    nCh = AFE_settings.channels;
+end
 
 %%
 % Communication Port
@@ -182,7 +194,11 @@ AFE_settings.ComPortType=ComPortType;
 if strcmp(AFE_settings.ComPortType,'COM')
     ComPortName = get(handles.ComPortName,'String');
 %     AFE_settings.ComPortType=strcat(ComPortType,ComPortName);
-    AFE_settings.ComPortName=strcat(ComPortType,ComPortName);
+    if ispc
+        AFE_settings.ComPortName=strcat(ComPortType,ComPortName);
+    else
+        AFE_settings.ComPortName=ComPortName;
+    end
 end
 
 % AFE_settings.ComPortType
@@ -214,8 +230,8 @@ mov=handles.varargin{5};
 hGUI_Rec=handles.varargin{6};
 vreMovements = handles.varargin{7};
 rampStatus = handles.varargin{8};
-fast = handles.varargin{9};
-if fast == 0
+mode = handles.varargin{9};
+if mode == 0
     movRepeatDlg = handles.varargin{10};
     useLeg = handles.varargin{11};
 end
@@ -234,40 +250,47 @@ if(exist('cdata','var')) == 1
     delete(cdata);
 end
 
-if(fast)
-    
-    % Fast recording session
-    [cdata, sF, sT] = FastRecordingSession(hGUI_Rec,AFE_settings);
-    tempdata = cdata;                                                      % variable useful for offline data processing
-    save('cdata.mat','cdata','tempdata','sF','sT','nCh','ComPortType','deviceName');
-else
+switch mode
+    case 0
+        % If ramp training has been selected in GUI_RecordingSession the ramp
+        % parameters should be obtained and the rampRecordingSession file is run
+        if rampStatus
+            [rampMin, minData] = ObtainRampMin(hGUI_Rec,AFE_settings,get(handles.cb_trainVRE,'Value'));%Fs,Ne,Nr,Tc,Tr,Psr,msg,EMG_AQhandle
+            [rampMax, maxData] = ObtainRampMax(nM,mov,hGUI_Rec,AFE_settings,get(handles.cb_trainVRE,'Value'),vreMovements, get(handles.cb_VRELeftHand,'Value'));%Fs,Ne,Nr,Tc,Tr,Psr,msg,EMG_AQhandle
+            rampParams =  {rampMin rampMax minData maxData};
+            [cdata, sF] = RecordingSession(nM,nR,cT,rT,mov,hGUI_Rec,AFE_settings,get(handles.cb_trainVRE,'Value'),vreMovements,get(handles.cb_VRELeftHand,'Value'),movRepeatDlg,useLeg,rampStatus,rampParams);%Fs,Ne,Nr,Tc,Tr,Psr,msg,EMG_AQhandle,rampParams);
+        else
+            [cdata, sF] = RecordingSession(nM,nR,cT,rT,mov,hGUI_Rec,AFE_settings,get(handles.cb_trainVRE,'Value'),vreMovements,get(handles.cb_VRELeftHand,'Value'),movRepeatDlg,useLeg,rampStatus);%Fs,Ne,Nr,Tc,Tr,Psr,msg,EMG_AQhandle);
+        end
+        % Fs=handles.varargin{1};
+        % Nr=handles.varargin{3};
+        % Tc=handles.varargin{4};
+        % Tr=handles.varargin{5};
+        %Moved from Recoding Session Fig
 
-    % If ramp training has been selected in GUI_RecordingSession the ramp
-    % parameters should be obtained and the rampRecordingSession file is run
-    if rampStatus
-        [rampMin, minData] = ObtainRampMin(hGUI_Rec,AFE_settings,get(handles.cb_trainVRE,'Value'));%Fs,Ne,Nr,Tc,Tr,Psr,msg,EMG_AQhandle
-        [rampMax, maxData] = ObtainRampMax(nM,mov,hGUI_Rec,AFE_settings,get(handles.cb_trainVRE,'Value'),vreMovements, get(handles.cb_VRELeftHand,'Value'));%Fs,Ne,Nr,Tc,Tr,Psr,msg,EMG_AQhandle
-        rampParams =  {rampMin rampMax minData maxData};
-        [cdata, sF] = RecordingSession(nM,nR,cT,rT,mov,hGUI_Rec,AFE_settings,get(handles.cb_trainVRE,'Value'),vreMovements,get(handles.cb_VRELeftHand,'Value'),movRepeatDlg,useLeg,rampStatus,rampParams);%Fs,Ne,Nr,Tc,Tr,Psr,msg,EMG_AQhandle,rampParams);
-    else
-        [cdata, sF] = RecordingSession(nM,nR,cT,rT,mov,hGUI_Rec,AFE_settings,get(handles.cb_trainVRE,'Value'),vreMovements,get(handles.cb_VRELeftHand,'Value'),movRepeatDlg,useLeg,rampStatus);%Fs,Ne,Nr,Tc,Tr,Psr,msg,EMG_AQhandle);
-    end
-    % Fs=handles.varargin{1};
-    % Nr=handles.varargin{3};
-    % Tc=handles.varargin{4};
-    % Tr=handles.varargin{5};
-    %Moved from Recoding Session Fig
-    
-    sT = (cT+rT)*nR;
-    cdata = cdata(:,:,size(cdata,3));
-    tempdata = cdata;
-    save('cdata.mat','cdata','tempdata','sF','sT','nCh','ComPortType','deviceName');
-    %close(GUI_AFEselection);
-    close(GUI_RecordingSession);
+        sT = (cT+rT)*nR;
+        cdata = cdata(:,:,size(cdata,3));
+        tempdata = cdata;
+        save('cdata.mat','cdata','tempdata','sF','sT','nCh','ComPortType','deviceName');
+        %close(GUI_AFEselection);
+        close(GUI_RecordingSession);
 
-    % close(recording_session_fig);
+        % close(recording_session_fig);
 
-    % close(get(hObject,'Parent'))
+        % close(get(hObject,'Parent'))
+    case 1
+        % Fast recording session
+        [cdata, sF, sT] = FastRecordingSession(hGUI_Rec,AFE_settings);
+        tempdata = cdata;                                                      % variable useful for offline data processing
+        save('cdata.mat','cdata','tempdata','sF','sT','nCh','ComPortType','deviceName');
+    case 2
+        % HD-EMG mode, recording performed by caller
+        %handles.AFE_settings = AFE_settings;
+        
+        GUI_Recordings_Image('startRecording',hGUI_Rec,AFE_settings);
+    case 3
+        % Biofeedback mode, recording performed by caller
+        startBiofeedback(hGUI_Rec,AFE_settings);
 end
 
 % --- Executes during object creation, after setting all properties.
@@ -436,11 +459,14 @@ function pm_name_Callback(hObject, eventdata, handles)
 %        str2double(get(hObject,'String')) returns contents of pm_name as a double
 contents = cellstr(get(handles.pm_name,'String'));
 deviceName = contents{get(handles.pm_name,'Value')};
-if strcmp(deviceName,'ADS1299_DSP')
-    set(handles.cb_recFeatures,'Visible', 'on');
-else
-    set(handles.cb_recFeatures,'Visible', 'off');
+%CK: These are the default values for the MyoBand. Changing these might
+%lead to unwanted behaviour.
+if strcmp(deviceName, 'Thalmic MyoBand')
+    set(handles.pm_sampleRate, 'Value', 9); %CK: The sample rate should be 200 Hz
+    set(handles.ComPortType, 'Value', 1); %CK: I chose the NI ComPort because later in BPR it was easier to implement the MyoBand as an NI device, eventhough it isn't!
+    set(handles.et_chs, 'String', '8');
 end
+guidata(hObject,handles);
 
 % --- Executes during object creation, after setting all properties.
 function pm_name_CreateFcn(hObject, eventdata, handles)
@@ -453,6 +479,9 @@ function pm_name_CreateFcn(hObject, eventdata, handles)
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
+deviceNames = {'AD2','AD3','MyoAmpF4F1','MyoAmpF4F2','MyoAmpF4F7','MyoAmpF4F7_Shielded','NeuroAmpF8F1','RHA2216','RHA2132','ADS1299','ADS_BP','Thalmic MyoBand'};
+set(hObject,'String',deviceNames);
+set(hObject,'Value',5);
 
 % --- Executes during object creation, after setting all properties.
 function uipanel3_CreateFcn(hObject, eventdata, handles)

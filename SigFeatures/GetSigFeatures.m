@@ -112,9 +112,8 @@ end
 
 function pF = GetSigFeatures_twl(pF)
 % Waveform Length (acumulative changes in the length)
-% 2011-07-27 Max Ortiz / Creation
-    mdata = [zeros(1,pF.ch) ; pF.data(1:pF.sp-1,:)];
-    pF.f.twl = sum(abs(pF.data - mdata));
+% 2011-07-27 Max Ortiz / Creation 
+    pF.f.twl = sum(abs(pF.data(2:pF.sp,:) - pF.data(1:pF.sp-1,:)));
 end
 
 % -----------------------------------------------

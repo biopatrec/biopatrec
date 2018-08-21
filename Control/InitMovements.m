@@ -29,7 +29,7 @@
 function obj = InitMovements(path)
 
     if(nargin)
-        fid = fopen(strcat(path,'\movements.def'));
+        fid = fopen(strcat(path,filesep,'movements.def'));
         if(fid==-1)
             errordlg('movements.def file not found in the given folder','Definition File Error');
             return

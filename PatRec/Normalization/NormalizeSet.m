@@ -54,4 +54,5 @@ function tSet = NormalizeSet(tSet, patRec)
         disp('Error: No normalization method found');
     end
     
+    tSet(isnan(tSet)) = 0;
 end

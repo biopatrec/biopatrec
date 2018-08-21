@@ -29,7 +29,7 @@
 function obj = InitMotors(path)
 
     if(nargin)
-        fid = fopen(strcat(path,'\motors.def'));
+        fid = fopen(strcat(path,filesep,'motors.def'));
         if(fid==-1)
             errordlg('motors.def file not found in the given folder','Definition File Error');
             return

@@ -24,10 +24,31 @@
 % ------------------------- Updates & Contributors ------------------------
 % 2009-04-02 / Max Ortiz  / Creation of EMG_AQ
 % 2011-22-06 / Max Ortiz  / Software name changed from EMG_AQ to BioPatRec
-% 20XX-XX-XX / Author     / Comments
-
+% 2018-09-07 / Andreas Eiler / change current folder due to writing permissions of cdata
+% YYYY-DD-MM / Author / Update
 close all;
 clear all;
 
 %EMG_AQ
 GUI_BioPatRec;
+
+%% Function finds the Folder where BPR is stored and cuts the Path by the filename
+% Current Folder has to be changed to this folder due to writing
+% permissions for the cdata.m file
+ BPR_Path = which('BioPatRec.m'); %find location of BPR and cut the path to the folder
+ BPR_cut = 0;
+ leng_BPR_Path = length(BPR_Path);
+ 
+ while ~BPR_cut %cut the Path to the folder
+     if BPR_Path(leng_BPR_Path) ~= '\'
+         BPR_Path(leng_BPR_Path) = [];
+         leng_BPR_Path = leng_BPR_Path - 1;
+     else
+         BPR_Path(leng_BPR_Path) = [];
+         BPR_cut = 1;
+     end
+ end
+ 
+ cd (BPR_Path)
+
+

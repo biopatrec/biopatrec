@@ -50,6 +50,8 @@
 %                                 other custom devices for BioPatRec_TRE.
 % 2016-02-10 / Max Ortiz        / change the initialization of the NI card
 %                                 to use the vector of channels rather than only the number
+% 2016-04-15 / Julian Maier     / Artificial artifact inseration (Line 268)   
+
 % 20xx-xx-xx / Author  / Comment on update
 
 function handlesX = RealtimePatRec(patRecX, handlesX)
@@ -160,7 +162,12 @@ function handlesX = RealtimePatRec(patRecX, handlesX)
 
         % Init SBI
         sCh = patRec.nCh;                                                  % Vector of channels
-        s = InitSBI_NI(sF,sT,sCh); 
+        if strcmp(deviceName, 'Thalmic MyoBand')
+            %CK: init MyoBand
+            s = MyoBandSession(sF, sT, sCh);
+        else
+            s = InitSBI_NI(sF,sT,sCh); 
+        end 
         s.NotifyWhenDataAvailableExceeds = tWs;                            % PEEK time
         lh = s.addlistener('DataAvailable', @RealtimePatRec_OneShot); 
 
@@ -170,8 +177,15 @@ function handlesX = RealtimePatRec(patRecX, handlesX)
         if ~s.IsDone                                                       % check if is done
             s.wait();
         end
-        delete(lh);
-
+        
+        
+        if ~strcmp(deviceName, 'Thalmic MyoBand')
+            delete(lh);
+        end
+        %CK: Stop sampling from MyoBand
+        if strcmp(deviceName, 'Thalmic MyoBand')
+            MyoClient('StopSampling');
+        end
     %%%%% Real Time PatRec with other custom device %%%%%   
     else
 
@@ -196,7 +210,7 @@ function handlesX = RealtimePatRec(patRecX, handlesX)
         handles.obj = obj;
 
         % Set the selected device and Start the acquisition
-        SetDeviceStartAcquisition(handles, obj);
+        handles = SetDeviceStartAcquisition(handles, obj);
 
         for timeWindowNr = 1:sT/tW
 
@@ -266,10 +280,17 @@ function RealtimePatRec_OneShot(src,event)
     %Output vector
     outVectorMotor = zeros(patRec.nOuts,1);
     
-    tData = tempData(end-patRec.sF*patRec.tW+1:end,:);
-    
     %Only considered the data once it has at least the size of time window
     if size(tempData,1) >= (patRec.sF*patRec.tW) 
+		
+		% Add artifact if required
+        if isfield(patRec,'addArtifact')
+            timeLength=str2double(handles.et_testingT.String);
+            tempDataArt = AddArtifactRealtime(tempData,timeLength);
+            tData = tempDataArt(end-patRec.sF*patRec.tW+1:end,:);
+        else % Copy the temporal data to the test data
+            tData = tempData(end-patRec.sF*patRec.tW+1:end,:);   
+        end
 
         % Start of processing time
         procTimeS = tic;

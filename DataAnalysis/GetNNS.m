@@ -36,7 +36,7 @@ if nargout > 1
     findNN = true;
 end
 
-if ~isempty(varargin)
+if ~isempty(varargin) && varargin{1} ~= inf
     k = varargin{1};
 else
     k = nS - 1; % maximume number of nearest neighbors from the same class

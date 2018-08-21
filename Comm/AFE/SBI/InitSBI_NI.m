@@ -31,6 +31,8 @@
 % 2016-02-10 / Max Ortiz  / Modifed routine to use chAI directly as a
 %                           string of numbers identifying each channels
 %                           as in the GUI
+% 2018-08-01 / Andreas Eiler / Adapting functions to new version of matlab 
+%                           (daq.getDevices)
 % 20xx-xx-xx / Author    / Comment on update
 
 function [s] = InitSBI_NI(sF, sT, chAI, chAO)
@@ -40,8 +42,9 @@ function [s] = InitSBI_NI(sF, sT, chAI, chAO)
 % chAIidx = find(chAI);
 
 % Close possible daq objects running
-if (~isempty(daqfind))
-    stop(daqfind)
+if ~isempty(daq.getDevices)
+    daqreset;
+%    stop(daq.getDevices)
 end
 
 % Find devices

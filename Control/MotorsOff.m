@@ -58,7 +58,7 @@ for i = 1 : noPIDs
         % if in speed control, PWM must be set to 0
         if ~SendMotorCommand(com, ctrl_type, motor_index, mov_dir, 0);
             disp('Failed');
-            fclose(com.io);
+            fclose(com);
         end
         
     elseif(ctrl_type == 1)

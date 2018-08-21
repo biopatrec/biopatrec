@@ -33,7 +33,7 @@ overlapS = 0.02*sF;    % Overlap samples considering 20 ms
 fData = [];
 
 for i = 1 : overlapS : tS-twS
-    feature = GetSigFeatures(data(i:i+twS,:), sF, {fID});
+    feature = GetSigFeatures(data(i:i+twS,:), sF, 'None', {fID});
     fData = [fData ; feature.(fID)];
 end
 

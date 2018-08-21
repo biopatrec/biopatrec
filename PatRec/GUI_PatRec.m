@@ -24,6 +24,9 @@
 % 2014-12-01 / Enzo Mastinu  / Added the handling part for the COM port number
                              % information into the parameters
 % 2015-04-29 / Cosima P.     / Addition of NetLab
+% 2016-11-30 / Niclas N.     / Addition of Feature Selection
+% 2018-02-24 / Adam Naber    / Fixed bugs in loading PatRec, SigFeatures,
+                             % and SigRecordings
 % 20xx-xx-xx / Author       / Comment on update
 
 function varargout = GUI_PatRec(varargin)
@@ -50,7 +53,7 @@ function varargout = GUI_PatRec(varargin)
 
 % Edit the above text to modify the response to help GUI_PatRec
 
-% Last Modified by GUIDE v2.5 24-Jun-2015 15:57:15
+% Last Modified by GUIDE v2.5 19-May-2017 16:56:56
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -81,7 +84,7 @@ function GUI_PatRec_OpeningFcn(hObject, eventdata, handles, varargin)
 
 set(handles.bg_featuresSelect,'SelectionChangeFcn',@bg_featuresSelect_SelectionChangeFcn);
 
-backgroundImage2 = importdata('/../Img/BioPatRec.png');
+backgroundImage2 = importdata('Img/BioPatRec.png');
 %select the axes
 axes(handles.axes1);
 %place image onto the axes
@@ -138,12 +141,35 @@ function pb_GetFeatures_Callback(hObject, eventdata, handles)
                 set(handles.rb_all,'Enable','on');
                 set(handles.rb_top2,'Enable','on');
                 set(handles.rb_top3,'Enable','on');
-                set(handles.rb_top4,'Enable','on'); 
+                set(handles.rb_top4,'Enable','on');
+                
+                set(handles.pm_normSets,'Enable','on'); 
+                set(handles.pm_SelectTopology,'Enable','on'); 
+                set(handles.pm_movMix,'Enable','on'); 
+                set(handles.pm_normSets,'Enable','on');
+                set(handles.pm_FeatureReduction,'Enable','on');
+                set(handles.et_vSets,'Enable','on');
+                set(handles.et_tSets,'Enable','on');
+                set(handles.et_trSets,'Enable','on');    
+                set(handles.pb_RealtimePatRecMov2Mov,'Enable','off');
+                set(handles.pb_RunOfflineTraining,'Enable','on');
+                
                 
             elseif (exist('recSessionFeatures','var'))         % Get sig_Features
                 Load_recSessionFeatures(recSessionFeatures, handles);            
                 %Enable algorithm selection
                 set(handles.pm_SelectAlgorithm,'Enable','on');
+                set(handles.pb_RunOfflineTraining,'Enable','on');
+                
+                set(handles.pm_normSets,'Enable','on'); 
+                set(handles.pm_SelectTopology,'Enable','on'); 
+                set(handles.pm_movMix,'Enable','on'); 
+                set(handles.pm_normSets,'Enable','on');
+                set(handles.pm_FeatureReduction,'Enable','on');
+                set(handles.et_vSets,'Enable','on');
+                set(handles.et_tSets,'Enable','on');
+                set(handles.et_trSets,'Enable','on');    
+                set(handles.pb_RealtimePatRecMov2Mov,'Enable','off');
                 set(handles.pb_RunOfflineTraining,'Enable','on');
 
             elseif (exist('sigFeatures','var'))         % Get sig_Features
@@ -155,6 +181,17 @@ function pb_GetFeatures_Callback(hObject, eventdata, handles)
                 set(handles.rb_top3,'Enable','on');
                 set(handles.rb_top4,'Enable','on'); 
                 set(handles.pb_RunOfflineTraining,'Enable','on');
+                
+                set(handles.pm_normSets,'Enable','on'); 
+                set(handles.pm_SelectTopology,'Enable','on'); 
+                set(handles.pm_movMix,'Enable','on'); 
+                set(handles.pm_normSets,'Enable','on');
+                set(handles.pm_FeatureReduction,'Enable','on');
+                set(handles.et_vSets,'Enable','on');
+                set(handles.et_tSets,'Enable','on');
+                set(handles.et_trSets,'Enable','on');    
+                set(handles.pb_RealtimePatRecMov2Mov,'Enable','off');
+                set(handles.pb_RunOfflineTraining,'Enable','on');
 
             elseif (exist('treated_data','var'))         % Get sig_Features
                 Load_sigFeatures(treated_data, handles);            
@@ -164,21 +201,49 @@ function pb_GetFeatures_Callback(hObject, eventdata, handles)
                 set(handles.rb_top2,'Enable','on');
                 set(handles.rb_top3,'Enable','on');
                 set(handles.rb_top4,'Enable','on'); 
+                
+                set(handles.pm_normSets,'Enable','on'); 
+                set(handles.pm_SelectTopology,'Enable','on'); 
+                set(handles.pm_movMix,'Enable','on'); 
+                set(handles.pm_normSets,'Enable','on');
+                set(handles.pm_FeatureReduction,'Enable','on');
+                set(handles.et_vSets,'Enable','on');
+                set(handles.et_tSets,'Enable','on');
+                set(handles.et_trSets,'Enable','on');    
+                set(handles.pb_RealtimePatRecMov2Mov,'Enable','off');
+                set(handles.pb_RunOfflineTraining,'Enable','on');
 
             elseif (exist('patRec','var'))              % Get patRec
                 Load_patRec(patRec, 'GUI_PatRec',[]);
                 set(handles.pm_normSets,'Enable','off'); 
                 set(handles.pm_SelectTopology,'Enable','off'); 
-                set(handles.pm_movMix,'Enable','off'); 
-                set(handles.pm_normSets,'Enable','off'); 
+                set(handles.pm_movMix,'Enable','off');
+                set(handles.pm_FeatureReduction,'Enable','off');
+                set(handles.pm_SelectTraining,'Enable','off');
+                set(handles.pm_SelectAlgorithm,'Enable','off');
+                set(handles.pb_RunOfflineTraining,'Enable','off');
+                set(handles.et_vSets,'Enable','off');
+                set(handles.et_tSets,'Enable','off');
+                set(handles.et_trSets,'Enable','off');
     %           set(handles.pb_RealtimePatRec,'Enable','on');    
     %           set(handles.pb_motionTest,'Enable','on');        
-                set(handles.pb_RealtimePatRecGUI,'Enable','on');
                 %Added to enable Mov2Mov-button after loading PatRec
                 set(handles.pb_RealtimePatRecMov2Mov,'Enable','on');
                 %Load all values from the patRec into the GUI.
-                set(handles.et_accuracy,'String',num2str(patRec.acc(end)));
-                set(handles.lb_accuracy,'String',num2str(patRec.acc(1:end-1)));        
+                set(handles.et_accuracy,'String',num2str(patRec.performance.acc(end)));
+                set(handles.lb_accuracy,'String',num2str(patRec.performance.acc(1:end-1)));
+                set(handles.et_accTrue,'String',num2str(patRec.performance.accTrue(end)));
+                set(handles.lb_accTrue,'String',num2str(patRec.performance.accTrue(1:end-1)));
+                set(handles.et_specificity,'String',num2str(patRec.performance.specificity(end)));
+                set(handles.lb_specificity,'String',num2str(patRec.performance.specificity(1:end-1)));
+                set(handles.et_recall,'String',num2str(patRec.performance.recall(end)));
+                set(handles.lb_recall,'String',num2str(patRec.performance.recall(1:end-1)));
+                set(handles.et_precision,'String',num2str(patRec.performance.precision(end)));
+                set(handles.lb_precision,'String',num2str(patRec.performance.precision(1:end-1)));
+                set(handles.et_f1,'String',num2str(patRec.performance.f1(end)));
+                set(handles.lb_f1,'String',num2str(patRec.performance.f1(1:end-1)));
+                set(handles.et_npv,'String',num2str(patRec.performance.npv(end)));
+                set(handles.lb_npv,'String',num2str(patRec.performance.npv(1:end-1)));
                 set(handles.et_trTime,'String',num2str(patRec.trTime));
                 set(handles.et_tTime,'String',num2str(patRec.tTime));
                 disp('%%%%%%%%%%% patRec loaded %%%%%%%%%%%%%');
@@ -217,11 +282,19 @@ function pb_GetFeatures_Callback(hObject, eventdata, handles)
             fullDir = strcat(path,name,ext); % We get the path of the selected file
             fileDir = dir(fullDir); % We use this to get the size, which is a field of dir
             movText = fgetl(fid); % We read the first line
-            movText = textscan(movText, '%s', 'Delimiter', ',', 'BufSize', fileDir.bytes); %Scans for objects seperated with commas. We use the filesize as buffer
+            if verLessThan('matlab','8.4')
+                movText = textscan(movText, '%s', 'Delimiter', ',', 'BufSize', fileDir.bytes); %Scans for objects seperated with commas. We use the filesize as buffer
+            else
+                movText = textscan(movText, '%s', 'Delimiter', ',');
+            end
             recSession.mov = movText{1}; %And load them into the recSession
             fclose(fid); %We need to close the file, before we can textscan it with other parameters
             fid = fopen(file);
-            C = textscan(fid, '%s', 'Delimiter', '\n', 'BufSize', fileDir.bytes); % Scans for objects seperated by line breaks            
+            if verLessThan('matlab','8.4')
+                C = textscan(fid, '%s', 'Delimiter', '\n', 'BufSize', fileDir.bytes); % Scans for objects seperated by line breaks            
+            else
+                movText = textscan(movText, '%s', 'Delimiter', ',');
+            end
             recSession.date = C{1}{2};
             recSession.comm = C{1}{3};
             if strcmp(recSession.comm, 'COM')
@@ -269,9 +342,6 @@ function pb_GetFeatures_Callback(hObject, eventdata, handles)
             set(handles.rb_top4,'Enable','on'); 
         end
     end
-    
-
-   
     
     
 % --- Executes on button press in pb_RunOfflineTraining.
@@ -2187,28 +2257,4 @@ function et_accTrue_CreateFcn(hObject, eventdata, handles)
 %       See ISPC and COMPUTER.
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
-end
-
-
-% --------------------------------------------------------------------
-function m_ALC_Callback(hObject, eventdata, handles)
-% hObject    handle to m_ALC (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-
-% --------------------------------------------------------------------
-function m_ALC_upload_Callback(hObject, eventdata, handles)
-% hObject    handle to m_ALC_upload (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-if isfield(handles,'patRec')
-    if strcmp(handles.patRec.patRecTrained.algorithm, 'DA')
-        UpdateCoefficientsALCD(handles);
-    else
-        set(handles.t_msg,'String','No DA found. No data uploaded');
-    end
-else
-    set(handles.t_msg,'String','No patRec found. No data uploaded');   
 end

@@ -78,7 +78,12 @@
 % 2015-11-27 / Enzo Mastinu  / It has been added the possibility to repeat 
 %                              the same movement recording if needed.
 % 2016-05-11 / Niclas Nilsson / DataAnalysis was added
-
+% 2017-02-28 / Simon Nilsson / Changed time window size to 200 samples
+                            % when acquiring data using the RHA2132 for
+                            % the buffered acquisition mode to work well.
+% 2018-07-09 / Andreas Eiler / Added function to change current folder to load
+                            % Myo.dll file correctly
+                            
 % 20xx-xx-xx / Author  / Comment
 
 
@@ -103,11 +108,10 @@ vreLeftHand  = varargin{10};
 movRepeatDlg = varargin{11};
 useLeg      = varargin{12};
 rampStatus   = varargin{13};
+saveRec     = true;
 
-if length(varargin) > 13
-    saveRec = varargin{14};
-else
-    saveRec = true;
+if sum(strcmp(varargin,'replace')) > 0
+    saveRec = false;
 end
 
 % Get required informations from afeSettings structure
@@ -115,6 +119,10 @@ nCh          = afeSettings.channels;
 sF           = afeSettings.sampleRate;
 deviceName   = afeSettings.name;
 ComPortType  = afeSettings.ComPortType;
+if isfield(afeSettings,'vChannels')
+    vCh = afeSettings.vChannels;
+    handles.vCh = vCh;
+end
 if strcmp(ComPortType, 'COM')
     ComPortName = afeSettings.ComPortName;
 end
@@ -140,7 +148,13 @@ handles.sTall = sTall;
 handles.sT    = sT;
 
 % Setting for data peeking
-tW            = sT/100;                                                % Time window size
+% Time window size
+% Window of 200 samples works well with buffered sending mode of RHA2132
+if strcmp(deviceName,'RHA2132')
+    tW = 200/sF;
+else
+    tW = sT/100;
+end
 tWs           = tW*sF;                                                 % Time window samples
 handles.tWs   = tWs;
 timeStamps    = 0:1/sF:tW-1/sF;                                        % Create vector of time
@@ -271,7 +285,7 @@ while ex <= nM
     % Warning to the user
     fileName = ['Img/' char(mov(ex)) '.jpg'];
     if ~exist(fileName,'file')
-        fileName = ['/../Img/' 'noImage' '.png'];%'Img/relax.jpg';
+        fileName = ['Img/' 'noImage' '.png'];%'Img/relax.jpg';
     end
     
     movI = importdata(fileName);                                       % Import Image
@@ -334,7 +348,17 @@ while ex <= nM
         
         % Init SBI
         sCh = 1:nCh;
-        s = InitSBI_NI(sF,sTall,sCh);
+        
+        if strcmp(deviceName, 'Thalmic MyoBand')
+            %CK: init MyoBand
+            originFolder = pwd;
+            changeFolderToMyoDLL();
+            pause (0.5);
+            s = MyoBandSession(sF, sTall, sCh);
+            cd (originFolder);
+        else
+            s = InitSBI_NI(sF,sTall,sCh);
+        end
         s.NotifyWhenDataAvailableExceeds = tWs;                        % PEEK time
         lh = s.addlistener('DataAvailable', @RecordingSession_ShowData);
         
@@ -474,11 +498,20 @@ while ex <= nM
     
     % NI DAQ card: "You must delete the listener once the operation is complete"
     if strcmp(ComPortType,'NI');
-        error=0;
+        error = 0;
         if ~s.IsDone                                                   % check if is done
             s.wait();
         end
-        delete(lh);
+        
+        %CK: Since variable lh is not used in the MyoBandSession, we cannot
+        %delete it this way. But for any other device lh will be deleted.
+        if ~strcmp(deviceName, 'Thalmic MyoBand')
+            delete(lh);
+        end
+        %CK: Stop sampling from MyoBand
+        if strcmp(deviceName, 'Thalmic MyoBand')
+             MyoClient('StopSampling');
+        end
     end
     
     if error == 1
@@ -535,6 +568,9 @@ if saveRec                                                             % Saved i
     recSession.nM       = nM;
     recSession.nR       = nR;
     recSession.nCh      = nCh;
+    if isfield(handles,'vCh')
+        recSession.vCh = handles.vCh;
+    end
     recSession.dev      = deviceName;
     recSession.comm     = ComPortType;
     if strcmp(ComPortType, 'COM')
@@ -548,6 +584,7 @@ if saveRec                                                             % Saved i
         recSession.ramp.rampMax = rampParams{2};
         recSession.ramp.minData = rampParams{3};
         recSession.ramp.maxData = rampParams{4};
+        recSession.ramp.rampFeature = 'tmabs';              % what is being used in ramp training - mean absolute value. hard coded, may be editable later
     end
     
     [filename, pathname] = uiputfile({'*.mat','MAT-files (*.mat)'},'Save as', 'Untitled.mat');
@@ -597,6 +634,6 @@ if saveRec                                                             % Saved i
     choice = questdlg(dlgQuestion,dlgTitle,'Yes','No', 'Yes');
     if strcmp(choice,'Yes')
         GUI_DataAnalysis(recSession,varargin)
-    end    
+    end
 end
 end

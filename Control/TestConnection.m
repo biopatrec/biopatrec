@@ -6,7 +6,7 @@ function result = TestConnection(com)
     end 
     % Send test message
     fwrite(com,'A','char');
-    fwrite(com,'C','char')
+    fwrite(com,'C','char');
     replay = char(fread(com,1,'char'));
     if strcmp(replay,'C');
         result = 1;

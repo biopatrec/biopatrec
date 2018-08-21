@@ -77,8 +77,8 @@ function GUI_BioPatRec_OpeningFcn(hObject, eventdata, handles, varargin)
 
 %load the background image into Matlab
 %if image is not in the same directory as the GUI files, you must use the 
-%full path name of the iamge file
-backgroundImage = importdata('/../Img/BioPatRec.png');
+%full path name of the image file
+backgroundImage = importdata('Img/BioPatRec.png');
 %select the axes
 axes(handles.axes1);
 %place image onto the axes

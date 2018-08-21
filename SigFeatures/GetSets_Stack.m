@@ -30,12 +30,34 @@
 % ------------------------- Updates & Contributors ------------------------
 % [Contributors are welcome to add their email]
 % 2009-04-26 / Max Ortiz  / Creation
-% 2009-07-21 / Max Ortiz  / To hanlde "treated_data" struct and selection of the number of set
+% 2009-07-21 / Max Ortiz  / To handle "treated_data" struct and selection of the number of set
 % 2011-06-24 / Max Ortiz  / Update to new coding standard and name to stack             
 
-function [trSet, trOut, vSet, vOut, tSet, tOut] = GetSets_Stack(sigFeatures, features)
+function [trSet, trOut, vSet, vOut, tSet, tOut, movIdx, movOutIdx] = GetSets_Stack(sigFeatures, features)
 
-nM   = length(sigFeatures.trFeatures(1,:));     % Number of movements
+%Variables
+nM        = size(sigFeatures.mov,1);
+nMm       = sum(cellfun(@(x) any(strfind(x,'+')), sigFeatures.mov));
+nMi       = nM-nMm;
+movIdx    = 1:size(sigFeatures.mov,1);
+movIdxMix = zeros(1,nMm);
+movOutIdx = cell(1,nM);
+
+% Find the mixed movements by looking for "+"
+% use of a temporal index to match the output, this assumes that the order
+% of the output is the same as the order of the movements
+indIdx = 1;
+mixIdx = 1;
+for i = 1 : size(sigFeatures.mov,1)
+    if isempty(strfind(sigFeatures.mov{i},'+'))
+        movOutIdx{i} = indIdx;  % Index for the output of each movement
+        indIdx = indIdx + 1;
+    else
+        movIdxMix(mixIdx) = i;
+        mixIdx = mixIdx + 1;
+    end
+end
+
 trSets = sigFeatures.eTrSets;     % effective number of sets for trainning
 
 if isempty(sigFeatures.vFeatures)
@@ -60,7 +82,7 @@ trOut = zeros(Ntrset, nM);
 vOut  = zeros(Nvset , nM);
 tOut  = zeros(Ntset , nM);
 
-for e = 1 : nM;
+for e = 1 : nM
     % Training
     for r = 1 : trSets
         sidx = r + (trSets*(e-1));
@@ -96,4 +118,20 @@ for e = 1 : nM;
     end
 end
 
+% Extract information for mixed patterns
+for j = 1 : nMm
+    idxMix = zeros(1,nMi);
+    e = movIdxMix(j);    % index of the movement
+    %find mixed movements
+    for i = 1 : (nMi-1)
+        ii = movIdx(i);
+        if isempty(strfind(sigFeatures.mov{e},sigFeatures.mov{ii}))
+            idxMix(i) = 0;
+        else
+            idxMix(i) = 1;
+        end
+    end
 
+    movOutIdx{e} = find(idxMix);
+
+end

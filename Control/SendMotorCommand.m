@@ -18,29 +18,23 @@
 % ------------------- Function Description ------------------
 % Function to implement the Control Framework
 %
-% It waits until the ALC acknowledges the comunication, otherwise 
+% It waits until the controller acknowledges the comunication, otherwise 
 % it exits with a failure (result = 0).
 %
 % --------------------------Updates--------------------------
 % 2015-07-07 / Enzo Mastinu  / Created  accordingly to the standardized
 %                              framework. It sends the motor command to the
 %                              external device.
+% 2018-02-02 / Adam Naber  / Now sends command atomically. This should make
+                             communication with different platforms easier.
 % 20xx-xx-xx / Author  / Comment
 
-
+%% ArduPilot Function to send a motor command
 function result = SendMotorCommand(obj, type, index, dir, pwm)
-    % Send the message type
-    fwrite(obj,'M','char');
-    % Send the motor type
-    fwrite(obj,type);
-    % Send PWM ID
-    fwrite(obj,index);  
-    % Send direction
-    fwrite(obj,dir)    
-    % Send speed/position
-    fwrite(obj,pwm)              
+    cmd = ['M',type,index,dir,pwm];
+    fwrite(obj,cmd,'char')
 
-    % If no problems where encountered, the ALC must return ID  
+    % If no problems where encountered, the controller will return the motor ID
     reply = fread(obj,1);
     if reply == index
         result=1;

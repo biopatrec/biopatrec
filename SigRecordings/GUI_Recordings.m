@@ -33,9 +33,7 @@
                             % session. At the end of the recording session it 
                             % is possible to check all channels individually, 
                             % apply offlinedata  process as feature extraction or filter etc.
-% 2016-04-01 / Julian Maier / Added Crop option, signal separation, noise
-                            % adding, motion filtering, wavelet filering
-% 20xx-xx-xx / Author  / Comment on update
+% 2017-09-25 / Simon Nilsson  / Added virtual reference filtering option
 
 
 
@@ -63,7 +61,7 @@ function varargout = GUI_Recordings(varargin)
 
 % Edit the above text to modify the response to help GUI_Recordings
 
-% Last Modified by GUIDE v2.5 29-Apr-2016 16:16:47
+% Last Modified by GUIDE v2.5 28-Feb-2017 16:19:55
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
 gui_State = struct('gui_Name',       mfilename, ...
@@ -93,7 +91,7 @@ function GUI_Recordings_OpeningFcn(hObject, eventdata, handles, varargin)
 % varargin   command line arguments to GUI_Recordings (see VARARGIN)
 
 %load the background image into Matlab
-backgroundImage2 = importdata('/../Img/BioPatRec.png');
+backgroundImage2 = importdata('Img/BioPatRec.png');
 %select the axes
 axes(handles.a_biopatrec);
 %place image onto the axes
@@ -1066,46 +1064,15 @@ function m_plotExtern_Callback(hObject, eventdata, handles)
 PlotTimeFreq
 
 % --------------------------------------------------------------------
-function m_wden_Callback(hObject, eventdata, handles)
-% hObject    handle to m_wden (see GCBO)
+function m_vRef_Callback(hObject, eventdata, handles)
+% hObject    handle to m_vRef (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-wd = GUI_Denoising(); %Open Wavelet GUI
-wddata = guidata(wd);
-set(wddata.t_sthandles,'UserData',handles); %transfer parent handles to child GUI
-denoiseParams = get(handles.t_denoiseParams,'UserData');
-denoiseParams = SetDenoiseParams(wddata,denoiseParams);
-uiwait(wd);
-denoiseParams = get(handles.t_denoiseParams,'UserData');
-if ~isempty(denoiseParams)
+    % Load matrix
     load('cdata.mat');
     handles.nCh = size(tempdata,2);
     handles.ComPortType = ComPortType;
     handles.deviceName = deviceName;
-    tempdata = WaveletSignalDenoising(tempdata,denoiseParams);    
+    tempdata = tempdata - mean(tempdata,2)*ones(1,size(tempdata,2));
     DataShow(handles,tempdata,sF,sT);
     save('cdata.mat','cdata','tempdata','sF','sT','nCh','ComPortType','deviceName');
-    disp('Wavelet Denoising applied.')
-end
-
-% --------------------------------------------------------------------
-function m_mFilter_Callback(hObject, eventdata, handles)
-% hObject    handle to m_mFilter (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-strMeth = {'SWT','SWT + SigSep','DWT','DWT + SigSep'};
-[selMeth,ok] = listdlg('PromptString','Select artifact removal method:',...
-    'SelectionMode','single','ListSize',[160 120],...
-    'ListString',strMeth); 
-if ~ok, return; end
-meth= strMeth{selMeth};
-
-load('cdata.mat');
-handles.nCh = size(tempdata,2);
-handles.ComPortType = ComPortType;
-handles.deviceName = deviceName;
-tempdata = MotionFilt(tempdata',sF,meth);
-DataShow(handles,tempdata,sF,sT);
-save('cdata.mat','cdata','tempdata','sF','sT','nCh','ComPortType','deviceName');
-disp(['Applied mFilter.'])

@@ -28,7 +28,10 @@
                             % apply offline data process as feature extraction or filter etc.
 % 2015-10-28 / Martin Holder / >2014b plot interface fixes
 
-% 20xx-xx-xx / Author  / Comment
+% 2017-09-25 / Simon Nilsson  / Added warning dialog if acquisition error occurs
+
+% 2018-07-09 / Andreas Eiler / Added function to change current folder to load
+                            % Myo.dll file correctly
 
 
 
@@ -96,7 +99,9 @@ function [cdata, sF, sT] = FastRecordingSession(varargin)
     ymax =  ampPP * nCh - ampPP*1/3;
     p_t0 = plot(handles.a_t0, timeStamps, sData);
     handles.p_t0 = p_t0;
-    xlim(handles.a_t0, [0,tW]);
+    xlim(handles.a_t0, [timeStamps(1) timeStamps(end)]);
+    set(handles.a_t0,'XTick',0:numel(timeStamps)-1);
+    set(handles.a_t0,'XTickLabel',timeStamps);
     ylim(handles.a_t0, [ymin ymax]);
     set(handles.a_t0,'YTick',offVector);
     set(handles.a_t0,'YTickLabel',0:nCh-1);
@@ -127,7 +132,6 @@ function [cdata, sF, sT] = FastRecordingSession(varargin)
     drawnow;
 
     % Run 
-    timeStamps = 0:1/sF:tW-1/sF;                                       % Timestamps used the time vector
     currentTv = 1;                                                     % Current time vector
     tV = timeStamps(currentTv):1/sF:(tW-1/sF)+timeStamps(currentTv);   % Time vector used for drawing graphics
     currentTv = currentTv - 1 + tWs;                                   % Updated everytime tV is updated
@@ -138,7 +142,16 @@ function [cdata, sF, sT] = FastRecordingSession(varargin)
 
         % Init SBI
         sCh = 1:nCh;
-        s = InitSBI_NI(sF,sT,sCh);
+        if strcmp(deviceName, 'Thalmic MyoBand')
+            %CK: init MyoBand
+            originFolder = pwd;
+            changeFolderToMyoDLL();
+            pause (0.5);
+            s = MyoBandSession(sF, sT, sCh);
+            cd (originFolder);
+        else
+            s = InitSBI_NI(sF,sT,sCh);
+        end
         s.NotifyWhenDataAvailableExceeds = tWs;                        % PEEK time
         lh = s.addlistener('DataAvailable', @RecordingSession_ShowData);   
 
@@ -154,30 +167,50 @@ function [cdata, sF, sT] = FastRecordingSession(varargin)
 
         % Connect the chosen device, it returns the connection object
         obj = ConnectDevice(handles);
-
+        if strcmp(get(obj,'Status'),'closed')   % Make sure port opened correctly
+            return;
+        end
+        
         % Set the selected device and Start the acquisition
         SetDeviceStartAcquisition(handles, obj);
+        if strcmp(get(obj,'Status'),'closed')   % StartAcquisition closes the port on failure
+            return;
+        end
+        
+        samplesCounter = 1;  
 
         samplesCounter = 1;
         cData = zeros(tWs, nCh);  
 
         for timeWindowNr = 1:sT/tW
-            cData = Acquire_tWs(deviceName, obj, nCh, tWs);    % acquire a new time window of samples  
+            [cData, error] = Acquire_tWs(deviceName, obj, nCh, tWs);    % acquire a new time window of samples  
+            if error == 1
+                errordlg('Error occurred during the acquisition!','Error');
+                return
+            end
             acquireEvent.Data = cData;
             RecordingSession_ShowData(0, acquireEvent);            % plot data and add cData to allData vector
             samplesCounter = samplesCounter + tWs;
         end
 
         % Stop acquisition
-        StopAcquisition(deviceName, obj);  
+        StopAcquisition(deviceName, obj); 
+        
     end
 
     % NI DAQ card: "You must delete the listener once the operation is complete"
-    if strcmp(ComPortType,'NI');  
+    if strcmp(ComPortType,'NI')  
         if ~s.IsDone                                                   % check if is done
             s.wait();
         end
-        delete(lh);
+        if ~strcmp(deviceName, 'Thalmic MyoBand')
+            delete(lh);
+        end
+        %CK: Stop sampling from MyoBand
+        if strcmp(deviceName, 'Thalmic MyoBand')
+%             s.stop(); 
+            MyoClient('StopSampling');
+        end
     end
 
     % Save Data
@@ -190,14 +223,14 @@ function [cdata, sF, sT] = FastRecordingSession(varargin)
     fileName = 'Img/Agree.jpg';
     movI = importdata(fileName);                                       % Import Image
     set(handles.a_pic,'Visible','on');                                 % Turn on visibility
-    pic = image(movI,'Parent',handles.a_pic);                          % set image
+    image(movI,'Parent',handles.a_pic);                          % set image
     axis(handles.a_pic,'off');                                         % Remove axis tick marks
     set(handles.a_prog,'visible','off');
     set(handles.hPatch,'Xdata',[0 0 0 0]);
 
     % Data Plot
     cdata = recSessionData;
-    DataShow(handles,cdata,sF,sT);
+    DataShow(handles,cdata(:,1:handles.nCh),sF,sT);
     
     % Set visible the offline plot and process panels
     set(handles.uipanel9,'Visible','on');   

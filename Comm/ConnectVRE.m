@@ -41,6 +41,7 @@ function handles = ConnectVRE(handles, program)
     handles = DisableIfExists(handles,'pb_VRleg');
     handles = DisableIfExists(handles,'pb_socketConnect2');
     handles = DisableIfExists(handles,'pb_ARarm');
+    handles = DisableIfExists(handles,'pb_ARleg');
     handles = EnableIfExists(handles,'pb_socketDisconnect');
     handles = EnableIfExists(handles,'pb_Camera');
     handles = EnableIfExists(handles,'pb_ActivateArm');

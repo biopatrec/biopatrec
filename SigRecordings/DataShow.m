@@ -51,6 +51,7 @@ function DataShow(handles,cdata, sF, sT)
     ampPP = 5;
     ymin = -ampPP*2/3;
     ymax =  ampPP * nCh - ampPP*1/3;
+    xmax =  max(tt);
     
     %Fast Fourier Transform
     NFFT = 2^nextpow2(nS);                                                 % Next power of 2 from number of samples
@@ -63,6 +64,8 @@ function DataShow(handles,cdata, sF, sT)
     offVector = offVector .* ampPP;
     Kt = ampPP/(2*max(max(abs(cdata))));
     Kf = ampPP/(max(max(abs(m))));
+    tempData = zeros(size(cdata,1),nCh);
+    fData = zeros(size(m,1),nCh);
     for j = 1 : nCh
         tempData(:,j) = cdata(:,j)*Kt + offVector(j);
         fData(:,j) = m(:,j)*Kf + offVector(j);
@@ -74,6 +77,7 @@ function DataShow(handles,cdata, sF, sT)
     set(handles.a_t0,'YTick',offVector);
     set(handles.a_t0,'YTickLabel',0:nCh-1);
     ylim(handles.a_t0, [ymin ymax]);
+    xlim(handles.a_t0, [0 xmax]);
     axes(handles.a_f0);
     plot(f,fData);
     set(handles.a_f0,'YTick',offVector);

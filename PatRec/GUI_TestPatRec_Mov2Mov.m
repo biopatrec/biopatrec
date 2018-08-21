@@ -51,6 +51,7 @@
 %                             implemented, the SPC control does not need
 %                             anymore the MoveMotorWifi or any dedicated
 %                             SPC functions
+% 2016-12-05 / Jake Gusman  / Addition of Fitts Law Test Initiation button
 %
 % 20xx-xx-xx / Author  / Comment on update
 
@@ -78,7 +79,7 @@ function varargout = GUI_TestPatRec_Mov2Mov(varargin)
 
 % Edit the above text to modify the response to help GUI_TestPatRec_Mov2Mov
 
-% Last Modified by GUIDE v2.5 19-May-2016 13:42:13
+% Last Modified by GUIDE v2.5 05-Dec-2016 15:09:35
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -152,7 +153,7 @@ if ~isempty(varargin)
 end
 
 % Logo image
-backgroundImage2 = importdata('/../Img/BioPatRec.png');
+backgroundImage2 = importdata('Img/BioPatRec.png');
 %select the axes
 axes(handles.axes3);
 %place image onto the axes
@@ -324,17 +325,7 @@ end
 % Run realtime patrec
 set(handles.t_msg,'String','Real time PatRec started...');      
 drawnow;
-
-% TEST ALCD
-if isfield(handles,'cb_ALCD')
-    if get(handles.cb_ALCD,'Value') == 1
-        handles = ControlTestALCD(handles.patRec, handles);
-    else
-        handles = RealtimePatRec(handles.patRec, handles);  
-    end
-else
-    handles = RealtimePatRec(handles.patRec, handles);
-end
+handles = RealtimePatRec(handles.patRec, handles);  
 set(handles.t_msg,'String','Real time PatRec finished');    
 
 % Save the handles back
@@ -446,9 +437,9 @@ function pb_motionTest_Callback(hObject, eventdata, handles)
         set(handles.t_msg,'String','No patRec to test');        
         return
     end
-        
+   
     % Run motion test
-    set(handles.t_msg,'String','Motion Test started...');      
+    set(handles.t_msg,'String','Motion Test started...');  
     drawnow;
     MotionTest(patRec, handles);
     set(handles.t_msg,'String','Motion Test finished'); 
@@ -626,6 +617,10 @@ if length( handles.patRec.control.maxDegPerMov ) >= 1
 else
     set(hObject,'String','N/A')
 end
+
+handles.mov.name
+handles.movList.name
+
 guidata(hObject,handles);
 
 % --- Executes during object creation, after setting all properties.
@@ -1632,7 +1627,17 @@ guidata(hObject,handles);
 
 set(handles.pb_testConnection,'Enable','on');
 set(handles.pb_disconnect,'Enable','on');
-if isobject(handles.sensors)
+set(handles.pb_move1,'Enable','on');
+set(handles.pb_move2,'Enable','on');
+set(handles.pb_move3,'Enable','on');
+set(handles.pb_move4,'Enable','on');
+set(handles.pb_move5,'Enable','on');
+set(handles.pb_move6,'Enable','on');
+set(handles.pb_move7,'Enable','on');
+set(handles.pb_move8,'Enable','on');
+set(handles.pb_move9,'Enable','on');
+set(handles.pb_move10,'Enable','on');
+if isfield(handles, 'sensors') && isobject(handles.sensors)
     set(handles.pb_sensors,'Enable','on');
 end
 
@@ -2087,7 +2092,7 @@ function pb_socketConnect2_Callback(hObject, eventdata, handles)
 % hObject    handle to pb_socketConnect2 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-handles = ConnectVRE(handles,'Augmented Reality.exe');
+handles = ConnectVRE(handles,'Augmented Reality HAND.exe');
 guidata(hObject,handles);
 
 % --- Executes on button press in cb_keys.
@@ -2158,9 +2163,9 @@ if get(hObject,'Value')
     % Create proportional control variables if patRec structure is loaded
     if isfield(handles,'patRec')
         % Increase maximum speed to 100
-        handles.patRec.control.maxDegPerMov = ones(size(handles.patRec.control.maxDegPerMov)).*100;
-        set(handles.et_allSpeed,'String',100);
-        et_allSpeed_Callback(handles.et_allSpeed,eventdata,handles);
+%         handles.patRec.control.maxDegPerMov = ones(size(handles.patRec.control.maxDegPerMov)).*100;
+%         set(handles.et_allSpeed,'String',100);
+%         et_allSpeed_Callback(handles.et_allSpeed,eventdata,handles);
         
         % Initialize proportional control
         handles.patRec = InitPropControl(handles.patRec);
@@ -2250,7 +2255,7 @@ function pb_ARarm_Callback(hObject, eventdata, handles)
 % hObject    handle to pb_ARarm (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-handles = ConnectVRE(handles,'Augmented Reality ARM.exe');
+handles = ConnectVRE(handles,'Augmented Reality.exe');
 % Flex the elbow with 90 degrees. 
 VREActivation(handles.vre_Com,90,[],15,1,get(handles.cb_moveTAC,'Value'));
 guidata(hObject,handles);
@@ -2313,14 +2318,6 @@ function pb_sensors_Callback(hObject, eventdata, handles)
 
 GUI_Sensors(hObject, eventdata, handles);
 
-
-% --- Executes on button press in cb_ALCD.
-function cb_ALCD_Callback(hObject, eventdata, handles)
-% hObject    handle to cb_ALCD (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hint: get(hObject,'Value') returns toggle state of cb_ALCD
 
 function et_COM_Callback(hObject, eventdata, handles)
 % hObject    handle to et_COM (see GCBO)
@@ -2538,3 +2535,147 @@ function pb_VRleg_Callback(hObject, eventdata, handles)
 handles.vre_leg = 1;
 handles = ConnectVRE(handles,'Virtual Reality.exe');
 guidata(hObject,handles);
+
+
+% --- Executes on button press in cb_addArtifacts.
+function cb_addArtifacts_Callback(hObject, eventdata, handles)
+% hObject    handle to cb_addArtifacts (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: get(hObject,'Value') returns toggle state of cb_addArtifacts
+
+% ADD ARTIFACT PROMPT
+if get(handles.cb_addArtifacts,'Value')
+    addArtifact = ChoiceArtifact(handles.patRec);
+    if isempty(addArtifact)
+        set(handles.cb_addArtifacts,'Value',0)
+    else
+        disp(addArtifact)
+        % Save the handles back
+        handles.patRec.addArtifact = addArtifact;
+        guidata(hObject,handles);
+    end
+else
+    if isfield(handles.patRec,'addArtifact')
+        handles.patRec = rmfield(handles.patRec,'addArtifact');
+        guidata(hObject,handles);
+    end
+    disp('Artifact options discarded.')
+end
+
+
+% --- Executes on button press in pb_ARleg.
+function pb_ARleg_Callback(hObject, eventdata, handles)
+% hObject    handle to pb_ARleg (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+handles.vre_leg = 1;
+handles = ConnectVRE(handles,'Augmented Reality.exe');
+guidata(hObject,handles);
+
+function et_Unity_ip_Callback(hObject, eventdata, handles)
+% hObject    handle to et_Unity_ip (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of et_Unity_ip as text
+%        str2double(get(hObject,'String')) returns contents of et_Unity_ip as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function et_Unity_ip_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to et_Unity_ip (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function et_Unity_port_Callback(hObject, eventdata, handles)
+% hObject    handle to et_Unity_port (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of et_Unity_port as text
+%        str2double(get(hObject,'String')) returns contents of et_Unity_port as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function et_Unity_port_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to et_Unity_port (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+% --- Executes on button press in pb_Unity_connect_disconnect.
+function pb_Unity_connect_disconnect_Callback(hObject, eventdata, handles)
+% hObject    handle to pb_Unity_connect_disconnect (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+%CK: I bet togglebutton would be the better choice for this button, but for
+%now this shall work though.
+if strcmp(get(handles.pb_Unity_connect_disconnect, 'String'), 'Connect')
+    ip = str2num(get(handles.et_Unity_port, 'String'));
+    obj = tcpip(get(handles.et_Unity_ip, 'String'), ip(1) );
+    try
+        fopen(obj);
+        set(handles.t_msg,'String','Connected to TCP Socket');
+        set(handles.pb_Camera,'Enable','on') %CK: I have no idea why/if this is neccessary
+        set(handles.pb_Unity_connect_disconnect, 'String','Disconnect')
+    catch
+        set(handles.t_msg,'String','Connection failed...');
+    end
+    handles.vre_Com = obj;
+    handles.vre_Heatmap =1;
+else
+    obj = handles.vre_Com;
+    fclose(obj);
+    handles.vre_Com = obj;
+    set(handles.t_msg,'String','Disconnected');
+    set(handles.pb_Unity_connect_disconnect, 'String', 'Connect');
+end
+guidata(hObject,handles);
+
+
+% --- Executes on button press in pb_fittsLawTest.
+function pb_fittsLawTest_Callback(hObject, eventdata, handles)
+% hObject    handle to pb_fittsLawTest (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Save mainGUI handle to guidata of GUI_FittsLawTest
+GUI = eval('GUI_FittsLawTest');
+FittsHandles = guidata(GUI);
+   
+    % set pop-up menu options to movements that are available in PatRec
+    armMovements = handles.patRec.mov;
+    armMovements(end) = {'None'};                     % replace 'Rest' with 'None'
+    set(FittsHandles.pm_expand,'String',armMovements);
+    set(FittsHandles.pm_shrink,'String',armMovements);
+    set(FittsHandles.pm_right,'String',armMovements);
+    set(FittsHandles.pm_left,'String',armMovements);
+    set(FittsHandles.pm_up,'String',armMovements);
+    set(FittsHandles.pm_down,'String',armMovements);
+    
+    % set initial pop-up menu values to "None"
+    nM = handles.patRec.nM;nM = handles.patRec.nM;
+    set(FittsHandles.pm_expand,'Value',nM);
+    set(FittsHandles.pm_shrink,'Value',nM);
+    set(FittsHandles.pm_right,'Value',nM);
+    set(FittsHandles.pm_left,'Value',nM);
+    set(FittsHandles.pm_up,'Value',nM);
+    set(FittsHandles.pm_down,'Value',nM);
+
+FittsHandles.mainGUI = hObject;
+guidata(GUI,FittsHandles); 

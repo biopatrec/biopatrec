@@ -79,7 +79,7 @@ function GUI_RecordingSession_OpeningFcn(hObject, eventdata, handles, varargin)
 % handles    structure with handles and user data (see GUIDATA)
 % varargin   command line arguments to GUI_RecordingSession (see VARARGIN)
 
-backgroundImage2 = importdata('/../Img/BioPatRec.png');
+backgroundImage2 = importdata('Img/BioPatRec.png');
 %select the axes
 axes(handles.axes2);
 %place image onto the axes
@@ -90,7 +90,7 @@ axis off
 %load the background image into Matlab
 %if image is not in the same directory as the GUI files, you must use the 
 %full path name of the iamge file
-backgroundImage = importdata('/../Img/surface.jpg');
+backgroundImage = importdata('Img/surface.jpg');
 %select the axes
 axes(handles.axes1);
 %place image onto the axes
@@ -353,12 +353,12 @@ function et_msg_Callback(hObject, eventdata, handles)
     
     mov = movS(movN(1));
     
-    %backgroundImage = importdata(['/../Img/mov' num2str(num) '.JPG']);
+    %backgroundImage = importdata(['Img/mov' num2str(num) '.JPG']);
     % If the image does not exist, we display a dummy image. 
-    if(exist(['/../Img/' char(mov) '.JPG'], 'file'))
-        backgroundImage = importdata(['/../Img/' char(mov) '.JPG']);
+    if(exist(['Img/' char(mov) '.JPG'], 'file'))
+        backgroundImage = importdata(['Img/' char(mov) '.JPG']);
     else
-        backgroundImage = importdata(['/../Img/' 'noImage' '.png']); 
+        backgroundImage = importdata(['Img/' 'noImage' '.png']); 
     end
     image(backgroundImage);
     axis off

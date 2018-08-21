@@ -23,6 +23,10 @@
                             % SetDeviceStartAcquisition(),
                             % Acquire_tWs(), StopAcquisition(). This functions 
                             % has been moved to COMM/AFE folder, into this new script.
+% 2017-02-28 / Simon Nilsson / Separated the acquisition modes for RHA2216
+                            % and RHA2132. The RHA2132 now uses a higher
+                            % baudrate and a buffered acquisition mode to
+                            % handle the higher data flow of HD-EMG.
 
 % 20xx-xx-xx / Author  / Comment
 
@@ -36,6 +40,11 @@ function StopAcquisition(deviceName, obj)
         fwrite(obj,'Q','char');                                        % Stop the aquisition  ´
         fclose(obj);                                                   % Close connection
     end
+    %%%%% INTAN RHA2132 %%%%%
+    if strcmp(deviceName, 'RHA2132')
+        fwrite(obj,'Q','char');                                        % Stop the aquisition  ´
+        fclose(obj);                                                   % Close connection
+    end
 
     %%%%% ADS1299 %%%%%
     if strcmp(deviceName, 'ADS1299')
@@ -43,7 +52,11 @@ function StopAcquisition(deviceName, obj)
         fclose(obj);                                                   % Close connection
     end
     if strcmp(deviceName, 'ADS_BP')
-        fwrite(obj,'T','char');                                        % Stop the aquisition  ´
+        fwrite(obj,'T','char');                                        % Stop the aquisition  
+        pause(0.5);
+        if obj.BytesAvailable > 0
+            fread(obj,obj.BytesAvailable,'uint8');       
+        end
         fclose(obj);                                                   % Close connection
     end
         

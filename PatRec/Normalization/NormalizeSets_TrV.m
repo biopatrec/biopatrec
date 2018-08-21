@@ -63,6 +63,8 @@ function [trSet vSet patRec] = NormalizeSets_TrV(normSetsType, trSet, vSet, patR
         disp('No normalization method found');
         
     end
+    trSet(isnan(trSet)) = 0;
+    vSet(isnan(vSet)) = 0;
     patRec.normSets = normSets;
 
 end

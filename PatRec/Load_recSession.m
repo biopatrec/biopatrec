@@ -71,6 +71,9 @@ function Load_recSession(recSession, handles)
     set(stdata.lb_nCh,'String',num2str(nCh'));
     set(stdata.lb_nCh,'Value',nCh);
     
+    if isfield(recSession,'vCh')
+        handles.vCh = recSession.vCh;
+    end
 
     %set(stdata.t_path,'UserData',path);
     

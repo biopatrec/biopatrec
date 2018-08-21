@@ -25,10 +25,9 @@
 % 2011-07-27 / Max Ortiz  / Moved the "updated sigTreated" instructions out
 %                           of the GUI push bottom
 % 2016-03-01 / Eva Lendaro / Moved filtering after segmentation
-% 2016-02-01 / Julian Maier / Added signal separation and wavelet denoising
+% 2016-02-01 / Julian Maier / Added signal separation
 % 2016-03-01 / Julian Maier / Application of conventional filtering after
 %                             signal segmenation.
-% 2016-04-01 / Julian Maier / Added motion reduction filter
 % 20xx-xx-xx / Author  / Comment on update
 
 function sigTreated = TreatData(handles, sigTreated)
@@ -43,7 +42,6 @@ sFiltersSel         = get(handles.pm_spatialFilters,'Value');
 sigTreated.sFilter  = sFilters(sFiltersSel);
 
 sigTreated.eCt      = sigTreated.cT * sigTreated.cTp;      % Effective contraction time
-sigTreated.wOverlap = str2double(get(handles.et_wOverlap,'String'));
 sigTreated.tW       = str2double(get(handles.et_tw,'String'));
 sigTreated.nW       = str2double(get(handles.et_nw,'String'));
 sigTreated.trSets   = str2double(get(handles.et_trN,'String'));
@@ -54,10 +52,24 @@ twSegMethods            = get(handles.pm_twSegMethod,'String');
 twSegMethodsSel         = get(handles.pm_twSegMethod,'Value');
 sigTreated.twSegMethod  = twSegMethods(twSegMethodsSel);
 
+if twSegMethodsSel == 1 % Non-overlapped windows
+    sigTreated.wOverlap = 0;
+else
+    sigTreated.wOverlap = str2double(get(handles.et_wOverlap,'String'));
+end
+
 if get(handles.pm_SignalSeparation,'Value') ~=1,
     allSigSeparaAlg             = get(handles.pm_SignalSeparation,'String');
     selSigSeparaAlg             = allSigSeparaAlg(get(handles.pm_SignalSeparation,'Value'));
     sigTreated.sigSeparation.Alg= selSigSeparaAlg;
+end
+
+if ~isempty(get(handles.t_denoiseParams,'UserData'))
+    sigTreated.sigDenoising = get(handles.t_denoiseParams,'UserData');
+    if isfield(sigTreated,'plotFlag')
+        sigTreated.sigDenoising.plotFlag = true;
+        clear sigTreated.plotFlag
+    end
 end
 
 %% Signal Separation Alg - Compute
@@ -81,8 +93,11 @@ set(handles.t_msg,'String','Segmenting data...');
 [trData, vData, tData] = GetData(sigTreated);
 %Remove raw treated data
 sigTreated = rmfield(sigTreated,'trData');
+%Save raw testing data
+sigTreated.tDataRaw = tData;
 set(handles.t_msg,'String','Data segmented');
 disp('Data segmented.');
+
 
 %% Frequency Filters
 set(handles.t_msg,'String','Applying filters segmentwise...');
