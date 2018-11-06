@@ -50,13 +50,20 @@
 %                                 other custom devices for BioPatRec_TRE.
 % 2016-02-10 / Max Ortiz        / change the initialization of the NI card
 %                                 to use the vector of channels rather than only the number
-% 2016-04-15 / Julian Maier     / Artificial artifact inseration (Line 268)   
-
+% 2018-02-23/ James Austin      / Added window overlap as the cycletime for real time
+%                                 pattern recognition implementation from
+%                                 NI devices (replacing tWs for PEEK time). 
+%                               / Added currentDegPerMovLast array to induce program
+%                                 to send a new signal to the motors of an
+%                                 external device whenever either the movement class
+%                                 *or* the velocity changes (i.e. external
+%                                 devices will now work with velocity ramp
+%                                 or other velocity-variant control methods).
 % 20xx-xx-xx / Author  / Comment on update
 
 function handlesX = RealtimePatRec(patRecX, handlesX)
 
-    clear global;
+    clear global
     clear persistent;
 
     global patRec;
@@ -70,6 +77,7 @@ function handlesX = RealtimePatRec(patRecX, handlesX)
     global pwmBs;
     global tempData;
     global outVectorMotorLast;
+    global currentDegPerMovLast;
     
     %global data;            % only needed for testing
     global thresholdGUIData;
@@ -80,7 +88,8 @@ function handlesX = RealtimePatRec(patRecX, handlesX)
     procT    = [];
     tempData = [];
     outVectorMotorLast = zeros(patRec.nOuts,1);
-                         
+    currentDegPerMovLast = zeros(patRec.nOuts,1);
+    
     % Get needed info from patRec structure
     sF                  = patRec.sF;
     nCh                 = length(patRec.nCh);       
@@ -91,7 +100,7 @@ function handlesX = RealtimePatRec(patRecX, handlesX)
     sT = str2double(get(handles.et_testingT,'String'));
     tW = patRec.tW;                                                        % Time window size
     tWs = tW*sF;                                                           % Time window samples
-   
+    cycletime = patRec.wOverlap;                                           % Timestep length from window overlap
 
     % Initialze control algorithms
     %patRec = InitControl(patRec); % No longer needed, Initialization is done in GUI
@@ -162,13 +171,8 @@ function handlesX = RealtimePatRec(patRecX, handlesX)
 
         % Init SBI
         sCh = patRec.nCh;                                                  % Vector of channels
-        if strcmp(deviceName, 'Thalmic MyoBand')
-            %CK: init MyoBand
-            s = MyoBandSession(sF, sT, sCh);
-        else
-            s = InitSBI_NI(sF,sT,sCh); 
-        end 
-        s.NotifyWhenDataAvailableExceeds = tWs;                            % PEEK time
+        s = InitSBI_NI(sF,sT,sCh); 
+        s.NotifyWhenDataAvailableExceeds = cycletime*sF;                            % PEEK time
         lh = s.addlistener('DataAvailable', @RealtimePatRec_OneShot); 
 
         % Start DAQ
@@ -177,15 +181,8 @@ function handlesX = RealtimePatRec(patRecX, handlesX)
         if ~s.IsDone                                                       % check if is done
             s.wait();
         end
-        
-        
-        if ~strcmp(deviceName, 'Thalmic MyoBand')
-            delete(lh);
-        end
-        %CK: Stop sampling from MyoBand
-        if strcmp(deviceName, 'Thalmic MyoBand')
-            MyoClient('StopSampling');
-        end
+        delete(lh);
+
     %%%%% Real Time PatRec with other custom device %%%%%   
     else
 
@@ -210,7 +207,7 @@ function handlesX = RealtimePatRec(patRecX, handlesX)
         handles.obj = obj;
 
         % Set the selected device and Start the acquisition
-        handles = SetDeviceStartAcquisition(handles, obj);
+        SetDeviceStartAcquisition(handles, obj);
 
         for timeWindowNr = 1:sT/tW
 
@@ -272,6 +269,7 @@ function RealtimePatRec_OneShot(src,event)
     global pwmBs;    
     global tempData;
     global outVectorMotorLast;
+    global currentDegPerMovLast; 
 	global thresholdGUIData;
 
     %Keep saving all recorded data
@@ -282,16 +280,8 @@ function RealtimePatRec_OneShot(src,event)
     
     %Only considered the data once it has at least the size of time window
     if size(tempData,1) >= (patRec.sF*patRec.tW) 
-		
-		% Add artifact if required
-        if isfield(patRec,'addArtifact')
-            timeLength=str2double(handles.et_testingT.String);
-            tempDataArt = AddArtifactRealtime(tempData,timeLength);
-            tData = tempDataArt(end-patRec.sF*patRec.tW+1:end,:);
-        else % Copy the temporal data to the test data
-            tData = tempData(end-patRec.sF*patRec.tW+1:end,:);   
-        end
-
+        % Set tData to length of 1 time window if enough data is available
+        tData = tempData(end-patRec.sF*patRec.tW+1:end,:);
         % Start of processing time
         procTimeS = tic;
 
@@ -330,6 +320,11 @@ function RealtimePatRec_OneShot(src,event)
                 outVectorMotor(outMov) = 1;
                 % Check if the state has change
                 outChanged = find(xor(outVectorMotor, outVectorMotorLast));
+                % Check if the velocity has changed by finding non-zero
+                % differences between current velocity and previous
+                % velocity (currentDegPerMovLast)
+                speedChanged = find(transpose(patRec.control.currentDegPerMov) - currentDegPerMovLast);
+                outChanged = union(outChanged, speedChanged);
                 % Only send information to the motors that have changed state
                 for i = 1 : size(outChanged,1)
                     if outVectorMotor(outChanged(i))
@@ -380,6 +375,7 @@ function RealtimePatRec_OneShot(src,event)
         % Next cycle
         nTW = nTW + 1;
         outVectorMotorLast = outVectorMotor;
+        currentDegPerMovLast = transpose(patRec.control.currentDegPerMov);
         % Finish of processing time
         procT(nTW) = toc(procTimeS);
         
