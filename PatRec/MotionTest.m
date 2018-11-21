@@ -39,7 +39,9 @@
 %                                 details read RecordingSession.m log.
 % 2016-05-03 / Julian Maier     / Artifact inseration added to tempdata if
 %                                 required
-                            
+% 2018-02-23/ James Austin      / Added window overlap as the cycletime for real time
+%                                 pattern recognition implementation from
+%                                 NI devices (replacing tWs for PEEK time).                          
 % 20xx-xx-xx / Author     / Comment on update
 
 
@@ -147,7 +149,7 @@ deviceName          = patRec.dev;
 sT = motionTest.timeOut;
 tW = patRec.tW;                                                           % Time window size
 tWs = tW*sF;                                                              % Time window samples
-
+cycletime = patRec.wOverlap;                                              % Timestep length from window overlap
 
 %% Motion Test
 % Note: Probabily this way of testing only works for the NI
@@ -180,7 +182,7 @@ for t = 1 : trials
             movementObjects = handles.movList(patRec.movOutIdx{mIdx(m)});
             mov = patRec.mov{mIdx(m)};
             %Prepare
-            for i = 1 : 3
+            for i = 1 : 3;
                 % Warn the user
                 %msg = ['Relax and prepare to "' mov '" in: ' num2str(4-i) ' seconds (trial:' num2str(t) ', rep:' num2str(r) ')'];
                 % No warning
@@ -220,6 +222,11 @@ for t = 1 : trials
             procTime = [];      % Processing time (vector)
             dataTW = [];        % Reset the dataTW (matrix)
             tempData = [];      % Reset tempData if it is the first call
+
+            % Ask the user to execute movement
+            set(handles.t_msg,'String',mov);
+            drawnow;
+            
             
             % Move the VRE into place.
             for i = 1:length(movementObjects)
@@ -238,36 +245,19 @@ for t = 1 : trials
 
                 % Init SBI
                 sCh = 1:nCh;
-%                 s = InitSBI_NI(sF,sT,sCh);
-                if strcmp(deviceName, 'Thalmic MyoBand')
-                    %CK: init MyoBand
-                    s = MyoBandSession(sF, sT, sCh);
-                else
-                    s = InitSBI_NI(sF,sT,sCh);
-                end
-                s.NotifyWhenDataAvailableExceeds = tWs;                            % PEEK time
-                lh = s.addlistener('DataAvailable', @MotionTest_OneShot);
+                s = InitSBI_NI(sF,sT,sCh); 
+                s.NotifyWhenDataAvailableExceeds = cycletime*sF;                            % PEEK time
+                lh = s.addlistener('DataAvailable', @MotionTest_OneShot); 
 
-                % Ask the user to execute movement
-                set(handles.t_msg,'String',mov);
-                drawnow;
-                
                 % Start DAQ
                 s.startBackground();                                               % Run in the backgroud
 
                 if ~s.IsDone                                                       % check if is done
                     s.wait();
                 end
-%                 delete(lh);
-                if ~strcmp(deviceName, 'Thalmic MyoBand')
-                    delete(lh);
-                end
-                %CK: Stop sampling from MyoBand
-                if strcmp(deviceName, 'Thalmic MyoBand')
-                    MyoClient('StopSampling');
-                end
-                
-                %%%%% Motion Test with other custom device %%%%%
+                delete(lh);
+
+            %%%%% Motion Test with other custom device %%%%%   
             else
                 
                 % Prepare handles for next function calls
@@ -287,10 +277,6 @@ for t = 1 : trials
                 % Set the selected device and Start the acquisition
                 SetDeviceStartAcquisition(handles, obj);
 
-                % Ask the user to execute movement
-                set(handles.t_msg,'String',mov);
-                drawnow;
-                
                 for timeWindowNr = 1:sT/tW
 
                     cData = Acquire_tWs(deviceName, obj, nCh, tWs);            % acquire a new time window of samples

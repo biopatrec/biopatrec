@@ -22,6 +22,11 @@
 % ------------------------- Updates & Contributors ------------------------
 % [Contributors are welcome to add their email]
 % 2012-11-23 / Joel Falk-Dahlin  / Creation
+% 2012-02-23 / James Austin  / Changed MovMatrix to use movement classes from
+%                           pattern recognition controller (patRec.mov(1), patRec.mov(1), etc.) 
+%                           instead of matching to pre-defined labels ('Open Hand', etc.),
+%                           so that TrackStateSpace now works for any set of up to 6
+%                           input movement classes (plus rest) chosen for the TAC test.
 % 20xx-xx-xx / Author  / Comment on update
 
 function [movMatrix, movMatrixNorm] = CreateMovMatrix(patRec)
@@ -34,33 +39,33 @@ function [movMatrix, movMatrixNorm] = CreateMovMatrix(patRec)
     for i = patRec.indMovIdx
         
         %moves = regexp(patRec.mov{indMovIdx(i)},'\W+\W','split'); % Read current movement (could be individual or simultaneous)
-        moves = regexp(patRec.mov{i},'\W+\W','split'); % Read current movement (could be individual or simultaneous)
+        moves = regexp(patRec.mov{i},'\W+\W','split'); % Read current movement (could be individual or simultaneous)     
         
         outMovTmp = [];
         
         for j = 1:length(moves) % Loop through all movement that current output is (1 if individual several if simultaneous)
 
-            if strcmp(moves{j},'Open Hand') % If read movement is Open hand, map to 1
+            if strcmp(moves{j},patRec.mov(1))
                 outMovTmp = [outMovTmp; 1];
             end
 
-            if strcmp(moves{j},'Close Hand') % If read movement is Close Hand, map to 2
+            if strcmp(moves{j},patRec.mov(2)) 
                 outMovTmp = [outMovTmp; 2];
             end
 
-            if strcmp(moves{j},'Flex Hand') % If read movement is Flex Hand, map to 3
+            if strcmp(moves{j},patRec.mov(3))
                 outMovTmp = [outMovTmp; 3];
             end
 
-            if strcmp(moves{j},'Extend Hand') % If read movement is Extend Hand, map to 4
+            if strcmp(moves{j},patRec.mov(4))
                 outMovTmp = [outMovTmp; 4];
             end
 
-            if strcmp(moves{j},'Pronation') % If read movement is Pronation, map to 5
+            if strcmp(moves{j},patRec.mov(5))
                 outMovTmp = [outMovTmp; 5];
             end
 
-            if strcmp(moves{j},'Supination') % If read movement is Supination, map to 6
+            if strcmp(moves{j},patRec.mov(6))
                 outMovTmp = [outMovTmp; 6];
             end
 
@@ -75,22 +80,22 @@ function [movMatrix, movMatrixNorm] = CreateMovMatrix(patRec)
         for j = 1:length(outMovTmp)
    
             switch outMovTmp(j)
-                case 1 % Open Hand
+                case 1 
                     dim = 1;
                     dir = 1;
-                case 2 % Close Hand
+                case 2 
                     dim = 1;
                     dir = -1;
-                case 3 % Flex Hand
+                case 3
                     dim = 2;
                     dir = 1;
-                case 4 % Extend Hand
+                case 4
                     dim = 2;
                     dir = -1;
-                case 5 % Pronation
+                case 5 
                     dim = 3;
                     dir = 1;
-                case 6 % Supination
+                case 6
                     dim = 3;
                     dir = -1;
                 case 7

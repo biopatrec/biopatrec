@@ -24,7 +24,10 @@
 % 2012-03-11 / Max Ortiz  / Added DDF Abs
 % 2014-04-11 / Julian Maier  / Added EMG filter (zero-phase BP + 50 Hz Notch, faster than FilterBP)
 % 2016-01-23 / Eva Lendaro / Changed high cut-off frequency of butterworth filter from 1000 to
-% 800
+% 2018-03-08 / James Austin / Added simple notch filter  ('50 Hz Notch') 
+%                           / Added simple notch filter for North American powerline frequency ('60 Hz Notch') 
+%                           / Added PLH filter for North American powerline frequency ('PLH NA')
+
 
 function data = ApplyFilters(sigTreated, data)
 
@@ -36,20 +39,26 @@ function data = ApplyFilters(sigTreated, data)
     
     if strcmp(sigTreated.fFilter,'None')
         % Do nothing and exit if
+    elseif strcmp(sigTreated.fFilter,'50Hz Notch')
+        data  = Filter50hz(sF, data);     
+    elseif strcmp(sigTreated.fFilter,'60Hz Notch')
+        data  = Filter60hz(sF, data);
     elseif strcmp(sigTreated.fFilter,'PLH')
         data  = BSbutterPLHarmonics(sF, data);
+    elseif strcmp(sigTreated.fFilter,'PLH NA')
+        data  = BSbutterPLHarmonicsNA(sF, data);    
     elseif strcmp(sigTreated.fFilter,'BP 20-800')
-        data  = FilterBP(sF, data,20,min(800,sF/2-1));
+        data  = FilterBP(sF, data,20,800);
     elseif strcmp(sigTreated.fFilter,'BP 70-800')
-        data  = FilterBP(sF, data,70,min(800,sF/2-1));
+        data  = FilterBP(sF, data,70,800);
 	elseif strcmp(sigTreated.fFilter,'EMG 10-500')
-        data  = FilterEMG(sF, data, 8, 10 ,min(500,sF/2-1));
+        data  = FilterEMG(sF, data, 8, 10 ,500);
     elseif strcmp(sigTreated.fFilter,'EMG 20-500')
-        data  = FilterEMG(sF, data, 8, 20 ,min(500,sF/2-1));
+        data  = FilterEMG(sF, data, 8, 20 ,500);
     elseif strcmp(sigTreated.fFilter,'EMG 70-500')
-        data  = FilterEMG(sF, data, 8 ,70 ,min(500,sF/2-1));
+        data  = FilterEMG(sF, data, 8 ,70 ,500);
     elseif strcmp(sigTreated.fFilter,'EMG 100-500')
-        data  = FilterEMG(sF, data, 8 ,100 ,min(500,sF/2-1));
+        data  = FilterEMG(sF, data, 8 ,100 ,500);
     end
     
 %    disp('Frequency Filtering Done');
