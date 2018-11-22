@@ -189,5 +189,16 @@ function handles = SetDeviceStartAcquisition(handles, obj)
             fclose(obj);
             return
         end
+        % Start recording
+        fwrite(obj,'G','char');
+        fwrite(obj,nCh,'char');
+        replay = char(fread(obj,1,'char'));
+        if strcmp(replay, 'G')
+            set(handles.t_msg,'String','Start');
+        else
+            set(handles.t_msg,'String','Error Start'); 
+            fclose(obj);
+            return
+        end
     end         
 end

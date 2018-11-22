@@ -106,11 +106,11 @@ trials  = str2double(get(handles.et_trials,'String'));
 nR  = str2double(get(handles.et_nR,'String'));
 timeOut = str2double(get(handles.et_timeOut,'String'));
 nwCompTime = 20;    % Number of windows to consider completion time
-tW = patRec.tW;                                                  % Time window size
-iW = patRec.wOverlap;                                           % Increment window size
-pDiv    = tW/iW;        % Peeking devider
+tW = patRec.tW;                                                 % Time window size
+oW = patRec.wOverlap;                                           % Overlap window size
+iW = tW-oW;                                                     % Increment window size
 dwellTime = str2double(get(handles.et_dwellTime,'String'));
-dwelltWs = dwellTime/(tW/pDiv);                                 % number of time windows until success
+dwelltWs = dwellTime/iW;                                 % number of time windows until success
 pause on;   % Enable pauses
 expand = get(handles.pm_expand,'Value');
 shrink = get(handles.pm_shrink,'Value');
@@ -170,7 +170,7 @@ deviceName          = patRec.dev;
 sT = joyStickTest.timeOut;
 % tW = patRec.tW;                                                           % Time window size
 tWs = tW*sF; 
-iWs = iW*sF;
+iWs = floor(iW*sF);
 
 %% Fitts Law Test
 
@@ -331,13 +331,13 @@ pause(2)
             patRec = ReInitControl(patRec);
             
             
-            cData = zeros(tWs,nCh);
+            cData = zeros(iWs,nCh);
             if strcmp (ComPortType, 'NI')                                          % Fitts Law Test not yet tested for this type of input
 
                 % Init SBI
                 sCh = 1:nCh;
                 s = InitSBI_NI(sF,sT,sCh); 
-                s.NotifyWhenDataAvailableExceeds = tWs/pDiv;   %change to toverlap                         % PEEK time
+                s.NotifyWhenDataAvailableExceeds = iWs;   %change to toverlap                         % PEEK time
                 lh = s.addlistener('DataAvailable', @JoyStickTest_OneShot); 
 
                 % Start DAQ
@@ -368,8 +368,8 @@ pause(2)
                 % Set the selected device and Start the acquisition
                 SetDeviceStartAcquisition(handles, obj);
 
-                for timeWindowNr = 1:sT/(tW/pDiv)
-                    cData = Acquire_tWs(deviceName, obj, nCh, tWs/pDiv);         % acquire a new time window of samples
+                for timeWindowNr = 1:(sT-oW)/iW
+                    cData = Acquire_tWs(deviceName, obj, nCh, iWs);         % acquire a new time window of samples
                     acquireEvent.Data = cData;
                     JoyStickTest_OneShot(0, acquireEvent);
 

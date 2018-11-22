@@ -63,7 +63,7 @@
 
 function handlesX = RealtimePatRec(patRecX, handlesX)
 
-    clear global
+    clear global;
     clear persistent;
 
     global patRec;
@@ -100,7 +100,10 @@ function handlesX = RealtimePatRec(patRecX, handlesX)
     sT = str2double(get(handles.et_testingT,'String'));
     tW = patRec.tW;                                                        % Time window size
     tWs = tW*sF;                                                           % Time window samples
-    cycletime = patRec.wOverlap;                                           % Timestep length from window overlap
+    oW = patRec.wOverlap;                                                  % Timestep length from window overlap
+    oWs = oW*sF;                                                           % Overlap samples
+    iW = tW-oW;
+    iWs = floor(iW*sF);
 
     % Initialze control algorithms
     %patRec = InitControl(patRec); % No longer needed, Initialization is done in GUI
@@ -164,15 +167,20 @@ function handlesX = RealtimePatRec(patRecX, handlesX)
         end        
     end
 
-    cData = zeros(tWs,nCh);
+    cData = zeros(iWs,nCh);
     
     %%%%% Real Time PatRec with NI DAQ card %%%%%
     if strcmp (ComPortType, 'NI')
 
         % Init SBI
         sCh = patRec.nCh;                                                  % Vector of channels
-        s = InitSBI_NI(sF,sT,sCh); 
-        s.NotifyWhenDataAvailableExceeds = cycletime*sF;                            % PEEK time
+        if strcmp(deviceName, 'Thalmic MyoBand')
+            %CK: init MyoBand
+            s = MyoBandSession(sF, sT, sCh);
+        else
+            s = InitSBI_NI(sF,sT,sCh); 
+        end 
+        s.NotifyWhenDataAvailableExceeds = iWs;                            % PEEK time
         lh = s.addlistener('DataAvailable', @RealtimePatRec_OneShot); 
 
         % Start DAQ
@@ -181,8 +189,15 @@ function handlesX = RealtimePatRec(patRecX, handlesX)
         if ~s.IsDone                                                       % check if is done
             s.wait();
         end
-        delete(lh);
-
+        
+        
+        if ~strcmp(deviceName, 'Thalmic MyoBand')
+            delete(lh);
+        end
+        %CK: Stop sampling from MyoBand
+        if strcmp(deviceName, 'Thalmic MyoBand')
+            MyoClient('StopSampling');
+        end
     %%%%% Real Time PatRec with other custom device %%%%%   
     else
 
@@ -207,11 +222,11 @@ function handlesX = RealtimePatRec(patRecX, handlesX)
         handles.obj = obj;
 
         % Set the selected device and Start the acquisition
-        SetDeviceStartAcquisition(handles, obj);
+        handles = SetDeviceStartAcquisition(handles, obj);
 
-        for timeWindowNr = 1:sT/tW
+        for timeWindowNr = 1:(sT-oW)/iW
 
-            cData = Acquire_tWs(deviceName, obj, nCh, tWs);            % acquire a new time window of samples
+            cData = Acquire_tWs(deviceName, obj, nCh, iWs);            % acquire a new time window of samples
             acquireEvent.Data = cData;
             RealtimePatRec_OneShot(0, acquireEvent);                       
         end
@@ -280,8 +295,16 @@ function RealtimePatRec_OneShot(src,event)
     
     %Only considered the data once it has at least the size of time window
     if size(tempData,1) >= (patRec.sF*patRec.tW) 
-        % Set tData to length of 1 time window if enough data is available
-        tData = tempData(end-patRec.sF*patRec.tW+1:end,:);
+		
+		% Add artifact if required
+        if isfield(patRec,'addArtifact')
+            timeLength=str2double(handles.et_testingT.String);
+            tempDataArt = AddArtifactRealtime(tempData,timeLength);
+            tData = tempDataArt(end-patRec.sF*patRec.tW+1:end,:);
+        else % Copy the temporal data to the test data
+            tData = tempData(end-patRec.sF*patRec.tW+1:end,:);   
+        end
+
         % Start of processing time
         procTimeS = tic;
 
