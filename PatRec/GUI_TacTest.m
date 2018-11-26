@@ -268,6 +268,12 @@ end
 
 guidata(hObject,handles);
 
+% --- Executes during object creation, after setting all properties.
+function pb_start_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to pb_start (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
 
 % --- Executes on button press in pb_start.
 function pb_start_Callback(hObject, eventdata, handles)
