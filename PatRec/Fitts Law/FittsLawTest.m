@@ -109,8 +109,8 @@ nR  = str2double(get(handles.et_nR,'String'));
 timeOut = str2double(get(handles.et_timeOut,'String'));
 nwCompTime = 20;    % Number of windows to consider completion time
 tW = patRec.tW;                                                 % Time window size
-oW = patRec.wOverlap;                                           % Overlap window size
-iW = tW-oW;                                                     % Increment window size
+iW = patRec.wOverlap                                                     % Increment window size
+oW = tW-iW;                                           % Overlap window size
 dwellTime = str2double(get(handles.et_dwellTime,'String'));
 dwelltWs = dwellTime/iW;                                 % number of time windows until success
 pause on;   % Enable pauses

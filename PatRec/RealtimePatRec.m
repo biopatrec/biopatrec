@@ -100,10 +100,10 @@ function handlesX = RealtimePatRec(patRecX, handlesX)
     sT = str2double(get(handles.et_testingT,'String'));
     tW = patRec.tW;                                                        % Time window size
     tWs = tW*sF;                                                           % Time window samples
-    oW = patRec.wOverlap;                                                  % Timestep length from window overlap
-    oWs = oW*sF;                                                           % Overlap samples
-    iW = tW-oW;
+    iW = patRec.wOverlap;
     iWs = floor(iW*sF);
+    oW = tW-iW;                                                  % Timestep length from window overlap
+    oWs = oW*sF;                                                           % Overlap samples
 
     % Initialze control algorithms
     %patRec = InitControl(patRec); % No longer needed, Initialization is done in GUI

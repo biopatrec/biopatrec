@@ -125,10 +125,10 @@ function success = TACTest(patRecX, handlesX)
     sT = tacTest.timeOut;
     tW = patRec.tW;                                                            % Time window size
     tWs = tW*sF;                                                           % Time window samples
-    oW = patRec.wOverlap;                                                  % Timestep length from window overlap
-    oWs = oW*sF;                                                           % Overlap samples
-    iW = tW-oW;
+    iW = patRec.wOverlap;
     iWs = floor(iW*sF);
+    oW = tW-iW;                                                  % Timestep length from window overlap
+    oWs = oW*sF;                                                           % Overlap samples
     
     % Is threshold (thOut) used?
     if(isfield(patRec.patRecTrained,'thOut'))

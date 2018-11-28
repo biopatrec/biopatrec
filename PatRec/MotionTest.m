@@ -148,8 +148,8 @@ deviceName          = patRec.dev;
 sT = motionTest.timeOut;
 tW = patRec.tW;                                                           % Time window size
 tWs = tW*sF;                                                              % Time window samples
-oW = patRec.wOverlap;                                                     % Timestep length from window overlap
-iW = tW-oW;                                                               % Increment window size
+iW = patRec.wOverlap;                                                               % Increment window size
+oW = tW-iW;                                                     % Timestep length from window overlap
 iWs = floor(iW*sF);                                                              % Increment window samples
 
 %% Motion Test
