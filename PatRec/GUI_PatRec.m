@@ -214,7 +214,8 @@ function pb_GetFeatures_Callback(hObject, eventdata, handles)
                 set(handles.pb_RunOfflineTraining,'Enable','on');
 
             elseif (exist('patRec','var'))              % Get patRec
-                Load_patRec(patRec, 'GUI_PatRec',[]);
+                Load_patRec(patRec, hObject, []);
+                handles = guidata(hObject);
                 set(handles.pm_normSets,'Enable','off'); 
                 set(handles.pm_SelectTopology,'Enable','off'); 
                 set(handles.pm_movMix,'Enable','off');
@@ -342,6 +343,7 @@ function pb_GetFeatures_Callback(hObject, eventdata, handles)
             set(handles.rb_top4,'Enable','on'); 
         end
     end
+    guidata(hObject,handles);
     
     
 % --- Executes on button press in pb_RunOfflineTraining.

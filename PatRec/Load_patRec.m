@@ -45,8 +45,13 @@ function Load_patRec(patRec, newGUI, loadMovements)
         end
     end
 
-    % Open Fig and load information                
-    nG = eval([newGUI,'(patRec)']);
+    if isstring(newGUI) || ischar(newGUI)
+        % Open Fig and load information                
+        nG = eval([newGUI,'(patRec)']);
+    else
+        % Use existing GUI data to store information
+        nG = newGUI;
+    end
     newHandles = guidata(nG);
 	    
     % Fill the GUI
