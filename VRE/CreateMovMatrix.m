@@ -30,6 +30,8 @@
 % 2018-11-26 / Adam Naber / Changed MovMatrix to rely directly on the number of indivicual
 %                           movements themselves, rather than making any assumptions about
 %                           the number of available movements.
+% 2018-12-03 / James Austin / Updated MovMatrix normalization division operation that previously 
+%                            had compatibility errors with MATLAB 2014a.                     
 % 20xx-xx-xx / Author  / Comment on update
 
 function [movMatrix, movMatrixNorm] = CreateMovMatrix(patRec)
@@ -70,8 +72,14 @@ function [movMatrix, movMatrixNorm] = CreateMovMatrix(patRec)
             end
         end
     end
-
-    movMatrixNorm = movMatrix ./ sqrt(sum(movMatrix.^2,2));
+    
+    % Previous movMatrix normalization line:
+    %movMatrixNorm = movMatrix ./ sqrt(sum(movMatrix.^2,2));
+    
+    % Substituted with an equivalent operation compatible with MATLAB 2014a:
+    norm = sqrt(sum(movMatrix.^2,2));
+    movMatrixNorm = bsxfun(@rdivide,movMatrix,norm(:));
+    
     % Make sure the "Rest" norm is 0
     if restIdx > 0
         movMatrixNorm(restIdx,:) = [];
