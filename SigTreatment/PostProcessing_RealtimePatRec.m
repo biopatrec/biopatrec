@@ -35,6 +35,11 @@ patRecX   = patRec;
     if isfield(patRec,'sigSeparation')
         data = data * patRec.sigSeparation.W;
     end
+	
+	% Apply Wavelet Denoising
+    if isfield(patRec,'sigDenoising')
+       data = WaveletSignalDenoising(data,patRec.sigDenoising);
+    end
     
     %if gui is open then go to drawfunction else nothing
     

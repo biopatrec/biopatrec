@@ -1,5 +1,5 @@
 % ---------------------------- Copyright Notice ---------------------------
-% This file is part of BioPatRec © which is open and free software under 
+% This file is part of BioPatRec Â© which is open and free software under 
 % the GNU Lesser General Public License (LGPL). See the file "LICENSE" for 
 % the full license governing this code and copyrights.
 %
@@ -33,6 +33,8 @@
                             % session. At the end of the recording session it 
                             % is possible to check all channels individually, 
                             % apply offlinedata  process as feature extraction or filter etc.
+% 2016-04-01 / Julian Maier / Added Crop option, signal separation, noise
+                            % adding, motion filtering, wavelet filering
 % 2017-09-25 / Simon Nilsson  / Added virtual reference filtering option
 
 
@@ -61,7 +63,7 @@ function varargout = GUI_Recordings(varargin)
 
 % Edit the above text to modify the response to help GUI_Recordings
 
-% Last Modified by GUIDE v2.5 28-Feb-2017 16:19:55
+% Last Modified by GUIDE v2.5 24-Mar-2023 12:19:47
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
 gui_State = struct('gui_Name',       mfilename, ...
@@ -97,6 +99,9 @@ axes(handles.a_biopatrec);
 %place image onto the axes
 image(backgroundImage2);
 %remove the axis tick marks
+axis off
+%Do the same for a_pic
+axes(handles.a_pic);
 axis off
 
 fID = LoadFeaturesIDs;
@@ -270,7 +275,7 @@ function et_it_Callback(hObject, eventdata, handles)
     end
 
     xmax = str2double(get(handles.et_ft,'String'));
-    set(handles.a_t0,'XLim',[input xmax]);
+    set(handles.a_pic,'XLim',[input xmax]);
     guidata(hObject, handles);
 
 
@@ -294,7 +299,7 @@ function et_ft_Callback(hObject, eventdata, handles)
     end
 
     xmin = str2double(get(handles.et_it,'String'));
-    set(handles.a_t0,'XLim',[xmin input]);
+    set(handles.a_pic,'XLim',[xmin input]);
     guidata(hObject, handles);
 
 
@@ -345,6 +350,15 @@ function t_load_ClickedCallback(hObject, eventdata, handles)
                     elseif(exist('cData','var')) == 1              
                         DataShow(handles,cData,sF,sT);
                         tempdata = cdata;
+                        save('cdata.mat','cdata','tempdata','sF','sT','nCh','ComPortType','deviceName');
+                    elseif(exist('allData','var')==1)
+                        sT = length(allData)/sF;
+                        DataShow(handles,allData,sF,sT);
+                        tempdata = allData;
+                        cdata = allData;
+                        nCh = size(allData,2);
+                        ComPortType = 'NOT_KNOWN';
+                        deviceName = 'ALCD2';
                         save('cdata.mat','cdata','tempdata','sF','sT','nCh','ComPortType','deviceName');
                     end
                 elseif(exist('sData','var')) == 1              % fix compatibility with sData old recordings
@@ -518,7 +532,8 @@ function m_Fplh_Callback(hObject, eventdata, handles)
     handles.nCh = size(tempdata,2);
     handles.ComPortType = ComPortType;
     handles.deviceName = deviceName;
-    tempdata = BSbutterPLHarmonics(sF,tempdata);
+%    tempdata = BSbutterPLHarmonics(sF,tempdata);
+    tempdata = BSbutterMRHarmonics(sF,tempdata);
     DataShow(handles,tempdata,sF,sT);
     save('cdata.mat','cdata','tempdata','sF','sT','nCh','ComPortType','deviceName');
 
@@ -676,7 +691,7 @@ function pb_plotSelected_Callback(hObject, eventdata, handles)
     Ch = get(handles.lb_channels,'Value'); 
     tempdata = tempdata(:,Ch);
     tt = 0:1/sF:(length(tempdata)-1)/sF; 
-    axes(handles.a_t0);
+    axes(handles.a_pic);
     plot(tt, tempdata);
     %Fast Fourier Transform
     nS  = length(tempdata);
@@ -709,6 +724,7 @@ function pb_Start_Callback(hObject, eventdata, handles)
     tW = str2double(get(handles.et_tW,'String'));
     handles.sT = sT;
     handles.tW = tW;
+%     GUI_AFEselection(0,0,0,0,0,handles,0,0,fast);
     GUI_AFEselection(0,0,0,0,0,handles,0,0,fast);
 
 
@@ -1062,6 +1078,29 @@ function m_plotExtern_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 PlotTimeFreq
+
+% --------------------------------------------------------------------
+function m_wden_Callback(hObject, eventdata, handles)
+% hObject    handle to m_wden (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+wd = GUI_Denoising(); %Open Wavelet GUI
+wddata = guidata(wd);
+set(wddata.t_sthandles,'UserData',handles); %transfer parent handles to child GUI
+denoiseParams = get(handles.t_denoiseParams,'UserData');
+denoiseParams = SetDenoiseParams(wddata,denoiseParams);
+uiwait(wd);
+denoiseParams = get(handles.t_denoiseParams,'UserData');
+if ~isempty(denoiseParams)
+    load('cdata.mat');
+    handles.nCh = size(tempdata,2);
+    handles.ComPortType = ComPortType;
+    handles.deviceName = deviceName;
+    tempdata = WaveletSignalDenoising(tempdata,denoiseParams);    
+    DataShow(handles,tempdata,sF,sT);
+    save('cdata.mat','cdata','tempdata','sF','sT','nCh','ComPortType','deviceName');
+    disp('Wavelet Denoising applied.')
+end
 
 % --------------------------------------------------------------------
 function m_vRef_Callback(hObject, eventdata, handles)

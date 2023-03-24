@@ -104,6 +104,17 @@ set(handles.t_msg,'String','Applying filters segmentwise...');
 [trData, vData, tData] = ApplyFiltersEpochs(sigTreated, trData, vData, tData);
 disp('Selected filters applied to each segment.');
 
+%% Wavelet De-Noising
+if isfield(sigTreated,'sigDenoising')
+    set(handles.t_msg,'String','Wavelet de-noising...');
+    [trData, vData, tData, stopFlag]=ApplySignalDenoising(sigTreated,trData, vData, tData);
+    if stopFlag
+        sigTreated.stopFlag = true;
+        return
+    end
+    disp('Wavelet de-noising applied');
+end
+
 %% Sig Separation - Apply calculated ICA unmixing Matrix W
 if isfield(sigTreated,'sigSeparation')
     [trData, vData, tData]=ICAPreprocess(sigTreated,trData,vData,tData);

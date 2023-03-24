@@ -114,6 +114,9 @@ function pb_treat_Callback(hObject, eventdata, handles)
     sigTreated = get(handles.t_sigTreated,'UserData');
         
     % Treat the Data ----------------------------------------------------
+    if ~isempty(get(handles.t_denoiseParams,'UserData'))
+        sigTreated.plotFlag = true;
+    end
     sigTreated = TreatData(handles, sigTreated); % Treat Data
     if isfield(sigTreated,'stopFlag')
         return
@@ -847,6 +850,58 @@ function cb_AddArtifact_Callback(hObject, eventdata, handles)
 % Hint: get(hObject,'Value') returns toggle state of cb_AddArtifact
 
 
+
+% --- Executes on button press in pb_LoadWaveletDenoise.
+function pb_LoadWaveletDenoise_Callback(hObject, eventdata, handles)
+% hObject    handle to pb_LoadWaveletDenoise (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+wd = GUI_Denoising(); %Open Wavelet GUI
+wddata = guidata(wd);
+set(wddata.t_sthandles,'UserData',handles); %transfer parent handles to child GUI
+
+denoiseParams = get(handles.t_denoiseParams,'UserData');
+denoiseParams = SetDenoiseParams(wddata,denoiseParams);
+
+
+% --- Executes on selection change in pm_motionFilt.
+function pm_motionFilt_Callback(hObject, eventdata, handles)
+% hObject    handle to pm_motionFilt (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: contents = cellstr(get(hObject,'String')) returns pm_motionFilt contents as cell array
+%        contents{get(hObject,'Value')} returns selected item from pm_motionFilt
+
+mType = get(handles.pm_motionFilt,'String');
+mSel = get(handles.pm_motionFilt,'Value');
+if ~isempty(strfind(mType{mSel},'SigSep'))
+    strAlg = {'PCA','FastICA','TDSEP','JADE'};
+    [selAlg,ok] = listdlg('PromptString','Select ICA method:',...
+        'SelectionMode','single','ListSize',[120 80],...
+        'ListString',strAlg); 
+    if ~ok
+         set(handles.pm_motionFilt,'Value',1)
+         return; 
+    end
+    alg = strAlg{selAlg};
+    set(handles.pm_motionFilt,'UserData',alg)
+end
+
+% --- Executes during object creation, after setting all properties.
+function pm_motionFilt_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to pm_motionFilt (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: popupmenu controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
 % --- Executes on button press in pb_preview.
 function pb_preview_Callback(hObject, eventdata, handles)
 % hObject    handle to pb_preview (see GCBO)
@@ -862,6 +917,9 @@ set(handles.t_msg,'String','Treating the data...');
     sigTreated = get(handles.t_sigTreated,'UserData');
         
     % Treat the Data ----------------------------------------------------
+    if ~isempty(get(handles.t_denoiseParams,'UserData'))
+        sigTreated.plotFlag = true;
+    end
     sigPreview = TreatData(handles, sigTreated); % Treat Data
     if isfield(sigTreated,'stopFlag')
         return

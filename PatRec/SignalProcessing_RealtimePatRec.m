@@ -32,6 +32,11 @@ function tSet = SignalProcessing_RealtimePatRec(data, patRec)
     if isfield(patRec,'sigSeparation')
         data = data * patRec.sigSeparation.W;
     end
+	
+	% Apply Wavelet Denoising
+    if isfield(patRec,'sigDenoising')
+       data = WaveletSignalDenoising(data,patRec.sigDenoising);
+    end
     
     % Get signal features
     tFeatures = GetSigFeatures(data,patRec.sF,'None',patRec.selFeatures);    
